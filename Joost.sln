@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joost.DbAccess", "Joost.DbAccess\Joost.DbAccess.csproj", "{2FCB05F6-85FD-47F0-8060-D6F5815C0E70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joost.Tests", "Joost.Tests\Joost.Tests.csproj", "{442177B3-F944-4C3B-A76F-D018BF2F1B2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joost.Client", "Joost.Client\Joost.Client.csproj", "{35282A70-401D-4D79-B290-787B921BDAD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joost.Api", "Joost.Api\Joost.Api.csproj", "{A52FDD1E-FCF2-4D34-A53B-6665B846CA56}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FCB05F6-85FD-47F0-8060-D6F5815C0E70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FCB05F6-85FD-47F0-8060-D6F5815C0E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FCB05F6-85FD-47F0-8060-D6F5815C0E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FCB05F6-85FD-47F0-8060-D6F5815C0E70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{442177B3-F944-4C3B-A76F-D018BF2F1B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{442177B3-F944-4C3B-A76F-D018BF2F1B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{442177B3-F944-4C3B-A76F-D018BF2F1B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{442177B3-F944-4C3B-A76F-D018BF2F1B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35282A70-401D-4D79-B290-787B921BDAD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35282A70-401D-4D79-B290-787B921BDAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35282A70-401D-4D79-B290-787B921BDAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35282A70-401D-4D79-B290-787B921BDAD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A52FDD1E-FCF2-4D34-A53B-6665B846CA56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A52FDD1E-FCF2-4D34-A53B-6665B846CA56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A52FDD1E-FCF2-4D34-A53B-6665B846CA56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A52FDD1E-FCF2-4D34-A53B-6665B846CA56}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
