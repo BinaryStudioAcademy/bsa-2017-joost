@@ -49,7 +49,7 @@ namespace Joost.DbAccess.DAL
             return _dataSet.FirstOrDefault(predicate);
         }
 
-        public async Task<T> Find(Expression<Func<T, bool>> predicate)
+        public async Task<T> FindAsync(Expression<Func<T, bool>> predicate)
         {
             return await _dataSet.FirstOrDefaultAsync(predicate);
         }
