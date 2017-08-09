@@ -88,5 +88,9 @@ namespace Joost.DbAccess.DAL
         {
             await _dataContext.SaveChangesAsync();
         }
+        public void Dispose()
+        {
+            _dataContext.Dispose();
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Joost.DbAccess.Interfaces
 {
-    public interface IRepository<T> where T : class, IEntity
+    public interface IRepository<T> : IDisposable where T : class, IEntity
     {
         IQueryable<T> Query();
         IEnumerable<T> All();

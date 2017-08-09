@@ -21,13 +21,12 @@ namespace Joost.DbAccess.Entities
 
         public virtual ICollection<User> Contacts { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
-        public virtual ICollection<Connection> Connectios { get; set; }
+        public string ConnectionId { get; set; }
 
         public User()
         {
             Contacts = new List<User>();
             Groups = new List<Group>();
-            Connectios = new List<Connection>();
         }
     }
 
