@@ -10,7 +10,10 @@ namespace Joost.DbAccess.EF
 {
     public class JoostDbContext: DbContext
     {
-        public JoostDbContext() : base("JoostDB") { }
+        public JoostDbContext() : base("JoostDB")
+        {
+            Database.SetInitializer(new JoostDbInitialiser());
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
