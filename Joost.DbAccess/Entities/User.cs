@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Joost.DbAccess.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Joost.DbAccess.Entities
 {
-    public class User : Receiver
+    public class User : IEntity
     {
+        public int Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
@@ -14,17 +16,16 @@ namespace Joost.DbAccess.Entities
         public DateTime BirthDate { get; set; }
         public Gender Gender { get; set; }
         public string Status { get; set; }
+        public string Avatar { get; set; }
         public UserState State { get; set; }
 
         public virtual ICollection<User> Contacts { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
-        public virtual ICollection<Message> Messages { get; set; }
 
         public User()
         {
             Contacts = new List<User>();
             Groups = new List<Group>();
-            Messages = new List<Message>();
         }
     }
 

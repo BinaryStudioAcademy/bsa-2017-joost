@@ -52,8 +52,8 @@
     <Compile Include="EF\JoostDbContext.cs" />
     <Compile Include="EF\JoostDbInitialiser.cs" />
     <Compile Include="Entities\Group.cs" />
+    <Compile Include="Entities\GroupMessage.cs" />
     <Compile Include="Entities\Message.cs" />
-    <Compile Include="Entities\Receiver.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
