@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Joost.DbAccess.EF
 {
-    class JoostDbInitialiser : System.Data.Entity.DropCreateDatabaseIfModelChanges<JoostDbContext>
+    public class JoostDbInitialiser : System.Data.Entity.DropCreateDatabaseIfModelChanges<JoostDbContext>
     {
         protected override void Seed(JoostDbContext context)
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Joost.DbAccess.EF
 {
-    class JoostDbContext: DbContext
+    public class JoostDbContext: DbContext
     {
         public JoostDbContext() : base("JoostDB") { }
 
