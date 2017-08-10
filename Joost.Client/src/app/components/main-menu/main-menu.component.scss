@@ -1,7 +1,5 @@
 @import '../../../vars.scss';
 
-$left-panel-width: 400px;
-
 .main-avatar {
   width: 64px;
   height: 64px;
@@ -98,7 +96,4 @@ $left-panel-width: 400px;
     align-content:center;
     margin:10px;
     color: $color-text-secondary;
-}
-.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after {
-  background-color:$color-selected-tab-line;
 }
