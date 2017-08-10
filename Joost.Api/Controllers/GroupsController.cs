@@ -25,6 +25,21 @@ namespace Joost.Api.Controllers
 
         // GET: api/Groups/5
         [HttpGet]
+        public IHttpActionResult GetGroups(string name)
+        {
+            var groups = _unitOfWork.Repository<Group>()
+                .Query()
+                .Where(item => item.Name.Contains(name))
+                .ToList();
+            if (groups==null)
+            {
+                return NotFound();
+            }
+            return Ok(groups);
+        }
+
+        // GET: api/Groups/5
+        [HttpGet]
         public async Task<IHttpActionResult> GetGroup(int id)
         {
             var group = await _unitOfWork.Repository<Group>().GetAsync(id);

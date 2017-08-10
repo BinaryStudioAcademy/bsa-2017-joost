@@ -19,7 +19,7 @@ namespace Joost.DbAccess.EF
             new User {Email="diana", Password="admin", FirstName="Diana", LastName = "Kolisnichenko" , State = UserState.Online },
             new User {Email="raingeragon", Password="admin", FirstName="Ilya", LastName = "Khomenko" , State = UserState.Online },
             new User {Email="legodov", Password="admin", FirstName="Oleh", LastName = "Dovhan" , State = UserState.Online },
-            new User {Email="straber", Password="admin", FirstName="Oleksandr", LastName = "Truba" , State = UserState.Online },
+            new User {Email="straber@ukr.net", Password="password", FirstName="Oleksandr", LastName = "Truba" , State = UserState.Online },
             new User {Email="daria", Password="admin", FirstName="Darina", LastName = "Korotkih" , State = UserState.Online },
             new User {Email="rrational", Password="admin", FirstName="Vasyl", LastName = "Barna" , State = UserState.Online },
             new User {Email="vitaly", Password="admin", FirstName="Віталій", LastName = "Ільченко" , State = UserState.Online }
