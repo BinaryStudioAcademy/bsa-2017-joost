@@ -1,15 +1,16 @@
+@import '../../../vars.scss';
+
 .mdl-list__item-primary-content{
- color: white;
+ color: $color-text-primary;
 }
 .mdl-list__item-text-body{
   max-width: 300px;
-  color: white;
+  color: $color-text-secondary;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: inline-bloc;
 }
 
 .mdl-list__item:hover{
-    background-color: #673ab7;
+    background-color:$color-primary-dark;
 }
