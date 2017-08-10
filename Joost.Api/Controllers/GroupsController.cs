@@ -6,14 +6,10 @@ using System.Web.Http;
 
 namespace Joost.Api.Controllers
 {
-    public class GroupsController : ApiController
+    public class GroupsController : BaseApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public GroupsController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public GroupsController(IUnitOfWork unitOfWork) : base(unitOfWork)
+        { }
 
         // GET: api/Groups/5
         [HttpGet]

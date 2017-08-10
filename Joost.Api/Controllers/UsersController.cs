@@ -7,14 +7,10 @@ using System.Web.Http;
 namespace Joost.Api.Controllers
 {
     [RoutePrefix("api/users")]
-    public class UsersController : ApiController
+    public class UsersController : BaseApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public UsersController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public UsersController(IUnitOfWork unitOfWork) : base(unitOfWork)
+        { }
 
         // GET: api/users
         [HttpGet]

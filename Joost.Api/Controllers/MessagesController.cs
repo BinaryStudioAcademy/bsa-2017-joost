@@ -5,14 +5,10 @@ using System.Web.Http;
 
 namespace Joost.Api.Controllers
 {
-    public class MessagesController : ApiController
+    public class MessagesController : BaseApiController
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public MessagesController(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+        public MessagesController(IUnitOfWork unitOfWork) : base(unitOfWork)
+        { }
 
         // GET: api/Messages
         [HttpGet]
