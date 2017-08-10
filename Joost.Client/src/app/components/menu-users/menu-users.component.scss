@@ -1,0 +1,15 @@
+.mdl-list__item-primary-content{
+ color: white;
+}
+.mdl-list__item-text-body{
+  max-width: 300px;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-bloc;
+}
+
+.mdl-list__item:hover{
+    background-color: #673ab7;
+}
