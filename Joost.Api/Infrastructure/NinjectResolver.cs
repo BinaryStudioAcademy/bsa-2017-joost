@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Ninject;
 using Joost.DbAccess.Interfaces;
 using Joost.DbAccess.DAL;
+using Joost.Api.Services;
 
 namespace WeatherApp.Infrastructure
 {
@@ -30,6 +31,7 @@ namespace WeatherApp.Infrastructure
 		private void AddBindings()
 		{
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
+            kernel.Bind<IChatHubService>().To<ChatHubService>();
         }
 	}
 }
