@@ -1,4 +1,5 @@
-﻿using Joost.DbAccess.DAL;
+﻿using Joost.Api.Services;
+using Joost.DbAccess.DAL;
 using Joost.DbAccess.EF;
 using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
@@ -103,6 +104,8 @@ namespace Joost.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
+            EmailService email = new EmailService();
+            email.SendEmail(user);
             _unitOfWork.Repository<User>().Add(user);
             await _unitOfWork.SaveAsync();
 
