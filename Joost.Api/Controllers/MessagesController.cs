@@ -1,4 +1,5 @@
-﻿using Joost.DbAccess.Entities;
+﻿using Joost.Api.Services;
+using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -7,12 +8,16 @@ namespace Joost.Api.Controllers
 {
     public class MessagesController : BaseApiController
     {
-        public MessagesController(IUnitOfWork unitOfWork) : base(unitOfWork)
-        { }
+        private IChatHubService _chatHubService;
+
+        public MessagesController(IUnitOfWork unitOfWork, IChatHubService chatHubService) : base(unitOfWork)
+        {
+            _chatHubService = chatHubService;
+        }
 
         // GET: api/Messages
         [HttpGet]
-        public async Task<IHttpActionResult> GetMessages()
+        public async Task<IHttpActionResult> GetUserMessages()
         {
             var messages = await _unitOfWork.Repository<Message>().AllAsync();
             if (messages == null)
@@ -22,9 +27,21 @@ namespace Joost.Api.Controllers
             return Ok(messages);
         }
 
+        // GET: api/Messages
+        [HttpGet]
+        public async Task<IHttpActionResult> GetGroupMessages()
+        {
+            var messages = await _unitOfWork.Repository<GroupMessage>().AllAsync();
+            if (messages == null)
+            {
+                return NotFound();
+            }
+            return Ok(messages);
+        }
+
         // POST: api/Messages
         [HttpPost]
-        public async Task<IHttpActionResult> AddMessage([FromBody]Message message)
+        public async Task<IHttpActionResult> AddUserMessage([FromBody]Message message)
         {
             if (!ModelState.IsValid)
             {
@@ -32,6 +49,24 @@ namespace Joost.Api.Controllers
             }
             _unitOfWork.Repository<Message>().Add(message);
             await _unitOfWork.SaveAsync();
+
+            await _chatHubService.SendToUser(message.Sender.Id, message.Receiver.Id, message.Text);
+
+            return CreatedAtRoute("DefaultApi", new { id = message.Id }, message);
+        }
+
+        // POST: api/Messages
+        [HttpPost]
+        public async Task<IHttpActionResult> AddGroupMessage([FromBody]GroupMessage message)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            _unitOfWork.Repository<GroupMessage>().Add(message);
+            await _unitOfWork.SaveAsync();
+
+            await _chatHubService.SendToGroup(message.Sender.Id, message.Receiver.Id, message.Text);
 
             return CreatedAtRoute("DefaultApi", new { id = message.Id }, message);
         }
