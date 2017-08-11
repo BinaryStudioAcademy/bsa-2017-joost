@@ -10,6 +10,7 @@ import { MenuUsersComponent } from './components/menu-users/menu-users.component
 import { MenuSearchComponent } from './components/menu-search/menu-search.component';
 import { MenuAddComponent } from './components/menu-add/menu-add.component';
 import { MenuMessagesComponent } from './components/menu-messages/menu-messages.component';
+import { UserDetailsComponent } from './components/user-details/user-details.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { MenuMessagesComponent } from './components/menu-messages/menu-messages.
     MenuUsersComponent,
     MenuSearchComponent,
     MenuAddComponent,
-    MenuMessagesComponent
+    MenuMessagesComponent,
+    UserDetailsComponent
   ],
   imports: [
     BrowserModule,

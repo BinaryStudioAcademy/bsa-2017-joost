@@ -1,0 +1,12 @@
+@import '../../../vars.scss';
+
+.data-container{
+   width: calc(100% - 16px);
+   margin: 8px;
+}
+
+.user-avatar{
+    width: 200;
+    height: 200px;
+    margin: 20px;
+}
