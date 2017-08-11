@@ -1,11 +1,12 @@
-﻿using Joost.Api.ViewModel;
-using Joost.DbAccess.Entities;
+﻿using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Joost.DbAccess.DAL;
 using Joost.DbAccess.EF;
+using Joost.Api.Models;
+using Joost.Api.Infrastructure;
 
 namespace Joost.Api.Controllers
 {
@@ -16,7 +17,7 @@ namespace Joost.Api.Controllers
         // POST api/account/auth
         [Route("api/account/auth")]
         [HttpPost]
-		public async Task<IHttpActionResult> Auth([FromBody]LoginViewModel login)
+		public async Task<IHttpActionResult> Auth([FromBody]LoginModel login)
 		{
             if (!ModelState.IsValid)
             {
@@ -33,7 +34,9 @@ namespace Joost.Api.Controllers
             {
                 return StatusCode(System.Net.HttpStatusCode.PartialContent);
             }
-            return Ok(new { UserId = user.Id, Time = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds });
+            var token = new Token() { UserId = user.Id, Time = DateTime.Now };
+
+            return Ok(Encrypt.EncryptToken(token));
         }
-	}
+    }
 }

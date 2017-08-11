@@ -2,6 +2,7 @@
 using Joost.DbAccess.EF;
 using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -16,14 +17,17 @@ namespace Joost.Api.Controllers
 
         // GET: api/users
         [HttpGet]
-        public async Task<IHttpActionResult> GetUsers(string name)
+        public IHttpActionResult GetUsers(string name)
         {
-            var users = await _unitOfWork.Repository<User>().AllAsync();
+            var users = _unitOfWork.Repository<User>()
+                .Query()
+                .Where(item =>!String.IsNullOrEmpty(item.LastName) && !String.IsNullOrEmpty(item.FirstName) && (item.FirstName.Contains(name) || item.LastName.Contains(name) || item.Email.Contains(name)))
+                .ToList();
             if (users == null)
             {
                 return NotFound();
             }
-            return Ok(users.Where(item => item.FirstName.Contains(name) || item.LastName.Contains(name)));
+            return Ok(users);
         }
 
         // GET: api/users/5
