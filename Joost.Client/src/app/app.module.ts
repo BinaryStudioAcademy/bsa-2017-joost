@@ -11,6 +11,7 @@ import { MenuSearchComponent } from './components/menu-search/menu-search.compon
 import { MenuAddComponent } from './components/menu-add/menu-add.component';
 import { MenuMessagesComponent } from './components/menu-messages/menu-messages.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
+import { SignalTestComponent } from './components/signal-test/signal-test.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { UserDetailsComponent } from './components/user-details/user-details.com
     MenuSearchComponent,
     MenuAddComponent,
     MenuMessagesComponent,
-    UserDetailsComponent
+    UserDetailsComponent,
+    SignalTestComponent
   ],
   imports: [
     BrowserModule,
