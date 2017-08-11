@@ -1,3 +1,27 @@
-<p>
-  menu-search works!
-</p>
+<form>
+  <div class="text-input-container">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" name="search" type="text" [(ngModel)]="searchString" (keyup)="search()" id="search-users">
+      <label class="mdl-textfield__label" for="search-users">Find...</label>
+    </div>
+  </div>
+
+  <ul class="demo-list-three mdl-list">
+  <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let user of result">
+    <span class="mdl-list__item-primary-content">
+      <i class="material-icons mdl-list__item-avatar">person</i>
+      <span>{{user.FirstName}} {{user.LastName}}</span>
+      <span class="mdl-list__item-text-body">
+        Bryan Cranston played the role of Walter in Breaking Bad. He is also known
+        for playing Hal in Malcom in the Middle.
+      </span>
+    </span>
+    <a class="mdl-list__item-secondary-action add_contact" (click)="addToContact(user.Id)"><i class="material-icons">add_circle_outline</i></a>
+  </li>
+</ul>
+	<div class="menu__search__not_found" *ngIf="result !== null &&  result !== undefined && result.length === 0 && searchString!==''" >Unfortunately, nothing was found on your request(</div>
+	<div class="wrapper__spiner">
+		<div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" [hidden]="(result !== null  && searchString!=='') || searchString===''"></div>
+	</div>
+	
+</form>
