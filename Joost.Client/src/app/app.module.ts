@@ -1,7 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
+
+import { UserService } from './service/user-service/user.service';
 
 import { AppComponent } from './components/app/app.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
@@ -22,14 +27,15 @@ import { SignalTestComponent } from './components/signal-test/signal-test.compon
     MenuSearchComponent,
     MenuAddComponent,
     MenuMessagesComponent,
-    UserDetailsComponent,
-    SignalTestComponent
+    UserDetailsComponent 
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

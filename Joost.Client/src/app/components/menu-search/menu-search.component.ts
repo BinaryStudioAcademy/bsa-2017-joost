@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../service/user-service/user.service';
 
 @Component({
   selector: 'app-menu-search',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuSearchComponent implements OnInit {
 
-  constructor() { }
+    private result:any;
+	private searchString:string;
+	private  userId:number = 1;
+	constructor(private userService: UserService) { }
 
-  ngOnInit() {
-  }
-
+	ngOnInit() {
+	}
+	search(){
+		this.result =null;
+		this.userService.searchResult(this.searchString).subscribe(data => this.result = data);
+	}
+	addToContact(contactId:number){
+		// this.userService.addContact(this.userId,contactId);
+		// this.search();
+	}
 }

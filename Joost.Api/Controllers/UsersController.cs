@@ -43,6 +43,31 @@ namespace Joost.Api.Controllers
             return Ok(user);
         }
 
+        // GET: api/users/contact
+        [HttpPost]
+        [Route("contact")]
+        public async Task<IHttpActionResult> AddContact([FromBody]Contact contact)
+        {
+            if (contact.UserId==contact.ContactId)
+            {
+                return InternalServerError();
+            }
+            var user = await _unitOfWork.Repository<User>().GetAsync(contact.UserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
+            if (contactUser == null)
+            {
+                return NotFound();
+            }
+            user.Contacts.Add(contactUser);
+            await _unitOfWork.SaveAsync();
+
+            return Ok();
+        }
+
         // GET: api/users/state/5
         [HttpGet]
         [Route("state/{id}")]
@@ -127,5 +152,10 @@ namespace Joost.Api.Controllers
             }
             base.Dispose(disposing);
         }
+    }
+    public class Contact
+    {
+        public int UserId { get; set; }
+        public int ContactId { get; set; }
     }
 }
