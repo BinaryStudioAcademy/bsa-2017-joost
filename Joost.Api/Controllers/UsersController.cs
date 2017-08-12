@@ -1,16 +1,21 @@
-﻿using Joost.Api.Services;
+﻿using Joost.Api.Filters;
+using Joost.Api.Models;
+using Joost.Api.Services;
 using Joost.DbAccess.DAL;
 using Joost.DbAccess.EF;
 using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System;
+using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Joost.Api.Controllers
 {
     [RoutePrefix("api/users")]
+    [TokenAuthorization]
     public class UsersController : BaseApiController
     {
         public UsersController(IUnitOfWork unitOfWork) : base(unitOfWork)
@@ -22,7 +27,13 @@ namespace Joost.Api.Controllers
         {
             var users = _unitOfWork.Repository<User>()
                 .Query()
-                .Where(item =>!String.IsNullOrEmpty(item.LastName) && !String.IsNullOrEmpty(item.FirstName) && (item.FirstName.Contains(name) || item.LastName.Contains(name) || item.Email.Contains(name)))
+                .Where(item => !String.IsNullOrEmpty(item.LastName) && !String.IsNullOrEmpty(item.FirstName) && (item.FirstName + " " + item.LastName).Contains(name) || item.Email.Contains(name))
+                .Select(user => new UserSearchTDO() {
+                    Id = user.Id,
+                    Name = user.FirstName + " " + user.LastName,
+                    Avatar = user.Avatar,
+                    City = user.City
+                })
                 .ToList();
             if (users == null)
             {
@@ -49,16 +60,17 @@ namespace Joost.Api.Controllers
         [Route("contact")]
         public async Task<IHttpActionResult> AddContact([FromBody]Contact contact)
         {
-            if (contact.UserId==contact.ContactId)
+            var userId = GetCurrentUserId();
+            if (userId ==contact.Id)
             {
                 return InternalServerError();
             }
-            var user = await _unitOfWork.Repository<User>().GetAsync(contact.UserId);
+            var user = await _unitOfWork.Repository<User>().GetAsync(userId);
             if (user == null)
             {
                 return NotFound();
             }
-            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
+            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.Id);
             if (contactUser == null)
             {
                 return NotFound();
@@ -67,6 +79,19 @@ namespace Joost.Api.Controllers
             await _unitOfWork.SaveAsync();
 
             return Ok();
+        }
+        [HttpGet]
+        [Route("contact")]
+        public async Task<IHttpActionResult> GetContact()
+        {
+            var userId = GetCurrentUserId();
+            var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user.Contacts.Select(t => t.Id).ToList());
         }
 
         // GET: api/users/state/5
@@ -156,9 +181,7 @@ namespace Joost.Api.Controllers
             base.Dispose(disposing);
         }
     }
-    public class Contact
-    {
-        public int UserId { get; set; }
-        public int ContactId { get; set; }
+    public class Contact{
+        public int Id { get; set; }
     }
 }

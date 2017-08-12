@@ -1,12 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { UserService } from './services/user.service';
+import { AuthenticationService } from './services/authentication.service';
+import { AuthInterceptor } from './interceptor/auth-interceptor';
 
 import { AppComponent } from './components/app/app.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
@@ -35,7 +37,15 @@ import { SignalTestComponent } from './components/signal-test/signal-test.compon
     HttpClientModule,
     FormsModule
   ],
-  providers: [UserService],
+  providers: [
+    UserService,
+    AuthenticationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
