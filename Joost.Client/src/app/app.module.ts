@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { UserService } from './service/user-service/user.service';
+import { UserService } from './services/user.service';
 
 import { AppComponent } from './components/app/app.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';

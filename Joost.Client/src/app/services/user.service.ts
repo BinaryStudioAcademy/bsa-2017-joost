@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http';
+import { BaseApiService } from "./base-api.service";
 
 @Injectable()
-export class UserService {
+export class UserService extends BaseApiService{
 
-  constructor(private http:HttpClient) { }
+	constructor(http : HttpClient) {
+		super(http);
+		this.parUrl = "users";
+	}
 
   searchResult(name:string){
   	return this.http
-  	.get("http://localhost:51248/api/users",{
+  	.get(this.generateUrl(),{
   		params: new HttpParams().set('name',name)
   	});
   }
   addContact(userId:number, contactId:number){
   	return this.http
-  	.post("http://localhost:51248/api/users/contact",{
+  	.post(this.generateUrl() + "/contact",{
   		params: new HttpParams().set('UserId', userId.toString()).append('ContactId', contactId.toString())
   	});
   }
