@@ -1,7 +1,8 @@
-﻿using Joost.DbAccess.Entities;
+﻿using Joost.Api.Models;
 using System;
 using System.Net;
 using System.Net.Mail;
+using System.Web.Configuration;
 
 namespace Joost.Api.Services
 {
@@ -16,11 +17,11 @@ namespace Joost.Api.Services
         {
             url = $"http://localhost:51248/";
             key = Guid.NewGuid();
-            email = "email";
-            password = "password";
+            email = WebConfigurationManager.AppSettings["Email"];
+            password = WebConfigurationManager.AppSettings["Password"];
         }
 
-        public Guid SendEmail(User user)
+        public Guid SendEmail(LoginModel user)
         {
             try
             {
@@ -28,15 +29,15 @@ namespace Joost.Api.Services
                 mail.From = new MailAddress(email);
                 mail.To.Add(user.Email);
                 mail.IsBodyHtml = true;
-                mail.Subject = "Invitation to Joost";
-                mail.Body = $"<div> <h3>Hi { user.FirstName + " " + user.LastName} !</h3><br /> ";
+                mail.Subject = "Invitation to Joost Team";
+                mail.Body = $"<div> <h3>Hi!</h3><br /> ";
                 mail.Body += $"<p>You registered on our messenger. If you want to log in, you should use following link: ";
-                mail.Body += $"<a href='http://localhost:51248/{key.ToString()}'>Joost</a></p>";
+                mail.Body += $"<a href='http://localhost:51248/api/users/confirmregistration/{key.ToString()}'>Joost</a></p>";
                 mail.Body += $"<p>Your credentials: </p>";
                 mail.Body += $"<p> Login: {user.Email}</p>" +
                              $"<p> Password: {user.Password} </p> <br /><br />";
                 mail.Body += $"<p>Regards,</p>";
-                mail.Body += $"<p>Joost</p>";
+                mail.Body += $"<p>Joost Support</p>";
                 mail.Body += $"</div>";
 
 

@@ -1,4 +1,5 @@
-﻿using Joost.Api.Services;
+﻿using Joost.Api.Models;
+using Joost.Api.Services;
 using Joost.DbAccess.DAL;
 using Joost.DbAccess.EF;
 using Joost.DbAccess.Entities;
@@ -98,18 +99,63 @@ namespace Joost.Api.Controllers
 
         // POST: api/users
         [HttpPost]
-        public async Task<IHttpActionResult> AddUser([FromBody]User user)
+        public async Task<IHttpActionResult> AddUser([FromBody]LoginModel user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            EmailService email = new EmailService();
-            email.SendEmail(user);
-            _unitOfWork.Repository<User>().Add(user);
+            var email = new EmailService();
+            var checkUser = await _unitOfWork.Repository<User>().FindAsync(item => item.Email == user.Email);
+
+            if (checkUser != null)
+            {
+                var checkConfirm = await _unitOfWork.Repository<ConfirmRegistration>().GetAsync(checkUser.Id);
+                if (checkConfirm != null)
+                {
+                    checkConfirm.Key = email.SendEmail(user).ToString();
+                    checkConfirm.DateOfRegistration = DateTime.Now;
+                    _unitOfWork.Repository<ConfirmRegistration>().Attach(checkConfirm);
+                    await _unitOfWork.SaveAsync();
+                }
+                else
+                {
+                    return BadRequest("The user with this name already exists.");
+                }
+            }
+            else
+            {
+                var key = email.SendEmail(user);
+                var newUser = new User { Email = user.Email, Password = user.Password, IsActived = false };
+                _unitOfWork.Repository<User>().Add(newUser);
+                _unitOfWork.Repository<ConfirmRegistration>().Add(new ConfirmRegistration() { Id = newUser.Id, Key = key.ToString(), DateOfRegistration = DateTime.Now });
+                await _unitOfWork.SaveAsync();
+            }
+
+            return CreatedAtRoute("DefaultApi", null, user);
+        }
+
+        // GET: api/users/confirmregistration/{key}
+        [HttpGet]
+        [Route("confirmregistration/{key}")]
+        public async Task<IHttpActionResult> ConfirmRegistration(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return NotFound();
+            }
+            var user = await _unitOfWork.Repository<ConfirmRegistration>().FindAsync(item => item.Key == key);
+            if(user == null)
+            {
+                return BadRequest();
+            }
+
+            user.User.IsActived = true;
+            _unitOfWork.Repository<User>().Attach(user.User);
+            _unitOfWork.Repository<ConfirmRegistration>().Delete(user);
             await _unitOfWork.SaveAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.Id }, user);
+            return Ok(user.Id);
         }
 
         // PUT: api/users/5

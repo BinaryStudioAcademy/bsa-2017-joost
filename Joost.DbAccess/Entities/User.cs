@@ -22,6 +22,7 @@ namespace Joost.DbAccess.Entities
 
         public virtual ICollection<User> Contacts { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
+        public virtual ConfirmRegistration ConfirmRegistration { get; set; }
         public string ConnectionId { get; set; }
 
         public User()

@@ -66,7 +66,7 @@ namespace Joost.DbAccess.DAL
 
         public void Attach(T entity)
         {
-            _dataSet.Attach(entity);
+            _dataContext.Entry(entity).State = EntityState.Modified;
         }
 
         public void Delete(T entity)
