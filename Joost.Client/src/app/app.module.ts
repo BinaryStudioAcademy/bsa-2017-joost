@@ -27,7 +27,8 @@ import { SignalTestComponent } from './components/signal-test/signal-test.compon
     MenuSearchComponent,
     MenuAddComponent,
     MenuMessagesComponent,
-    UserDetailsComponent 
+    UserDetailsComponent,
+    SignalTestComponent 
   ],
   imports: [
     BrowserModule,

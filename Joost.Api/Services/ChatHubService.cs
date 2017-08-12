@@ -8,8 +8,8 @@ namespace Joost.Api.Services
 {
     public class ChatHubService : IChatHubService
     {
-        private IHubContext _hubContext;
         private IUnitOfWork _unitOfWork;
+        private IHubContext _hubContext;
 
         public ChatHubService(IUnitOfWork unitOfWork)
         {

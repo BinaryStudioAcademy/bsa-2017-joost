@@ -7,7 +7,6 @@ using System.Web.Http.Cors;
 
 namespace Joost.Api.Controllers
 {
-    [EnableCors(origins: "http://localhost:4200", headers: "*", methods: "*")]
     public class MessagesController : BaseApiController
     {
         private IChatHubService _chatHubService;

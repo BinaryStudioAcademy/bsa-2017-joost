@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
+import {Observable} from "rxjs/Observable";
 import 'signalr';
 declare var jquery:any;
 declare var $ :any;
 
-export class User { 
+export class User {  //temporary here
     public Id: number;
     public ConnectionId : string;
 
@@ -14,7 +15,7 @@ export class User {
     
 }
 
-export class Message {
+export class Message { //temporaty here
     public SenderId: number;      
     public Text: string;    
 
@@ -35,26 +36,35 @@ export class ChatHubService {
   private client: any;
   private chat: any;
 
+  private SignalrConnection: any;
+  private ChatProxy: any;
+
   private ConnectionId: string;
+
 
     constructor() {
 
-      console.log("Constructo of hub STARTED")
+      console.log("ChatHub constructor");
       
-      $.connection.hub.url = "http://localhost:51248/signalr";
       
-      this.chat = $.connection.ChatHub; 
-      this.server = this.chat.server;
-      this.client = this.chat.client;
+      this.SignalrConnection = $.hubConnection("http://localhost:51248/signalr", {  
+        useDefaultPath: false  
+      });
+      
+      this.ChatProxy = this.SignalrConnection.createHubProxy('chathub');
+      console.log("Proxy created");
 
-      console.log("Constructo of hub REGISTER EVENTS")
-      this.registerOnServerEvents(); // setting event handlers
+        this.ChatProxy.on("addMessage",function (a, b) {   
+            console.log(a + 'ssssssssss' + b);
+         });  
 
 
-      console.log("Constructo of hub START CONNECTION")      
-      this.startConnection(); // connectning to Hub
+      //this.registerOnServerEvents();
+      //console.log("Events registered");
+      
+      this.startConnection();
     }
-    
+       
     
     private registerOnServerEvents(): void {
       
@@ -91,7 +101,7 @@ export class ChatHubService {
     // обробка пвд з сервера
     addMessage(SenderId: number, message: string): void {
         console.log("Getting message from server:" + message);      
-      this.allMessages.push(new Message(SenderId, message));
+      //this.allMessages.push(new Message(SenderId, message));
     }
 
 
@@ -104,15 +114,23 @@ export class ChatHubService {
     }
 
     private startConnection(): void {
-        let self = this;
-        $.connection.hub.start().done((data: any) => {
-            console.log('startConnection ' + data);
-            console.log('Send  onConnected');
+       this.SignalrConnection.start().done((data: any) => {
+            console.log("Connection estabilished");
         }).fail((error) => {
-            console.log('Could not connect ' + error);
+            console.log("Could not connect " + error);
 
         });
     }
+
+
+   testInvoking() {  
+    this.ChatProxy.invoke('asp').done(function () {
+        console.log ('Invocation of NewContosoChatMessage succeeded');
+    }).fail(function (error) {
+        console.log('Invocation of NewContosoChatMessage failed. Error: ' + error);
+    });
+    console.log('Invoked');
+}  
 
 //--------------------------------------------------------------------------------
 

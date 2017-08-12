@@ -15,4 +15,10 @@ export class SignalTestComponent implements OnInit {
   ngOnInit() {
   }
 
+  invoke() {
+        console.log("triggered");
+    this.chatHubService.testInvoking();
+
+  }
+
 }

@@ -5,14 +5,13 @@ using Joost.DbAccess.Entities;
 
 namespace Joost.Api.Hubs
 {
-    [Authorize]
-    public class ChatHub : Hub
+    public class ChatHub : Hub<IClient>
     {
         IUnitOfWork _unitOfWork;
 
         public ChatHub(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork; 
         }
 
         public async Task Connect(int userId)
