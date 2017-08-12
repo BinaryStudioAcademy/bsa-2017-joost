@@ -7,17 +7,18 @@ using Joost.DbAccess.DAL;
 using Joost.DbAccess.EF;
 using Joost.Api.Models;
 using Joost.Api.Infrastructure;
+using System.Web.Http.Cors;
 
 namespace Joost.Api.Controllers
 {
-	public class AccountController : BaseApiController
+    public class AccountController : BaseApiController
     {
         public AccountController(IUnitOfWork unitOfWork) : base(unitOfWork) {}
         
         // POST api/account/auth
         [Route("api/account/auth")]
         [HttpPost]
-		public async Task<IHttpActionResult> Auth([FromBody]LoginModel login)
+		public async Task<IHttpActionResult> Auth([FromBody]LoginTDO login)
 		{
             if (!ModelState.IsValid)
             {
@@ -34,9 +35,9 @@ namespace Joost.Api.Controllers
             {
                 return StatusCode(System.Net.HttpStatusCode.PartialContent);
             }
-            var token = new Token() { UserId = user.Id, Time = DateTime.Now };
+            var token = new TokenTDO() { UserId = user.Id, Time = DateTime.Now };
 
-            return Ok(Encrypt.EncryptToken(token));
+            return Ok(new { token = Encrypt.EncryptToken(token) });
         }
     }
 }

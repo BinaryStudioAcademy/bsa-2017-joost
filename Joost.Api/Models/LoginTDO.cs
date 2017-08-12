@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Joost.Api.Models
 {
-    public class LoginModel
+    public class LoginTDO
     {
         [Required]
         [RegularExpression(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$")]

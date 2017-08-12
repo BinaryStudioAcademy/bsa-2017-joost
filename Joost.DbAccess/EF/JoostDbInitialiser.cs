@@ -13,16 +13,16 @@ namespace Joost.DbAccess.EF
         {
             var users = new List<User>
             {
-            new User {Email="andrewbulkovskiy", Password="admin", FirstName="Andrew", LastName = "Bulkovskiy" , State = UserState.Online },
-            new User {Email="amateishchuk", Password="admin", FirstName="Andrii", LastName = "Mateishchuk" , State = UserState.Online },
-            new User {Email="artyom", Password="admin", FirstName="Artyom", LastName = "Moiseenko" , State = UserState.Online },
-            new User {Email="diana", Password="admin", FirstName="Diana", LastName = "Kolisnichenko" , State = UserState.Online },
-            new User {Email="raingeragon", Password="admin", FirstName="Ilya", LastName = "Khomenko" , State = UserState.Online },
-            new User {Email="legodov", Password="admin", FirstName="Oleh", LastName = "Dovhan" , State = UserState.Online },
+            new User {Email="andrewbulkovskiy@gmail.com", Password="password", FirstName="Andrew", LastName = "Bulkovskiy" , State = UserState.Online },
+            new User {Email="amateishchuk@gmail.com", Password="password", FirstName="Andrii", LastName = "Mateishchuk" , State = UserState.Online },
+            new User {Email="artyom@gmail.com", Password="password", FirstName="Artyom", LastName = "Moiseenko" , State = UserState.Online },
+            new User {Email="diana@gmail.com", Password="password", FirstName="Diana", LastName = "Kolisnichenko" , State = UserState.Online },
+            new User {Email="raingeragon@gmail.com", Password="password", FirstName="Ilya", LastName = "Khomenko" , State = UserState.Online },
+            new User {Email="legodov@gmail.com", Password="password", FirstName="Oleh", LastName = "Dovhan" , State = UserState.Online },
             new User {Email="straber@ukr.net", Password="password", FirstName="Oleksandr", LastName = "Truba" , State = UserState.Online },
-            new User {Email="daria", Password="admin", FirstName="Darina", LastName = "Korotkih" , State = UserState.Online },
-            new User {Email="rrational", Password="admin", FirstName="Vasyl", LastName = "Barna" , State = UserState.Online },
-            new User {Email="vitaly", Password="admin", FirstName="Віталій", LastName = "Ільченко" , State = UserState.Online }
+            new User {Email="daria@gmail.com", Password="password", FirstName="Darina", LastName = "Korotkih" , State = UserState.Online },
+            new User {Email="rrational@gmail.com", Password="password", FirstName="Vasyl", LastName = "Barna" , State = UserState.Online },
+            new User {Email="vitaly@gmail.com", Password="admin", FirstName="Віталій", LastName = "Ільченко" , State = UserState.Online }
             };
 
             users.ForEach(c => context.Users.Add(c));

@@ -13,8 +13,8 @@ namespace Joost.Api
 		{
             // Web API routes
             config.MapHttpAttributeRoutes();
-            var cors = new EnableCorsAttribute("*", "*", "*");
-            config.EnableCors(cors);
+            var cors = new EnableCorsAttribute("http://localhost:4200", "*", "*","*");
+            config.EnableCors();
             //Json format for response
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("Text/html"));
             config.Routes.MapHttpRoute(
