@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http';
 import { BaseApiService } from "./base-api.service";
 
@@ -23,4 +23,12 @@ export class UserService extends BaseApiService{
   	});
   }
 
+  confirmRegistration(key: string) {
+      debugger;
+      let url = this.generateUrl() + '/confirmregistration/' + key;
+      return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
+      /*return this.http.get(this.generateUrl() + "/confirmregistration/", {
+          params: new HttpParams().set('key', key)
+      });*/
+  }
 }

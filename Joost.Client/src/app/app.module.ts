@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+﻿import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -17,6 +17,7 @@ import { MenuAddComponent } from './components/menu-add/menu-add.component';
 import { MenuMessagesComponent } from './components/menu-messages/menu-messages.component';
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { SignalTestComponent } from './components/signal-test/signal-test.component';
+import { ConfirmRegistrationComponent } from './components/confirm-registration/confirm-registration.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { SignalTestComponent } from './components/signal-test/signal-test.compon
     MenuSearchComponent,
     MenuAddComponent,
     MenuMessagesComponent,
-    UserDetailsComponent 
+    UserDetailsComponent,
+    ConfirmRegistrationComponent,
   ],
   imports: [
     BrowserModule,

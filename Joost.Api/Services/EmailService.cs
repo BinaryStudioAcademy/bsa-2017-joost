@@ -15,7 +15,7 @@ namespace Joost.Api.Services
 
         public EmailService()
         {
-            url = $"http://localhost:51248/";
+            url = $"http://localhost:4200/";
             key = Guid.NewGuid();
             email = WebConfigurationManager.AppSettings["Email"];
             password = WebConfigurationManager.AppSettings["Password"];
@@ -32,7 +32,7 @@ namespace Joost.Api.Services
                 mail.Subject = "Invitation to Joost Team";
                 mail.Body = $"<div> <h3>Hi!</h3><br /> ";
                 mail.Body += $"<p>You registered on our messenger. If you want to log in, you should use following link: ";
-                mail.Body += $"<a href='http://localhost:51248/api/users/confirmregistration/{key.ToString()}'>Joost</a></p>";
+                mail.Body += $"<a href='{url}confirm-registration?key={key.ToString()}'>Joost</a></p>";
                 mail.Body += $"<p>Your credentials: </p>";
                 mail.Body += $"<p> Login: {user.Email}</p>" +
                              $"<p> Password: {user.Password} </p> <br /><br />";
