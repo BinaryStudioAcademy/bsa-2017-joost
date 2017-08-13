@@ -1,16 +1,13 @@
 ﻿using Joost.Api.Filters;
 using Joost.Api.Models;
 using Joost.Api.Services;
-using Joost.DbAccess.DAL;
-using Joost.DbAccess.EF;
 using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System;
-using System.Data.Entity.SqlServer;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
+using Joost.Api.Models.Extentions;
 
 namespace Joost.Api.Controllers
 {
@@ -52,7 +49,7 @@ namespace Joost.Api.Controllers
                 return NotFound();
             }
 
-            return Ok(user);
+            return Ok(user.ToUserDetailsDTO());
         }
 
         // GET: api/users/contact

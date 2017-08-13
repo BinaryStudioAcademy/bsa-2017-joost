@@ -3,11 +3,8 @@ using Joost.DbAccess.Interfaces;
 using System;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Joost.DbAccess.DAL;
-using Joost.DbAccess.EF;
 using Joost.Api.Models;
 using Joost.Api.Infrastructure;
-using System.Web.Http.Cors;
 
 namespace Joost.Api.Controllers
 {
@@ -20,7 +17,7 @@ namespace Joost.Api.Controllers
         [HttpPost]
 		public async Task<IHttpActionResult> Auth([FromBody]LoginTDO login)
 		{
-            if (!ModelState.IsValid)
+           if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -39,5 +36,23 @@ namespace Joost.Api.Controllers
 
             return Ok(new { token = Encrypt.EncryptToken(token) });
         }
-    }
+
+		// Get api/account/auth
+		[Route("api/account/auth")]
+		[HttpGet]
+		public async Task<IHttpActionResult> GetId(string token)
+		{
+			TokenTDO tok = null;
+			try
+			{
+				tok = Encrypt.DecryptToken(token);
+				return Ok(tok.UserId);
+			}
+			catch
+			{
+				return BadRequest();
+			}
+		}
+
+	}
 }

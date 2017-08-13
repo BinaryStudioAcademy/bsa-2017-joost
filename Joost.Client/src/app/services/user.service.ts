@@ -1,6 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http';
 import { BaseApiService } from "./base-api.service";
+import { UserDetail } from "../models/user-detail";
 
 @Injectable()
 export class UserService extends BaseApiService{
@@ -30,6 +31,12 @@ export class UserService extends BaseApiService{
       let url = this.generateUrl() + '/confirmregistration/' + key;
       return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
 
+  }
+
+  getUserDetails(id: number){
+    return this.http.get<UserDetail>(this.generateUrl(), {
+      params: new HttpParams().set('id', id.toString())
+    });
   }
 }
 export interface UserSearch{

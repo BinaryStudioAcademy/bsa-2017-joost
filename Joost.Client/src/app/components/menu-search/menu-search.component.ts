@@ -18,6 +18,7 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 
 	ngOnInit() {
 		this.authService.login("straber@ukr.net","password");
+		let id = this.authService.getUserId();
 		this.userService.getContacts().subscribe(data=>this.contactList= data);
 	}
 	ngOnDestroy() {

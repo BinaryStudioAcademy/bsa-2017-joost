@@ -6,46 +6,49 @@
   <div class="mdl-cell mdl-cell--3-col">
      <img src="assets/img/man.png" class="user-avatar">
   </div>
-  <div class="user-details-main-info mdl-cell mdl-cell--9-col">
-    <div>
-      <h3>Jon Snow</h3>
-      <div class="mdl-layout-spacer"><i>Winter is coing!</i></div>
-      <div class="user-details-state">
-        <i class="material-icons">check_circle</i>
-        <span>Online</span>
-      </div>
-      <button class="mdl-button mdl-js-button mdl-button--raised"> Send Message</button>
-    </div>
-  </div>
-</div>
+  <div *ngIf="user">
 
-<div class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-  <div class="user-details-group mdl-card__actions mdl-card--border">
-    <!-- <h5> Info</h5> -->
-    <div>
-      <h5>Address:</h5>
-      <span>Lviv, ua</span>
-    </div>
-    <div>
-      <h5>Birthday:</h5>
-      <span>14.12.1993</span>
-    </div>
-    <div>
-      <h5>Gender:</h5>
-      <span>Male</span>
+    <div class="user-details-main-info mdl-cell mdl-cell--9-col">
+      <div>
+        <h3>{{user.FirstName}}</h3>
+        <div class="mdl-layout-spacer"><i>Winter is coing!</i></div>
+        <div class="user-details-state">
+          <i class="material-icons">check_circle</i>
+          <span>Online</span>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised"> Send Message</button>
+      </div>
     </div>
   </div>
-  <div class="user-details-group mdl-card__actions mdl-card--border">
-    <!-- <h5>Settings</h5> -->
-    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
-      <input type="checkbox" id="switch-notifications" class="mdl-switch__input" checked>
-      <span class="mdl-switch__label">Notifications</span>
-    </label>
-  </div>
-  <div class="user-details-group mdl-card__actions mdl-card--border">
-    <!-- <h5>Actions</h5> -->
-    <button class="mdl-button mdl-js-button mdl-button--raised"> Clear History</button>
-    <button class="mdl-button mdl-js-button mdl-button--raised"> Delete Conversation</button>
-    <button class="mdl-button mdl-js-button mdl-button--raised"> Block User</button>
+
+  <div class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    <div class="user-details-group mdl-card__actions mdl-card--border">
+      <!-- <h5> Info</h5> -->
+      <div>
+        <h5>Address:</h5>
+        <span>Lviv, ua</span>
+      </div>
+      <div>
+        <h5>Birthday:</h5>
+        <span>14.12.1993</span>
+      </div>
+      <div>
+        <h5>Gender:</h5>
+        <span>Male</span>
+      </div>
+    </div>
+    <div class="user-details-group mdl-card__actions mdl-card--border">
+      <!-- <h5>Settings</h5> -->
+      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
+        <input type="checkbox" id="switch-notifications" class="mdl-switch__input" checked>
+        <span class="mdl-switch__label">Notifications</span>
+      </label>
+    </div>
+    <div class="user-details-group mdl-card__actions mdl-card--border">
+      <!-- <h5>Actions</h5> -->
+      <button class="mdl-button mdl-js-button mdl-button--raised"> Clear History</button>
+      <button class="mdl-button mdl-js-button mdl-button--raised"> Delete Conversation</button>
+      <button class="mdl-button mdl-js-button mdl-button--raised"> Block User</button>
+    </div>
   </div>
 </div>

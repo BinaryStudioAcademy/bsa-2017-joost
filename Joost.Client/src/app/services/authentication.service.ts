@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 
 import { BaseApiService } from "./base-api.service";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable()
 export class AuthenticationService extends BaseApiService {
@@ -34,8 +35,6 @@ export class AuthenticationService extends BaseApiService {
       },
       err=> this.isError = true
     );
-
-    
   }
 
   logout() {
@@ -43,6 +42,13 @@ export class AuthenticationService extends BaseApiService {
     localStorage.removeItem('joostUserToken');
   }
 
+  getUserId() {
+    console.log(this.token);
+    return this.http
+    .get<number>(this.generateUrl(),{
+    params: new HttpParams().set('token', this.token)
+    });
+  }
 }
 interface Token{
   token:string,
