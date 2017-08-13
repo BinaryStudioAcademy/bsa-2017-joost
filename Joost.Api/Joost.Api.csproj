@@ -242,7 +242,7 @@
     <Compile Include="Hubs\IClient.cs" />
     <Compile Include="Infrastructure\Encrypt.cs" />
     <Compile Include="Infrastructure\NinjectResolver.cs" />
-    <Compile Include="Models\Extentions\UserUserDetailsDTO.cs" />
+    <Compile Include="Models\Extentions\UserToUserDetailsDTO.cs" />
     <Compile Include="Models\TokenTDO.cs" />
     <Compile Include="Models\UserDetailsDTO.cs" />
     <Compile Include="Models\UserSearchTDO.cs" />

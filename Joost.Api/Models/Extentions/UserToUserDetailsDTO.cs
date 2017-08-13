@@ -6,7 +6,7 @@ using System.Web;
 
 namespace Joost.Api.Models.Extentions
 {
-	public static class UserUserDetailsDTO
+	public static class UserToUserDetailsDTO
 	{
 		public static UserDetailsDTO ToUserDetailsDTO(this User user)
 		{

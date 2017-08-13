@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Joost.Api.Models;
 using Joost.Api.Infrastructure;
+using System.Linq;
+using System.Net.Http;
 
 namespace Joost.Api.Controllers
 {
@@ -37,20 +39,23 @@ namespace Joost.Api.Controllers
             return Ok(new { token = Encrypt.EncryptToken(token) });
         }
 
-		// Get api/account/auth
-		[Route("api/account/auth")]
+		// Get api/account
+		[Route("api/account")]
 		[HttpGet]
-		public async Task<IHttpActionResult> GetId(string token)
+		public IHttpActionResult GetId()
 		{
-			TokenTDO tok = null;
+			if (!Request.Headers.Contains("Authorization"))
+				return BadRequest();
+
+			TokenTDO token = null;
 			try
 			{
-				tok = Encrypt.DecryptToken(token);
-				return Ok(tok.UserId);
+				token = Encrypt.DecryptToken(Request.Headers.GetValues("Authorization").First());
+				return Ok(token.UserId);
 			}
 			catch
 			{
-				return BadRequest();
+				return NotFound();
 			}
 		}
 

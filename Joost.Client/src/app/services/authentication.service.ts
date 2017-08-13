@@ -13,7 +13,7 @@ export class AuthenticationService extends BaseApiService {
 
   constructor(http: HttpClient) {
     super(http);
-    this.parUrl = "account/auth";
+    this.parUrl = "account";
     this.token = localStorage.getItem('joostUserToken'); 
   }
 
@@ -26,7 +26,7 @@ export class AuthenticationService extends BaseApiService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<Token>(this.generateUrl(),
+    return this.http.post<Token>(this.generateUrl() + "/auth",
     {"Email": email, "Password" : password})
     .subscribe(
       data=>{
@@ -45,9 +45,7 @@ export class AuthenticationService extends BaseApiService {
   getUserId() {
     console.log(this.token);
     return this.http
-    .get<number>(this.generateUrl(),{
-    params: new HttpParams().set('token', this.token)
-    });
+    .get<number>(this.generateUrl());
   }
 }
 interface Token{

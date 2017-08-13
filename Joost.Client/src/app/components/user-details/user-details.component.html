@@ -10,8 +10,8 @@
 
     <div class="user-details-main-info mdl-cell mdl-cell--9-col">
       <div>
-        <h3>{{user.FirstName}}</h3>
-        <div class="mdl-layout-spacer"><i>Winter is coing!</i></div>
+        <h3>{{user.FirstName}} {{user.LastName}}</h3>
+        <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
         <div class="user-details-state">
           <i class="material-icons">check_circle</i>
           <span>Online</span>
@@ -26,15 +26,15 @@
       <!-- <h5> Info</h5> -->
       <div>
         <h5>Address:</h5>
-        <span>Lviv, ua</span>
+        <span>{{user.City}}, {{user.Country}}</span>
       </div>
       <div>
         <h5>Birthday:</h5>
-        <span>14.12.1993</span>
+        <span>{{user.BirthDate | date:'shortDate'}}</span>
       </div>
       <div>
         <h5>Gender:</h5>
-        <span>Male</span>
+        <span>{{user.Gender}}</span>
       </div>
     </div>
     <div class="user-details-group mdl-card__actions mdl-card--border">

@@ -4,6 +4,7 @@ import { Location }                 from '@angular/common';
 import { UserService } from "../../services/user.service";
 import { AuthenticationService } from "../../services/authentication.service";
 import { UserDetail } from "../../models/user-detail";
+import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: 'app-user-details',
@@ -12,7 +13,7 @@ import { UserDetail } from "../../models/user-detail";
 })
 export class UserDetailsComponent implements OnInit {
 
-  user: UserDetail = null;
+  user: UserDetail;
   constructor(
     private location: Location,
     private userService: UserService,

@@ -1,14 +1,14 @@
 export class UserDetail{
-    id: number;
-    firstName: string;
-    lastName: string;
-    city: string;
-    country: string;
-    birthDate: Date;
-    gender: number;
-    status: UserState;
-    avatar: string;
-    state: number;
+    Id: number;
+    FirstName: string;
+    LastName: string;
+    City: string;
+    Country: string;
+    BirthDate: Date;
+    Gender: Gender;
+    Status: UserState;
+    Avatar: string;
+    State: number;
 }
 
 enum UserState
@@ -17,4 +17,10 @@ enum UserState
     Busy,
     Inaccesible,
     Offline
+}
+
+enum Gender
+{
+    Male,
+    Female
 }
