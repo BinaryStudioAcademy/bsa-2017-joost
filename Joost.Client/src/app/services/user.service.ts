@@ -1,7 +1,10 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient,HttpParams } from '@angular/common/http';
+
 import { BaseApiService } from "./base-api.service";
+
 import { UserDetail } from "../models/user-detail";
+import { UserSearch } from "../models/user-search";
 
 @Injectable()
 export class UserService extends BaseApiService{
@@ -39,9 +42,4 @@ export class UserService extends BaseApiService{
     });
   }
 }
-export interface UserSearch{
-  id:number,
-  name:string,
-  avatar:string,
-  City:string
-}
+

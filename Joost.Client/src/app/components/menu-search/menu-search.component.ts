@@ -1,6 +1,9 @@
 import { Component, OnInit,OnDestroy } from '@angular/core';
-import { UserService,UserSearch } from '../../services/user.service';
+
+import { UserService } from '../../services/user.service';
 import { AuthenticationService } from '../../services/authentication.service';
+
+import { UserSearch } from "../../models/user-search";
 
 @Component({
   selector: 'app-menu-search',
