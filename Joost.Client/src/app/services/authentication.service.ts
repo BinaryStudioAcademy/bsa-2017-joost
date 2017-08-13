@@ -8,11 +8,12 @@ import { BaseApiService } from "./base-api.service";
 @Injectable()
 export class AuthenticationService extends BaseApiService {
   private token: string;
+  private isError:boolean;
 
   constructor(http: HttpClient) {
     super(http);
     this.parUrl = "account/auth";
-    this.token = JSON.parse(localStorage.getItem('joostUserToken')); 
+    this.token = localStorage.getItem('joostUserToken'); 
   }
 
   getToken(): string {
@@ -24,19 +25,17 @@ export class AuthenticationService extends BaseApiService {
   }
 
   login(email: string, password: string) {
-    return this.http.post(this.generateUrl(),
-    JSON.stringify({Email: email, Password : password}))
-    .map((response: Response) => {
-      // let token = response.body;
-      // if(token) {
-      //   this.token = token;
-      //   return true;
-      // }
-      // else {
-      //   return false;
-      // }
-      return true;
-    })
+    return this.http.post<Token>(this.generateUrl(),
+    {"Email": email, "Password" : password})
+    .subscribe(
+      data=>{
+        this.token = data.token;
+        localStorage.setItem('joostUserToken',data.token)
+      },
+      err=> this.isError = true
+    );
+
+    
   }
 
   logout() {
@@ -44,4 +43,7 @@ export class AuthenticationService extends BaseApiService {
     localStorage.removeItem('joostUserToken');
   }
 
+}
+interface Token{
+  token:string,
 }

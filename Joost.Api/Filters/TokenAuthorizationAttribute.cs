@@ -15,15 +15,11 @@ namespace Joost.Api.Filters
 {
     public class TokenAuthorizationAttribute: ActionFilterAttribute
     {
-        private TimeSpan expiryTime;
+        public TimeSpan expiryTime { get; set; } = new TimeSpan(24, 0, 0);
 
-        public TokenAuthorizationAttribute(TimeSpan? expiryTime=null)
+        public TokenAuthorizationAttribute()
         {
-            if (expiryTime == null)
-            {
-                expiryTime = new TimeSpan(4, 0, 0);
-            }
-            this.expiryTime = expiryTime.Value;
+            
         }
 
         public override void OnActionExecuting(HttpActionContext actionContext)
@@ -36,7 +32,7 @@ namespace Joost.Api.Filters
                     Content = new StringContent("I didn't see your token in request")
                 };
             }
-            Token token = null;
+            TokenTDO token = null;
             try
             {
                 token = Encrypt.DecryptToken(actionContext.Request.Headers.GetValues("Authorization").First());
@@ -48,6 +44,7 @@ namespace Joost.Api.Filters
                     StatusCode = System.Net.HttpStatusCode.MethodNotAllowed,
                     Content = new StringContent("Invalid token")
                 };
+                return;
             }
 
             var unitOfWork = new UnitOfWork();

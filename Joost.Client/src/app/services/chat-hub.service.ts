@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
+import {Observable} from "rxjs/Observable";
 import 'signalr';
 declare var jquery:any;
 declare var $ :any;
 
-export class User { 
+export class User {  //temporary here
     public Id: number;
     public ConnectionId : string;
 
@@ -14,7 +15,7 @@ export class User {
     
 }
 
-export class Message {
+export class Message { //temporaty here
     public SenderId: number;      
     public Text: string;    
 
@@ -27,111 +28,91 @@ export class Message {
 
 @Injectable()
 export class ChatHubService {
+
+  private url = 'http://localhost:51248/signalr';
+  private hubName = 'chathub';
+  private SignalrConnection: any;
+  private ChatProxy: any;
+  private ConnectionId: any;
+
   
   private allMessages: Message[];
   private allUsers: User[];
   
-  private server: any;
-  private client: any;
-  private chat: any;
-
-  private ConnectionId: string;
-
-    constructor() {
-
-      console.log("Constructo of hub STARTED")
-      
-      $.connection.hub.url = "http://localhost:51248/signalr";
-      
-      this.chat = $.connection.ChatHub; 
-      this.server = this.chat.server;
-      this.client = this.chat.client;
-
-      console.log("Constructo of hub REGISTER EVENTS")
-      this.registerOnServerEvents(); // setting event handlers
-
-
-      console.log("Constructo of hub START CONNECTION")      
-      this.startConnection(); // connectning to Hub
-    }
+  
+  constructor() {
     
+    this.SignalrConnection = $.hubConnection(this.url, {  
+      useDefaultPath: false  
+    });
     
-    private registerOnServerEvents(): void {
-      
-      let self = this;
-       
-      this.client.addMessage = (SenderId: number, message: string) => {
-        console.log("Adding message event on client");
-        self.addMessage(SenderId, message);
+    this.ChatProxy = this.SignalrConnection.createHubProxy(this.hubName);
+
+    this.registerEvents();
+    this.startConnection();
+  
+  }
+  
+  private startConnection(): void {
+    this.SignalrConnection.start().done((data: any) => {
+      this.ConnectionId = this.SignalrConnection.id;
+      console.log('Connection estabilished. Id: ' + this.ConnectionId);
+    }).fail((error) => {
+      console.log('Could not connect to hub. Error: ' + error);
+    });
+  }
+  
+  private registerEvents(): void {
+    let self = this;
+    
+    this.ChatProxy.on('addMessage',function (SenderId: number, message: string) {
+      self.addMessage(SenderId,message);
+    });  
+
+    this.ChatProxy.on('onConnected',function (ConnectionId: string, userId: number) {   
+      self.addUser(ConnectionId,userId);;
+    });  
+
+    this.ChatProxy.on('onNewUserConnected',function (ConnectionId: string, userId: number) {     
+      self.addUser(ConnectionId, userId);
+    });  
+
+    this.ChatProxy.on('onUserDisconnected',function (ConnectionId: string, userId: number) {    
+      let index = self.allUsers.map(function(x) {return x.Id; }).indexOf(userId);
+      if (index != -1) {
+        return self.allUsers.splice(index, 1);
       };
-
-      // User registration event
-      this.client.onConnected = (ConnectionId: string, userId: number) => {
-        console.log("First user connected! Id:" + userId);        
-         self.addUser(ConnectionId,userId);
-      };
-      
-      
-      this.client.onNewUserConnected = (ConnectionId: string, userId: number) => {
-        console.log("New user connected! Id:" + userId);        
-        self.addUser(ConnectionId, userId);
-      };
-      
-      
-      this.client.onUserDisconnected = (ConnectionId: string, userId: number) => {
-        console.log("User deisconnected. Id:" + userId);        
-        let index = self.allUsers.map(function(x) {return x.Id; }).indexOf(userId); // what if dont eist?
-        
-        if (index != -1) {
-          return self.allUsers.splice(index, 1);
-        };
-      }
+    });  
+  
+  }
+  
+  addMessage(SenderId: number, message: string): void {
+    this.allMessages.push(new Message(SenderId, message));
+  }
+  
+  addUser(connectionId: string, userId: number): void {
+    if (this.ConnectionId !== connectionId) {
+      let usr = { Id: userId, ConnectionId: connectionId };
+      this.allUsers.push(usr);
     }
+  }
+  
+  //Server methods here:
+   SendToUser(SenderId: number, ReceiverId: number, message: string) {  
+     this.ChatProxy.invoke('SendToUser', SenderId, ReceiverId, message).done(function () {
+       console.log ('Invocation of SendToUser on server succeeded.');
+      }).fail(function (error) {
+        console.log('Invocation of SendToUser on server failed. Error: ' + error);
+      });
+   }
     
-    // обробка пвд з сервера
-    addMessage(SenderId: number, message: string): void {
-        console.log("Getting message from server:" + message);      
-      this.allMessages.push(new Message(SenderId, message));
-    }
+   SendToGroup(SenderId: number, GroupId: number, message: string) {  
+     this.ChatProxy.invoke('SendToGroup', SenderId, GroupId, message).done(function () {
+       console.log ('Invocation of SendToGroup on server succeeded.');
+      }).fail(function (error) {
+        console.log('Invocation of SendToGroup on server failed. Error: ' + error);
+      });
+   }
 
-
-    addUser(connectionId: string, userId: number): void {
-        console.log("Adding new user with id:" + userId);
-        if (this.ConnectionId !== connectionId) {
-            let usr = { Id: userId, ConnectionId: connectionId };
-            this.allUsers.push(usr);
-        }
-    }
-
-    private startConnection(): void {
-        let self = this;
-        $.connection.hub.start().done((data: any) => {
-            console.log('startConnection ' + data);
-            console.log('Send  onConnected');
-        }).fail((error) => {
-            console.log('Could not connect ' + error);
-
-        });
-    }
-
-//--------------------------------------------------------------------------------
-
-    // // серверний метод для надсилання пвд конкретному юзеру
-    // sendMessageToUser(SenderId: number, ReceiverId: number, message: string) {
-    //     console.log("Sending message" + message + " from user: " + SenderId +  " to user: " + ReceiverId );
-      
-    //   this.server.SendToUser(SenderId, ReceiverId, message);
-    // }
-
-    //   // серверний метод для надсилання пвд групі
-    // sendMessageToGroup(SenderId: number, GroupId: number, message: string) {
-    //     console.log("Sending message" + message + " from user: " + SenderId +  " to group: " + GroupId );
-
-      
-    //   this.server.SendToGroup(SenderId, GroupId, message);
-    // }
-
-//--------------------------------------------------------------------------------
-    
 
 }

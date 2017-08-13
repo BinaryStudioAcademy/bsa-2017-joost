@@ -12,23 +12,31 @@ export class UserService extends BaseApiService{
 
   searchResult(name:string){
   	return this.http
-  	.get(this.generateUrl(),{
+  	.get<UserSearch>(this.generateUrl(),{
   		params: new HttpParams().set('name',name)
   	});
   }
-  addContact(userId:number, contactId:number){
-  	return this.http
-  	.post(this.generateUrl() + "/contact",{
-  		params: new HttpParams().set('UserId', userId.toString()).append('ContactId', contactId.toString())
-  	});
+  getContacts(){
+    return this.http
+    .get<number[]>(this.generateUrl()+ "/contact");
   }
+  addContact(contactId:number){
+  	return this.http
+  	.post(this.generateUrl() + "/contact",
+      {  	  "Id":contactId  	});
+  }
+}
+export interface UserSearch{
+  id:number,
+  name:string,
+  avatar:string,
+  City:string
+}
 
   confirmRegistration(key: string) {
       debugger;
       let url = this.generateUrl() + '/confirmregistration/' + key;
       return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
-      /*return this.http.get(this.generateUrl() + "/confirmregistration/", {
-          params: new HttpParams().set('key', key)
-      });*/
+
   }
 }
