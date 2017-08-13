@@ -25,18 +25,16 @@ export class UserService extends BaseApiService{
   	.post(this.generateUrl() + "/contact",
       {  	  "Id":contactId  	});
   }
+
+  confirmRegistration(key: string) {
+      let url = this.generateUrl() + '/confirmregistration/' + key;
+      return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
+
+  }
 }
 export interface UserSearch{
   id:number,
   name:string,
   avatar:string,
   City:string
-}
-
-  confirmRegistration(key: string) {
-      debugger;
-      let url = this.generateUrl() + '/confirmregistration/' + key;
-      return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
-
-  }
 }

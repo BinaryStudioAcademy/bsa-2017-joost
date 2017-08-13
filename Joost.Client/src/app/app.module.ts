@@ -31,7 +31,7 @@ import { ConfirmRegistrationComponent } from './components/confirm-registration/
     MenuAddComponent,
     MenuMessagesComponent,
     UserDetailsComponent,
-    SignalTestComponent 
+    SignalTestComponent,
     ConfirmRegistrationComponent,
   ],
   imports: [
