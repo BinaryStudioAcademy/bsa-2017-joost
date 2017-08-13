@@ -123,7 +123,7 @@ namespace Joost.Api.Controllers
 
         // POST: api/users
         [HttpPost]
-        public async Task<IHttpActionResult> AddUser([FromBody]LoginModel user)
+        public async Task<IHttpActionResult> AddUser([FromBody]LoginTDO user)
         {
             if (!ModelState.IsValid)
             {
