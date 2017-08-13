@@ -34,11 +34,14 @@ export class ChatHubService {
   private SignalrConnection: any;
   private ChatProxy: any;
   private ConnectionId: any;
-
+  
+  public onConnectedEvent: EventEmitter<void>; 
+  public onNewUserConnectedEvent: EventEmitter<void>; 
+  public addMessageEvent: EventEmitter<void>; 
+  public onUserDisconnectedEvent: EventEmitter<void>; 
   
   private allMessages: Message[];
   private allUsers: User[];
-  
   
   constructor() {
     
@@ -50,13 +53,13 @@ export class ChatHubService {
 
     this.registerEvents();
     this.startConnection();
-  
+
   }
   
   private startConnection(): void {
     this.SignalrConnection.start().done((data: any) => {
       this.ConnectionId = this.SignalrConnection.id;
-      console.log('Connection estabilished. Id: ' + this.ConnectionId);
+      console.log('Connection estabilished. Connection id: ' + this.ConnectionId);
     }).fail((error) => {
       console.log('Could not connect to hub. Error: ' + error);
     });
@@ -65,16 +68,19 @@ export class ChatHubService {
   private registerEvents(): void {
     let self = this;
     
-    this.ChatProxy.on('addMessage',function (SenderId: number, message: string) {
-      self.addMessage(SenderId,message);
-    });  
-
-    this.ChatProxy.on('onConnected',function (ConnectionId: string, userId: number) {   
-      self.addUser(ConnectionId,userId);;
-    });  
-
+    this.ChatProxy.on('onConnected',function (ConnectionId: string, userId: number) {
+      self.addUser(ConnectionId,userId);
+       self.onConnectedEvent.emit();
+    }); 
+    
     this.ChatProxy.on('onNewUserConnected',function (ConnectionId: string, userId: number) {     
       self.addUser(ConnectionId, userId);
+       self.onNewUserConnectedEvent.emit();
+    });  
+    
+    this.ChatProxy.on('addMessage',function (SenderId: number, message: string) {
+      self.addMessage(SenderId,message);
+       self.addMessageEvent.emit();
     });  
 
     this.ChatProxy.on('onUserDisconnected',function (ConnectionId: string, userId: number) {    
@@ -82,8 +88,10 @@ export class ChatHubService {
       if (index != -1) {
         return self.allUsers.splice(index, 1);
       };
-    });  
+       self.onUserDisconnectedEvent.emit();
+    });
   
+
   }
   
   addMessage(SenderId: number, message: string): void {
