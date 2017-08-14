@@ -18,7 +18,7 @@ namespace Joost.Api.Infrastructure
         private const int keysize = 256;
 
         //Encrypt
-        public static string EncryptToken(TokenTDO token)
+        public static string EncryptToken(TokenDto token)
         {
             string plainText = JsonConvert.SerializeObject(token);
 
@@ -39,7 +39,7 @@ namespace Joost.Api.Infrastructure
             return Convert.ToBase64String(cipherTextBytes);
         }
         //Decrypt
-        public static TokenTDO DecryptToken(string cipherText)
+        public static TokenDto DecryptToken(string cipherText)
         {
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
             byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
@@ -55,7 +55,7 @@ namespace Joost.Api.Infrastructure
             memoryStream.Close();
             cryptoStream.Close();
             var resultString = Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
-            return JsonConvert.DeserializeObject<TokenTDO>(resultString);
+            return JsonConvert.DeserializeObject<TokenDto>(resultString);
         }
     }
 }

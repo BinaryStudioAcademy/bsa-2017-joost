@@ -242,16 +242,16 @@
     <Compile Include="Hubs\IClient.cs" />
     <Compile Include="Infrastructure\Encrypt.cs" />
     <Compile Include="Infrastructure\NinjectResolver.cs" />
-    <Compile Include="Models\Extentions\UserToUserDetailsDTO.cs" />
-    <Compile Include="Models\TokenTDO.cs" />
-    <Compile Include="Models\UserDetailsDTO.cs" />
-    <Compile Include="Models\UserSearchTDO.cs" />
+    <Compile Include="Models\ContactDto.cs" />
+    <Compile Include="Models\TokenDto.cs" />
+    <Compile Include="Models\UserDetailsDto.cs" />
+    <Compile Include="Models\UserSearchDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ChatHubService.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\IChatHubService.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Models\LoginTDO.cs" />
+    <Compile Include="Models\LoginDto.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

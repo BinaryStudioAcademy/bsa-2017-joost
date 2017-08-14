@@ -2,12 +2,8 @@
 using Joost.Api.Models;
 using Joost.DbAccess.DAL;
 using Joost.DbAccess.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Web;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
@@ -34,7 +30,7 @@ namespace Joost.Api.Filters
                     Content = new StringContent("I didn't see your token in request")
                 };
             }
-            TokenTDO token = null;
+            TokenDto token = null;
             try
             {
                 token = Encrypt.DecryptToken(actionContext.Request.Headers.GetValues("Authorization").First());

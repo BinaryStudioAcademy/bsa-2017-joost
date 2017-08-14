@@ -7,7 +7,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Joost.Api.Models.Extentions;
 
 namespace Joost.Api.Controllers
 {
@@ -25,7 +24,7 @@ namespace Joost.Api.Controllers
             var users = _unitOfWork.Repository<User>()
                 .Query()
                 .Where(item => !String.IsNullOrEmpty(item.LastName) && !String.IsNullOrEmpty(item.FirstName) && (item.FirstName + " " + item.LastName).Contains(name) || item.Email.Contains(name))
-                .Select(user => new UserSearchTDO() {
+                .Select(user => new UserSearchDto() {
                     Id = user.Id,
                     Name = user.FirstName + " " + user.LastName,
                     Avatar = user.Avatar,
@@ -49,13 +48,13 @@ namespace Joost.Api.Controllers
                 return NotFound();
             }
 
-            return Ok(user.ToUserDetailsDTO());
+            return Ok(UserDetailsDto.FromModel(user));
         }
 
         // GET: api/users/contact
         [HttpPost]
         [Route("contact")]
-        public async Task<IHttpActionResult> AddContact([FromBody]Contact contact)
+        public async Task<IHttpActionResult> AddContact([FromBody]ContactDto contact)
         {
             var userId = GetCurrentUserId();
             if (userId ==contact.Id)
@@ -120,7 +119,7 @@ namespace Joost.Api.Controllers
 
         // POST: api/users
         [HttpPost]
-        public async Task<IHttpActionResult> AddUser([FromBody]LoginTDO user)
+        public async Task<IHttpActionResult> AddUser([FromBody]LoginDto user)
         {
             if (!ModelState.IsValid)
             {
@@ -153,7 +152,7 @@ namespace Joost.Api.Controllers
                 await _unitOfWork.SaveAsync();
             }
 
-            return CreatedAtRoute("DefaultApi", null, user);
+            return Ok();
         }
 
         // GET: api/users/confirmregistration/{key}
@@ -222,8 +221,5 @@ namespace Joost.Api.Controllers
             }
             base.Dispose(disposing);
         }
-    }
-    public class Contact{
-        public int Id { get; set; }
     }
 }
