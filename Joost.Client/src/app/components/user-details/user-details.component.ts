@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Location }                 from '@angular/common';
+import { Location } from '@angular/common';
+import { Observable } from "rxjs/Observable";
 
 import { UserService } from "../../services/user.service";
 import { AuthenticationService } from "../../services/authentication.service";
+
 import { UserDetail } from "../../models/user-detail";
-import { Observable } from "rxjs/Observable";
 
 @Component({
   selector: 'app-user-details',
@@ -24,7 +25,6 @@ export class UserDetailsComponent implements OnInit {
     this.authService.getUserId().subscribe( data => {
         this.userService.getUserDetails(data).subscribe( d => {
           this.user = d;
-          console.log(d);
           console.log(this.user);
          });
     });

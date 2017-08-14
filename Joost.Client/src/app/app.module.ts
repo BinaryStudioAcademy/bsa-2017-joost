@@ -21,6 +21,10 @@ import { UserDetailsComponent } from './components/user-details/user-details.com
 import { SignalTestComponent } from './components/signal-test/signal-test.component';
 import { ConfirmRegistrationComponent } from './components/confirm-registration/confirm-registration.component';
 
+import { GenderPipe } from "./pipes/gender.pipe";
+import { StateIconPipe } from "./pipes/state-icon.pipe";
+import { StateStringPipe } from "./pipes/state-string.pipe";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +37,9 @@ import { ConfirmRegistrationComponent } from './components/confirm-registration/
     UserDetailsComponent,
     SignalTestComponent,
     ConfirmRegistrationComponent,
+    GenderPipe,
+    StateIconPipe,
+    StateStringPipe
   ],
   imports: [
     BrowserModule,

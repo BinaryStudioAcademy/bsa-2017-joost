@@ -58,6 +58,10 @@
     padding: 10px 0;
 }
 
-.user-details-state .material-icons{
-    color: $color-online-indecator;
+:host ::ng-deep .online-state {
+ color: $color-online-indecator;
+}
+
+:host ::ng-deep .busy-state{
+ color: $color-offline-indecator;
 }

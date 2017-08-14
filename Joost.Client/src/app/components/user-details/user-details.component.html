@@ -13,8 +13,8 @@
         <h3>{{user.FirstName}} {{user.LastName}}</h3>
         <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
         <div class="user-details-state">
-          <i class="material-icons">check_circle</i>
-          <span>Online</span>
+            <div [innerHtml]="user.State | stateIconPipe"></div>
+            <span>{{user.State | stateStringPipe}}</span>
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised"> Send Message</button>
       </div>
@@ -34,7 +34,7 @@
       </div>
       <div>
         <h5>Gender:</h5>
-        <span>{{user.Gender}}</span>
+        <span>{{user.Gender | genderPipe}}</span>
       </div>
     </div>
     <div class="user-details-group mdl-card__actions mdl-card--border">

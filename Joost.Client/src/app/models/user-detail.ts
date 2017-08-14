@@ -6,12 +6,12 @@ export class UserDetail{
     Country: string;
     BirthDate: Date;
     Gender: Gender;
-    Status: UserState;
+    Status: string;
     Avatar: string;
-    State: number;
+    State: UserState;
 }
 
-enum UserState
+export enum UserState
 {
     Online,
     Busy,
@@ -19,7 +19,7 @@ enum UserState
     Offline
 }
 
-enum Gender
+export enum Gender
 {
     Male,
     Female
