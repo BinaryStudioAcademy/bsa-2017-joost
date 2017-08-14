@@ -1,19 +1,12 @@
 ﻿using Joost.DbAccess.Entities;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Joost.DbAccess.EF
 {
     public class JoostDbContext: DbContext
     {
-        public JoostDbContext() : base("JoostDB")
-        {
-            Database.SetInitializer(new JoostDbInitialiser());
-        }
+        public JoostDbContext() : base("JoostDB") { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }
@@ -36,7 +29,6 @@ namespace Joost.DbAccess.EF
             modelBuilder.Entity<Group>()
                 .HasMany(g => g.Members)
                 .WithMany(m => m.Groups);
-
 
             modelBuilder.Properties<DateTime>().Configure(c => c.HasColumnType("datetime2"));
             base.OnModelCreating(modelBuilder);
