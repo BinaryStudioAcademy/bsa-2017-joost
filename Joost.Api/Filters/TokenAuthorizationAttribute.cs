@@ -15,12 +15,14 @@ namespace Joost.Api.Filters
 {
     public class TokenAuthorizationAttribute: ActionFilterAttribute
     {
+        /*
         public TimeSpan expiryTime { get; set; } = new TimeSpan(24, 0, 0);
 
         public TokenAuthorizationAttribute()
         {
             
         }
+        */
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
@@ -57,7 +59,7 @@ namespace Joost.Api.Filters
                     Content = new StringContent("Invalid userID")
                 };
             }
-
+            /*
             if (DateTime.Now - token.Time > expiryTime)
             {
                 actionContext.Response = new HttpResponseMessage
@@ -65,7 +67,7 @@ namespace Joost.Api.Filters
                     StatusCode = System.Net.HttpStatusCode.MethodNotAllowed,
                     Content = new StringContent("Token life has expired")
                 };
-            }
+            } */
         }
     }
 }
