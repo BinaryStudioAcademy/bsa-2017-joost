@@ -7,6 +7,7 @@ using Joost.Api.Models;
 using Joost.Api.Infrastructure;
 using System.Linq;
 using System.Net.Http;
+using Joost.Api.Filters;
 
 namespace Joost.Api.Controllers
 {
@@ -42,21 +43,10 @@ namespace Joost.Api.Controllers
 		// Get api/account
 		[Route("api/account")]
 		[HttpGet]
+        [TokenAuthorization]
 		public IHttpActionResult GetId()
 		{
-			if (!Request.Headers.Contains("Authorization"))
-				return BadRequest();
-
-			TokenTDO token = null;
-			try
-			{
-				token = Encrypt.DecryptToken(Request.Headers.GetValues("Authorization").First());
-				return Ok(token.UserId);
-			}
-			catch
-			{
-				return NotFound();
-			}
+			return Ok(GetCurrentUserId());
 		}
 
 	}

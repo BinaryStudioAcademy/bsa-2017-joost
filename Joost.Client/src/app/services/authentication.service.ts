@@ -43,7 +43,6 @@ export class AuthenticationService extends BaseApiService {
   }
 
   getUserId() {
-    console.log(this.token);
     return this.http
     .get<number>(this.generateUrl());
   }

@@ -21,7 +21,6 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 
 	ngOnInit() {
 		this.authService.login("straber@ukr.net","password");
-		let id = this.authService.getUserId();
 		this.userService.getContacts().subscribe(data=>this.contactList= data);
 	}
 	ngOnDestroy() {
@@ -38,7 +37,6 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 				});
 		}
 		this.result = null;
-		console.log(this.contactList);
 	}
 	addToContact(contactId:number){
 		this.userService.addContact(contactId).subscribe(succes=>{
