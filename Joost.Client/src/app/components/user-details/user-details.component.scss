@@ -1,0 +1,63 @@
+@import '../../../vars.scss';
+
+.data-container{
+   width: calc(100% - 16px);
+   margin: 8px;
+}
+
+.user-avatar{
+    width: 150;
+    height: 150px;
+    margin: 20px;
+}
+
+.user-details-header{
+    height: 50px;
+    padding: 0 8px;
+    justify-content:space-between;
+}
+
+.user-details-main{
+    flex-direction: column;
+}
+
+.user-details-group{
+    padding-left: 20px;
+}
+
+.user-details-group .mdl-button{
+    display: block;
+    margin: 10px 0;
+}
+.user-details-group h6{
+    margin: 0;
+}
+
+.user-details-group h5{
+    margin: 8px 0;
+}
+
+.user-details-main-info{
+    display: flex;
+    align-items:center;
+}
+
+.user-details-main-info h3{
+    margin: 0;
+}
+
+.user-details-online-indecator{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: $color-online-indecator;
+}
+.user-details-state{
+    display: flex;
+    align-items:center;
+    padding: 10px 0;
+}
+
+.user-details-state .material-icons{
+    color: $color-online-indecator;
+}

@@ -1,25 +1,17 @@
-$left-panel-width: 400px;
+@import '../../../vars.scss';
 
 .main-avatar {
   width: 64px;
   height: 64px;
   border-radius: 32px;
 }
-.main-layout .mdl-layout__header .mdl-layout__drawer-button {
-  color: rgba(0, 0, 0, 0.54);
-}
+
 .mdl-layout__drawer .avatar {
   margin-bottom: 16px;
 }
 .left-panel {
   border: none;
-}
-
-.left-panel .mdl-menu__container {
-  z-index: -1;
-}
-.left-panel .demo-navigation {
-  z-index: -2;
+  background-color: $color-primary;
 }
 
 .left-panel .mdl-menu .mdl-menu__item {
@@ -53,13 +45,14 @@ $left-panel-width: 400px;
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
-  color: rgba(255, 255, 255, 0.56);
+  color: $color-text-secondary;
   font-weight: 500;
 }
-.main-layout .link-navigation .mdl-navigation__link:hover {
-  background-color: #00BCD4;
-  color: #37474F;
+
+.mdl-list__item:hover{
+  color:$color-primary-dark;
 }
+
 .link-navigation .mdl-navigation__link .material-icons {
   font-size: 24px;
   color: rgba(255, 255, 255, 0.56);
@@ -69,26 +62,19 @@ $left-panel-width: 400px;
     width: $left-panel-width;
 }
 
-.mdl-tabs__tab, .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active{
-    color: white;
-    width:$left-panel-width/5;
+.mdl-tabs__tab{
+  color: $color-text-secondary;
+  width: $left-panel-width/5;
+}
+.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active{
+    color:$color-text-primary;
 }
 
-.left-panel-user-info{
-    display: flex;
-    flex-direction:column;
-    align-content:center;
-    margin:10px;
-}
-
-.header-user-name{
-    font-size: 1.25em;
-}
 .online-indecator{
     width:12px;
     height: 12px;
     border-radius: 6px;
-    background-color:greenyellow;
+    background-color:$color-online-indecator;
     position: absolute;
     bottom: 2px;
     right: 2px;
@@ -97,4 +83,17 @@ $left-panel-width: 400px;
 
 .avatar-container{
     position: relative;
+}
+
+.header-user-name{
+    font-size: 1.25em;
+    color: $color-text-primary;
+}
+
+.left-panel-user-info{
+    display: flex;
+    flex-direction:column;
+    align-content:center;
+    margin:10px;
+    color: $color-text-secondary;
 }

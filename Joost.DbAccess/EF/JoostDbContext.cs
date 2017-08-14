@@ -19,6 +19,7 @@ namespace Joost.DbAccess.EF
         public DbSet<Group> Groups { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<GroupMessage> GroupMessages { get; set; }
+        public DbSet<ConfirmRegistration> ConfirmRegistration { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

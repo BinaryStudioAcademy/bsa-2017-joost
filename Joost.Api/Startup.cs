@@ -1,4 +1,8 @@
-﻿using Microsoft.Owin;
+﻿using Joost.Api.Hubs;
+using Joost.DbAccess.DAL;
+using Microsoft.AspNet.SignalR;
+using Microsoft.Owin;
+using Microsoft.Owin.Cors;
 using Owin;
 
 [assembly: OwinStartup(typeof(Joost.Api.Startup))]
@@ -9,7 +13,10 @@ namespace Joost.Api
     {
         public void Configuration(IAppBuilder app)
         {
-            // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=316888
+            GlobalHost.DependencyResolver.Register(
+                typeof(ChatHub),
+                () => new ChatHub(new UnitOfWork()));
+            app.UseCors(CorsOptions.AllowAll);
             app.MapSignalR();
         }
     }

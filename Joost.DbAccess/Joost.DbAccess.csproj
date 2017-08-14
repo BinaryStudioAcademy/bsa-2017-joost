@@ -51,6 +51,7 @@
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="EF\JoostDbContext.cs" />
     <Compile Include="EF\JoostDbInitialiser.cs" />
+    <Compile Include="Entities\ConfirmRegistration.cs" />
     <Compile Include="Entities\Group.cs" />
     <Compile Include="Entities\GroupMessage.cs" />
     <Compile Include="Entities\Message.cs" />
@@ -61,7 +62,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

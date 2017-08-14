@@ -1,0 +1,54 @@
+<div class="user-details-header mdl-layout__header-row mdl-shadow--2dp">
+  <button class="mdl-button mdl-js-button" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
+  <button class="mdl-button mdl-js-button">Delete</button>
+</div>
+<div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+  <div class="mdl-cell mdl-cell--3-col">
+     <img src="assets/img/man.png" class="user-avatar">
+  </div>
+  <div *ngIf="user">
+
+    <div class="user-details-main-info mdl-cell mdl-cell--9-col">
+      <div>
+        <h3>{{user.FirstName}} {{user.LastName}}</h3>
+        <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
+        <div class="user-details-state">
+          <i class="material-icons">check_circle</i>
+          <span>Online</span>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised"> Send Message</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    <div class="user-details-group mdl-card__actions mdl-card--border">
+      <!-- <h5> Info</h5> -->
+      <div>
+        <h5>Address:</h5>
+        <span>{{user.City}}, {{user.Country}}</span>
+      </div>
+      <div>
+        <h5>Birthday:</h5>
+        <span>{{user.BirthDate | date:'shortDate'}}</span>
+      </div>
+      <div>
+        <h5>Gender:</h5>
+        <span>{{user.Gender}}</span>
+      </div>
+    </div>
+    <div class="user-details-group mdl-card__actions mdl-card--border">
+      <!-- <h5>Settings</h5> -->
+      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
+        <input type="checkbox" id="switch-notifications" class="mdl-switch__input" checked>
+        <span class="mdl-switch__label">Notifications</span>
+      </label>
+    </div>
+    <div class="user-details-group mdl-card__actions mdl-card--border">
+      <!-- <h5>Actions</h5> -->
+      <button class="mdl-button mdl-js-button mdl-button--raised"> Clear History</button>
+      <button class="mdl-button mdl-js-button mdl-button--raised"> Delete Conversation</button>
+      <button class="mdl-button mdl-js-button mdl-button--raised"> Block User</button>
+    </div>
+  </div>
+</div>

@@ -5,14 +5,13 @@ using Joost.DbAccess.Entities;
 
 namespace Joost.Api.Hubs
 {
-    [Authorize]
-    public class ChatHub : Hub
+    public class ChatHub : Hub<IClient>
     {
         IUnitOfWork _unitOfWork;
 
         public ChatHub(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork; 
         }
 
         public async Task Connect(int userId)
@@ -28,8 +27,8 @@ namespace Joost.Api.Hubs
                     {
                         await Groups.Add(connectionId, group.Id.ToString());
                     }
-                    Clients.Caller.onConnected(connectionId, userId);
-                    Clients.AllExcept(connectionId).onNewUserConnected(connectionId, userId);
+                    await Clients.Caller.onConnected(connectionId, userId);
+                    await Clients.AllExcept(connectionId).onNewUserConnected(connectionId, userId);
                     await _unitOfWork.SaveAsync();
                 }
             }
@@ -60,13 +59,13 @@ namespace Joost.Api.Hubs
                 var receiver = await userRepository.GetAsync(receiverId);
                 if (receiver != null && !string.IsNullOrEmpty(receiver.ConnectionId))
                 {
-                    Clients.Client(receiver.ConnectionId).addMessage(senderId, message);
+                    await Clients.Client(receiver.ConnectionId).addMessage(senderId, message);
                 }
             }
         }
-        public void SendToGroup(int senderId, int groupId, string message)
+        public async Task SendToGroup(int senderId, int groupId, string message)
         {
-            Clients.OthersInGroup(groupId.ToString()).addMessage(senderId, message);
+            await Clients.Group(groupId.ToString()).addMessage(senderId, message);
         }
     }
 }

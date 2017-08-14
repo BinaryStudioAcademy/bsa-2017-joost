@@ -18,9 +18,11 @@ namespace Joost.DbAccess.Entities
         public string Status { get; set; }
         public string Avatar { get; set; }
         public UserState State { get; set; }
+        public bool IsActived { get; set; }
 
         public virtual ICollection<User> Contacts { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
+        public virtual ConfirmRegistration ConfirmRegistration { get; set; }
         public string ConnectionId { get; set; }
 
         public User()
