@@ -3,7 +3,6 @@ using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Cors;
 
 namespace Joost.Api.Controllers
 {
@@ -14,30 +13,6 @@ namespace Joost.Api.Controllers
         public MessagesController(IUnitOfWork unitOfWork, IChatHubService chatHubService) : base(unitOfWork)
         {
             _chatHubService = chatHubService;
-        }
-
-        // GET: api/Messages
-        [HttpGet]
-        public async Task<IHttpActionResult> GetUserMessages()
-        {
-            var messages = await _unitOfWork.Repository<Message>().AllAsync();
-            if (messages == null)
-            {
-                return NotFound();
-            }
-            return Ok(messages);
-        }
-
-        // GET: api/Messages
-        [HttpGet]
-        public async Task<IHttpActionResult> GetGroupMessages()
-        {
-            var messages = await _unitOfWork.Repository<GroupMessage>().AllAsync();
-            if (messages == null)
-            {
-                return NotFound();
-            }
-            return Ok(messages);
         }
 
         // POST: api/Messages
@@ -53,7 +28,7 @@ namespace Joost.Api.Controllers
 
             await _chatHubService.SendToUser(message.Sender.Id, message.Receiver.Id, message.Text);
 
-            return CreatedAtRoute("DefaultApi", new { id = message.Id }, message);
+            return Ok();
         }
 
         // POST: api/Messages
@@ -69,12 +44,12 @@ namespace Joost.Api.Controllers
 
             await _chatHubService.SendToGroup(message.Sender.Id, message.Receiver.Id, message.Text);
 
-            return CreatedAtRoute("DefaultApi", new { id = message.Id }, message);
+            return Ok();
         }
 
         // PUT: api/Messages/5
         [HttpPut]
-        public async Task<IHttpActionResult> EditMessage(int id, [FromBody]Message message)
+        public async Task<IHttpActionResult> EditUserMessage(int id, [FromBody]Message message)
         {
             _unitOfWork.Repository<Message>().Attach(message);
             await _unitOfWork.SaveAsync();
@@ -82,14 +57,36 @@ namespace Joost.Api.Controllers
             return Ok(message);
         }
 
+        // PUT: api/Messages/5
+        [HttpPut]
+        public async Task<IHttpActionResult> EditGroupMessage(int id, [FromBody]GroupMessage message)
+        {
+            _unitOfWork.Repository<GroupMessage>().Attach(message);
+            await _unitOfWork.SaveAsync();
+
+            return Ok(message);
+        }
+
         // DELETE: api/Messages/5
         [HttpDelete]
-        public async Task DeleteMessage(int id)
+        public async Task DeleteUserMessage(int id)
         {
             var message = await _unitOfWork.Repository<Message>().FindAsync(item => item.Id == id);
             if (message != null)
             {
                 _unitOfWork.Repository<Message>().Delete(message);
+                await _unitOfWork.SaveAsync();
+            }
+        }
+
+        // DELETE: api/Messages/5
+        [HttpDelete]
+        public async Task DeleteGroupMessage(int id)
+        {
+            var message = await _unitOfWork.Repository<GroupMessage>().FindAsync(item => item.Id == id);
+            if (message != null)
+            {
+                _unitOfWork.Repository<GroupMessage>().Delete(message);
                 await _unitOfWork.SaveAsync();
             }
         }

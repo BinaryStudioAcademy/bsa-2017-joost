@@ -15,8 +15,13 @@ namespace Joost.Api.Controllers
         }
         protected int GetCurrentUserId()
         {
-            var token = Encrypt.DecryptToken(Request.Headers.GetValues("Authorization").First());
-            return token.UserId;
+            var header = Request.Headers.GetValues("Authorization").FirstOrDefault();
+            if (string.IsNullOrEmpty(header)) return -1;
+            else
+            {
+                var token = Encrypt.DecryptToken(header);
+                return token.UserId;
+            }
         }
         protected override void Dispose(bool disposing)
         {

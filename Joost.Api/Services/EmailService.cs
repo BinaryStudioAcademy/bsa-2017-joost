@@ -21,7 +21,7 @@ namespace Joost.Api.Services
             password = WebConfigurationManager.AppSettings["Password"];
         }
 
-        public Guid SendEmail(LoginTDO user)
+        public Guid SendEmail(LoginDto user)
         {
             try
             {

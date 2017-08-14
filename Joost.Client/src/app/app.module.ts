@@ -17,9 +17,15 @@ import { MenuUsersComponent } from './components/menu-users/menu-users.component
 import { MenuSearchComponent } from './components/menu-search/menu-search.component';
 import { MenuAddComponent } from './components/menu-add/menu-add.component';
 import { MenuMessagesComponent } from './components/menu-messages/menu-messages.component';
+<<<<<<< HEAD
+import {LoginComponent} from './components/login/login.component';
+import { LoginSignUpComponent } from './components/login-sign-up/login-sign-up.component';
+import { LoginSignInComponent } from './components/login-sign-in/login-sign-in.component';
+=======
 import { UserDetailsComponent } from './components/user-details/user-details.component';
 import { SignalTestComponent } from './components/signal-test/signal-test.component';
 import { ConfirmRegistrationComponent } from './components/confirm-registration/confirm-registration.component';
+>>>>>>> 963ab2503f52275185d227bc64de32d3be57c03d
 
 import { GenderPipe } from "./pipes/gender.pipe";
 import { StateIconPipe } from "./pipes/state-icon.pipe";
@@ -34,6 +40,11 @@ import { StateStringPipe } from "./pipes/state-string.pipe";
     MenuSearchComponent,
     MenuAddComponent,
     MenuMessagesComponent,
+<<<<<<< HEAD
+    LoginComponent,
+    LoginSignUpComponent,
+    LoginSignInComponent
+=======
     UserDetailsComponent,
     SignalTestComponent,
     ConfirmRegistrationComponent,

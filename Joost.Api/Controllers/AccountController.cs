@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Joost.Api.Models;
 using Joost.Api.Infrastructure;
-using System.Linq;
-using System.Net.Http;
 using Joost.Api.Filters;
 
 namespace Joost.Api.Controllers
@@ -18,7 +16,7 @@ namespace Joost.Api.Controllers
         // POST api/account/auth
         [Route("api/account/auth")]
         [HttpPost]
-		public async Task<IHttpActionResult> Auth([FromBody]LoginTDO login)
+		public async Task<IHttpActionResult> Auth([FromBody]LoginDto login)
 		{
            if (!ModelState.IsValid)
             {
@@ -35,7 +33,7 @@ namespace Joost.Api.Controllers
             {
                 return StatusCode(System.Net.HttpStatusCode.PartialContent);
             }
-            var token = new TokenTDO() { UserId = user.Id, Time = DateTime.Now };
+            var token = new TokenDto() { UserId = user.Id, Time = DateTime.Now };
 
             return Ok(new { token = Encrypt.EncryptToken(token) });
         }

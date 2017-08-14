@@ -62,7 +62,7 @@ namespace Joost.Api.Controllers
             _unitOfWork.Repository<Group>().Add(group);
             await _unitOfWork.SaveAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = group.Id }, group);
+            return Ok();
         }
 
         // PUT: api/Groups/5
