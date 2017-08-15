@@ -76,7 +76,30 @@ namespace Joost.Api.Controllers
 
             return Ok();
         }
-        [HttpGet]
+
+		[HttpDelete]
+		[Route("contact")]
+		public async Task<IHttpActionResult> DeleteContact(int id)
+		{
+			var userId = GetCurrentUserId();
+			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			var contact = user.Contacts.FirstOrDefault(u => u.Id == id);
+			if (contact == null)
+			{
+				return NotFound();
+			}
+			user.Contacts.Remove(contact);
+
+			await _unitOfWork.SaveAsync();
+			return Ok();
+		}
+
+		[HttpGet]
         [Route("contact")]
         public async Task<IHttpActionResult> GetContact()
         {
