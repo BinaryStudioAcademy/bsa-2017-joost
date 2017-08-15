@@ -43,8 +43,8 @@ export class UserDetailsComponent implements OnInit {
   }
 
   deleteFromContact(contactId:number){
-		this.userService.addContact(contactId).subscribe(() =>{
-			this.isFriend = true;
+		this.userService.deleteContact(contactId).subscribe(() =>{
+			this.isFriend = false;
 		});
   }
   
@@ -56,5 +56,13 @@ export class UserDetailsComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  contactActionClick(id: number):void {
+    debugger;
+    if(this.isFriend)
+      this.deleteFromContact(id);
+    else
+      this.addToContact(id);
   }
 }

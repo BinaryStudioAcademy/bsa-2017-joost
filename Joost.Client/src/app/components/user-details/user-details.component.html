@@ -1,13 +1,14 @@
-<div class="user-details-header mdl-layout__header-row mdl-shadow--2dp">
-  <button class="mdl-button mdl-js-button" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
-  <button class="mdl-button mdl-js-button">Delete</button>
-</div>
 <div class="loading-container" [hidden]="isLoadFinished">
   <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active test"></div>
   <div>Please wait, data is loading...</div>
 </div>
 <div [hidden]="!isLoadFinished">
   <div *ngIf="user">
+    <div class="user-details-header mdl-layout__header-row mdl-shadow--2dp">
+      <button class="mdl-button mdl-js-button" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
+      <button class="mdl-button mdl-js-button" (click)="contactActionClick(user.Id)">{{isFriend ? 'Delete' : 'Add'}}</button>
+    </div>
+
     <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
       <div class="mdl-cell mdl-cell--3-col">
         <div *ngIf="user.Avatar">
@@ -46,20 +47,20 @@
         </div>
       </div>
     </div>
-  </div>
-  <div [hidden] = "!user" class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-    <div class="user-details-group mdl-card__actions mdl-card--border">
-      <!-- <h5>Settings</h5> -->
-      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
-        <input type="checkbox" id="switch-notifications" class="mdl-switch__input" checked>
-        <span class="mdl-switch__label">Notifications</span>
-      </label>
-    </div>
-    <div class="user-details-group mdl-card__actions mdl-card--border">
-      <!-- <h5>Actions</h5> -->
-      <button class="mdl-button mdl-js-button mdl-button--raised"> Clear History</button>
-      <button class="mdl-button mdl-js-button mdl-button--raised"> Delete Conversation</button>
-      <button class="mdl-button mdl-js-button mdl-button--raised"> Block User</button>
+    <div [hidden] = "!isFriend" class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+      <div class="user-details-group mdl-card__actions mdl-card--border">
+        <!-- <h5>Settings</h5> -->
+        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
+          <input type="checkbox" id="switch-notifications" class="mdl-switch__input" checked>
+          <span class="mdl-switch__label">Notifications</span>
+        </label>
+      </div>
+      <div class="user-details-group mdl-card__actions mdl-card--border">
+        <!-- <h5>Actions</h5> -->
+        <button class="mdl-button mdl-js-button mdl-button--raised"> Clear History</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised"> Delete Conversation</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised"> Block User</button>
+      </div>
     </div>
   </div>
 </div>

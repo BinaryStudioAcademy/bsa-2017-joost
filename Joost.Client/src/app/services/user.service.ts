@@ -20,6 +20,9 @@ export class UserService extends BaseApiService{
   		params: new HttpParams().set('name',name)
   	});
   }
+
+  // contacts
+
   getContacts(){
     return this.http
     .get<number[]>(this.generateUrl()+ "/contact");
@@ -29,6 +32,15 @@ export class UserService extends BaseApiService{
   	.post(this.generateUrl() + "/contact",
       {  	  "Id":contactId  	});
   }
+  
+  deleteContact(contactId:number){
+  	return this.http
+  	.delete(this.generateUrl() + "/contact",{
+  		params: new HttpParams().set('id', contactId.toString())
+  	});
+  }
+
+  //
 
   confirmRegistration(key: string) {
       let url = this.generateUrl() + '/confirmregistration/' + key;
