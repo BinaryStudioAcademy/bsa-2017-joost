@@ -22,15 +22,21 @@ namespace Joost.Api.Controllers
         public IHttpActionResult GetUsers(string name)
         {
 			var curUsertId = GetCurrentUserId();
-            var users = _unitOfWork.Repository<User>()
-                .Query()
-                .Where(item => 
+			var users = _unitOfWork.Repository<User>()
+				.Query()
+				.Where(item =>
 					item.Id != curUsertId &&
-					(!string.IsNullOrEmpty(item.LastName) 
-					&& !string.IsNullOrEmpty(item.FirstName) 
-					&& (item.FirstName + " " + item.LastName).Contains(name) 
+					(!string.IsNullOrEmpty(item.LastName)
+					&& !string.IsNullOrEmpty(item.FirstName)
+					&& (item.FirstName + " " + item.LastName).Contains(name)
 					|| item.Email.Contains(name)))
-                .Select(user => UserSearchDto.FromModel(user))
+				.Select(user => new UserSearchDto()
+				{
+					Avatar = user.Avatar,
+					City = user.City,
+					Id = user.Id,
+					Name = user.FirstName + " " + user.LastName
+				})
                 .ToList();
             if (users == null)
             {
