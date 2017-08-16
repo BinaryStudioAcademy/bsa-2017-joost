@@ -11,7 +11,7 @@ using System.Web.Http;
 namespace Joost.Api.Controllers
 {
     [RoutePrefix("api/users")]
-    [TokenAuthorization]
+    [AccessTokenAuthorization]
     public class UsersController : BaseApiController
     {
         public UsersController(IUnitOfWork unitOfWork) : base(unitOfWork)

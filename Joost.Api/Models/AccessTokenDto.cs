@@ -2,7 +2,7 @@
 
 namespace Joost.Api.Models
 {
-    public class TokenDto
+    public class AccessTokenDto
     {
         public int UserId { get; set; }
         public DateTime Time { get; set; }

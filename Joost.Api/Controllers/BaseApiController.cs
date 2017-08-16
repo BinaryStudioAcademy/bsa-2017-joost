@@ -19,7 +19,7 @@ namespace Joost.Api.Controllers
             if (string.IsNullOrEmpty(header)) return -1;
             else
             {
-                var token = Encrypt.DecryptToken(header);
+                var token = Encrypt.DecryptAccessToken(header);
                 return token.UserId;
             }
         }

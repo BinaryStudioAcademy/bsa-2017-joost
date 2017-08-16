@@ -234,7 +234,7 @@
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Filters\TokenAuthorizationAttribute.cs" />
+    <Compile Include="Filters\AccessTokenAuthorizationAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -243,7 +243,8 @@
     <Compile Include="Infrastructure\Encrypt.cs" />
     <Compile Include="Infrastructure\NinjectResolver.cs" />
     <Compile Include="Models\ContactDto.cs" />
-    <Compile Include="Models\TokenDto.cs" />
+    <Compile Include="Models\AccessTokenDto.cs" />
+    <Compile Include="Models\RefreshTokenDto.cs" />
     <Compile Include="Models\UserDetailsDto.cs" />
     <Compile Include="Models\UserSearchDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
