@@ -1,0 +1,28 @@
+.wrapper{
+    margin-left: 20px;
+    margin-top: 20px;
+    width: 800px;
+    min-height: 600px;
+}
+.center-label{
+    text-align: center;
+}
+.right-label{
+    text-align: right;
+}
+.left-part, .right-part{
+    display: inline-block;
+    width: 49%;
+}
+input, select, textarea{
+    min-width: 200px;
+}
+ul{
+    list-style-type: none;
+    padding-left: 0px;
+}
+.group-image{
+    height: 200px;
+    width: 200px;
+    border-radius: 100px;
+}
