@@ -33,6 +33,7 @@ export class UserDetailsComponent implements OnInit {
       .subscribe(user => {
         this.user = user;
         this.isLoadFinished = true;
+        this.checkInContact(user.Id);
       },
       err=> {
         this.isError = true;
@@ -64,7 +65,6 @@ export class UserDetailsComponent implements OnInit {
   }
 
   contactActionClick(id: number):void {
-    debugger;
     if(this.isFriend)
       this.deleteFromContact(id);
     else

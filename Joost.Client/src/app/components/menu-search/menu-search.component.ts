@@ -27,6 +27,7 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 		this.authService.logout();
 	}
 	search(){
+		this.userService.getContacts().subscribe(data=>this.contactList= data);
 		this.isLoad = false;
 		if (this.searchString) {
 			this.userService
