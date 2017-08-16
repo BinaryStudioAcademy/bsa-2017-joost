@@ -1,0 +1,52 @@
+<div class="wrapper">
+  <h3 class="center-label">Create group</h3>
+  <div class="left-part">
+    <label>Name:</label><br>
+    <input type="text" [(ngModel)]="name">
+    <br>
+    <label>Description:</label><br>
+    <textarea rows="3" [(ngModel)]="description"></textarea>
+    <br>
+    <label>Image</label><br>
+    <input type="text" placeholder="url..." [(ngModel)]="imageUrl">
+    <br><br>
+    <img 
+      class="group-image"
+      [src]="imageUrl" 
+      alt="Group image"
+      title="Group image">
+    <br><br>
+    <label>Add member</label><br>
+    <ul>
+      <li 
+        *ngFor="let member of members; let i = index">
+        {{ member.FirstName}} {{member.LastName}} 
+        <span 
+          style="cursor: pointer"
+          (click)="onAddMember(i)">+
+        </span>
+      </li>
+    </ul>
+  </div>
+  <div class="right-part">
+    {{ selectedMembers.length }} members<br><br>
+    <ul>
+      <li *ngFor="let member of selectedMembers; let i = index">
+        {{ member.FirstName}} {{member.LastName}}
+        <span 
+          style="cursor: pointer"
+          (click)="onDeleteMember(i)">-
+        </span>
+      </li>
+    </ul>
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+  </div>
+  <p style="text-align:right">
+    <button 
+      type="button"
+      (click)="onSubmit()">Create</button>
+    <button 
+      type="button"
+      (click)="onCancel()">Cancel</button>
+  </p>
+</div>

@@ -21,15 +21,16 @@ namespace Joost.Api.Controllers
         [HttpGet]
         public IHttpActionResult GetUsers(string name)
         {
+			var curUsertId = GetCurrentUserId();
             var users = _unitOfWork.Repository<User>()
                 .Query()
-                .Where(item => !String.IsNullOrEmpty(item.LastName) && !String.IsNullOrEmpty(item.FirstName) && (item.FirstName + " " + item.LastName).Contains(name) || item.Email.Contains(name))
-                .Select(user => new UserSearchDto() {
-                    Id = user.Id,
-                    Name = user.FirstName + " " + user.LastName,
-                    Avatar = user.Avatar,
-                    City = user.City
-                })
+                .Where(item => 
+					item.Id != curUsertId &&
+					(!string.IsNullOrEmpty(item.LastName) 
+					&& !string.IsNullOrEmpty(item.FirstName) 
+					&& (item.FirstName + " " + item.LastName).Contains(name) 
+					|| item.Email.Contains(name)))
+                .Select(user => UserSearchDto.FromModel(user))
                 .ToList();
             if (users == null)
             {
@@ -76,7 +77,30 @@ namespace Joost.Api.Controllers
 
             return Ok();
         }
-        [HttpGet]
+
+		[HttpDelete]
+		[Route("contact")]
+		public async Task<IHttpActionResult> DeleteContact(int id)
+		{
+			var userId = GetCurrentUserId();
+			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			var contact = user.Contacts.FirstOrDefault(u => u.Id == id);
+			if (contact == null)
+			{
+				return NotFound();
+			}
+			user.Contacts.Remove(contact);
+
+			await _unitOfWork.SaveAsync();
+			return Ok();
+		}
+
+		[HttpGet]
         [Route("contact")]
         public async Task<IHttpActionResult> GetContact()
         {

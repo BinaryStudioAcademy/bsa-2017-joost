@@ -1,5 +1,6 @@
 ﻿using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -55,14 +56,25 @@ namespace Joost.Api.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> AddGroup([FromBody]Group group)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            _unitOfWork.Repository<Group>().Add(group);
-            await _unitOfWork.SaveAsync();
+            // did that here in order to prevent datetime formating form client here
+            group.CreatedAt = DateTime.Now;
 
-            return Ok();
+            // don't know, have existed similar to GetCurrentUserId() method from client-side
+            // so call that here and assign searched user to GroupCreator property
+            var id = GetCurrentUserId();
+            var user = _unitOfWork.Repository<User>().Get(id);
+            group.GroupCreator = user;
+
+            try
+            {
+                _unitOfWork.Repository<Group>().Add(group);
+                await _unitOfWork.SaveAsync();
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         // PUT: api/Groups/5

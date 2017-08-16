@@ -15,23 +15,22 @@
       <a href="#message-panel" class="mdl-tabs__tab is-active"><i class="material-icons">message</i></a>
       <a href="#people-panel" class="mdl-tabs__tab"><i class="material-icons">people</i></a>
       <a href="#search-panel" class="mdl-tabs__tab"><i class="material-icons">search</i></a>
-      <a href="#add-panel" class="mdl-tabs__tab"><i class="material-icons">add_circle</i></a>
+      <a href="#add-panel" class="mdl-tabs__tab" (click)="onCreateGroup()">
+        <i class="material-icons">add_circle</i>
+      </a>
       <a href="#settings-panel" class="mdl-tabs__tab"><i class="material-icons">settings</i></a>
   </div>
 
   <div class="mdl-tabs__panel is-active" id="message-panel">
     <app-menu-messages></app-menu-messages>
   </div>
-  <div class="mdl-tabs__panel is-active" id="people-panel">
+  <div class="mdl-tabs__panel" id="people-panel">
      <app-menu-users></app-menu-users>
   </div>
-   <div class="mdl-tabs__panel is-active" id="search-panel">
+   <div class="mdl-tabs__panel" id="search-panel">
     <app-menu-search></app-menu-search>
   </div>
-   <div class="mdl-tabs__panel is-active" id="add-panel">
-    <app-menu-add></app-menu-add>
-  </div>
-   <div class="mdl-tabs__panel is-active" id="settings-panel">
+   <div class="mdl-tabs__panel" id="settings-panel">
     <app-menu-settings></app-menu-settings>
   </div>
 </div>

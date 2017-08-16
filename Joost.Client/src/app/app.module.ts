@@ -30,6 +30,9 @@ import { GenderPipe } from "./pipes/gender.pipe";
 import { StateIconPipe } from "./pipes/state-icon.pipe";
 import { StateStringPipe } from "./pipes/state-string.pipe";
 
+import { GroupEditComponent } from "./components/group-edit/group-edit.component";
+import { GroupService } from "./services/group.service";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,7 +50,8 @@ import { StateStringPipe } from "./pipes/state-string.pipe";
     ConfirmRegistrationComponent,
     GenderPipe,
     StateIconPipe,
-    StateStringPipe
+    StateStringPipe,
+    GroupEditComponent
   ],
   imports: [
     BrowserModule,
@@ -56,6 +60,7 @@ import { StateStringPipe } from "./pipes/state-string.pipe";
     FormsModule
   ],
   providers: [
+    GroupService,
     UserService,
     AuthenticationService,
     {
