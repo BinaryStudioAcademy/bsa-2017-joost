@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-main-menu',
@@ -8,9 +8,12 @@ import { Router } from '@angular/router';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
   }
 
+  onCreateGroup(){
+    this.router.navigate(["groups/new"], { relativeTo: this.route });
+  }
 }
