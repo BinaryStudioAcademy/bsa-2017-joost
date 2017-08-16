@@ -1,4 +1,11 @@
-﻿<p>
-  User created successfully! If you want to enter in your account you should press this button
-    <button md-button (click)="confirm()">Log in</button>
-</p>
+﻿<div style="margin:auto;">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp" id="card">
+        <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+            <div class="mdl-tabs__tab-bar">
+                <span class="mdl-tabs__tab is-active">Confirm Registration</span>
+            </div>
+            <p>Registration finished successfully! If you want to enter in your account you should press this button.</p>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="button" (click)="confirm()">Finish Registration</button>
+        </div>
+    </div>
+</div>

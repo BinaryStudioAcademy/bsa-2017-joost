@@ -29,6 +29,7 @@ import { ConfirmRegistrationComponent } from './components/confirm-registration/
 import { GenderPipe } from "./pipes/gender.pipe";
 import { StateIconPipe } from "./pipes/state-icon.pipe";
 import { StateStringPipe } from "./pipes/state-string.pipe";
+import { LoginService } from "./services/login.service";
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { StateStringPipe } from "./pipes/state-string.pipe";
   ],
   providers: [
     UserService,
+    LoginService,
     AuthenticationService,
     {
       provide: HTTP_INTERCEPTORS,

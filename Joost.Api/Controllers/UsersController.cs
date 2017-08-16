@@ -11,7 +11,6 @@ using System.Web.Http;
 namespace Joost.Api.Controllers
 {
     [RoutePrefix("api/users")]
-    [TokenAuthorization]
     public class UsersController : BaseApiController
     {
         public UsersController(IUnitOfWork unitOfWork) : base(unitOfWork)
@@ -19,6 +18,7 @@ namespace Joost.Api.Controllers
 
         // GET: api/users
         [HttpGet]
+        [TokenAuthorization]
         public IHttpActionResult GetUsers(string name)
         {
             var users = _unitOfWork.Repository<User>()
@@ -40,6 +40,7 @@ namespace Joost.Api.Controllers
 
         // GET: api/users/5
         [HttpGet]
+        [TokenAuthorization]
         public async Task<IHttpActionResult> GetUser(int id)
         {
             var user = await _unitOfWork.Repository<User>().GetAsync(id);
@@ -53,6 +54,7 @@ namespace Joost.Api.Controllers
 
         // GET: api/users/contact
         [HttpPost]
+        [TokenAuthorization]
         [Route("contact")]
         public async Task<IHttpActionResult> AddContact([FromBody]ContactDto contact)
         {
@@ -77,6 +79,7 @@ namespace Joost.Api.Controllers
             return Ok();
         }
         [HttpGet]
+        [TokenAuthorization]
         [Route("contact")]
         public async Task<IHttpActionResult> GetContact()
         {
@@ -92,6 +95,7 @@ namespace Joost.Api.Controllers
 
         // GET: api/users/state/5
         [HttpGet]
+        [TokenAuthorization]
         [Route("state/{id}")]
         public async Task<IHttpActionResult> GetState(int id)
         {
@@ -180,6 +184,7 @@ namespace Joost.Api.Controllers
 
         // PUT: api/users/5
         [HttpPut]
+        [TokenAuthorization]
         public async Task<IHttpActionResult> EditUser(int id, [FromBody]User user)
         {
             _unitOfWork.Repository<User>().Attach(user);
@@ -190,6 +195,7 @@ namespace Joost.Api.Controllers
 
         // PUT: api/users/state/5
         [HttpPut]
+        [TokenAuthorization]
         public async Task<IHttpActionResult> EditState(int id, UserState state)
         {
             var user = await _unitOfWork.Repository<User>().GetAsync(id);
@@ -203,6 +209,7 @@ namespace Joost.Api.Controllers
 
         // DELETE: api/users/5
         [HttpDelete]
+        [TokenAuthorization]
         public async Task DeleteUser(int id)
         {
             var user = await _unitOfWork.Repository<User>().FindAsync(item => item.Id == id);
