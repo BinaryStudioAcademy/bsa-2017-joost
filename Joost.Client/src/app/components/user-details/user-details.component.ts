@@ -33,7 +33,12 @@ export class UserDetailsComponent implements OnInit {
       .subscribe(user => {
         this.user = user;
         this.isLoadFinished = true;
-      });
+      },
+      err=> {
+        this.isError = true;
+        console.log(this.isError);
+      }
+    );
   }
 
   addToContact(contactId:number){
