@@ -49,6 +49,12 @@ export class UserService extends BaseApiService{
       return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
 
   }
+
+   getUserDetails(id: number){
+    return this.http.get<UserDetail>(this.generateUrl(), {
+      params: new HttpParams().set('id', id.toString())
+    });
+  }
     
   getUser(id: number) {
     return this.http.get<User>(this.generateUrl() + '/' + id.toString());
