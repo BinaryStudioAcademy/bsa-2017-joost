@@ -19,8 +19,8 @@ namespace Joost.Api.Controllers
             if (string.IsNullOrEmpty(header)) return -1;
             else
             {
-                var token = Encrypt.DecryptToken(header);
-                return token.UserId;
+                var token = Encrypt.DecryptAccessToken(header);
+                return token.AT_UserId;
             }
         }
         protected override void Dispose(bool disposing)

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Observable } from "rxjs/Observable";
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import 'rxjs/add/operator/switchMap';
 
 import { UserService } from "../../services/user.service";
-import { AuthenticationService } from "../../services/authentication.service";
-
 import { UserDetail } from "../../models/user-detail";
 
 @Component({
@@ -14,23 +14,60 @@ import { UserDetail } from "../../models/user-detail";
 })
 export class UserDetailsComponent implements OnInit {
 
+  
   user: UserDetail;
+  private isLoadFinished:boolean = false;
+  private isError:boolean = false;
+  private isFriend = false;
+
   constructor(
     private location: Location,
     private userService: UserService,
-    private authService: AuthenticationService
+    private route: ActivatedRoute
   ) { }
 
-  ngOnInit() {
-    this.authService.getUserId().subscribe( data => {
-        this.userService.getUserDetails(data).subscribe( d => {
-          this.user = d;
-          console.log(this.user);
-         });
-    });
+  ngOnInit(): void {
+
+    this.route.paramMap
+      .switchMap((params: ParamMap) => this.userService.getUserDetails(+params.get('id')))
+      .subscribe(user => {
+        this.user = user;
+        this.isLoadFinished = true;
+        this.checkInContact(user.Id);
+      },
+      err=> {
+        this.isError = true;
+        console.log(this.isError);
+      }
+    );
   }
+
+  addToContact(contactId:number){
+		this.userService.addContact(contactId).subscribe(() =>{
+			this.isFriend = true;
+		});
+  }
+
+  deleteFromContact(contactId:number){
+		this.userService.deleteContact(contactId).subscribe(() =>{
+			this.isFriend = false;
+		});
+  }
+  
+	checkInContact(id:number):void {
+		this.userService.getContacts().subscribe( list => {
+      this.isFriend = list.indexOf(id) >= 0;
+    });
+	}
 
   goBack(): void {
     this.location.back();
+  }
+
+  contactActionClick(id: number):void {
+    if(this.isFriend)
+      this.deleteFromContact(id);
+    else
+      this.addToContact(id);
   }
 }

@@ -18,10 +18,8 @@ namespace Joost.Api.Infrastructure
         private const int keysize = 256;
 
         //Encrypt
-        public static string EncryptToken(TokenDto token)
+        private static string EncryptToken(string plainText)
         {
-            string plainText = JsonConvert.SerializeObject(token);
-
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
             PasswordDeriveBytes password = new PasswordDeriveBytes(passPhrase, null);
@@ -38,8 +36,19 @@ namespace Joost.Api.Infrastructure
             cryptoStream.Close();
             return Convert.ToBase64String(cipherTextBytes);
         }
+        public static string EncryptAccessToken(AccessTokenDto token)
+        {
+            string plainText = JsonConvert.SerializeObject(token);
+            return EncryptToken(plainText);
+        }
+        public static string EncryptRefreshToken(RefreshTokenDto token)
+        {
+            string plainText = JsonConvert.SerializeObject(token);
+            return EncryptToken(plainText);
+        }
+
         //Decrypt
-        public static TokenDto DecryptToken(string cipherText)
+        private static string DecryptToken(string cipherText)
         {
             byte[] initVectorBytes = Encoding.UTF8.GetBytes(initVector);
             byte[] cipherTextBytes = Convert.FromBase64String(cipherText);
@@ -55,7 +64,17 @@ namespace Joost.Api.Infrastructure
             memoryStream.Close();
             cryptoStream.Close();
             var resultString = Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
-            return JsonConvert.DeserializeObject<TokenDto>(resultString);
+            return resultString;
+        }
+        public static AccessTokenDto DecryptAccessToken(string cipherText)
+        {
+            var resultString = DecryptToken(cipherText);
+            return JsonConvert.DeserializeObject<AccessTokenDto>(resultString);
+        }
+        public static RefreshTokenDto DecryptRefreshToken(string cipherText)
+        {
+            var resultString = DecryptToken(cipherText);
+            return JsonConvert.DeserializeObject<RefreshTokenDto>(resultString);
         }
     }
 }

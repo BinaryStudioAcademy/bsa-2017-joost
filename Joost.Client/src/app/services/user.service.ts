@@ -5,6 +5,8 @@ import { BaseApiService } from "./base-api.service";
 
 import { UserDetail } from "../models/user-detail";
 import { UserSearch } from "../models/user-search";
+import { User } from "../models/user";
+
 
 @Injectable()
 export class UserService extends BaseApiService{
@@ -20,6 +22,9 @@ export class UserService extends BaseApiService{
   		params: new HttpParams().set('name',name)
   	});
   }
+
+  // contacts
+
   getContacts(){
     return this.http
     .get<number[]>(this.generateUrl()+ "/contact");
@@ -29,6 +34,15 @@ export class UserService extends BaseApiService{
   	.post(this.generateUrl() + "/contact",
       {  	  "Id":contactId  	});
   }
+  
+  deleteContact(contactId:number){
+  	return this.http
+  	.delete(this.generateUrl() + "/contact",{
+  		params: new HttpParams().set('id', contactId.toString())
+  	});
+  }
+
+  //
 
   confirmRegistration(key: string) {
       let url = this.generateUrl() + '/confirmregistration/' + key;
@@ -36,10 +50,20 @@ export class UserService extends BaseApiService{
 
   }
 
-  getUserDetails(id: number){
+   getUserDetails(id: number){
     return this.http.get<UserDetail>(this.generateUrl(), {
       params: new HttpParams().set('id', id.toString())
     });
   }
+    
+  getUser(id: number) {
+    return this.http.get<User>(this.generateUrl() + '/' + id.toString());
+  }
+  
+  updateUser(user: User) {
+    return this.http.put<User>(this.generateUrl() + '/' + user.Id.toString(), JSON.stringify(user)).subscribe();
+  }
+
+  
 }
 
