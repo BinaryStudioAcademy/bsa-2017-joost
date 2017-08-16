@@ -5,6 +5,8 @@ import { BaseApiService } from "./base-api.service";
 
 import { UserDetail } from "../models/user-detail";
 import { UserSearch } from "../models/user-search";
+import { User } from "../models/user";
+
 
 @Injectable()
 export class UserService extends BaseApiService{
@@ -48,12 +50,12 @@ export class UserService extends BaseApiService{
 
   }
     
-  getUserDetails(id: number) {
-    return this.http.get<UserDetail>(this.generateUrl() + '/' + id.toString());
+  getUser(id: number) {
+    return this.http.get<User>(this.generateUrl() + '/' + id.toString());
   }
   
-  updateUserDetails(user: UserDetail) {
-    return this.http.put<UserDetail>(this.generateUrl() + '/' + user.Id.toString(), JSON.stringify(user)).subscribe();
+  updateUser(user: User) {
+    return this.http.put<User>(this.generateUrl() + '/' + user.Id.toString(), JSON.stringify(user)).subscribe();
   }
 
   

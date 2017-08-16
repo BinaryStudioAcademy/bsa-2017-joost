@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { UserDetail } from "../../models/user-detail";
-import { UserState } from "../../models/user-detail";
-import { Gender } from "../../models/user-detail";
+import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
 
 @Component({
@@ -14,7 +12,7 @@ import { UserService } from "../../services/user.service";
 })
 export class UserEditingComponent implements OnInit {
 
-  user: UserDetail;
+  user: User;
   userId: number; // initialize from router on init
 
   constructor(
@@ -29,12 +27,12 @@ export class UserEditingComponent implements OnInit {
   }
 
   SaveUser() {
-      this.userService.updateUserDetails(this.user);
+      this.userService.updateUser(this.user);
       this.location.back();
   }
 
   GetUser() {
-    this.userService.getUserDetails(this.userId).subscribe( d => {
+    this.userService.getUser(this.userId).subscribe( d => {
       this.user = d;
       console.log(d);
       console.log(this.user);
