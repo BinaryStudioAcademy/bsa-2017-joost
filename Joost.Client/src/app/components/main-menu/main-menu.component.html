@@ -1,13 +1,19 @@
 <div class="main-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
   <div class="left-panel mdl-layout__drawer mdl-color-text--blue-grey-50">
-    <header class="left-panel-header">
-      <div class="avatar-container">
-        <a routerLink="/user-details" routerLinkActive="active"><img src="assets/img/man.png" class="main-avatar"></a>
-        <div class="online-indecator"></div>
-      </div>
-      <div class="left-panel-user-info">
-        <div class="header-user-name">Jon Snow</div>
-        <div>Winter is coming</div>
+    <header>
+      <div *ngIf="curUser" class="left-panel-header">
+        <a [routerLink]="['/user-editing', curUser.Id]" skipLocationChange>
+          <div class="avatar-container">
+            <img src="assets/img/man.png" class="main-avatar">
+            <div class="online-indecator"></div>
+          </div>
+        </a>
+        <div class="left-panel-user-info">
+          <a [routerLink]="['/user-editing', curUser.Id]" skipLocationChange>
+            <div class="header-user-name">{{curUser.FirstName + ' ' + curUser.LastName}}</div>
+          </a>
+          <div>Winter is coming</div>
+        </div>
       </div>
     </header>
     <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">

@@ -30,6 +30,7 @@ export class AuthenticationService extends BaseApiService {
     {"Email": email, "Password" : password})
     .subscribe(
       data=>{
+        console.log(data.accessToken);
         this.token = data.accessToken;
         localStorage.setItem('joostUserToken',data.accessToken)
       },

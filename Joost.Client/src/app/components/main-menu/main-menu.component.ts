@@ -1,6 +1,11 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { AuthenticationService } from "../../services/authentication.service";
+import { UserService } from "../../services/user.service";
+
+import { UserDetail } from "../../models/user-detail";
+
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
@@ -8,9 +13,19 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class MainMenuComponent implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  private curUser: UserDetail; 
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute,
+    private userService: UserService,
+    private authService: AuthenticationService) { }
 
   ngOnInit() {
+    this.authService.login("straber@ukr.net","password");
+    let userId = 0;
+    this.authService.getUserId().subscribe(data => {
+      this.userService.getUserDetails(data).subscribe( d => this.curUser = d);
+    });
   }
 
   onCreateGroup(){
