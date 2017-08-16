@@ -20,7 +20,7 @@ namespace Joost.Api.Controllers
             else
             {
                 var token = Encrypt.DecryptAccessToken(header);
-                return token.UserId;
+                return token.AT_UserId;
             }
         }
         protected override void Dispose(bool disposing)
