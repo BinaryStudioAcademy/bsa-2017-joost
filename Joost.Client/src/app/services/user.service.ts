@@ -1,4 +1,5 @@
 ﻿import { Injectable } from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import { HttpClient,HttpParams } from '@angular/common/http';
 
 import { BaseApiService } from "./base-api.service";
@@ -6,11 +7,12 @@ import { BaseApiService } from "./base-api.service";
 import { UserDetail } from "../models/user-detail";
 import { UserSearch } from "../models/user-search";
 import { User } from "../models/user";
+import { Contact,ContactState} from "../models/contact";
+import { UserContact} from "../models/user-contact";
 
 
 @Injectable()
 export class UserService extends BaseApiService{
-
 	constructor(http : HttpClient) {
 		super(http);
 		this.parUrl = "users";
@@ -24,25 +26,35 @@ export class UserService extends BaseApiService{
   }
 
   // contacts
-
+  getAllContacts(){
+    return this.http
+    .get<UserContact[]>(this.generateUrl()+ "/all-contact");
+  }
   getContacts(){
     return this.http
-    .get<number[]>(this.generateUrl()+ "/contact");
+    .get<Contact[]>(this.generateUrl()+ "/contact");
   }
   addContact(contactId:number){
   	return this.http
   	.post(this.generateUrl() + "/contact",
-      {  	  "Id":contactId  	});
+      {  	  "ContactId":contactId ,"State": ContactState.New 	});
   }
-  
+  confirmContact(contactId:number){
+     return this.http
+    .post(this.generateUrl() + "/confirm-contact",
+      {      "ContactId":contactId ,"State": ContactState.Accept });
+  }
+  declineContact(contactId:number){
+     return this.http
+    .post(this.generateUrl() + "/decline-contact",
+      {      "ContactId":contactId ,"State": ContactState.Decline });
+  }
   deleteContact(contactId:number){
   	return this.http
   	.delete(this.generateUrl() + "/contact",{
   		params: new HttpParams().set('id', contactId.toString())
   	});
   }
-
-  //
 
   confirmRegistration(key: string) {
       let url = this.generateUrl() + '/confirmregistration/' + key;

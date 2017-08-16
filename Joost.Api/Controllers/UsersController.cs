@@ -18,7 +18,7 @@ namespace Joost.Api.Controllers
 
         // GET: api/users
         [HttpGet]
-        [TokenAuthorization]
+        [AccessTokenAuthorization]
         public IHttpActionResult GetUsers(string name)
         {
 			var curUsertId = GetCurrentUserId();
@@ -47,7 +47,6 @@ namespace Joost.Api.Controllers
 
         // GET: api/users/5
         [HttpGet]
-        [TokenAuthorization]
         public async Task<IHttpActionResult> GetUser(int id)
         {
             var user = await _unitOfWork.Repository<User>().GetAsync(id);
@@ -61,12 +60,11 @@ namespace Joost.Api.Controllers
 
         // GET: api/users/contact
         [HttpPost]
-        [TokenAuthorization]
         [Route("contact")]
         public async Task<IHttpActionResult> AddContact([FromBody]ContactDto contact)
         {
             var userId = GetCurrentUserId();
-            if (userId ==contact.Id)
+            if (userId ==contact.ContactId)
             {
                 return InternalServerError();
             }
@@ -75,20 +73,81 @@ namespace Joost.Api.Controllers
             {
                 return NotFound();
             }
-            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.Id);
+            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
             if (contactUser == null)
             {
                 return NotFound();
             }
-            user.Contacts.Add(contactUser);
+            user.Contacts.Add(new Contact() {
+                User = user,
+                ContactUser = contactUser,
+                State = DbAccess.Entities.ContactState.Sent,
+            });
+            contactUser.Contacts.Add(new Contact()
+            {
+                User = contactUser,
+                ContactUser = user,
+                State = DbAccess.Entities.ContactState.New,
+            });
+            await _unitOfWork.SaveAsync();
+
+            return Ok();
+        }
+        [HttpPost]
+        [Route("confirm-contact")]
+        public async Task<IHttpActionResult> ConfirmContact([FromBody]ContactDto contact)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == contact.ContactId)
+            {
+                return InternalServerError();
+            }
+            var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
+            if (contactUser == null)
+            {
+                return NotFound();
+            }
+            user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Accept;
+            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Accept;
+           
+            await _unitOfWork.SaveAsync();
+
+            return Ok();
+        }
+        [HttpPost]
+        [Route("decline-contact")]
+        public async Task<IHttpActionResult> DeclineContact([FromBody]ContactDto contact)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == contact.ContactId)
+            {
+                return InternalServerError();
+            }
+            var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
+            if (contactUser == null)
+            {
+                return NotFound();
+            }
+            user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Decline;
+            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
             await _unitOfWork.SaveAsync();
 
             return Ok();
         }
 
-		[HttpDelete]
+        [HttpDelete]
 		[Route("contact")]
-		public async Task<IHttpActionResult> DeleteContact(int id)
+		public async Task<IHttpActionResult> DeleteContact(int id )
 		{
 			var userId = GetCurrentUserId();
 			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
@@ -108,8 +167,7 @@ namespace Joost.Api.Controllers
 			return Ok();
 		}
 
-		[HttpGet]
-        [TokenAuthorization]
+        [HttpGet]
         [Route("contact")]
         public async Task<IHttpActionResult> GetContact()
         {
@@ -119,13 +177,32 @@ namespace Joost.Api.Controllers
             {
                 return NotFound();
             }
+            var cont = user.Contacts.Select(t => new ContactDto() { ContactId = t.ContactUser.Id, State = (Models.ContactState)t.State }).ToList();
+            return Ok(cont);
+        }
 
-            return Ok(user.Contacts.Select(t => t.Id).ToList());
+        [HttpGet]
+        [Route("all-contact")]
+        public async Task<IHttpActionResult> GetAllContact()
+        {
+            var userId = GetCurrentUserId();
+            var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var cont = user.Contacts.Select(t => new UserContactDto {
+                Id = t.ContactUser.Id,
+                State = (Models.ContactState)t.State,
+                Avatar = t.ContactUser.Avatar,
+                Name = t.ContactUser.FirstName + " " + t.ContactUser.LastName,
+                City = t.ContactUser.City
+             }).OrderBy(t=>t.State).ToList();
+            return Ok(cont);
         }
 
         // GET: api/users/state/5
         [HttpGet]
-        [TokenAuthorization]
         [Route("state/{id}")]
         public async Task<IHttpActionResult> GetState(int id)
         {
@@ -214,7 +291,6 @@ namespace Joost.Api.Controllers
 
         // PUT: api/users/5
         [HttpPut]
-        [TokenAuthorization]
         public async Task<IHttpActionResult> EditUser(int id, [FromBody]User user)
         {
             _unitOfWork.Repository<User>().Attach(user);
@@ -225,7 +301,6 @@ namespace Joost.Api.Controllers
 
         // PUT: api/users/state/5
         [HttpPut]
-        [TokenAuthorization]
         public async Task<IHttpActionResult> EditState(int id, UserState state)
         {
             var user = await _unitOfWork.Repository<User>().GetAsync(id);
@@ -239,7 +314,6 @@ namespace Joost.Api.Controllers
 
         // DELETE: api/users/5
         [HttpDelete]
-        [TokenAuthorization]
         public async Task DeleteUser(int id)
         {
             var user = await _unitOfWork.Repository<User>().FindAsync(item => item.Id == id);

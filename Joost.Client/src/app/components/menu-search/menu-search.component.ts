@@ -4,6 +4,7 @@ import { UserService } from '../../services/user.service';
 import { AuthenticationService } from '../../services/authentication.service';
 
 import { UserSearch } from "../../models/user-search";
+import { Contact,ContactState} from "../../models/contact";
 
 @Component({
   selector: 'app-menu-search',
@@ -15,7 +16,7 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
     private result:UserSearch;
 	private searchString:string;
 	private isLoad:boolean = false;
-	private contactList:number[];
+	private contactList:Contact[];
 
 	constructor(private userService: UserService,private authService: AuthenticationService) { }
 
@@ -37,17 +38,26 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 				});
 		}
 		this.result = null;
+		
 	}
 	addToContact(contactId:number){
 		this.userService.addContact(contactId).subscribe(succes=>{
-			this.contactList.push(contactId)
+			this.contactList.push(new Contact(contactId,ContactState.Sent))
 		});
 		this.search();
 	}
 	checkInContact(id:number):boolean{
-		if (this.contactList.indexOf(id)<0) {
-			return false;
+		return this.contactList.map(t=>t.ContactId).indexOf(id) > -1 ;
+	}
+	findContact(id:number):string{
+		let state =  this.contactList.filter(t=>t.ContactId==id)[0];
+		if (state) {
+			switch (state.State) {
+				case ContactState.Accept:
+					return "check_circle";
+		    	default:
+		    		return "trending_flat";
+		    }
 		}
-		return true;
 	}
 }

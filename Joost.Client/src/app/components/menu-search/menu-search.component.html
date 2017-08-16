@@ -18,7 +18,7 @@
       </span>
     </span>
     <a class="mdl-list__item-secondary-action add_contact" *ngIf="!checkInContact(user.Id)" (click)="addToContact(user.Id)"><i class="material-icons">add_circle_outline</i></a>
-     <a class="mdl-list__item-secondary-action add_contact" *ngIf="checkInContact(user.Id)"><i class="material-icons">check_circle</i></a>
+    <a class="mdl-list__item-secondary-action add_contact" *ngIf="checkInContact(user.Id)"><i class="material-icons">{{findContact(user.Id)}}</i></a>
   </li>
 </ul>
 	<div class="menu__search__not_found" *ngIf="isLoad && result!==undefiend && result.length === 0 && searchString!==''" >Unfortunately, nothing was found on your request(</div>

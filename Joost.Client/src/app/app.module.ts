@@ -17,6 +17,7 @@ import { MenuUsersComponent } from './components/menu-users/menu-users.component
 import { MenuSearchComponent } from './components/menu-search/menu-search.component';
 import { MenuAddComponent } from './components/menu-add/menu-add.component';
 import { MenuMessagesComponent } from './components/menu-messages/menu-messages.component';
+import { UserAddContactComponent } from './components/user-add-contact/user-add-contact.component';
 
 import {LoginComponent} from './components/login/login.component';
 import { LoginSignUpComponent } from './components/login-sign-up/login-sign-up.component';
@@ -34,6 +35,7 @@ import { LoginService } from "./services/login.service";
 import { GroupEditComponent } from "./components/group-edit/group-edit.component";
 import { GroupService } from "./services/group.service";
 import { UserEditingComponent } from './components/user-editing/user-editing.component';
+
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { UserEditingComponent } from './components/user-editing/user-editing.com
     StateIconPipe,
     StateStringPipe,
     GroupEditComponent,
-    UserEditingComponent
+    UserEditingComponent,
+    UserAddContactComponent
   ],
   imports: [
     BrowserModule,

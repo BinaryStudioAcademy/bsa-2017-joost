@@ -51,6 +51,7 @@
     <Compile Include="DAL\UnitOfWork.cs" />
     <Compile Include="EF\JoostDbContext.cs" />
     <Compile Include="Entities\ConfirmRegistration.cs" />
+    <Compile Include="Entities\Contact.cs" />
     <Compile Include="Entities\Group.cs" />
     <Compile Include="Entities\GroupMessage.cs" />
     <Compile Include="Entities\Message.cs" />
@@ -61,6 +62,10 @@
     <Compile Include="Migrations\201708142105046_InitialCreate.cs" />
     <Compile Include="Migrations\201708142105046_InitialCreate.Designer.cs">
       <DependentUpon>201708142105046_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201708151953261_Add Contact Table.cs" />
+    <Compile Include="Migrations\201708151953261_Add Contact Table.Designer.cs">
+      <DependentUpon>201708151953261_Add Contact Table.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +79,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201708142105046_InitialCreate.resx">
       <DependentUpon>201708142105046_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708151953261_Add Contact Table.resx">
+      <DependentUpon>201708151953261_Add Contact Table.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

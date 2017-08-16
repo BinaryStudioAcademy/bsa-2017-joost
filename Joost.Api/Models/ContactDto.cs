@@ -2,6 +2,14 @@
 {
     public class ContactDto
     {
-        public int Id { get; set; }
+        public int ContactId { get; set; }
+        public ContactState State { get; set; }
+    }
+    public enum ContactState
+    {
+        New,
+        Sent,
+        Accept,
+        Decline
     }
 }

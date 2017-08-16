@@ -245,6 +245,7 @@
     <Compile Include="Models\ContactDto.cs" />
     <Compile Include="Models\AccessTokenDto.cs" />
     <Compile Include="Models\RefreshTokenDto.cs" />
+    <Compile Include="Models\UserContactDto.cs" />
     <Compile Include="Models\UserDetailsDto.cs" />
     <Compile Include="Models\UserSearchDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

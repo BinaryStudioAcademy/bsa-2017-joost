@@ -56,7 +56,7 @@ export class UserDetailsComponent implements OnInit {
   
 	checkInContact(id:number):void {
 		this.userService.getContacts().subscribe( list => {
-      this.isFriend = list.indexOf(id) >= 0;
+      this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0;
     });
 	}
 
