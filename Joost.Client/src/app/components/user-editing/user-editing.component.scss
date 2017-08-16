@@ -1,0 +1,92 @@
+@import '../../../vars.scss';
+
+.data-container{
+   width: calc(100% - 16px);
+   margin: 8px;
+}
+
+.user-avatar{
+    width: 150px;
+    height: 150px;
+    margin: 20px;
+}
+
+.user-editing-header{
+    height: 50px;
+    padding: 0 8px;
+    justify-content:space-between;
+}
+
+.user-editing-main{
+    flex-direction: column;
+}
+
+.user-editing-group{
+    padding-left: 20px;
+}
+
+.user-editing-group .mdl-button{
+    margin: 10px 5px 10px 5px;
+}
+.user-editing-group h6{
+    margin: 0;
+}
+
+.user-editing-group h5{
+    margin: 8px 0;
+}
+
+.user-editing-main-info .mdl-button{
+    margin: 10px 5px 10px 5px;
+}
+
+.user-editing-main-info{
+    display: flex;
+    align-items:center;
+}
+
+.user-editing-main-info h3{
+    margin: 0;
+}
+
+.user-editing-online-indecator{
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: $color-online-indecator;
+}
+.user-editing-state{
+    display: flex;
+    align-items:center;
+    padding: 10px 0;
+}
+
+.user-editing-state .material-icons{
+    color: $color-online-indecator;
+}
+
+.autowide{
+    width: auto;
+}
+
+.padding-vertical-10{
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+}
+
+.user-editing-button-container {
+    float: right;
+    padding-right: 10px;
+}
+
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+

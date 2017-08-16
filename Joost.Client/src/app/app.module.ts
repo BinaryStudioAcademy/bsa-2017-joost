@@ -32,6 +32,7 @@ import { StateStringPipe } from "./pipes/state-string.pipe";
 
 import { GroupEditComponent } from "./components/group-edit/group-edit.component";
 import { GroupService } from "./services/group.service";
+import { UserEditingComponent } from './components/user-editing/user-editing.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { GroupService } from "./services/group.service";
     GenderPipe,
     StateIconPipe,
     StateStringPipe,
-    GroupEditComponent
+    GroupEditComponent,
+    UserEditingComponent
   ],
   imports: [
     BrowserModule,

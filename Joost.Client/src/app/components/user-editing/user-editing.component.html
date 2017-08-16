@@ -1,0 +1,95 @@
+<div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+  <div class="mdl-cell mdl-cell--3-col">
+     <img src="assets/img/man.png" class="user-avatar">
+  </div>
+
+    <div class="user-editing-main-info mdl-cell mdl-cell--9-col">
+      <div>
+        <h3>{{user.FirstName}} {{user.LastName}}</h3>
+        <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
+        <div class="user-editing-state">
+          <i class="material-icons">check_circle</i>
+          <span>Online</span>
+        </div>
+        <!-- <div>
+          <label for="file-upload" class="custom-file-upload">Set profile photo</label>
+          <input id="file-upload" type="file"(change)="fileChanged($event)" name="file" accept="image/png" />
+        </div> -->
+        <div>
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Set profile photo</button>            
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Change password</button>                  
+        </div>
+      </div>
+    </div>
+
+  <div class="user-editing-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    
+    <div class="user-editing-group mdl-card__actions mdl-card--border">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-textfield mdl-js-textfield padding-vertical-10">
+            <h5>Status:</h5>
+            <input class="mdl-textfield__input " type="text"  [(ngModel)]="user.Status" id="userStatus" />
+            <label class="mdl-textfield__label" for="userStatus"></label>
+          </div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+            <h5>First name:</h5>
+            <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.FirstName" id="userFirstName" />
+            <label class="mdl-textfield__label" for="userFirstName"></label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+            <h5>Last name:</h5>
+            <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.LastName" id="userLastName" />
+            <label class="mdl-textfield__label" for="userLastName"></label>
+          </div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+            <h5>City:</h5>
+            <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.City" id="userCity" />
+            <label class="mdl-textfield__label" for="userCity"></label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+            <h5>Country:</h5>
+            <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.Country" id="userCountry" />
+            <label class="mdl-textfield__label" for="userCountry"></label>
+          </div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+            <h5>Birthday:</h5>
+            <input class="mdl-textfield__input" type="date" [ngModel]="user.BirthDate | date:'dd-MM-yyyy'" (ngModelChange)="user.BirthDate = $event" id="userBirthday"/>
+            <label class="mdl-textfield__label" for="userBirthday"></label>
+          </div>
+        </div>
+         <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+            <h5>Gender:</h5>
+            <div class="padding-vertical-10">
+              <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGenderMale">
+                <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" [value]="0">
+                <span class="mdl-radio__label">Male</span>
+              </label>
+            </div>
+           <div class="padding-vertical-10">
+             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGendeFemale">
+               <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" [value]="1">
+               <span class="mdl-radio__label">Female</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="user-editing-group mdl-card__actions mdl-card--border">
+      <div class="user-editing-button-container">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="SaveUser()"> Save</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="Cancel()">Cancel</button>  
+      </div>
+    </div>
+
+  </div>
+</div>
