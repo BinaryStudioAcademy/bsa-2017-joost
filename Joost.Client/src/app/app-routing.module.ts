@@ -48,7 +48,7 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'add-contact/:id',
+        path: 'add-contact',
         component: UserAddContactComponent
       }]
   },

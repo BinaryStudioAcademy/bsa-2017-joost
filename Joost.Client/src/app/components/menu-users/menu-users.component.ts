@@ -24,16 +24,14 @@ export class MenuUsersComponent implements OnInit {
 		this.userService.changeContact.subscribe(user=>{
 			if (user) {
 				let contact = this.result.filter(t=>t.Id==user.Id)[0];
-				contact.State = user.State;
-				this.result.sort(function compare(a, b) {
-					  if (a.State < b.State) {
-					    return -1;
-					  }
-					  if (a.State > b.State) {
-					    return 1;
-					  }
-					  return 0;
-					});
+				if (contact!==undefined) {
+					contact.State = user.State;
+				}
+				else{
+					user.State = user.State;
+					this.result.push(user);
+				}
+				this.result.sort(this.compareUserContact);
 			}
 		});
 	}
@@ -42,8 +40,18 @@ export class MenuUsersComponent implements OnInit {
 	}
 	goToConfirm(id:number){
 		if (this.isNewContact(id)) {
-			this.router.navigate(['menu/add-contact',id]);
+			this.userService.changeContactIdNotify(id);
+			this.router.navigate(['menu/add-contact']);
 		}
+	}
+	compareUserContact(a:UserContact,b:UserContact):number{
+		if (a.State < b.State) {
+		  return -1;
+		}
+		if (a.State > b.State) {
+		  return 1;
+		}
+		return 0;
 	}
 	isNewContact(id:number):boolean{
 		return this.result.filter(t=>t.Id==id)[0].State===ContactState.New;

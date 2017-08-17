@@ -1,16 +1,9 @@
 import {ContactState} from "./contact";
 
 export class UserContact{
-	constructor(id:number, name:string, city:string, avatar:string, state:ContactState){
-		this.Id =id;
-		this.Name = name;
-		this.City = city;
-		this.Avatar = avatar;
-		this.State = state;
-	}
-    Id: number;
-    Name: string;
-    City: string;
-    Avatar: string;
-    State: ContactState;
+    public Id: number;
+    public Name: string;
+    public City: string;
+    public Avatar: string;
+    public State: ContactState;
 }

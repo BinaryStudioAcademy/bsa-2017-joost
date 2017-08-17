@@ -25,10 +25,7 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 		this.userService.getContacts().subscribe(data=>this.contactList = data);
 		this.userService.changeContact.subscribe(user=>{
 			if (user!==null) {
-					this.userService.getContacts().subscribe(data=>{
-						this.contactList = data;
-					});
-				// this.contactList.push(new Contact(user.Id,user.State));
+				this.contactList.push(new Contact(user.Id,user.State));
 			}
 		});
 	}
@@ -54,10 +51,14 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 	addToContact(contactId:number){
 		this.userService.addContact(contactId).subscribe(succes=>{
 			let userInfo = this.result.filter(t=>t.Id==contactId)[0];
-				let newContact = new UserContact(contactId, userInfo.Name, userInfo.City, userInfo.Avatar , ContactState.Sent);
-				this.userService.changeContactNotify(newContact);
+			let newContact = new UserContact();
+			newContact.Id = contactId;
+			newContact.Name= userInfo.Name;
+			newContact.City= userInfo.City;
+			newContact.Avatar = userInfo.Avatar;
+			newContact.State = ContactState.Sent;
+			this.userService.changeContactNotify(newContact);
 		});
-		this.search();
 	}
 	checkInContact(id:number):boolean{
 		return this.contactList.map(t=>t.ContactId).indexOf(id) > -1 ;

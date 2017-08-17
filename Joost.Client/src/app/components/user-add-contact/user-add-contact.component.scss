@@ -6,3 +6,21 @@
 .group-button{
 	text-align:center;
 }
+.test{
+    font-size: 100px;
+}
+
+.loading-container{
+    width: 100%;
+    height: calc(100% - 50px);
+    display: flex;
+    justify-content:center;
+    flex-direction: column;
+    align-items: center;
+    color:#757575;
+}
+
+.error-icon{
+    font-size: 2em;
+    color:#ef5350;
+}

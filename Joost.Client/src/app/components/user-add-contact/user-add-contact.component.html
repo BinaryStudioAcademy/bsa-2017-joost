@@ -1,12 +1,22 @@
+  <div class="loading-container" *ngIf="isError">
+  <div><i class="material-icons error-icon">error_outline</i></div>
+  <div>An error occured, please try again later</div>
+</div>
 
-  <div >
+<div class="loading-container" *ngIf="isError===null && !isLoad">
+  <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active">
+  </div>
+  <div>Please wait, data is loading...</div>
+</div>
+
+  <div *ngIf="isLoad">
     <div class="user-details-header mdl-layout__header-row mdl-shadow--2dp">
       <button class="mdl-button mdl-js-button" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
     </div>
 
-    <div *ngIf="isLoad" class="data-container mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    <div class="data-container mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
     	<div class="mdl-cell mdl-cell--12-col invite-text">
-    	User {{contact.Name}} <span *ngIf="contact.City!==null">({{contact.City}})</span> want to add you in friend list. <br> What are you think about this?
+    	User {{contact.Name}} <span *ngIf="contact.City!==undefined">({{contact.City}})</span> want to add you in friend list. <br> What are you think about this?
     	</div>
     	<div class="group-button mdl-cell mdl-cell--12-col">
 			<button class="mdl-button mdl-js-button mdl-button--primary" (click)="accept(contact.Id)">

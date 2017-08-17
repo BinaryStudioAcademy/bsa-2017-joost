@@ -18,6 +18,9 @@ export class UserService extends BaseApiService{
   private userSource = new BehaviorSubject<UserContact>(null);
   changeContact = this.userSource.asObservable();
 
+  private idContactSource = new BehaviorSubject<number>(null);
+  changeContactId = this.idContactSource.asObservable();
+
 	constructor(http : HttpClient) {
 		super(http);
 		this.parUrl = "users";
@@ -25,6 +28,9 @@ export class UserService extends BaseApiService{
   //Notify all subscribe components, when change some contact
   changeContactNotify(contact:UserContact){
     this.userSource.next(contact);
+  }
+   changeContactIdNotify(contactId:number){
+    this.idContactSource.next(contactId);
   }
   searchResult(name:string){
   	return this.http
