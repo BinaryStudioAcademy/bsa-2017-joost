@@ -16,8 +16,6 @@ import { MenuSettingsComponent } from './components/menu-settings/menu-settings.
 import { MenuUsersComponent } from './components/menu-users/menu-users.component';
 import { MenuSearchComponent } from './components/menu-search/menu-search.component';
 import { MenuAddComponent } from './components/menu-add/menu-add.component';
-
-
 import { MenuMessagesComponent } from './components/menu-messages/menu-messages.component';
 import { UserAddContactComponent } from './components/user-add-contact/user-add-contact.component';
 
