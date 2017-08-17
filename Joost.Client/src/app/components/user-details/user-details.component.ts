@@ -6,6 +6,7 @@ import 'rxjs/add/operator/switchMap';
 
 import { UserService } from "../../services/user.service";
 import { UserDetail } from "../../models/user-detail";
+declare var componentHandler: any;
 
 @Component({
   selector: 'app-user-details',
@@ -40,17 +41,20 @@ export class UserDetailsComponent implements OnInit {
         console.log(this.isError);
       }
     );
+    componentHandler.upgradeDom();
   }
 
   addToContact(contactId:number){
 		this.userService.addContact(contactId).subscribe(() =>{
-			this.isFriend = true;
+      this.isFriend = true;
+      componentHandler.upgradeDom();
 		});
   }
 
   deleteFromContact(contactId:number){
 		this.userService.deleteContact(contactId).subscribe(() =>{
-			this.isFriend = false;
+      this.isFriend = false;
+      componentHandler.upgradeDom();
 		});
   }
   

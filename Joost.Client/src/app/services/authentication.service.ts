@@ -32,6 +32,7 @@ export class AuthenticationService extends BaseApiService {
         console.log(data.accessToken);
         this.token = data.accessToken;
         localStorage.setItem('joostUserToken', data.accessToken);
+        console.log('token saved');
       },
       err=> this.isError = true
     );

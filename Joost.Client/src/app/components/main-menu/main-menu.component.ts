@@ -6,6 +6,8 @@ import { UserService } from "../../services/user.service";
 
 import { UserDetail } from "../../models/user-detail";
 
+declare var componentHandler: any;
+
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
@@ -24,6 +26,7 @@ export class MainMenuComponent implements OnInit {
     this.authService.getUserId().subscribe(data => {
       this.userService.getUserDetails(data).subscribe( d => this.curUser = d);
     });
+    componentHandler.upgradeDom();
   }
 
   onCreateGroup(){
