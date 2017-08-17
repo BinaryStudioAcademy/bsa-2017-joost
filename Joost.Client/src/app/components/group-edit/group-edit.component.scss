@@ -1,28 +1,35 @@
-.wrapper{
-    margin-left: 20px;
-    margin-top: 20px;
-    width: 800px;
-    min-height: 600px;
+@import '../../../vars.scss';
+
+.data-container{
+   width: calc(100% - 16px);
+   margin: 8px;
 }
-.center-label{
-    text-align: center;
+
+.autowide{
+    width: auto;
 }
-.right-label{
-    text-align: right;
-}
-.left-part, .right-part{
+
+.padding-vertical-10{
+    padding-left: 10px;
+    padding-right: 10px;
     display: inline-block;
-    width: 49%;
-}
-input, select, textarea{
-    min-width: 200px;
-}
-ul{
-    list-style-type: none;
-    padding-left: 0px;
 }
 .group-image{
-    height: 200px;
-    width: 200px;
-    border-radius: 100px;
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+}
+.user-editing-main{
+    flex-direction: column;
+}
+.user-editing-group h6{
+    margin: 0;
+}
+
+.user-editing-group h5{
+    margin: 8px 0;
+}
+.user-editing-button-container {
+    float: right;
+    padding-right: 10px;
 }

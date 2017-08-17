@@ -41,7 +41,9 @@ export class GroupEditComponent implements OnInit {
     newGroup.Members = this.selectedMembers;
     newGroup.Description = this.description;
 
-    this.groupService.addGroup(newGroup).subscribe();
+    this.groupService.addGroup(newGroup).subscribe(respone => {
+      this.onCancel();
+    });
   }
 
   onCancel(){
