@@ -7,4 +7,5 @@ export class CustomOption extends ToastOptions {
   dismiss = 'auto';
   toastLife = 3500;
   positionClass = "toast-bottom-right";
+  
 }

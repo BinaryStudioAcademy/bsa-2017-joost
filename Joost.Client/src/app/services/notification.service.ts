@@ -6,14 +6,14 @@ export class NotificationService {
     this.toastr.setRootViewContainerRef(vRef);
   }
 
-  showAddUser(notificationTitle:string, notificationMessage:string) {
+  showAddUser(notificationTitle:string) {
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/add_user.png\""+
       "style=\"width:30px; height:30px;\"></img>"+
       "<span style=\"font-weight:bold; font-size:14pt; margin-left: 10px;\">"+notificationTitle+"</span>"+
     "</div>"+
-    "<div>"+notificationMessage +"</div>";
+    "<div>Wants to add you to friendlist</div>";
 
     this.toastr.custom(htmlmessage, null,
                        {
@@ -27,7 +27,7 @@ export class NotificationService {
       "style=\"width:30px; height:30px;\"></img>"+
       "<span style=\"font-weight:bold; font-size:14pt; margin-left: 10px;\">"+notificationTitle+"</span>"+
     "</div>"+
-    "<div>"+notificationMessage +"</div>";
+    "<div>Invites you to "+notificationMessage +"</div>";
 
     this.toastr.custom(htmlmessage, null,
                        {
