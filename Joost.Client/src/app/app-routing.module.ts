@@ -58,7 +58,7 @@ const routes: Routes = [
             component: GroupEditComponent
           },
           {
-            path: 'edit:id',
+            path: 'edit/:id',
             component: GroupEditComponent
           }
         ]
