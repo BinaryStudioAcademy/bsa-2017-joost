@@ -20,31 +20,15 @@ const routes: Routes = [
     redirectTo: '/app'
   },
   {
-    path: 'login',
-    component: LoginComponent,
-    children: [{
-      path: 'sign-in',
-      component: LoginSignInComponent
-    }, {
-      path: 'sign-up',
-      component: LoginSignUpComponent
-    }]
-  },
-  {
     path: 'app',
     component: AppComponent,
-  },
-  {
-      path: 'confirm-registration',
-      component: ConfirmRegistrationComponent
   },
   {
     path: 'menu',
     component: MainMenuComponent,
     children: [{
-      path: 'user-details',
-      component: UserDetailsComponent,
-      outlet: 'menu'
+      path: 'user-details/:id',
+      component: UserDetailsComponent
     },
       {
         path: 'user-editing/:id',
@@ -67,7 +51,15 @@ const routes: Routes = [
         path: 'add-contact/:id',
         component: UserAddContactComponent
       }]
-  }
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+      path: 'confirm-registration',
+      component: ConfirmRegistrationComponent
+  }  
 ];
 
 @NgModule({

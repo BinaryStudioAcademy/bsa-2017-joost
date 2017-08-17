@@ -246,6 +246,7 @@
     <Compile Include="Infrastructure\NinjectResolver.cs" />
     <Compile Include="Models\ContactDto.cs" />
     <Compile Include="Models\AccessTokenDto.cs" />
+    <Compile Include="Models\GroupDto.cs" />
     <Compile Include="Models\RefreshTokenDto.cs" />
     <Compile Include="Models\UserContactDto.cs" />
     <Compile Include="Models\UserDetailsDto.cs" />

@@ -20,9 +20,9 @@ export class LoginSignInComponent implements OnInit {
   logIn() {
       this.authService.login(this.email, this.password).subscribe(data => {
         this.authService.getUserId().subscribe(id => {
-          debugger
-          this.router.navigate(['/menu'], {skipLocationChange: true});
+          this.router.navigate(['/menu/user-editing/', id]/*, {skipLocationChange: true}*/);
         })
       });
+    // this.router.navigate(['/menu']);
   }
 }

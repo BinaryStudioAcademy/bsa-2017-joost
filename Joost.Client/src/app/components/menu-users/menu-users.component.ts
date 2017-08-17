@@ -19,7 +19,6 @@ export class MenuUsersComponent implements OnInit {
 	constructor(private userService: UserService,private router: Router,private authService: AuthenticationService) { }
 
 	ngOnInit() {
-		this.authService.login("straber@ukr.net","password");
 		this.userService.getAllContacts().subscribe(data=> this.result = data);
 
 		this.userService.changeContact.subscribe(user=>{
