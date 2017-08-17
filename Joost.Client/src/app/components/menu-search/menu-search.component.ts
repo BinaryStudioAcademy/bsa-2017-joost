@@ -5,6 +5,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 
 import { UserSearch } from "../../models/user-search";
 import { Contact,ContactState} from "../../models/contact";
+import { UserContact} from "../../models/user-contact";
 
 @Component({
   selector: 'app-menu-search',
@@ -13,7 +14,7 @@ import { Contact,ContactState} from "../../models/contact";
 })
 export class MenuSearchComponent implements OnInit,OnDestroy {
 
-    private result:UserSearch;
+    private result:UserSearch[];
 	private searchString:string;
 	private isLoad:boolean = false;
 	private contactList:Contact[];
@@ -21,8 +22,14 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 	constructor(private userService: UserService,private authService: AuthenticationService) { }
 
 	ngOnInit() {
-		this.userService.getContacts().subscribe(data=>{
-			this.contactList= data;
+		this.userService.getContacts().subscribe(data=>this.contactList = data);
+		this.userService.changeContact.subscribe(user=>{
+			if (user!==null) {
+					this.userService.getContacts().subscribe(data=>{
+						this.contactList = data;
+					});
+				// this.contactList.push(new Contact(user.Id,user.State));
+			}
 		});
 	}
 	ngOnDestroy() {
@@ -46,7 +53,9 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 	}
 	addToContact(contactId:number){
 		this.userService.addContact(contactId).subscribe(succes=>{
-			this.contactList.push(new Contact(contactId,ContactState.Sent))
+			let userInfo = this.result.filter(t=>t.Id==contactId)[0];
+				let newContact = new UserContact(contactId, userInfo.Name, userInfo.City, userInfo.Avatar , ContactState.Sent);
+				this.userService.changeContactNotify(newContact);
 		});
 		this.search();
 	}
@@ -57,6 +66,12 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 		let state =  this.contactList.filter(t=>t.ContactId==id)[0];
 		if (state) {
 			switch (state.State) {
+				case ContactState.New:
+					return "new_releases";
+				case ContactState.Sent:
+					return "trending_flat";
+				case ContactState.Decline:
+					return "not_interested";
 				case ContactState.Accept:
 					return "check_circle";
 		    	default:

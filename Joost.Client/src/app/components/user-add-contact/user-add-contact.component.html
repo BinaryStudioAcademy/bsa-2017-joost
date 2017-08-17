@@ -5,8 +5,8 @@
     </div>
 
     <div *ngIf="isLoad" class="data-container mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-    	<div class="mdl-cell mdl-cell--12-col">
-    	User {{contact.Name}} <span *ngIf="contact.City!==null">({{contact.City}})</span> want to add you in friend list. What are you think about this?
+    	<div class="mdl-cell mdl-cell--12-col invite-text">
+    	User {{contact.Name}} <span *ngIf="contact.City!==null">({{contact.City}})</span> want to add you in friend list. <br> What are you think about this?
     	</div>
     	<div class="group-button mdl-cell mdl-cell--12-col">
 			<button class="mdl-button mdl-js-button mdl-button--primary" (click)="accept(contact.Id)">

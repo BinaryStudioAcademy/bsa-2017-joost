@@ -1,5 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { HttpClient,HttpParams } from '@angular/common/http';
 
 import { BaseApiService } from "./base-api.service";
@@ -13,14 +14,21 @@ import { UserContact} from "../models/user-contact";
 
 @Injectable()
 export class UserService extends BaseApiService{
+
+  private userSource = new BehaviorSubject<UserContact>(null);
+  changeContact = this.userSource.asObservable();
+
 	constructor(http : HttpClient) {
 		super(http);
 		this.parUrl = "users";
 	}
-
+  //Notify all subscribe components, when change some contact
+  changeContactNotify(contact:UserContact){
+    this.userSource.next(contact);
+  }
   searchResult(name:string){
   	return this.http
-  	.get<UserSearch>(this.generateUrl(),{
+  	.get<UserSearch[]>(this.generateUrl(),{
   		params: new HttpParams().set('name',name)
   	});
   }

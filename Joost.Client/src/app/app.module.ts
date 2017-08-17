@@ -37,7 +37,7 @@ import { GroupService } from "./services/group.service";
 import { UserEditingComponent } from './components/user-editing/user-editing.component';
 
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
-import {CustomOption} from './notification-options/custom-option'
+// import {CustomOption} from './notification-options/custom-option'
 
 @NgModule({
   declarations: [
@@ -78,10 +78,10 @@ import {CustomOption} from './notification-options/custom-option'
       useClass: AuthInterceptor,
       multi: true
     },
-    {
-      provide: ToastOptions,
-      useClass: CustomOption
-    }
+    // {
+    //   provide: ToastOptions,
+    //   useClass: CustomOption
+    // }
   ],
   bootstrap: [AppComponent]
 })
