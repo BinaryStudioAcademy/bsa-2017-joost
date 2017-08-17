@@ -101,3 +101,8 @@
     margin:10px;
     color: $color-text-secondary;
 }
+
+.main-content-container{
+    margin-left: $left-panel-width;
+    width: calc(100% -  400px); //  400px - $left-panel-width
+}

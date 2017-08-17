@@ -21,8 +21,6 @@ export class MainMenuComponent implements OnInit {
     private authService: AuthenticationService) { }
 
   ngOnInit() {
-    this.authService.login("straber@ukr.net","password");
-    let userId = 0;
     this.authService.getUserId().subscribe(data => {
       this.userService.getUserDetails(data).subscribe( d => this.curUser = d);
     });

@@ -19,7 +19,7 @@ import { MenuAddComponent } from './components/menu-add/menu-add.component';
 import { MenuMessagesComponent } from './components/menu-messages/menu-messages.component';
 import { UserAddContactComponent } from './components/user-add-contact/user-add-contact.component';
 
-import {LoginComponent} from './components/login/login.component';
+import { LoginComponent} from './components/login/login.component';
 import { LoginSignUpComponent } from './components/login-sign-up/login-sign-up.component';
 import { LoginSignInComponent } from './components/login-sign-in/login-sign-in.component';
 

@@ -20,6 +20,6 @@ export class LoginSignUpComponent implements OnInit {
   registrate(): void {
       var model: Login = { Email: this.email, Password : this.password };
       this.loginService.addUser(model);
-      this.router.navigate(['/login']);
+      this.router.navigate(['app/login']);
   }
 }
