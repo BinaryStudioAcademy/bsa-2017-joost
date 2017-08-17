@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
+import { LoginService } from "../../services/login.service";
+import { Login } from "../../models/user-detail";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-sign-up',
@@ -6,10 +9,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login-sign-up.component.scss']
 })
 export class LoginSignUpComponent implements OnInit {
-
-  constructor() { }
+  email: string;
+  password: string;
+    
+  constructor(private loginService: LoginService, private router: Router) { }
 
   ngOnInit() {
   }
 
+  registrate(): void {
+      var model: Login = { Email: this.email, Password : this.password };
+      this.loginService.addUser(model);
+      this.router.navigate(['/login']);
+  }
 }

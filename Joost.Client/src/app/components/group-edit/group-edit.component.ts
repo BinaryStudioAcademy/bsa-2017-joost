@@ -41,7 +41,9 @@ export class GroupEditComponent implements OnInit {
     newGroup.Members = this.selectedMembers;
     newGroup.Description = this.description;
 
-    this.groupService.addGroup(newGroup).subscribe();
+    this.groupService.addGroup(newGroup).subscribe(respone => {
+      this.onCancel();
+    });
   }
 
   onCancel(){
@@ -51,7 +53,7 @@ export class GroupEditComponent implements OnInit {
   ngOnInit() {
     this.userService.getContacts().subscribe(response => {
       for(var i = 0; i < response.length; i++){
-        this.userService.getUserDetails(response[i]).subscribe(response => {
+        this.userService.getUserDetails(response[i].ContactId).subscribe(response => {
           this.members.push(response);
         })
       }

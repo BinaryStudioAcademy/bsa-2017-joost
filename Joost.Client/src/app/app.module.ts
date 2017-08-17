@@ -16,7 +16,10 @@ import { MenuSettingsComponent } from './components/menu-settings/menu-settings.
 import { MenuUsersComponent } from './components/menu-users/menu-users.component';
 import { MenuSearchComponent } from './components/menu-search/menu-search.component';
 import { MenuAddComponent } from './components/menu-add/menu-add.component';
+
+
 import { MenuMessagesComponent } from './components/menu-messages/menu-messages.component';
+import { UserAddContactComponent } from './components/user-add-contact/user-add-contact.component';
 
 import {LoginComponent} from './components/login/login.component';
 import { LoginSignUpComponent } from './components/login-sign-up/login-sign-up.component';
@@ -28,13 +31,15 @@ import { ConfirmRegistrationComponent } from './components/confirm-registration/
 
 import { GenderPipe } from "./pipes/gender.pipe";
 import { StateIconPipe } from "./pipes/state-icon.pipe";
-import { StateStringPipe } from "./pipes/state-string.pipe";
 
+import { StateStringPipe } from "./pipes/state-string.pipe";
+import { LoginService } from "./services/login.service";
 import { GroupEditComponent } from "./components/group-edit/group-edit.component";
 import { GroupService } from "./services/group.service";
 import { UserEditingComponent } from './components/user-editing/user-editing.component';
 
-import {ToastModule} from 'ng2-toastr/ng2-toastr';
+import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
+import {CustomOption} from './notification-options/custom-option'
 
 @NgModule({
   declarations: [
@@ -55,7 +60,8 @@ import {ToastModule} from 'ng2-toastr/ng2-toastr';
     StateIconPipe,
     StateStringPipe,
     GroupEditComponent,
-    UserEditingComponent
+    UserEditingComponent,
+    UserAddContactComponent
   ],
   imports: [
     BrowserModule,
@@ -67,11 +73,16 @@ import {ToastModule} from 'ng2-toastr/ng2-toastr';
   providers: [
     GroupService,
     UserService,
+    LoginService,
     AuthenticationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: ToastOptions,
+      useClass: CustomOption
     }
   ],
   bootstrap: [AppComponent]

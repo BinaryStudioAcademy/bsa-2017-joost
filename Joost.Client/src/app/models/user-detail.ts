@@ -1,4 +1,4 @@
-export class UserDetail{
+﻿export class UserDetail{
     Id: number;
     FirstName: string;
     LastName: string;
@@ -9,6 +9,11 @@ export class UserDetail{
     Status: string;
     Avatar: string;
     State: UserState;
+}
+
+export class Login {
+    Email: string;
+    Password: string;
 }
 
 export enum UserState

@@ -1,52 +1,66 @@
-<div class="wrapper">
-  <h3 class="center-label">Create group</h3>
-  <div class="left-part">
-    <label>Name:</label><br>
-    <input type="text" [(ngModel)]="name">
-    <br>
-    <label>Description:</label><br>
-    <textarea rows="3" [(ngModel)]="description"></textarea>
-    <br>
-    <label>Image</label><br>
-    <input type="text" placeholder="url..." [(ngModel)]="imageUrl">
-    <br><br>
-    <img 
-      class="group-image"
-      [src]="imageUrl" 
-      alt="Group image"
-      title="Group image">
-    <br><br>
-    <label>Add member</label><br>
-    <ul>
-      <li 
-        *ngFor="let member of members; let i = index">
-        {{ member.FirstName}} {{member.LastName}} 
-        <span 
-          style="cursor: pointer"
-          (click)="onAddMember(i)">+
-        </span>
-      </li>
-    </ul>
+<div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+  <div class="user-editing-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    <div class="user-editing-group mdl-card__actions mdl-card--border">
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-textfield mdl-js-textfield padding-vertical-10">
+            <h3 style="text-align: center">Create new group:</h3>              
+          </div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">            
+            <input class="mdl-textfield__input" type="text"  [(ngModel)]="name" id="groupName" />
+            <label class="mdl-textfield__label" for="groupName">Group name</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+            <input class="mdl-textfield__input" type="text"  [(ngModel)]="imageUrl" id="groupImage" />
+            <label class="mdl-textfield__label" for="groupImage">Group image (url...)</label>        
+          </div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+            <textarea class="mdl-textfield__input" type="text" rows="2"  [(ngModel)]="description" id="description"></textarea>
+            <label class="mdl-textfield__label" for="description">Description</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">            
+            <img [hidden]="imageUrl == ''"
+              class="group-image"
+              [src]="imageUrl" 
+              alt="Group image"
+              title="Group image">            
+          </div>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col">
+            <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+              <h6>Add members</h6>            
+              <ul class="mdl-list">
+                <li class="mdl-list__item"
+                  *ngFor="let member of members; let i = index"
+                  style="cursor: pointer"
+                  (click)="onAddMember(i)">
+                  {{ member.FirstName}} {{member.LastName}} <i class="material-icons">check_box_outline_blank</i>
+                </li>
+              </ul>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">            
+              <h6>{{ selectedMembers.length }} Member<span [hidden]="selectedMembers.length === 1">s</span></h6>            
+              <ul class="mdl-list">
+                <li class="mdl-list__item"
+                  *ngFor="let member of selectedMembers; let i = index"
+                  style="cursor: pointer"
+                  (click)="onDeleteMember(i)">
+                  {{ member.FirstName}} {{member.LastName}} <i class="material-icons">check_box</i>
+                </li>
+              </ul>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="user-editing-group mdl-card__actions mdl-card--border">
+      <div class="user-editing-button-container">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="onSubmit()">Create Group</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="onCancel()">Cancel</button>  
+      </div>
+    </div>
   </div>
-  <div class="right-part">
-    {{ selectedMembers.length }} members<br><br>
-    <ul>
-      <li *ngFor="let member of selectedMembers; let i = index">
-        {{ member.FirstName}} {{member.LastName}}
-        <span 
-          style="cursor: pointer"
-          (click)="onDeleteMember(i)">-
-        </span>
-      </li>
-    </ul>
-    <br><br><br><br><br><br><br><br><br><br><br><br>
-  </div>
-  <p style="text-align:right">
-    <button 
-      type="button"
-      (click)="onSubmit()">Create</button>
-    <button 
-      type="button"
-      (click)="onCancel()">Cancel</button>
-  </p>
 </div>

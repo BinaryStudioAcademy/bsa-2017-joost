@@ -4,8 +4,8 @@ namespace Joost.Api.Models
 {
     public class RefreshTokenDto
     {
-        public int UserId { get; set; }
-        public DateTime Time { get; set; }
-        public AccessTokenDto AccessToken { get; set; }
+        public int RT_UserId { get; set; }
+        public DateTime RT_Time { get; set; }
+        public AccessTokenDto RT_AccessToken { get; set; }
     }
 }

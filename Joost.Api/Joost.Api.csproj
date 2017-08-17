@@ -228,6 +228,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AvatarsController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -241,10 +242,12 @@
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\IClient.cs" />
     <Compile Include="Infrastructure\Encrypt.cs" />
+    <Compile Include="Infrastructure\FileResult.cs" />
     <Compile Include="Infrastructure\NinjectResolver.cs" />
     <Compile Include="Models\ContactDto.cs" />
     <Compile Include="Models\AccessTokenDto.cs" />
     <Compile Include="Models\RefreshTokenDto.cs" />
+    <Compile Include="Models\UserContactDto.cs" />
     <Compile Include="Models\UserDetailsDto.cs" />
     <Compile Include="Models\UserSearchDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

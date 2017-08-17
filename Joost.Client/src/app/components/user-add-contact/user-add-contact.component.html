@@ -1,0 +1,20 @@
+
+  <div >
+    <div class="user-details-header mdl-layout__header-row mdl-shadow--2dp">
+      <button class="mdl-button mdl-js-button" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
+    </div>
+
+    <div *ngIf="isLoad" class="data-container mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    	<div class="mdl-cell mdl-cell--12-col">
+    	User {{contact.Name}} <span *ngIf="contact.City!==null">({{contact.City}})</span> want to add you in friend list. What are you think about this?
+    	</div>
+    	<div class="group-button mdl-cell mdl-cell--12-col">
+			<button class="mdl-button mdl-js-button mdl-button--primary" (click)="accept(contact.Id)">
+			  Accept
+			</button>
+			<button class="mdl-button mdl-js-button mdl-button--accent" (click)="decline(contact.Id)"> 
+			  Decline
+			</button>
+		</div>
+    </div>
+  </div>

@@ -22,6 +22,6 @@ export class ConfirmRegistrationComponent implements OnInit {
           this.key = params['key'];
           this.userService.confirmRegistration(this.key);
       });
-      //this.router.navigate(['/user-details']);
+      this.router.navigate(['/login']);
   }
 }

@@ -53,7 +53,7 @@ namespace Joost.Api.Filters
 
             using (var unitOfWork = new UnitOfWork())
             {
-                var user = unitOfWork.Repository<User>().Get(accessToken.UserId);
+                var user = unitOfWork.Repository<User>().Get(accessToken.AT_UserId);
                 if (user == null)
                 {
                     actionContext.Response = new HttpResponseMessage
@@ -65,11 +65,11 @@ namespace Joost.Api.Filters
                 }
             }
  
-            if (DateTime.Now - accessToken.Time > accessTokenLifetime)
+            if (DateTime.Now - accessToken.AT_Time > accessTokenLifetime)
             {
                 actionContext.Response = new HttpResponseMessage
                 {
-                    StatusCode = System.Net.HttpStatusCode.MethodNotAllowed,
+                    StatusCode = System.Net.HttpStatusCode.UpgradeRequired,
                     Content = new StringContent("Access token life has expired")
                 };
                 return;

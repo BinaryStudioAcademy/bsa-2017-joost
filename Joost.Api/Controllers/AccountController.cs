@@ -47,8 +47,8 @@ namespace Joost.Api.Controllers
                 return StatusCode(System.Net.HttpStatusCode.PartialContent);
             }
 
-            var accessToken = new AccessTokenDto() { UserId = user.Id, Time = DateTime.Now };
-            var refreshToken = new RefreshTokenDto() { UserId = user.Id, Time = DateTime.Now, AccessToken = accessToken };
+            var accessToken = new AccessTokenDto() { AT_UserId = user.Id, AT_Time = DateTime.Now };
+            var refreshToken = new RefreshTokenDto() { RT_UserId = user.Id, RT_Time = DateTime.Now, RT_AccessToken = accessToken };
             return Ok(new { accessToken = Encrypt.EncryptAccessToken(accessToken), refreshToken = Encrypt.EncryptRefreshToken(refreshToken) });
         }
 
@@ -86,19 +86,19 @@ namespace Joost.Api.Controllers
                 return StatusCode(System.Net.HttpStatusCode.MethodNotAllowed);
             }
 
-            var user = await _unitOfWork.Repository<User>().GetAsync(refreshToken.UserId);
+            var user = await _unitOfWork.Repository<User>().GetAsync(refreshToken.RT_UserId);
             if (user == null)
             {
                 return StatusCode(System.Net.HttpStatusCode.MethodNotAllowed);
             }
 
-            if (DateTime.Now - refreshToken.Time > refreshTokenLifetime)
+            if (DateTime.Now - refreshToken.RT_Time > refreshTokenLifetime)
             {
                 return StatusCode(System.Net.HttpStatusCode.MethodNotAllowed);
             }
 
-            var newAccessToken = new AccessTokenDto() { UserId = user.Id, Time = DateTime.Now };
-            var newRefreshToken = new RefreshTokenDto() { UserId = user.Id, Time = DateTime.Now, AccessToken = newAccessToken };
+            var newAccessToken = new AccessTokenDto() { AT_UserId = user.Id, AT_Time = DateTime.Now };
+            var newRefreshToken = new RefreshTokenDto() { RT_UserId = user.Id, RT_Time = DateTime.Now, RT_AccessToken = newAccessToken };
             return Ok(new { accessToken = Encrypt.EncryptAccessToken(newAccessToken), refreshToken = Encrypt.EncryptRefreshToken(newRefreshToken) });
         }
     }
