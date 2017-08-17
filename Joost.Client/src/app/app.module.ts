@@ -16,6 +16,8 @@ import { MenuSettingsComponent } from './components/menu-settings/menu-settings.
 import { MenuUsersComponent } from './components/menu-users/menu-users.component';
 import { MenuSearchComponent } from './components/menu-search/menu-search.component';
 import { MenuAddComponent } from './components/menu-add/menu-add.component';
+
+
 import { MenuMessagesComponent } from './components/menu-messages/menu-messages.component';
 import { UserAddContactComponent } from './components/user-add-contact/user-add-contact.component';
 
@@ -29,13 +31,15 @@ import { ConfirmRegistrationComponent } from './components/confirm-registration/
 
 import { GenderPipe } from "./pipes/gender.pipe";
 import { StateIconPipe } from "./pipes/state-icon.pipe";
+
 import { StateStringPipe } from "./pipes/state-string.pipe";
 import { LoginService } from "./services/login.service";
-
 import { GroupEditComponent } from "./components/group-edit/group-edit.component";
 import { GroupService } from "./services/group.service";
 import { UserEditingComponent } from './components/user-editing/user-editing.component';
 
+import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
+import {CustomOption} from './notification-options/custom-option'
 
 @NgModule({
   declarations: [
@@ -63,7 +67,8 @@ import { UserEditingComponent } from './components/user-editing/user-editing.com
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ToastModule.forRoot()
   ],
   providers: [
     GroupService,
@@ -74,6 +79,10 @@ import { UserEditingComponent } from './components/user-editing/user-editing.com
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: ToastOptions,
+      useClass: CustomOption
     }
   ],
   bootstrap: [AppComponent]
