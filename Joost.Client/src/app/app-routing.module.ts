@@ -11,61 +11,62 @@ import { LoginSignUpComponent } from "./components/login-sign-up/login-sign-up.c
 import { MenuSettingsComponent } from "./components/menu-settings/menu-settings.component";
 import { MainMenuComponent } from "./components/main-menu/main-menu.component";
 import { UserAddContactComponent } from './components/user-add-contact/user-add-contact.component';
-
+import { AppComponent } from "./components/app/app.component";
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: '/login'
+    redirectTo: '/app'
   },
   {
-      path: 'login',
-      component: LoginComponent,
-      children: [{
-        path: 'sign-in',
-        component: LoginSignInComponent
-      }, {
-        path: 'sign-up',
-        component: LoginSignUpComponent
-      }]
+    path: 'login',
+    component: LoginComponent,
+    children: [{
+      path: 'sign-in',
+      component: LoginSignInComponent
+    }, {
+      path: 'sign-up',
+      component: LoginSignUpComponent
+    }]
+  },
+  {
+    path: 'app',
+    component: AppComponent,
   },
   {
       path: 'confirm-registration',
       component: ConfirmRegistrationComponent
   },
   {
-      path: 'settings',
-      component: MenuSettingsComponent
-  },
-  {
-    path: 'user-details',
-    component: UserDetailsComponent
-  },
-  {
-    path: 'user-editing/:id',
-    component: UserEditingComponent
-  },
-  {
-    path: 'groups',
-    children: [
+    path: 'menu',
+    component: MainMenuComponent,
+    children: [{
+      path: 'user-details',
+      component: UserDetailsComponent,
+      outlet: 'menu'
+    },
       {
-        path: 'new',
-        component: GroupEditComponent
+        path: 'user-editing/:id',
+        component: UserEditingComponent
       },
       {
-        path: 'edit:id',
-        component: GroupEditComponent
-      }
-    ]
-  },
-  {
-    path: 'add-contact/:id',
-    component: UserAddContactComponent
-  },
-  {
-    path: 'menu',
-    component: MainMenuComponent
+        path: 'groups',
+        children: [
+          {
+            path: 'new',
+            component: GroupEditComponent
+          },
+          {
+            path: 'edit:id',
+            component: GroupEditComponent
+          }
+        ]
+      },
+      {
+        path: 'add-contact/:id',
+        component: UserAddContactComponent
+      }]
   }
 ];
 

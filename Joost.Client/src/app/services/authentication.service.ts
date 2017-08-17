@@ -26,16 +26,20 @@ export class AuthenticationService extends BaseApiService {
   }
 
   login(email: string, password: string) {
-    return this.http.post<Token>(this.generateUrl() + "/auth",
-    {"Email": email, "Password" : password})
-    .subscribe(
+    let obj = this.loginObservable(email, password);
+    obj.subscribe(
       data=>{
         console.log(data.accessToken);
         this.token = data.accessToken;
-        localStorage.setItem('joostUserToken',data.accessToken)
+        localStorage.setItem('joostUserToken', data.accessToken);
       },
       err=> this.isError = true
     );
+    return obj;
+  }
+
+  private loginObservable(email: string, password: string) {
+     return this.http.post<Token>(this.generateUrl() + "/auth", {"Email": email, "Password" : password});
   }
 
   logout() {

@@ -18,7 +18,11 @@ export class LoginSignInComponent implements OnInit {
   }
 
   logIn() {
-      this.authService.login(this.email, this.password);
-      this.router.navigate(['/settings']);
+      this.authService.login(this.email, this.password).subscribe(data => {
+        this.authService.getUserId().subscribe(id => {
+          debugger
+          this.router.navigate(['/menu'], {skipLocationChange: true});
+        })
+      });
   }
 }
