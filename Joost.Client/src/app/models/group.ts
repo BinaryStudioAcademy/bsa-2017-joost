@@ -1,8 +1,9 @@
-import { UserDetail } from "./user-detail";
+﻿import { UserDetail } from "./user-detail";
 
 export class Group {
     Id: number;
     Name: string;
     Description: string;
-    Members: Array<UserDetail>
+    MembersId: Array<number>;
+    ContactsId: Array<number>;
 }

@@ -1,4 +1,5 @@
-﻿using Joost.DbAccess.Entities;
+﻿using Joost.Api.Models;
+using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Joost.Api.Controllers
                 .Query()
                 .Where(item => item.Name.Contains(name))
                 .ToList();
-            if (groups==null)
+            if (groups == null)
             {
                 return NotFound();
             }
@@ -45,43 +46,73 @@ namespace Joost.Api.Controllers
         {
             var group = await _unitOfWork.Repository<Group>().GetAsync(id);
             if (group == null)
-            {
                 return NotFound();
-            }
 
-            return Ok(group);
+            var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
+            if (group.GroupCreator.Id != currentUser.Id)
+                return BadRequest();
+
+            var groupDto = new GroupDto
+            {
+                Id = group.Id,
+                Name = group.Name,
+                Description = group.Description,
+                MembersId = group.Members.Select(m => m.Id).ToList(),
+                ContactsId = group.GroupCreator.Contacts.Select(c => c.ContactUser.Id).ToList()
+            };
+
+            groupDto.ContactsId = groupDto.ContactsId.Except(groupDto.MembersId).ToList();
+            return Ok(groupDto);
         }
 
         // POST: api/Groups
         [HttpPost]
-        public async Task<IHttpActionResult> AddGroup([FromBody]Group group)
+        public async Task<IHttpActionResult> AddGroup([FromBody]GroupDto group)
         {
-            // did that here in order to prevent datetime formating form client here
-            group.CreatedAt = DateTime.Now;
-
-            // don't know, have existed similar to GetCurrentUserId() method from client-side
-            // so call that here and assign searched user to GroupCreator property
-            var id = GetCurrentUserId();
-            var user = _unitOfWork.Repository<User>().Get(id);
-            group.GroupCreator = user;
-
-            try
-            {
-                _unitOfWork.Repository<Group>().Add(group);
-                await _unitOfWork.SaveAsync();
-                return Ok();
-            }
-            catch
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
+
+            var newGroup = new Group()
+            {
+                Name = group.Name,
+                CreatedAt = DateTime.Now,
+                Description = group.Description,
+                GroupCreator = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId())
+            };
+
+            foreach (var memberId in group.MembersId)
+                newGroup.Members.Add(await _unitOfWork.Repository<User>().GetAsync(memberId));
+
+            _unitOfWork.Repository<Group>().Add(newGroup);
+            await _unitOfWork.SaveAsync();
+            return Ok();
         }
 
         // PUT: api/Groups/5
         [HttpPut]
-        public async Task<IHttpActionResult> EditGroup(int id, [FromBody]Group group)
+        public async Task<IHttpActionResult> EditGroup(int id, [FromBody]GroupDto group)
         {
-            _unitOfWork.Repository<Group>().Attach(group);
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var editGroup = await _unitOfWork.Repository<Group>().GetAsync(id);
+            var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
+
+            if (editGroup.GroupCreator.Id != currentUser.Id)
+                return BadRequest();
+
+            editGroup.Name = group.Name;
+            editGroup.Description = group.Description;
+            editGroup.Members.Clear();
+
+            foreach (var memberId in group.MembersId)
+            {
+                editGroup.Members.Add(await _unitOfWork.Repository<User>().GetAsync(memberId));
+            }
+
+            _unitOfWork.Repository<Group>().Attach(editGroup);
             await _unitOfWork.SaveAsync();
 
             return Ok(group);
@@ -89,14 +120,23 @@ namespace Joost.Api.Controllers
 
         // DELETE: api/Groups/5
         [HttpDelete]
-        public async Task DeleteGroup(int id)
+        public async Task<IHttpActionResult> DeleteGroup(int id)
         {
-            var group = await _unitOfWork.Repository<Group>().FindAsync(item => item.Id == id);
+            var group = await _unitOfWork.Repository<Group>().GetAsync(id);
+            var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
             if (group != null)
             {
-                _unitOfWork.Repository<Group>().Delete(group);
-                await _unitOfWork.SaveAsync();
+                if (group.GroupCreator.Id == currentUser.Id)
+                {
+                    _unitOfWork.Repository<Group>().Delete(group);
+                    await _unitOfWork.SaveAsync();
+                    return Ok();
+                }
+                else
+                    return BadRequest();
             }
+            else
+                return NotFound();
         }
 
         protected override void Dispose(bool disposing)
