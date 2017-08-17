@@ -5,8 +5,11 @@ export class NotificationService {
   constructor(private toastr: ToastsManager, vRef: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vRef);
   }
-
+  audio = new Audio();
   showAddUser(notificationTitle:string) {
+    this.audio.src="assets/notifications/1.mp3";
+    this.audio.load();
+    this.audio.play();
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/add_user.png\""+
@@ -20,7 +23,11 @@ export class NotificationService {
                          enableHTML: true
                         });
   }
+
   showAddChat(notificationTitle:string, notificationMessage:string) {
+    this.audio.src="assets/notifications/1.mp3";
+    this.audio.load();
+    this.audio.play();
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/new_chat.png\""+
@@ -34,7 +41,11 @@ export class NotificationService {
                          enableHTML: true
                         });
   }
+
   showNewMessage(notificationTitle:string, notificationMessage:string) {
+    this.audio.src="assets/notifications/1.mp3";
+    this.audio.load();
+    this.audio.play();
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/message.png\""+
@@ -48,7 +59,11 @@ export class NotificationService {
                          enableHTML: true
                         });
   }
+
   showNewMessageInChat(notificationTitle:string, notificationMessage:string) {
+    this.audio.src="assets/notifications/1.mp3";
+    this.audio.load();
+    this.audio.play();
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/message_in_chat.png\""+
