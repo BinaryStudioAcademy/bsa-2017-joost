@@ -34,6 +34,8 @@ import { GroupEditComponent } from "./components/group-edit/group-edit.component
 import { GroupService } from "./services/group.service";
 import { UserEditingComponent } from './components/user-editing/user-editing.component';
 
+import {ToastModule} from 'ng2-toastr/ng2-toastr';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +61,8 @@ import { UserEditingComponent } from './components/user-editing/user-editing.com
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ToastModule.forRoot()
   ],
   providers: [
     GroupService,
