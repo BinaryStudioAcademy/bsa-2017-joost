@@ -14,12 +14,11 @@ export class AppComponent implements OnInit {
     private authService: AuthenticationService
   ){}
   ngOnInit(): void {
-    this.authService.logout()
     if(this.authService.isUserLogined()) {
-          this.router.navigate(['menu'], /*{ skipLocationChange: true }*/);
+          this.router.navigate(['menu'], { skipLocationChange: true });
     }
     else {
-      this.router.navigate(['login'],  /*{ skipLocationChange: true }*/);
+      this.router.navigate(['login'],  { skipLocationChange: true });
     }
     
   }
