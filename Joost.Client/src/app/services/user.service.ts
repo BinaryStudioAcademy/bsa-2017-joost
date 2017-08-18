@@ -82,8 +82,8 @@ export class UserService extends BaseApiService{
     });
   }
     
-  getUser(id: number) {
-    return this.http.get<User>(this.generateUrl() + '/myprofile/' + id.toString());
+  getUser() {
+    return this.http.get<User>(this.generateUrl() + '/myprofile');
   }
   
   updateUser(user: User) {

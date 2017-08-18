@@ -45,7 +45,7 @@ export class UserEditingComponent implements OnInit {
   }
 
   GetUser() {
-    this.userService.getUser(this.userId).subscribe( d => {
+    this.userService.getUser().subscribe( d => {
       this.user = d;
       this.isLoadFinished = true;
     },

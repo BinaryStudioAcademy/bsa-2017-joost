@@ -250,6 +250,7 @@
     <Compile Include="Models\RefreshTokenDto.cs" />
     <Compile Include="Models\UserContactDto.cs" />
     <Compile Include="Models\UserDetailsDto.cs" />
+    <Compile Include="Models\UserProfileDto.cs" />
     <Compile Include="Models\UserSearchDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ChatHubService.cs" />
