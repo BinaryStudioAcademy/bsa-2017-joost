@@ -1,1 +1,13 @@
 @import '../../../vars.scss';
+
+.mdl-list__item:hover{
+    background-color:$color-primary-dark;
+}
+
+.mdl-list__item-text-body{
+    color:$color-text-secondary;
+}
+
+.mdl-list__item-primary-content{
+    color:$color-text-primary;
+}

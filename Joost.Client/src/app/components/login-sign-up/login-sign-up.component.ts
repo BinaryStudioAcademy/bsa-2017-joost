@@ -19,7 +19,12 @@ export class LoginSignUpComponent implements OnInit {
 
   registrate(): void {
       var model: Login = { Email: this.email, Password : this.password };
-      this.loginService.addUser(model);
-      this.router.navigate(['app/login']);
+      this.loginService.addUser(model).subscribe(rez => {
+        this.router.navigate(['login'])
+      },
+    error => {
+      debugger;
+      console.log(error);
+    });
   }
 }

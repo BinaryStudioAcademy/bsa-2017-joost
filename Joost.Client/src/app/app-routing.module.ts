@@ -57,8 +57,8 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-      path: 'confirm-registration',
-      component: ConfirmRegistrationComponent
+    path: 'confirm-registration',
+    component: ConfirmRegistrationComponent
   }  
 ];
 

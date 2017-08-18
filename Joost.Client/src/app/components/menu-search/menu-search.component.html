@@ -10,7 +10,7 @@
   <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let user of result">
     <span class="mdl-list__item-primary-content">
       <a [routerLink]="['user-details', user.Id]" skipLocationChange>
-        <i class="material-icons mdl-list__item-avatar">person</i>
+        <img src="{{user.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
       </a>
       <span>{{user.Name}}</span>
       <span class="mdl-list__item-text-body">

@@ -43,7 +43,7 @@ export class LoginService extends BaseApiService {
     addUser(user: Login) {
         return this.http
             .post(this.generateUrl(),
-            { "Email": user.Email, "Password": user.Password }).subscribe();
+            { "Email": user.Email, "Password": user.Password });
     }
 }
 

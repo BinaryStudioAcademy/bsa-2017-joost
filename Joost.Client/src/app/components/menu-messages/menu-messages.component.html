@@ -3,6 +3,41 @@
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
       <input class="mdl-textfield__input" type="text" id="search-messages">
       <label class="mdl-textfield__label" for="search-messages">Find...</label>
+      <ul class="demo-list-three mdl-list">
+          <li class="mdl-list__item mdl-list__item--three-line">
+            <span class="mdl-list__item-primary-content">
+              <a href="/" skipLocationChange>
+                <img src="{{null | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+              </a>
+              <span>Vasyl Barna</span>
+              <span class="mdl-list__item-text-body">
+                Привіт! Давай дружити=)
+              </span>
+            </span>
+          </li>
+          <li class="mdl-list__item mdl-list__item--three-line">
+              <span class="mdl-list__item-primary-content">
+                <a href="/" skipLocationChange>
+                  <img src="{{'10_avatar.jpg' | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+                </a>
+                <span>Віталій Ільченко</span>
+                <span class="mdl-list__item-text-body">
+                  Мене завтра не буде, замов за мене слівце)
+                </span>
+              </span>
+            </li>
+            <li class="mdl-list__item mdl-list__item--three-line">
+                <span class="mdl-list__item-primary-content">
+                  <a href="/" skipLocationChange>
+                    <img src="{{'5_avatar.jpg' | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+                  </a>
+                  <span>Ilya Khomenko</span>
+                  <span class="mdl-list__item-text-body">
+                    Злили 6 серію Гри Престолів!
+                  </span>
+                </span>
+              </li>
+        </ul>
     </div>
   </div>
 </form>

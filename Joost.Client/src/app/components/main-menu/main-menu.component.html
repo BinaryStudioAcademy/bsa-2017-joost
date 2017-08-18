@@ -4,7 +4,7 @@
       <div *ngIf="curUser" class="left-panel-header">
         <a [routerLink]="['user-editing', curUser.Id]">
           <div class="avatar-container">
-            <img src="assets/img/man.png" class="main-avatar">
+            <img src="{{curUser.Avatar | avatarPipe}}" class="main-avatar">
             <div class="online-indecator"></div>
           </div>
         </a>
@@ -12,7 +12,7 @@
           <a [routerLink]="['user-editing', curUser.Id]" skipLocationChange>
             <div class="header-user-name">{{curUser.FirstName + ' ' + curUser.LastName}}</div>
           </a>
-          <div>Winter is coming</div>
+          <div>{{curUser.Status}}</div>
         </div>
       </div>
     </header>
