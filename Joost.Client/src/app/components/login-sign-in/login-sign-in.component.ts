@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class LoginSignInComponent implements OnInit {
   email: string;
   password: string;
+  isError:string = "";
 
   constructor(private authService: AuthenticationService, private router: Router) { }
 
@@ -18,11 +19,16 @@ export class LoginSignInComponent implements OnInit {
   }
 
   logIn() {
-      this.authService.login(this.email, this.password).subscribe(data => {
-        console.log('get userId');
-        this.authService.getUserId().subscribe(id => {
+      this.authService.login(this.email, this.password).subscribe(
+        data => {
+          console.log('get userId');
+          this.authService.getUserId().subscribe(id => {
           this.router.navigate(['/menu/user-editing/', id]/*, {skipLocationChange: true}*/);
-        })
+        }),
+         error =>{
+           console.log(error);
+           this.isError = "User with this login and password not wound!"
+         }
       });
   }
 }
