@@ -78,11 +78,21 @@ namespace Joost.Api.Controllers
             {
                 return NotFound();
             }
-            user.Contacts.Add(new Contact() {
-                User = user,
-                ContactUser = contactUser,
-                State = DbAccess.Entities.ContactState.Sent,
-            });
+            // first send 
+            if (user.Contacts.FirstOrDefault(t=>t.ContactUser.Id==contactUser.Id)==null)
+            {
+                user.Contacts.Add(new Contact()
+                {
+                    User = user,
+                    ContactUser = contactUser,
+                    State = DbAccess.Entities.ContactState.Sent,
+                });
+            }
+            // retry when user decline offer
+            else
+            {
+                user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Sent;
+            }
             contactUser.Contacts.Add(new Contact()
             {
                 User = contactUser,
@@ -138,7 +148,7 @@ namespace Joost.Api.Controllers
             {
                 return NotFound();
             }
-            user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Decline;
+            user.Contacts.Remove(user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id));
             contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
             await _unitOfWork.SaveAsync();
 

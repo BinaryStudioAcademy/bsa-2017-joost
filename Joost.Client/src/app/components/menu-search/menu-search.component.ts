@@ -24,8 +24,18 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 	ngOnInit() {
 		this.userService.getContacts().subscribe(data=>this.contactList = data);
 		this.userService.changeContact.subscribe(user=>{
-			if (user!==null) {
-				this.contactList.push(new Contact(user.Id,user.State));
+			if (user) {
+				let contact = this.contactList.filter(t=>t.ContactId==user.Id)[0];
+				if (contact!==undefined) {
+					contact.State = user.State;
+				}
+				else if (user.State==ContactState.Decline) {
+					let currUser = this.contactList.filter(t=>t.ContactId==user.Id)[0];
+					this.contactList.splice(this.contactList.indexOf(currUser), 1);
+				}
+				else {
+					this.contactList.push(new Contact(user.Id,user.State));
+				}
 			}
 		});
 	}
@@ -68,7 +78,7 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 		if (state) {
 			switch (state.State) {
 				case ContactState.New:
-					return "new_releases";
+					return "fiber_new";
 				case ContactState.Sent:
 					return "trending_flat";
 				case ContactState.Decline:

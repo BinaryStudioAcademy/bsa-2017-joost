@@ -5,7 +5,6 @@ import { UserService } from '../../services/user.service';
 import { UserContact } from "../../models/user-contact";
 import { ContactState} from "../../models/contact";
 import { AuthenticationService } from '../../services/authentication.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'app-user-add-contact',
@@ -18,9 +17,6 @@ export class UserAddContactComponent implements OnInit{
 	private isError?:boolean = null;
 	private isLoad:boolean =false;
 	private contact: UserContact;
-	private allContact: UserContact[];
-	private idSource = new BehaviorSubject<number>(null);
- 	changeContact = this.idSource.asObservable();
 	constructor(
 		private userService: UserService,
 		private router: Router,
@@ -33,7 +29,6 @@ export class UserAddContactComponent implements OnInit{
 		this.userService.changeContactId.subscribe(id =>{
 			this.userService.getAllContacts().subscribe(
 			data =>{
-				this.allContact = data;
 				this.contact = data.filter(t=>t.Id==id)[0];
 				this.isLoad = true;
 			},
@@ -61,5 +56,13 @@ export class UserAddContactComponent implements OnInit{
 			this.contact.State = ContactState.Decline;
 			this.userService.changeContactNotify(this.contact);
 		});
+	}
+	retry(id:number){
+		this.userService.addContact(id).subscribe(succes=>{
+			this.router.navigate(["menu"]);
+			this.contact.State = ContactState.Sent;
+			this.userService.changeContactNotify(this.contact);
+		});
+	
 	}
 }
