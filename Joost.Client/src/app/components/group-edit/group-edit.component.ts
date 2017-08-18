@@ -39,7 +39,6 @@ export class GroupEditComponent implements OnInit {
     onSubmit() {
         if (!this.editMode) {
             // route: /groups/new
-            console.log(this.group);
             this.groupService.addGroup(this.group).subscribe(respone => {
                 this.onCancel();
                 console.log("Inserted");
@@ -70,7 +69,8 @@ export class GroupEditComponent implements OnInit {
         if (!this.editMode) {
             // route: /groups/new
             this.group = new Group();
-            this.userService.getAllContacts().subscribe(response => this.group.UnselectedMembers = response);
+            this.userService.getAllContacts()
+                .subscribe(response => this.group.UnselectedMembers = response);
         } else {
             // route: /groups/edit/:id
             this.groupService.getGroup(this.group.Id).subscribe(response => {

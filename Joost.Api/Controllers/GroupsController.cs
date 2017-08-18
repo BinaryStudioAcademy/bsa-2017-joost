@@ -46,13 +46,15 @@ namespace Joost.Api.Controllers
         {
             // if group doesn't exist
             var group = await _unitOfWork.Repository<Group>().GetAsync(id);
-            if (group == null)
-                return NotFound();
-
-            // if user isn't creator of the group
-            var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
-            if (group.GroupCreator.Id != currentUser.Id)
-                return BadRequest();
+            if (group != null)
+            {
+                // if user isn't creator of the group
+                var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
+                if (group.GroupCreator.Id != currentUser.Id)
+                    return BadRequest();
+            }
+            else
+                return NotFound();                       
 
             // select all friends of the current user
             var groupCreatorContacts = group.GroupCreator.Contacts

@@ -1,63 +1,85 @@
-<div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-    <div class="user-editing-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-        <div class="user-editing-group mdl-card__actions mdl-card--border">
-            <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--12-col">
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label padding-vertical-10">
-                        <h3 style="text-align: center">
-                            <span [hidden]="editMode">Create new group</span>
-                            <span [hidden]="!editMode">Edit group</span>
-                        </h3>
+<form (ngSubmit)="onSubmit()" #groupForm="ngForm">
+    <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+        <div class="user-editing-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">        
+            <div class="user-editing-group mdl-card__actions mdl-card--border">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <div class="mdl-textfield mdl-js-textfield padding-vertical-10">
+                            <h3 style="text-align: center">
+                                <span [hidden]="editMode">Create new group</span>
+                                <span [hidden]="!editMode">Edit group</span>
+                            </h3>
+                        </div>
                     </div>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col">
-                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label autowide padding-vertical-10">
-                        <h6>Group name</h6>
-                        <input class="mdl-textfield__input" type="text" [(ngModel)]="group.Name" id="groupName" />
-                        <label class="mdl-textfield__label" for="groupName"></label>
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">                        
+                            <input 
+                                class="mdl-textfield__input" 
+                                type="text" 
+                                [(ngModel)]="group.Name" 
+                                id="groupName"
+                                name="groupName" 
+                                required
+                                minlength="4"
+                            >
+                            <label class="mdl-textfield__label" for="groupName">Group name</label>
+                        </div>
                     </div>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col">
-                    <h6>Description</h6>
-                    <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
-                        <textarea class="mdl-textfield__input" type="text" rows="2" [(ngModel)]="group.Description" id="description"></textarea>
-                        <label class="mdl-textfield__label" for="description"></label>
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label autowide padding-vertical-10">
+                            <input 
+                                class="mdl-textfield__input" 
+                                type="text" 
+                                [(ngModel)]="group.Description"
+                                id="groupDescription"
+                                name="groupDescription"
+                            >
+                            <label class="mdl-textfield__label" for="description">Description</label>
+                        </div>
                     </div>
-                </div>
-                <div class="mdl-cell mdl-cell--12-col">
-                    <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
-                        <h6>Add members</h6>
-                        <ul class="mdl-list">
-                            <li class="mdl-list__item"
-                                *ngFor="let member of group.UnselectedMembers; let i = index"
-                                style="cursor: pointer"
-                                (click)="onAddMember(i)">
-                                {{ member.Name }} <i class="material-icons">check_box_outline_blank</i>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
-                        <h6>{{ group.SelectedMembers.length }} Member<span [hidden]="group.SelectedMembers.length === 1">s</span></h6>
-                        <ul class="mdl-list">
-                            <li class="mdl-list__item"
-                                *ngFor="let member of group.SelectedMembers; let i = index"
-                                style="cursor: pointer"
-                                (click)="onDeleteMember(i)">
-                                {{ member.Name }} <i class="material-icons">check_box</i>
-                            </li>
-                        </ul>
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                            <h6>Add members</h6>
+                            <div style="height:200px; overflow:auto">
+                                <ul>
+                                    <li
+                                        *ngFor="let member of group.UnselectedMembers; let i = index"
+                                        style="cursor: pointer"
+                                        (click)="onAddMember(i)">
+                                        {{ member.Name }} <i class="material-icons">check_box_outline_blank</i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                            <h6>{{ group.SelectedMembers.length }} Member<span [hidden]="group.SelectedMembers.length === 1">s</span></h6>
+                            <ul>
+                                <div style="height:200px; overflow:auto">
+                                    <li
+                                        *ngFor="let member of group.SelectedMembers; let i = index"
+                                        style="cursor: pointer"
+                                        (click)="onDeleteMember(i)">
+                                        {{ member.Name }} <i class="material-icons">check_box</i>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="user-editing-group mdl-card__actions mdl-card--border">
-            <div class="user-editing-button-container">
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="onSubmit()">
-                    <span [hidden]="editMode">Create Group</span>
-                    <span [hidden]="!editMode">Save Changes</span>
-                </button>
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="onCancel()">Cancel</button>
-            </div>
+            <div class="user-editing-group mdl-card__actions mdl-card--border">
+                <div class="user-editing-button-container">
+                    <button 
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                        type="submit"
+                        [disabled]="groupForm.invalid || group.SelectedMembers.length == 0"
+                    >
+                        <span [hidden]="editMode">Create Group</span>
+                        <span [hidden]="!editMode">Save Changes</span>
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="onCancel()">Cancel</button>
+                </div>
+            </div>        
         </div>
     </div>
-</div>
+</form>
