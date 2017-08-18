@@ -44,24 +44,42 @@ namespace Joost.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetGroup(int id)
         {
+            // if group doesn't exist
             var group = await _unitOfWork.Repository<Group>().GetAsync(id);
             if (group == null)
                 return NotFound();
 
+            // if user isn't creator of the group
             var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
             if (group.GroupCreator.Id != currentUser.Id)
                 return BadRequest();
+
+            // select all friends of the current user
+            var groupCreatorContacts = group.GroupCreator.Contacts
+                .Where(c => c.State == DbAccess.Entities.ContactState.Accept)
+                .Select(c => new UserContactDto
+                    {
+                        Id = c.ContactUser.Id,
+                        City = c.ContactUser.City,
+                        Name = $"{c.ContactUser.FirstName} {c.ContactUser.LastName}",
+                        Avatar = c.ContactUser.Avatar
+                    }).ToList();
 
             var groupDto = new GroupDto
             {
                 Id = group.Id,
                 Name = group.Name,
                 Description = group.Description,
-                MembersId = group.Members.Select(m => m.Id).ToList(),
-                ContactsId = group.GroupCreator.Contacts.Select(c => c.ContactUser.Id).ToList()
+                SelectedMembersId = group.Members.Select(m => m.Id).ToList(),
+                SelectedMembers = group.Members.Select(m => new UserContactDto {
+                    Id = m.Id,
+                    City = m.City,
+                    Name = $"{m.FirstName} {m.LastName}",
+                    Avatar = m.Avatar
+                }).ToList()                
             };
-
-            groupDto.ContactsId = groupDto.ContactsId.Except(groupDto.MembersId).ToList();
+            groupDto.UnselectedMembers = groupCreatorContacts.Except(groupDto.SelectedMembers).ToList();
+                       
             return Ok(groupDto);
         }
 
@@ -70,9 +88,7 @@ namespace Joost.Api.Controllers
         public async Task<IHttpActionResult> AddGroup([FromBody]GroupDto group)
         {
             if (!ModelState.IsValid)
-            {
                 return BadRequest();
-            }
 
             var newGroup = new Group()
             {
@@ -82,7 +98,7 @@ namespace Joost.Api.Controllers
                 GroupCreator = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId())
             };
 
-            foreach (var memberId in group.MembersId)
+            foreach (var memberId in group.SelectedMembersId)
                 newGroup.Members.Add(await _unitOfWork.Repository<User>().GetAsync(memberId));
 
             _unitOfWork.Repository<Group>().Add(newGroup);
@@ -107,10 +123,8 @@ namespace Joost.Api.Controllers
             editGroup.Description = group.Description;
             editGroup.Members.Clear();
 
-            foreach (var memberId in group.MembersId)
-            {
+            foreach (var memberId in group.SelectedMembersId)
                 editGroup.Members.Add(await _unitOfWork.Repository<User>().GetAsync(memberId));
-            }
 
             _unitOfWork.Repository<Group>().Attach(editGroup);
             await _unitOfWork.SaveAsync();
