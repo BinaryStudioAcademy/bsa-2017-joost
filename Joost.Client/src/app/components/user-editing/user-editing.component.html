@@ -119,8 +119,24 @@
               <div class="mdl-cell mdl-cell--12-col">
                 <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
                   <h5>Birthday:</h5>
-                  <input class="mdl-textfield__input" type="date" [ngModel]="user.BirthDate | date:'dd-MM-yyyy'" (ngModelChange)="user.BirthDate = $event" id="userBirthday"/>
-                  <label class="mdl-textfield__label" for="userBirthday"></label>
+                  <div class="date-container">              
+                    <div class="date-item">
+                      Day:
+                      <input class="mdl-textfield__input" type="text"  [(ngModel)]="inputDay" pattern="^([1-9]|[12][0-9]|3[01])$" id="inputDay" />
+                      <label class="mdl-textfield__label" for="inputDay"></label>
+                    </div>
+                    <div class="date-item">
+                      Month:
+                      <input class="mdl-textfield__input" type="text"  [(ngModel)]="inputMonth" pattern="^([1-9]|1[0-2])$" id="inputMonth" />
+                      <label class="mdl-textfield__label" for="inputMonth"></label>
+                    </div>
+                    <div class="date-item">
+                      Year:
+                      <input class="mdl-textfield__input" type="text"  [(ngModel)]="inputYear" pattern="^(19[5-9]\d|20[0-4]\d|2017)$" id="inputYear" />
+                      <label class="mdl-textfield__label" for="inputYear"></label>
+                    </div>
+                  </div>
+
                 </div>
               </div>
               <div class="mdl-cell mdl-cell--12-col">

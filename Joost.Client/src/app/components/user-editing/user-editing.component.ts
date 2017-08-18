@@ -27,6 +27,10 @@ export class UserEditingComponent implements OnInit {
   private passwordFirst: string = "";
   private passwordSecond: string = "";
 
+  private inputDay: string = "";
+  private inputMonth: string = "";
+  private inputYear: string = "";
+
   constructor(
     private userService: UserService,
     private avatarService: AvatarService,
@@ -41,13 +45,23 @@ export class UserEditingComponent implements OnInit {
   }
 
   SaveUser() {
+    this.user.BirthDate = new Date(+this.inputYear,  +this.inputMonth-1, +this.inputDay +1);
+    console.log( this.user.BirthDate);
     this.userService.updateUser(this.user);
+    this.router.navigate(['menu']);
   }
 
   GetUser() {
     this.userService.getUser().subscribe( d => {
       this.user = d;
       this.isLoadFinished = true;
+
+      let date = new Date(this.user.BirthDate);
+      this.inputDay =  (date.getDate()).toString();
+      this.inputMonth =  (date.getMonth() + 1).toString();
+      this.inputYear =  (date.getFullYear()).toString();
+
+
     },
     err=> {
       this.isError = true;
@@ -56,12 +70,13 @@ export class UserEditingComponent implements OnInit {
 
   Cancel() {
      this.location.back();
+     this.router.navigate(['menu']);
   }
 
   ChangePassword() {
     
     if(this.passwordOld == "" || this.passwordFirst == "" || this.passwordSecond == "") {
-      this.errorPasswordDivMessage = "one of the inputs is empty.";
+      this.errorPasswordDivMessage = "One of the inputs is empty.";
       this.errorPasswordDiv = true;
       return;
     }
