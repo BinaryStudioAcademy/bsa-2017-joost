@@ -1,72 +1,171 @@
-﻿<div class="loading-container" [hidden]="!isError">
+﻿<div class="loading-container" *ngIf="isError">
   <div><i class="material-icons error-icon">error_outline</i></div>
   <div>An error occured, please try again later</div>
 </div>
 
-<div class="loading-container" [hidden]="isLoadFinished">
+<div class="loading-container" *ngIf="!isLoadFinished">
   <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active test"></div>
   <div>Please wait, data is loading...</div>
 </div>
 
 <div [hidden]="!isLoadFinished">
-  <div *ngIf="user">
-    <div class="user-details-header mdl-layout__header-row mdl-shadow--2dp">
-      <button class="mdl-button mdl-js-button" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
-      <button class="mdl-button mdl-js-button" (click)="contactActionClick(user.Id)">{{isFriend ? 'Delete' : 'Add'}}</button>
-    </div>
-
-    <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-      <div class="mdl-cell mdl-cell--3-col">
-        <div *ngIf="user.Avatar">
-          <img src="{{user.Avatar | avatarPipe}}" class="user-avatar-img">   
+      <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+        <div class="mdl-cell mdl-cell--3-col">
+          <img src="{{user.Avatar | avatarPipe}}" class="user-avatar">   
+            <!-- <img src="assets/img/man.png" class="user-avatar"> -->
         </div>
-        <div *ngIf="!user.Avatar">
-          <i class="material-icons mdl-list__item user-avatar-img user-avatar-mIcon">person</i>
-        </div>
-      </div>
-      <div class="user-details-main-info mdl-cell mdl-cell--9-col">
-        <div>
-          <h3>{{user.FirstName}} {{user.LastName}}</h3>
-          <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
-          <div class="user-details-state">
-            <div [innerHtml]="user.State | stateIconPipe"></div>
-            <span>{{user.State | stateStringPipe}}</span>
+          <div class="user-editing-main-info mdl-cell mdl-cell--9-col">
+            <div>
+              <h3>{{user.FirstName}} {{user.LastName}}</h3>
+              <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
+                <!-- <div class="user-details-state">
+                  <div [innerHtml]="user.State | stateIconPipe"></div>
+                  <span>{{user.State | stateStringPipe}}</span>
+                </div> -->
+               <div class="user-editing-state">
+                <i class="material-icons">check_circle</i>
+                <span>Online</span>
+              </div> 
+               <div>
+                <label for="file-upload" class="custom-file-upload">Set profile photo</label>
+                <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
+              </div>  
+              <div>
+            <!-- <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Set profile photo</button>             -->
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                  
+              </div>
+            </div>
           </div>
-          <button class="mdl-button mdl-js-button mdl-button--raised"> Send Message</button>
+        
+        <div class="user-editing-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+          <div [hidden]="!passwordDiv">
+            <div class="user-editing-group mdl-card__actions mdl-card--border">
+            <div class="mdl-grid">
+               <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>Please remember that password lenght should be longer then five  characters, at least one letter and one number.</h5>
+                </div>
+              </div>
+                <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>Old password:</h5>
+                  <input class="mdl-textfield__input" type="password"  [(ngModel)]="passwordOld" id="userOldPassword" />
+                  <label class="mdl-textfield__label" for="userOldPassword"></label>
+                </div>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>New password:</h5>
+                  <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordFirst" id="userNewPassword" />
+                  <label class="mdl-textfield__label" for="userNewPassword"></label>
+                  <span class="mdl-textfield__error">This is incorrect one!</span> 
+                </div>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>Confirm new password:</h5>
+                  <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordSecond" id="userNewPassword" />
+                  <label class="mdl-textfield__label" for="userNewPassword"></label>
+                  <span class="mdl-textfield__error">This is incorrect one!</span>             
+                </div>
+              </div>
+            </div>
+
+            <div class="loading-container" [hidden]="!errorPasswordDiv">
+              <div><i class="material-icons error-icon">error_outline</i></div>
+              <div>Error: {{errorPasswordDivMessage}}</div>
+            </div>
+
+          <div class="user-editing-button-container">
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="ChangePassword()"> Change</button>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="CancelPassword()">Cancel</button>  
+            </div>
+          </div>
+          </div>
+
+          <div class="user-editing-group mdl-card__actions mdl-card--border">
+            <div class="mdl-grid">
+              <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-textfield mdl-js-textfield padding-vertical-10">
+                  <h5>Status:</h5>
+                  <input class="mdl-textfield__input " type="text"  [(ngModel)]="user.Status" id="userStatus" />
+                  <label class="mdl-textfield__label" for="userStatus"></label>
+                </div>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>First name:</h5>
+                  <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.FirstName" id="userFirstName" />
+                  <label class="mdl-textfield__label" for="userFirstName"></label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>Last name:</h5>
+                  <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.LastName" id="userLastName" />
+                  <label class="mdl-textfield__label" for="userLastName"></label>
+                </div>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>City:</h5>
+                  <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.City" id="userCity" />
+                  <label class="mdl-textfield__label" for="userCity"></label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>Country:</h5>
+                  <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.Country" id="userCountry" />
+                  <label class="mdl-textfield__label" for="userCountry"></label>
+                </div>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>Birthday:</h5>
+                  <div class="date-container">              
+                    <div class="date-item">
+                      Day:
+                      <input class="mdl-textfield__input" type="text"  [(ngModel)]="inputDay" pattern="^([1-9]|[12][0-9]|3[01])$" id="inputDay" />
+                      <label class="mdl-textfield__label" for="inputDay"></label>
+                    </div>
+                    <div class="date-item">
+                      Month:
+                      <input class="mdl-textfield__input" type="text"  [(ngModel)]="inputMonth" pattern="^([1-9]|1[0-2])$" id="inputMonth" />
+                      <label class="mdl-textfield__label" for="inputMonth"></label>
+                    </div>
+                    <div class="date-item">
+                      Year:
+                      <input class="mdl-textfield__input" type="text"  [(ngModel)]="inputYear" pattern="^(19[5-9]\d|20[0-4]\d|2017)$" id="inputYear" />
+                      <label class="mdl-textfield__label" for="inputYear"></label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="mdl-cell mdl-cell--12-col">
+                <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
+                  <h5>Gender:</h5>
+                  <div class="padding-vertical-10">
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGenderMale">
+                      <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="0">
+                      <span class="mdl-radio__label">Male</span>
+                    </label>
+                  </div>
+                <div class="padding-vertical-10">
+                  <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGendeFemale">
+                    <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="1">
+                    <span class="mdl-radio__label">Female</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="user-editing-group mdl-card__actions mdl-card--border">
+            <div class="user-editing-button-container">
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="SaveUser()"> Save</button>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="Cancel()">Cancel</button>  
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
-    <div class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-      <div class="user-details-group mdl-card__actions mdl-card--border">
-        <!-- <h5> Info</h5> -->
-        <div>
-          <h5>Address:</h5>
-          <span>{{user.City ? user.City : 'Unknown'}}, {{user.Country ? user.Country : 'Unknown'}}</span>
-        </div>
-        <div>
-          <h5>Birthday:</h5>
-          <span>{{user.BirthDate | date:'shortDate'}}</span>
-        </div>
-        <div>
-          <h5>Gender:</h5>
-          <span>{{user.Gender | genderPipe}}</span>
-        </div>
-      </div>
-    </div>
-    <div [hidden] = "!isFriend" class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-      <div class="user-details-group mdl-card__actions mdl-card--border">
-        <!-- <h5>Settings</h5> -->
-        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
-          <input type="checkbox" id="switch-notifications" class="mdl-switch__input" checked>
-          <span class="mdl-switch__label">Notifications</span>
-        </label>
-      </div>
-      <div class="user-details-group mdl-card__actions mdl-card--border">
-        <!-- <h5>Actions</h5> -->
-        <button class="mdl-button mdl-js-button mdl-button--raised"> Clear History</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised"> Delete Conversation</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised"> Block User</button>
-      </div>
-    </div>
-  </div>
 </div>

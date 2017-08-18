@@ -1,77 +1,120 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { Observable } from "rxjs/Observable";
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import 'rxjs/add/operator/switchMap';
+import { Router } from '@angular/router';
 
+import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
-import { UserDetail } from "../../models/user-detail";
-declare var componentHandler: any;
+import { AvatarService } from "../../services/avatar.service";
+import { AvatarPipe} from "../../pipes/avatar.pipe";
 
 @Component({
-  selector: 'app-user-details',
-  templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.scss']
+  selector: 'app-user-editing',
+  templateUrl: './user-editing.component.html',
+  styleUrls: ['./user-editing.component.scss']
 })
-export class UserDetailsComponent implements OnInit {
+export class UserEditingComponent implements OnInit {
 
-  
-  user: UserDetail;
+  user: User;
+  userId: number; // initialize from router on init
   private isLoadFinished:boolean = false;
   private isError:boolean = false;
-  private isFriend = false;
+  private passwordDiv: boolean = false;
+  private errorPasswordDiv: boolean = false;
+  private errorPasswordDivMessage: string;
+
+  private passwordOld: string = "";
+  private passwordFirst: string = "";
+  private passwordSecond: string = "";
+
+  private inputDay: string = "";
+  private inputMonth: string = "";
+  private inputYear: string = "";
 
   constructor(
-    private location: Location,
     private userService: UserService,
-    private route: ActivatedRoute
+    private avatarService: AvatarService,
+    public route: ActivatedRoute,
+    public router: Router,
+    private location: Location
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.userId = this.route.snapshot.params.id;
+    this.GetUser();
+  }
 
-    this.route.paramMap
-      .switchMap((params: ParamMap) => this.userService.getUserDetails(+params.get('id')))
-      .subscribe(user => {
-        this.user = user;
-        this.isLoadFinished = true;
-        this.checkInContact(user.Id);
-      },
-      err=> {
-        this.isError = true;
-        console.log(this.isError);
+  SaveUser() {
+    this.user.BirthDate = new Date(+this.inputYear,  +this.inputMonth-1, +this.inputDay +1);
+    console.log( this.user.BirthDate);
+    this.userService.updateUser(this.user);
+    this.router.navigate(['menu']);
+  }
+
+  GetUser() {
+    this.userService.getUser().subscribe( d => {
+      this.user = d;
+      this.isLoadFinished = true;
+
+      let date = new Date(this.user.BirthDate);
+      this.inputDay =  (date.getDate()).toString();
+      this.inputMonth =  (date.getMonth() + 1).toString();
+      this.inputYear =  (date.getFullYear()).toString();
+
+
+    },
+    err=> {
+      this.isError = true;
+    });
+  }
+
+  Cancel() {
+     this.location.back();
+     this.router.navigate(['menu']);
+  }
+
+  ChangePassword() {
+    
+    if(this.passwordOld == "" || this.passwordFirst == "" || this.passwordSecond == "") {
+      this.errorPasswordDivMessage = "One of the inputs is empty.";
+      this.errorPasswordDiv = true;
+      return;
+    }
+    else{
+      if(this.passwordOld != this.user.Password) {
+        this.errorPasswordDivMessage = "Wrong previous password.";
+        this.errorPasswordDiv = true;
+        return;
       }
-    );
-    componentHandler.upgradeDom();
-  }
-
-  addToContact(contactId:number){
-		this.userService.addContact(contactId).subscribe(() =>{
-      this.isFriend = true;
-      componentHandler.upgradeDom();
-		});
-  }
-
-  deleteFromContact(contactId:number){
-		this.userService.deleteContact(contactId).subscribe(() =>{
-      this.isFriend = false;
-      componentHandler.upgradeDom();
-		});
+      else {
+        if(this.passwordFirst != this.passwordSecond) {
+          this.errorPasswordDivMessage = "Passwords do not match.";
+          this.errorPasswordDiv = true;
+          return;
+        }
+        else {
+          this.user.Password = this.passwordFirst;
+          this.userService.updateUser(this.user);
+          this.passwordDiv = false;
+        }
+      }
+    }
   }
   
-	checkInContact(id:number):void {
-		this.userService.getContacts().subscribe( list => {
-      this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0;
-    });
-	}
-
-  goBack(): void {
-    this.location.back();
+  
+  CancelPassword() {
+    this.passwordDiv = !this.passwordDiv;
+    this.passwordOld = this.passwordFirst = this.passwordSecond ="";
+    this.errorPasswordDiv = false;
+  }
+  
+  SendAvatar(e: Event) {
+    var target: HTMLInputElement = e.target as HTMLInputElement;
+    this.avatarService.SetAvatar(target.files[0],this.userId);
   }
 
-  contactActionClick(id: number):void {
-    if(this.isFriend)
-      this.deleteFromContact(id);
-    else
-      this.addToContact(id);
-  }
+
 }
+
+
+
