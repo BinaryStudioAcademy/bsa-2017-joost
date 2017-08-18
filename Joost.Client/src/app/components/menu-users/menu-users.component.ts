@@ -28,8 +28,12 @@ export class MenuUsersComponent implements OnInit {
 					contact.State = user.State;
 				}
 				else{
-					user.State = user.State;
-					this.result.push(user);
+					if (user.State==ContactState.Decline) {
+						this.result.splice(this.result.indexOf(user), 1);
+					}
+					else {
+						this.result.push(user);
+					}
 				}
 				this.result.sort(this.compareUserContact);
 			}
@@ -39,7 +43,7 @@ export class MenuUsersComponent implements OnInit {
 		this.authService.logout();
 	}
 	goToConfirm(id:number){
-		if (this.isNewContact(id)) {
+		if (this.isNewContact(id) || this.isDeclineContact(id)) {
 			this.userService.changeContactIdNotify(id);
 			this.router.navigate(['menu/add-contact']);
 		}
@@ -56,12 +60,15 @@ export class MenuUsersComponent implements OnInit {
 	isNewContact(id:number):boolean{
 		return this.result.filter(t=>t.Id==id)[0].State===ContactState.New;
 	}
+	isDeclineContact(id:number):boolean{
+		return this.result.filter(t=>t.Id==id)[0].State===ContactState.Decline;
+	}
 	ContactStatus(id:number):string{
 		let state =  this.result.filter(t=>t.Id==id)[0];
 		if (state) {
 			switch (state.State) {
 				case ContactState.New:
-					return "new_releases";
+					return "fiber_new";
 				case ContactState.Sent:
 					return "trending_flat";
 				case ContactState.Decline:

@@ -1,8 +1,7 @@
 @import '../../../vars.scss';
 
 .data-container{
-   width: calc(100% - 16px);
-   margin: 8px;
+   width:100%;
 }
 
 .user-avatar{
@@ -19,6 +18,7 @@
 
 .user-editing-main{
     flex-direction: column;
+    margin:0;
 }
 
 .user-editing-group{

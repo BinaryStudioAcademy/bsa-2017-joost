@@ -14,10 +14,12 @@
 .mdl-list__item:hover{
     background-color:$color-primary-dark;
 }
-.add_contact{
-	cursor: pointer;
+.add-contact{
 	color: rgb(0, 206, 55);
 	margin-left: 5px;
+}
+.new-user{
+	cursor:pointer;
 }
 .menu__search__not_found{
 	text-align: center;
