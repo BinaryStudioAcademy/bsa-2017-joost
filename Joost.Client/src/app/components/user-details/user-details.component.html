@@ -18,7 +18,7 @@
     <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
       <div class="mdl-cell mdl-cell--3-col">
         <div *ngIf="user.Avatar">
-          <img src="assets/img/man.png" class="user-avatar-img">
+          <img src="{{user.Avatar | avatarPipe}}" class="user-avatar-img">   
         </div>
         <div *ngIf="!user.Avatar">
           <i class="material-icons mdl-list__item user-avatar-img user-avatar-mIcon">person</i>
