@@ -9,7 +9,13 @@ namespace Joost.Api.Models
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<int> MembersId { get; set; } // the property need for fill client group-edit.component selectedMembers list
-        public List<int> ContactsId { get; set; } // the property need for fill client group-edit.component members list. Using when user wants edit the group
+
+        // the property need in order to fill Group.Members which User class (not UserDetailsDto!!!) in Post and/or Put methods 
+        public List<int> SelectedMembersId { get; set; }
+
+        public List<UserContactDto> SelectedMembers { get; set; }
+
+        // the property need when we GetGroup by groupId, because client side has 2 collections (with selected and unselected members and we must fill its)
+        public List<UserContactDto> UnselectedMembers { get; set; } 
     }
 }
