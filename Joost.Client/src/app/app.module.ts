@@ -39,6 +39,9 @@ import { UserEditingComponent } from './components/user-editing/user-editing.com
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 // import {CustomOption} from './notification-options/custom-option'
 
+import { AvatarService } from './services/avatar.service';
+import { AvatarPipe } from "./pipes/avatar.pipe";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +62,8 @@ import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
     StateStringPipe,
     GroupEditComponent,
     UserEditingComponent,
-    UserAddContactComponent
+    UserAddContactComponent,
+    AvatarPipe
   ],
   imports: [
     BrowserModule,
@@ -72,6 +76,7 @@ import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
     GroupService,
     UserService,
     LoginService,
+    AvatarService,
     AuthenticationService,
     {
       provide: HTTP_INTERCEPTORS,

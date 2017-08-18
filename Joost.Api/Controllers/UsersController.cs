@@ -324,6 +324,19 @@ namespace Joost.Api.Controllers
             }
         }
 
+        // GET: api/users/myprofile/5
+        [HttpGet]
+        [Route("myprofile/{id}")]
+        public async Task<IHttpActionResult> GetProfile(int id)
+        {
+            var user = await _unitOfWork.Repository<User>().GetAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
