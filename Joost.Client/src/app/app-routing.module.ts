@@ -57,7 +57,7 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'confirm-registration',
+    path: 'confirm-registration/:key',
     component: ConfirmRegistrationComponent
   }  
 ];

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from "../../services/authentication.service";
 import { Router } from "@angular/router";
 
@@ -16,6 +16,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     if(this.authService.isUserLogined()) {
           this.router.navigate(['menu'], { skipLocationChange: true });
+    }
+    else if (window.location.pathname.search("confirm-registration") != -1){
+        this.router.navigate(['confirm-registration', window.location.search.split("key=")[1]]);
     }
     else {
       this.router.navigate(['login'],  { skipLocationChange: true });

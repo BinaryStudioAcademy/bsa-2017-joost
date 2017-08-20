@@ -18,7 +18,7 @@ export class ConfirmRegistrationComponent implements OnInit {
 
   confirm() {
       debugger;
-      this.route.queryParams.subscribe(params => {
+      this.route.params.subscribe(params => {
           this.key = params['key'];
           this.userService.confirmRegistration(this.key);
       });
