@@ -13,6 +13,9 @@ import { MainMenuComponent } from "./components/main-menu/main-menu.component";
 import { UserAddContactComponent } from './components/user-add-contact/user-add-contact.component';
 import { AppComponent } from "./components/app/app.component";
 
+import { DialogsListComponent } from "./components/dialogs-list/dialogs-list.component";
+import { MessagesListComponent } from "./components/messages-list/messages-list.component";
+
 const routes: Routes = [
   {
     path: '',
@@ -33,6 +36,10 @@ const routes: Routes = [
       {
         path: 'user-editing/:id',
         component: UserEditingComponent
+      },
+      {
+        path: 'messages/:type/:id',
+        component: MessagesListComponent
       },
       {
         path: 'groups',
@@ -59,7 +66,7 @@ const routes: Routes = [
   {
     path: 'confirm-registration/:key',
     component: ConfirmRegistrationComponent
-  }  
+  }
 ];
 
 @NgModule({

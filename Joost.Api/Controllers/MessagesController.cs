@@ -6,6 +6,13 @@ using System.Web.Http;
 
 namespace Joost.Api.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+
+    using Joost.Api.Models;
+
     public class MessagesController : BaseApiController
     {
         private IChatHubService _chatHubService;
@@ -13,6 +20,23 @@ namespace Joost.Api.Controllers
         public MessagesController(IUnitOfWork unitOfWork, IChatHubService chatHubService) : base(unitOfWork)
         {
             _chatHubService = chatHubService;
+        }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> GetGroupsMessages(int groupId, int skip, int take)
+        {
+            var gropMessages = await this._unitOfWork.Repository<GroupMessage>().AllAsync();
+            return this.Ok(gropMessages.Where(gm => gm.Sender.Id == groupId).Skip(skip).Take(take));
+        }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> GetMessagesWith(int userId, int skip, int take)
+        {
+            var messagesWith = await this._unitOfWork.Repository<Message>().AllAsync();
+            return this.Ok(
+                messagesWith
+                    .Where(m => m.Sender.Id == this.GetCurrentUserId() || m.Receiver.Id == this.GetCurrentUserId())
+                    .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId));
         }
 
         // POST: api/Messages

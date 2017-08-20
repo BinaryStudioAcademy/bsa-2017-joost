@@ -36,6 +36,11 @@ import { GroupEditComponent } from "./components/group-edit/group-edit.component
 import { GroupService } from "./services/group.service";
 import { UserEditingComponent } from './components/user-editing/user-editing.component';
 
+import { DialogsListComponent } from "./components/dialogs-list/dialogs-list.component";
+import { MessagesListComponent } from "./components/messages-list/messages-list.component";
+import { DialogsService } from "./services/dialogs.service";
+import { MessagesService } from "./services/messages.service"
+
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 // import {CustomOption} from './notification-options/custom-option'
 
@@ -63,7 +68,9 @@ import { AvatarPipe } from "./pipes/avatar.pipe";
     GroupEditComponent,
     UserEditingComponent,
     UserAddContactComponent,
-    AvatarPipe
+    AvatarPipe,
+    DialogsListComponent,
+    MessagesListComponent
   ],
   imports: [
     BrowserModule,
@@ -83,6 +90,8 @@ import { AvatarPipe } from "./pipes/avatar.pipe";
       useClass: AuthInterceptor,
       multi: true
     },
+    DialogsService,
+    MessagesService
     // {
     //   provide: ToastOptions,
     //   useClass: CustomOption

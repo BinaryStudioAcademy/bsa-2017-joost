@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { DialogsService } from "../../services/dialogs.service";
+import { Dialog } from "../../models/dialog";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-menu-messages',
@@ -7,7 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuMessagesComponent implements OnInit {
 
-  constructor() { }
+  private dialogs: Dialog[];
+
+  private navigateToMessages(dialog: Dialog) {
+    this.router.navigate(["/menu/messages", dialog.IsGroup ? "group" : "user" , dialog.Id ]);
+  }
+
+  constructor(private dialogsService: DialogsService, private router: Router) {
+    dialogsService.getAllDialogs().subscribe(d => {
+      this.dialogs = d;
+    });
+  }
 
   ngOnInit() {
   }
