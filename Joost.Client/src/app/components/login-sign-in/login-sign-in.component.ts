@@ -27,7 +27,7 @@ export class LoginSignInComponent implements OnInit {
         }),
          error =>{
            console.log(error);
-           this.isError = "User with this login and password not wound!"
+           this.isError = "User with this login and password not found!"
          }
       });
   }

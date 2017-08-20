@@ -44,7 +44,7 @@ namespace Joost.Api.Controllers
 
             if (!user.IsActived)
             {
-                return StatusCode(System.Net.HttpStatusCode.PartialContent);
+                return StatusCode(System.Net.HttpStatusCode.Forbidden);
             }
 
             var accessToken = new AccessTokenDto() { AT_UserId = user.Id, AT_Time = DateTime.Now };

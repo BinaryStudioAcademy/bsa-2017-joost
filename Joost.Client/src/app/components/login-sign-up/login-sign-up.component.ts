@@ -23,7 +23,6 @@ export class LoginSignUpComponent implements OnInit {
         this.router.navigate(['login'])
       },
     error => {
-      debugger;
       console.log(error);
     });
   }

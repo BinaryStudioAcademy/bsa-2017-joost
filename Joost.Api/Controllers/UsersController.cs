@@ -251,12 +251,22 @@ namespace Joost.Api.Controllers
 
             if (checkUser != null)
             {
-                var checkConfirm = await _unitOfWork.Repository<ConfirmRegistration>().GetAsync(checkUser.Id);
-                if (checkConfirm != null)
+                if (!checkUser.IsActived)
                 {
-                    checkConfirm.Key = email.SendEmail(user).ToString();
-                    checkConfirm.DateOfRegistration = DateTime.Now;
-                    _unitOfWork.Repository<ConfirmRegistration>().Attach(checkConfirm);
+                    var checkConfirm = await _unitOfWork.Repository<ConfirmRegistration>().GetAsync(checkUser.Id);
+                    if(checkConfirm == null)
+                    {
+                        checkConfirm = new ConfirmRegistration();
+                        checkConfirm.Key = email.SendEmail(user).ToString();
+                        checkConfirm.DateOfRegistration = DateTime.Now;
+                        _unitOfWork.Repository<ConfirmRegistration>().Attach(checkConfirm);
+                    }
+                    else
+                    {
+                        checkConfirm.Key = email.SendEmail(user).ToString();
+                        checkConfirm.DateOfRegistration = DateTime.Now;
+                        _unitOfWork.Repository<ConfirmRegistration>().Attach(checkConfirm);
+                    }
                     await _unitOfWork.SaveAsync();
                 }
                 else
