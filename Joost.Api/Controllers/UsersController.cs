@@ -10,11 +10,42 @@ using System.Web.Http;
 
 namespace Joost.Api.Controllers
 {
+    using System.Collections.Generic;
+
     [RoutePrefix("api/users")]
     public class UsersController : BaseApiController
     {
         public UsersController(IUnitOfWork unitOfWork) : base(unitOfWork)
         { }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> GetUsersDialogsWith(int take, int skip)
+        {
+            var userWithDialogs = await this._unitOfWork.Repository<Message>().AllAsync();
+            return this.Ok(
+                userWithDialogs
+                    .Where(m => m.Receiver.Id == this.GetCurrentUserId() || m.Sender.Id == this.GetCurrentUserId())
+                    .Aggregate(
+                        new List<User>(),
+                        (list, message) =>
+                            {
+                                if (message.Receiver.Id == this.GetCurrentUserId())
+                                {
+                                    if (!list.Contains(message.Sender))
+                                    {
+                                        list.Add(message.Sender);
+                                    }
+                                }
+                                else
+                                {
+                                    if (!list.Contains(message.Receiver))
+                                    {
+                                        list.Add(message.Receiver);
+                                    }
+                                }
+                                return list;
+                            }));
+        }
 
         // GET: api/users
         [HttpGet]

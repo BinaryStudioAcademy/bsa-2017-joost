@@ -1,0 +1,30 @@
+<!--
+<div *ngFor="let dialog of dialogs">
+    {{dialog.name}}
+    <img src="{{dialog.photo}}">
+</div>
+-->
+
+<!-- Three Line List with secondary info and action -->
+<div class="mainCl">
+    <img class="mainImg" src="https://files.slack.com/files-pri/T63EHP078-F6J9PGVB2/logo.png"/>
+    
+<ul class="demo-list-three mdl-list">
+  <li routerLink="/messages-list/{{dialog.groupId}}" class="mdl-list__item mdl-list__item--three-line" *ngFor="let dialog of dialogs">
+    <span class="mdl-list__item-primary-content">
+    
+        <img src="{{dialog.photo}}">
+      <div _ngcontent-c1="" class="online-indecator"></div>
+
+      <span>{{dialog.name}}</span>
+      <span class="mdl-list__item-text-body">
+       {{dialog.lastMessage}}
+      </span>
+    </span>
+    <span class="mdl-list__item-secondary-content">
+      {{dialog.unreadMessage}}
+    </span>
+  </li>
+</ul>
+
+</div>

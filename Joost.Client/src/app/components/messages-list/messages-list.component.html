@@ -1,0 +1,27 @@
+
+<div class="mainCl"> 
+
+  <div class="header">
+    {{ dialogName }}
+  </div>
+
+  <ul #scroll class="messages-container" (scroll)="scrolEvent($event)" >
+    <div class="messages">
+      <li *ngFor="let message of messages" [class.own]="message.Own" [class.alien]="!message.Own">
+        <div class= "NamePh">
+        <img src="{{message.image}}">
+        <span>{{message.Sender}}</span>
+        <span class="date">{{ getDate(message.DateTime) }}</span>
+        </div>
+        <span class="text"> {{message.Text}} </span>
+      </li>
+    </div>
+  </ul>  
+  
+  <form action="#">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" id="sample3">
+      <label class="mdl-textfield__label" for="sample3">Text...</label>
+    </div>
+  </form>
+</div>

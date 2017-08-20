@@ -6,6 +6,10 @@
   border-radius: 32px;
 }
 
+.mdl-layout__container{
+    position: relative;
+}
+
 .mdl-layout__drawer .avatar {
   margin-bottom: 16px;
 }
@@ -105,4 +109,5 @@
 .main-content-container{
     margin-left: $left-panel-width;
     width: calc(100% -  400px); //  400px - $left-panel-width
+    height: 100%
 }
