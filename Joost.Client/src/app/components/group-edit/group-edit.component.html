@@ -1,4 +1,4 @@
-<form (ngSubmit)="onSubmit()" #groupForm="ngForm">
+﻿<form (ngSubmit)="onSubmit()" #groupForm="ngForm">
     <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
         <div class="user-editing-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">        
             <div class="user-editing-group mdl-card__actions mdl-card--border">
@@ -13,6 +13,7 @@
                     </div>
                     <div class="mdl-cell mdl-cell--12-col">
                         <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">                        
+                            <h6>Group name</h6>
                             <input 
                                 class="mdl-textfield__input" 
                                 type="text" 
@@ -22,19 +23,27 @@
                                 required
                                 minlength="4"
                             >
-                            <label class="mdl-textfield__label" for="groupName">Group name</label>
                         </div>
                     </div>
                     <div class="mdl-cell mdl-cell--12-col">
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label autowide padding-vertical-10">
+                            <h6>Description</h6>
                             <input 
                                 class="mdl-textfield__input" 
                                 type="text" 
                                 [(ngModel)]="group.Description"
                                 id="groupDescription"
                                 name="groupDescription"
-                            >
-                            <label class="mdl-textfield__label" for="description">Description</label>
+                            >                            
+                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label autowide padding-vertical-10">
+                            <h6>Filter</h6>
+                            <input class="mdl-textfield__input"
+                                   type="text"
+                                   #filter
+                                   (keyup)="onFilterArray(filter.value)">
                         </div>
                     </div>
                     <div class="mdl-cell mdl-cell--12-col">
@@ -43,9 +52,9 @@
                             <div style="height:200px; overflow:auto">
                                 <ul>
                                     <li
-                                        *ngFor="let member of group.UnselectedMembers; let i = index"
+                                        *ngFor="let member of filteringArray; let i = index"
                                         style="cursor: pointer"
-                                        (click)="onAddMember(i)">
+                                        (click)="onAddMember(i)">                                        
                                         {{ member.Name }} <i class="material-icons">check_box_outline_blank</i>
                                     </li>
                                 </ul>
