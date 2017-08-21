@@ -11,29 +11,39 @@
 <div [hidden]="!isLoadFinished">
       <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
         <div class="mdl-cell mdl-cell--3-col">
-          <img src="{{user.Avatar | avatarPipe}}" class="user-avatar">   
-            <!-- <img src="assets/img/man.png" class="user-avatar"> -->
+          <!-- <img src="{{user.Avatar | avatarPipe}}" class="user-avatar"> -->
+          <label for="file-upload" class="custom-file-upload"><img src="{{user.Avatar | avatarPipe}}" class="user-avatar"></label>
+          <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
         </div>
+
           <div class="user-editing-main-info mdl-cell mdl-cell--9-col">
             <div>
+
+              <div class="name">
               <h3>{{user.FirstName}} {{user.LastName}}</h3>
-              <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
-                <!-- <div class="user-details-state">
-                  <div [innerHtml]="user.State | stateIconPipe"></div>
-                  <span>{{user.State | stateStringPipe}}</span>
-                </div> -->
-               <div class="user-editing-state">
+              <!-- <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div> -->
+              </div>
+            
+              <div class="mdl-layout-spacer">
+                <input class="mdl-textfield__input " type="text"  [(ngModel)]="user.Status" id="userStatus" />
+              </div>
+              
+              <div class="user-details-state">
+                <div [innerHtml]="user.State | stateIconPipe"></div>
+                <span>{{user.State | stateStringPipe}}</span>
+              </div> 
+               <!-- <div class="user-editing-state">
                 <i class="material-icons">check_circle</i>
                 <span>Online</span>
-              </div> 
+              </div>  -->
                <div>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                  
+              </div>
+              <!-- <div>
                 <label for="file-upload" class="custom-file-upload">Set profile photo</label>
                 <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
-              </div>  
-              <div>
-            <!-- <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Set profile photo</button>             -->
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                  
-              </div>
+              </div>   -->
+             
             </div>
           </div>
         
@@ -85,13 +95,6 @@
 
           <div class="user-editing-group mdl-card__actions mdl-card--border">
             <div class="mdl-grid">
-              <div class="mdl-cell mdl-cell--12-col">
-                <div class="mdl-textfield mdl-js-textfield padding-vertical-10">
-                  <h5>Status:</h5>
-                  <input class="mdl-textfield__input " type="text"  [(ngModel)]="user.Status" id="userStatus" />
-                  <label class="mdl-textfield__label" for="userStatus"></label>
-                </div>
-              </div>
               <div class="mdl-cell mdl-cell--12-col">
                 <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
                   <h5>First name:</h5>
