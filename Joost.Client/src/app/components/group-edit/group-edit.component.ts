@@ -6,13 +6,14 @@ import { UserService } from "../../services/user.service";
 import { Group } from "../../models/group";
 import { GroupService } from "../../services/group.service";
 import { UserContact } from "../../models/user-contact";
+import { MDL } from "../mdl-base.component";
 
 @Component({
     selector: 'app-group-edit',
     templateUrl: './group-edit.component.html',
     styleUrls: ['./group-edit.component.scss']
 })
-export class GroupEditComponent implements OnInit {
+export class GroupEditComponent extends MDL implements OnInit {
     group: Group;
     editMode: boolean = false;
 
@@ -21,7 +22,9 @@ export class GroupEditComponent implements OnInit {
         private route: ActivatedRoute,
         private userService: UserService,
         private groupService: GroupService,
-        private location: Location) { }
+        private location: Location) {
+            super();
+    }
 
     onAddMember(userIndex: number) {
         this.group.SelectedMembersId.push(this.group.UnselectedMembers[userIndex].Id);

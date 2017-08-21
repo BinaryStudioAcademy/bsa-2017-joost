@@ -4,6 +4,7 @@ import { MessagesService } from "../../services/messages.service";
 import { Message } from "../../models/message";
 import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
+import { MDL } from "../mdl-base.component";
 
 
 @Component({
@@ -11,7 +12,7 @@ import { GroupService } from "../../services/group.service";
     templateUrl: "./messages-list.component.html",
     styleUrls: ["./messages-list.component.css"] 
 })
-export class MessagesListComponent implements OnInit, AfterViewInit {
+export class MessagesListComponent extends MDL implements OnInit, AfterViewInit {
     private id: string;
     private isGroup: boolean;
     private skip = 0;
@@ -24,6 +25,7 @@ export class MessagesListComponent implements OnInit, AfterViewInit {
                 private messagesService: MessagesService,
                 private userService: UserService,
                 private groupService: GroupService) {
+        super();
     }
 
     private isOwnMessage(message) {

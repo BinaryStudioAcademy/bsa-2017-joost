@@ -17,12 +17,7 @@
 
     <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
       <div class="mdl-cell mdl-cell--3-col">
-        <div *ngIf="user.Avatar">
-          <img src="{{user.Avatar | avatarPipe}}" class="user-avatar-img">   
-        </div>
-        <div *ngIf="!user.Avatar">
-          <i class="material-icons mdl-list__item user-avatar-img user-avatar-mIcon">person</i>
-        </div>
+        <i class="material-icons mdl-list__item user-avatar-img user-avatar-mIcon">person</i>
       </div>
       <div class="user-details-main-info mdl-cell mdl-cell--9-col">
         <div>
@@ -53,7 +48,7 @@
         </div>
       </div>
     </div>
-    <div [hidden] = "!isFriend" class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    <div mdl [hidden] = "!isFriend" class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
       <div class="user-details-group mdl-card__actions mdl-card--border">
         <!-- <h5>Settings</h5> -->
         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
