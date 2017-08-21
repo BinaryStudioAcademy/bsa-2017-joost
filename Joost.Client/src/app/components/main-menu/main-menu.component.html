@@ -1,4 +1,4 @@
-<div class="main-layout mdl-js-layout mdl-layout--fixed-drawer">
+﻿<div class="main-layout mdl-js-layout mdl-layout--fixed-drawer">
   <div class="left-panel mdl-layout__drawer mdl-color-text--blue-grey-50">
     <header>
       <div *ngIf="curUser" class="left-panel-header">
@@ -10,9 +10,10 @@
         </a>
         <div class="left-panel-user-info">
           <a [routerLink]="['user-editing', curUser.Id]" skipLocationChange>
-            <div class="header-user-name">{{curUser.FirstName + ' ' + curUser.LastName}}</div>
+              <div class="header-user-name" *ngIf="curUser.FirstName">{{curUser.FirstName + ' ' + curUser.LastName}}</div>
+              <div class="header-user-name" *ngIf="!curUser.FirstName">{{curUser.Email}}</div>
           </a>
-          <div>{{curUser.Status}}</div>
+          <div *ngIf="curUser.Status">{{curUser.Status}}</div>
         </div>
       </div>
     </header>

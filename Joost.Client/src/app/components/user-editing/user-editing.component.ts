@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
@@ -49,19 +49,18 @@ export class UserEditingComponent implements OnInit {
     console.log( this.user.BirthDate);
     this.userService.updateUser(this.user);
     this.router.navigate(['menu']);
+    location.reload();
   }
 
   GetUser() {
     this.userService.getUser().subscribe( d => {
-      this.user = d;
-      this.isLoadFinished = true;
+        this.user = d;
+        this.isLoadFinished = true;
 
-      let date = new Date(this.user.BirthDate);
-      this.inputDay =  (date.getDate()).toString();
-      this.inputMonth =  (date.getMonth() + 1).toString();
-      this.inputYear =  (date.getFullYear()).toString();
-
-
+        let date = new Date(this.user.BirthDate);
+        this.inputDay =  (date.getDate()).toString();
+        this.inputMonth =  (date.getMonth() + 1).toString();
+        this.inputYear =  (date.getFullYear()).toString();
     },
     err=> {
       this.isError = true;

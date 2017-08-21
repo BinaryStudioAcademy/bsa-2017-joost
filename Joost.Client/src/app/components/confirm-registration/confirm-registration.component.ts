@@ -22,5 +22,6 @@ export class ConfirmRegistrationComponent implements OnInit {
           this.userService.confirmRegistration(this.key);
       });
       this.router.navigate(['/login']);
+      location.reload();
   }
 }
