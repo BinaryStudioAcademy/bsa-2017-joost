@@ -66,7 +66,6 @@ export class UserEditingComponent extends MDL implements OnInit {
   }
 
   Cancel() {
-     this.location.back();
      this.router.navigate(['menu']);
   }
 
@@ -97,7 +96,6 @@ export class UserEditingComponent extends MDL implements OnInit {
       }
     }
   }
-  
   
   CancelPassword() {
     this.passwordDiv = !this.passwordDiv;
