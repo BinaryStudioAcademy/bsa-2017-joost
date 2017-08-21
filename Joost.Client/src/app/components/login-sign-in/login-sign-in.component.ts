@@ -20,7 +20,7 @@ export class LoginSignInComponent implements OnInit {
 
   logIn() {
       this.authService.login(this.email, this.password).subscribe(
-        data => {
+          data => {
           console.log('get userId');
           this.authService.getUserId().subscribe(id => {
           this.router.navigate(['/menu/user-editing/', id]/*, {skipLocationChange: true}*/);

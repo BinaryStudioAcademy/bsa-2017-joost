@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
@@ -51,6 +51,7 @@ export class UserEditingComponent extends MDL implements OnInit {
     this.user.BirthDate = new Date(+this.inputYear, +this.inputMonth-1, +this.inputDay +1);
     this.userService.updateUser(this.user);
     this.router.navigate(['menu']);
+    location.reload();
   }
 
   GetUser() {
