@@ -45,8 +45,7 @@ export class UserEditingComponent implements OnInit {
   }
 
   SaveUser() {
-    this.user.BirthDate = new Date(+this.inputYear,  +this.inputMonth-1, +this.inputDay +1);
-    console.log( this.user.BirthDate);
+    this.user.BirthDate = new Date(+this.inputYear, +this.inputMonth-1, +this.inputDay +1);
     this.userService.updateUser(this.user);
     this.router.navigate(['menu']);
   }
@@ -54,14 +53,8 @@ export class UserEditingComponent implements OnInit {
   GetUser() {
     this.userService.getUser().subscribe( d => {
       this.user = d;
+      this.getUserBirthDate();
       this.isLoadFinished = true;
-
-      let date = new Date(this.user.BirthDate);
-      this.inputDay =  (date.getDate()).toString();
-      this.inputMonth =  (date.getMonth() + 1).toString();
-      this.inputYear =  (date.getFullYear()).toString();
-
-
     },
     err=> {
       this.isError = true;
@@ -113,6 +106,12 @@ export class UserEditingComponent implements OnInit {
     this.avatarService.SetAvatar(target.files[0],this.userId);
   }
 
+  getUserBirthDate() {
+    let date = new Date(this.user.BirthDate);
+    this.inputDay =  (date.getDate()).toString();
+    this.inputMonth =  (date.getMonth() + 1).toString();
+    this.inputYear =  (date.getFullYear()).toString();
+  }
 
 }
 
