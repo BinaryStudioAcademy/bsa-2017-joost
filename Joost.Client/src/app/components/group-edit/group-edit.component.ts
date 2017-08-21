@@ -22,7 +22,9 @@ export class GroupEditComponent extends MDL implements OnInit {
         private route: ActivatedRoute,
         private userService: UserService,
         private groupService: GroupService,
-        private location: Location) { }
+        private location: Location) {
+            super();
+    }
         
     onFilterArray(substr){
         this.filteringArray = this.group.UnselectedMembers
