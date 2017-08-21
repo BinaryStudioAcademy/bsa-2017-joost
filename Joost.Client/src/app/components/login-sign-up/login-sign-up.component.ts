@@ -20,7 +20,8 @@ export class LoginSignUpComponent implements OnInit {
   registrate(): void {
       var model: Login = { Email: this.email, Password : this.password };
       this.loginService.addUser(model).subscribe(rez => {
-          window.location.href = "https://www.google.com/gmail";
+          this.router.navigate(['/app']);
+          location.reload();
       },
     error => {
       console.log(error);
