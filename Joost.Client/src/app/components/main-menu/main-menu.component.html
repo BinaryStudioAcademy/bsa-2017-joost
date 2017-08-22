@@ -2,14 +2,14 @@
   <div class="left-panel mdl-layout__drawer mdl-color-text--blue-grey-50">
     <header>
       <div *ngIf="curUser" class="left-panel-header">
-        <a [routerLink]="['user-editing', curUser.Id]">
+        <a [routerLink]="['user-editing']">
           <div class="avatar-container">
             <img src="{{curUser.Avatar | avatarPipe}}" class="main-avatar">
             <div class="online-indecator"></div>
           </div>
         </a>
         <div class="left-panel-user-info">
-          <a [routerLink]="['user-editing', curUser.Id]" skipLocationChange>
+          <a [routerLink]="['user-editing']" skipLocationChange>
               <div class="header-user-name" *ngIf="curUser.FirstName">{{curUser.FirstName + ' ' + curUser.LastName}}</div>
               <div class="header-user-name" *ngIf="!curUser.FirstName">{{curUser.Email}}</div>
           </a>

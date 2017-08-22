@@ -33,31 +33,31 @@ const routes: Routes = [
       path: 'user-details/:id',
       component: UserDetailsComponent
     },
-      {
-        path: 'user-editing/:id',
-        component: UserEditingComponent
-      },
-      {
-        path: 'messages/:type/:id',
-        component: MessagesListComponent
-      },
-      {
-        path: 'groups',
-        children: [
-          {
-            path: 'new',
-            component: GroupEditComponent
-          },
-          {
-            path: 'edit/:id',
-            component: GroupEditComponent
-          }
-        ]
-      },
-      {
-        path: 'add-contact',
-        component: UserAddContactComponent
-      }]
+    {
+      path: 'user-editing',
+      component: UserEditingComponent
+    },
+    {
+      path: 'messages/:type/:id',
+      component: MessagesListComponent
+    },
+    {
+      path: 'groups',
+      children: [
+        {
+          path: 'new',
+          component: GroupEditComponent
+        },
+        {
+          path: 'edit/:id',
+          component: GroupEditComponent
+        }
+      ]
+    },
+    {
+      path: 'add-contact',
+      component: UserAddContactComponent
+    }]
   },
   {
     path: 'login',

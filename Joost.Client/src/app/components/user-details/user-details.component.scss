@@ -54,26 +54,6 @@
     margin: 0;
 }
 
-.user-details-online-indecator{
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-    background-color: $color-online-indecator;
-}
-.user-details-state{
-    display: flex;
-    align-items:center;
-    padding: 10px 0;
-}
-
-:host ::ng-deep .online-state {
- color: $color-online-indecator;
-}
-
-:host ::ng-deep .busy-state{
- color: $color-offline-indecator;
-}
-
 .test{
     font-size: 100px;
 }
