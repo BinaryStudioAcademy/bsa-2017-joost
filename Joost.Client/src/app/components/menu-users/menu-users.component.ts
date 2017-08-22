@@ -19,7 +19,17 @@ export class MenuUsersComponent implements OnInit {
 	constructor(private userService: UserService,private router: Router,private authService: AuthenticationService) { }
 
 	ngOnInit() {
-		this.userService.getAllContacts().subscribe(data=> this.result = data);
+		this.userService.getAllContacts().subscribe(data=> this.result = data,
+			async err => {
+				await this.userService.handleTokenErrorIfExist(err).then(ok => {
+					if (ok) { 
+					    this.userService.getAllContacts().subscribe(data => {
+						    this.result = data
+					    });
+				    }
+				});
+			}
+		);
 
 		this.userService.changeContact.subscribe(user=>{
 			if (user) {
@@ -37,6 +47,29 @@ export class MenuUsersComponent implements OnInit {
 				}
 				this.result.sort(this.compareUserContact);
 			}
+		},
+	    async err => {
+			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+				if (ok) {
+					this.userService.changeContact.subscribe(user => {
+					    if (user) {
+						    let contact = this.result.filter(t=>t.Id==user.Id)[0];
+						    if (contact!==undefined) {
+						    	contact.State = user.State;
+						    }
+						    else{
+						    	if (user.State==ContactState.Decline) {
+						    		this.result.splice(this.result.indexOf(user), 1);
+						    	}
+						    	else {
+						    		this.result.push(user);
+						    	}
+						    }
+						    this.result.sort(this.compareUserContact);
+					    }
+				    });
+			    }
+			});
 		});
 	}
 	ngOnDestroy() {

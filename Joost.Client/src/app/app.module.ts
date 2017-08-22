@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpService } from './services/http.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { UserService } from './services/user.service';
 import { AuthenticationService } from './services/authentication.service';
-import { AuthInterceptor } from './interceptor/auth-interceptor';
 
 import { AppComponent } from './components/app/app.component';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
@@ -80,16 +80,12 @@ import { AvatarPipe } from "./pipes/avatar.pipe";
     ToastModule.forRoot()
   ],
   providers: [
+    HttpService,
     GroupService,
     UserService,
     LoginService,
     AvatarService,
     AuthenticationService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
     DialogsService,
     MessagesService
     // {

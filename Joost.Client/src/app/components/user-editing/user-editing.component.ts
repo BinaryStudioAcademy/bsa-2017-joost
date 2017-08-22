@@ -17,7 +17,6 @@ import { MDL } from "../mdl-base.component";
 export class UserEditingComponent extends MDL implements OnInit {
 
   user: User;
-  userId: number; // initialize from router on init
   private isLoadFinished:boolean = false;
   private isError:boolean = false;
   private passwordDiv: boolean = false;
@@ -43,7 +42,6 @@ export class UserEditingComponent extends MDL implements OnInit {
   }
 
   ngOnInit() {
-    this.userId = this.route.snapshot.params.id;
     this.GetUser();
   }
 
@@ -60,8 +58,19 @@ export class UserEditingComponent extends MDL implements OnInit {
       this.getUserBirthDate();
       this.isLoadFinished = true;
     },
-    err=> {
-      this.isError = true;
+    async err=> {
+      await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+        if (ok) {
+          this.userService.getUser().subscribe(d => {
+            this.user = d;
+            this.getUserBirthDate();
+            this.isLoadFinished = true;
+          },
+          err => {
+            this.isError = true;
+          });
+        }
+      });
     });
   }
 
@@ -105,7 +114,7 @@ export class UserEditingComponent extends MDL implements OnInit {
   
   SendAvatar(e: Event) {
     var target: HTMLInputElement = e.target as HTMLInputElement;
-    this.avatarService.SetAvatar(target.files[0],this.userId);
+    this.avatarService.SetAvatar(target.files[0],this.user.Id);
     location.reload();
   }
 

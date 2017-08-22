@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; 
+//import { HttpClient, HttpHeaders } from '@angular/common/http'; 
+import { HttpService } from '../services/http.service';
 
 import { BaseApiService } from "./base-api.service";
 
 @Injectable()
 export class AvatarService extends BaseApiService{
   
-    constructor(http : HttpClient) {
+    constructor(http : HttpService) {
       super(http);
       this.parUrl = "avatars";
   }

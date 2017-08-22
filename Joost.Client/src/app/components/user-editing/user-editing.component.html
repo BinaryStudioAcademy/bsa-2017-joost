@@ -28,7 +28,7 @@
                 <input class="mdl-textfield__input " type="text"  [(ngModel)]="user.Status" id="userStatus" />
               </div>
               
-              <div class="user-details-state">
+              <div class="user-state-container">
                 <div [innerHtml]="user.State | stateIconPipe"></div>
                 <span>{{user.State | stateStringPipe}}</span>
               </div> 
