@@ -27,10 +27,8 @@ import { UserDetailsComponent } from './components/user-details/user-details.com
 import { SignalTestComponent } from './components/signal-test/signal-test.component';
 import { ConfirmRegistrationComponent } from './components/confirm-registration/confirm-registration.component';
 
-import { GenderPipe } from "./pipes/gender.pipe";
-import { StateIconPipe } from "./pipes/state-icon.pipe";
+import { StatePipe } from "./pipes/state.pipe";
 
-import { StateStringPipe } from "./pipes/state-string.pipe";
 import { LoginService } from "./services/login.service";
 import { GroupEditComponent } from "./components/group-edit/group-edit.component";
 import { GroupService } from "./services/group.service";
@@ -46,6 +44,8 @@ import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 
 import { AvatarService } from './services/avatar.service';
 import { AvatarPipe } from "./pipes/avatar.pipe";
+import { GenderPipe } from "./pipes/gender.pipe";
+
 
 @NgModule({
   declarations: [
@@ -62,15 +62,14 @@ import { AvatarPipe } from "./pipes/avatar.pipe";
     UserDetailsComponent,
     SignalTestComponent,
     ConfirmRegistrationComponent,
-    GenderPipe,
-    StateIconPipe,
-    StateStringPipe,
+    StatePipe,
     GroupEditComponent,
     UserEditingComponent,
     UserAddContactComponent,
     AvatarPipe,
     DialogsListComponent,
-    MessagesListComponent
+    MessagesListComponent,
+    GenderPipe
   ],
   imports: [
     BrowserModule,

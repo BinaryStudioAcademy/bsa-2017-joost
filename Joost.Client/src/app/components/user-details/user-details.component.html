@@ -11,11 +11,11 @@
 <div [hidden]="!isLoadFinished">
   <div *ngIf="user">
     <div class="user-details-header mdl-layout__header-row mdl-shadow--2dp">
-      <button class="mdl-button mdl-js-button" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
-      <button class="mdl-button mdl-js-button" (click)="contactActionClick(user.Id)">{{isFriend ? 'Delete' : 'Add'}}</button>
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect" (click)="contactActionClick(user.Id)">{{isFriend ? 'Delete' : 'Add'}}</button>
     </div>
 
-    <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    <div class="mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
       <div class="mdl-cell mdl-cell--3-col">
         <i class="material-icons mdl-list__item user-avatar-img user-avatar-mIcon">person</i>
       </div>
@@ -23,15 +23,12 @@
         <div>
           <h3>{{user.FirstName}} {{user.LastName}}</h3>
           <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
-          <div class="user-state-container">
-            <div [innerHtml]="user.State | stateIconPipe"></div>
-            <span>{{user.State | stateStringPipe}}</span>
-          </div>
-          <button class="mdl-button mdl-js-button mdl-button--raised"> Send Message</button>
+          <div [innerHtml]="user.State | statePipe"></div>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Send Message</button>
         </div>
       </div>
     </div>
-    <div class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    <div class="user-details-main mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
       <div class="user-details-group mdl-card__actions mdl-card--border">
         <!-- <h5> Info</h5> -->
         <div>
@@ -48,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div mdl [hidden] = "!isFriend" class="user-details-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    <div mdl [hidden] = "!isFriend" class="user-details-main mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
       <div class="user-details-group mdl-card__actions mdl-card--border">
         <!-- <h5>Settings</h5> -->
         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
@@ -58,9 +55,9 @@
       </div>
       <div class="user-details-group mdl-card__actions mdl-card--border">
         <!-- <h5>Actions</h5> -->
-        <button class="mdl-button mdl-js-button mdl-button--raised"> Clear History</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised"> Delete Conversation</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised"> Block User</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Clear History</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Delete Conversation</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Block User</button>
       </div>
     </div>
   </div>
