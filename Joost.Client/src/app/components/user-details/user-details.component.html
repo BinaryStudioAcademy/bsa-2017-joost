@@ -23,7 +23,7 @@
         <div>
           <h3>{{user.FirstName}} {{user.LastName}}</h3>
           <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
-          <div class="user-details-state">
+          <div class="user-state-container">
             <div [innerHtml]="user.State | stateIconPipe"></div>
             <span>{{user.State | stateStringPipe}}</span>
           </div>
