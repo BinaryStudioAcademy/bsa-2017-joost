@@ -22,7 +22,17 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 	constructor(private userService: UserService,private authService: AuthenticationService) { }
 
 	ngOnInit() {
-		this.userService.getContacts().subscribe(data=>this.contactList = data);
+		this.userService.getContacts().subscribe(data=>this.contactList = data,
+			async err => {
+                await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+					if (ok) {
+                        this.userService.getContacts().subscribe(data => {                
+                            this.contactList = data;
+					    });
+				    }
+                });
+            }
+		);
 		this.userService.changeContact.subscribe(user=>{
 			if (user) {
 				let contact = this.contactList.filter(t=>t.ContactId==user.Id)[0];
@@ -37,6 +47,27 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 					this.contactList.push(new Contact(user.Id,user.State));
 				}
 			}
+		},
+	    async err => {
+			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+				if (ok) {
+				this.userService.changeContact.subscribe(user => {                
+			     	if (user) {
+				    		let contact = this.contactList.filter(t=>t.ContactId==user.Id)[0];
+				    		if (contact!==undefined) {
+				    			contact.State = user.State;
+				    		}
+				    		else if (user.State==ContactState.Decline) {
+			     				let currUser = this.contactList.filter(t=>t.ContactId==user.Id)[0];
+			    				this.contactList.splice(this.contactList.indexOf(currUser), 1);
+			    			}
+			    			else {
+			    				this.contactList.push(new Contact(user.Id,user.State));
+				    		}
+					    }
+				    });
+			    }
+			});
 		});
 	}
 	ngOnDestroy() {
@@ -45,7 +76,17 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 	search(){
 		this.userService.getContacts().subscribe(data=>{
 			this.contactList= data;
+		},
+	    async err => {
+			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+				if (ok) {
+				    this.userService.getContacts().subscribe(data => {                
+					    this.contactList = data;
+				    });
+			    }
+			});
 		});
+
 		this.isLoad = false;
 		if (this.searchString) {
 			this.userService
@@ -53,7 +94,18 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 			.subscribe(data =>{
 					this.result = data;
 					this.isLoad = true;
-				});
+			},
+		    async err => {
+                await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+					if (ok) {
+                        this.userService
+						.searchResult(this.searchString).subscribe(data => {                
+                            this.result = data;
+						    this.isLoad = true;
+					    });
+				    }
+                });
+            });
 		}
 		this.result = null;
 		
@@ -68,6 +120,22 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 			newContact.Avatar = userInfo.Avatar;
 			newContact.State = ContactState.Sent;
 			this.userService.changeContactNotify(newContact);
+		},
+	    async err => {
+			await this.userService.handleTokenErrorIfExist(err).then(ok => {
+				if (ok) { 
+		    		this.userService.addContact(contactId).subscribe(succes => {                
+		    			let userInfo = this.result.filter(t=>t.Id==contactId)[0];
+			    		let newContact = new UserContact();
+			    		newContact.Id = contactId;
+			    		newContact.Name= userInfo.Name;
+					    newContact.City= userInfo.City;
+				    	newContact.Avatar = userInfo.Avatar;
+			    		newContact.State = ContactState.Sent;
+				    	this.userService.changeContactNotify(newContact);
+			    	});
+		     	}
+			});
 		});
 	}
 	checkInContact(id:number):boolean{

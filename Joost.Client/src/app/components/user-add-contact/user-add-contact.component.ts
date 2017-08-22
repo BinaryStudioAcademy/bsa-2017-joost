@@ -35,10 +35,38 @@ export class UserAddContactComponent extends MDL implements OnInit{
 				this.contact = data.filter(t=>t.Id==id)[0];
 				this.isLoad = true;
 			},
-			error => {
+			async err => {
+				await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+					if (ok) {
+					  this.userService.getAllContacts().subscribe(data => {
+						  this.contact = data.filter(t=>t.Id==id)[0];
+						  this.isLoad = true;
+					  },
+				      error => {
+						  this.isError = true;
+					  });
+				  }
+				});
 				this.isError = true;
 			}
 		);
+		},
+	    async err => {
+			await this.userService.handleTokenErrorIfExist(err).then(ok => {
+				if (ok) { 
+  				this.userService.changeContactId.subscribe(id => {
+  					this.userService.getAllContacts().subscribe(
+	  					data =>{
+	  						this.contact = data.filter(t=>t.Id==id)[0];
+		  					this.isLoad = true;
+		  				},
+		  				error => {
+			  				this.isError = true;
+					  	}
+					  );
+				  });
+			  }
+			});
 		});
 	}
 	
@@ -51,6 +79,17 @@ export class UserAddContactComponent extends MDL implements OnInit{
 			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Accept;
 			this.userService.changeContactNotify(this.contact);
+		},
+	    async err=> {
+			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+				if (ok) {
+			    this.userService.confirmContact(id).subscribe(ok => {
+				  this.router.navigate(["menu"]);
+				  this.contact.State = ContactState.Accept;
+				  this.userService.changeContactNotify(this.contact);
+			  	});
+			  }
+			});
 		});
 	}
 	decline(id:number){
@@ -58,6 +97,17 @@ export class UserAddContactComponent extends MDL implements OnInit{
 			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Decline;
 			this.userService.changeContactNotify(this.contact);
+		},
+	    async err=> {
+			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+				if (ok) {
+			    this.userService.declineContact(id).subscribe(ok => {
+				  this.router.navigate(["menu"]);
+				  this.contact.State = ContactState.Decline;
+				  this.userService.changeContactNotify(this.contact);
+				  });
+			  }
+			});
 		});
 	}
 	retry(id:number){
@@ -65,7 +115,17 @@ export class UserAddContactComponent extends MDL implements OnInit{
 			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Sent;
 			this.userService.changeContactNotify(this.contact);
+		},
+		async err=> {
+			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+				if (ok) {
+			    this.userService.addContact(id).subscribe(succes => {
+				  this.router.navigate(["menu"]);
+				  this.contact.State = ContactState.Sent;
+				  this.userService.changeContactNotify(this.contact);
+				  });
+			  }
+			});
 		});
-	
 	}
 }

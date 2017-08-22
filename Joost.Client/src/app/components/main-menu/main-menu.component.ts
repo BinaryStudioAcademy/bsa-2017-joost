@@ -25,7 +25,24 @@ export class MainMenuComponent extends MDL implements OnInit {
 
   ngOnInit() {
     this.authService.getUserId().subscribe(data => {
-      this.userService.getUserDetails(data).subscribe( d => this.curUser = d);
+      this.userService.getUserDetails(data).subscribe( d => this.curUser = d, 
+        async err => {
+          await this.userService.handleTokenErrorIfExist(err).then(ok => {
+            if (ok) { 
+              this.userService.getUserDetails(data).subscribe(d => this.curUser = d);
+            }
+          });
+        }
+      );
+    }, 
+    async err => {
+      await this.authService.handleTokenErrorIfExist(err).then(ok => {
+        if (ok) { 
+          this.authService.getUserId().subscribe(data => {
+            this.userService.getUserDetails(data).subscribe( d => this.curUser = d);
+          })
+        }
+      });
     });
   }
 

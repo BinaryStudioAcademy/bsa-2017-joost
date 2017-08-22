@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+//import { HttpClient } from "@angular/common/http";
+import { HttpRequest, HttpResponse } from "@angular/common/http";
+import { HttpService } from '../services/http.service';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 
 import { BaseApiService } from "./base-api.service";
 import { HttpParams } from "@angular/common/http";
+import { Tokens } from '../models/tokens';
 
 @Injectable()
 export class AuthenticationService extends BaseApiService {
   private token: string;
   private isError:boolean;
 
-  constructor(http: HttpClient) {
+  constructor(http: HttpService) {
     super(http);
     this.parUrl = "account";
-    this.token = localStorage.getItem('joostUserToken'); 
+    this.token = localStorage.getItem('joostUserAccessToken'); 
   }
 
   getToken(): string {
@@ -28,10 +31,11 @@ export class AuthenticationService extends BaseApiService {
   login(email: string, password: string) {
     let obj = this.loginObservable(email, password);
     obj.subscribe(
-      data=>{
-        console.log(data.accessToken);
+      data => {
+        console.log(data);
         this.token = data.accessToken;
-        localStorage.setItem('joostUserToken', data.accessToken);
+        localStorage.setItem('joostUserAccessToken', data.accessToken);
+        localStorage.setItem('joostUserRefreshToken', data.refreshToken);        
         console.log('token saved');
       },
       err=> this.isError = true
@@ -40,20 +44,20 @@ export class AuthenticationService extends BaseApiService {
   }
 
   private loginObservable(email: string, password: string) {
-     return this.http.post<Token>(this.generateUrl() + "/auth", {"Email": email, "Password" : password});
+    let req = new HttpRequest("POST", this.generateUrl() + "/auth", {"Email": email, "Password" : password});
+    return this.http.sendRequest<Tokens>(req);
+    //return this.http.post<Tokens>(this.generateUrl() + "/auth", {"Email": email, "Password" : password});
   }
 
   logout() {
     this.token = null;
-    localStorage.removeItem('joostUserToken');
+    localStorage.removeItem('joostUserAccessToken');
   }
 
   getUserId() {
-    return this.http
-    .get<number>(this.generateUrl());
+    let req = new HttpRequest("GET", this.generateUrl());
+    return this.http.sendRequest<number>(req);
+    //return this.http
+    //.get<number>(this.generateUrl());
   }
-}
-interface Token{
-  accessToken:string,
-  refreshToken:string
 }

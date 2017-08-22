@@ -1,7 +1,9 @@
 ﻿import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import { HttpClient,HttpParams } from '@angular/common/http';
+//import { HttpClient,HttpParams } from '@angular/common/http';
+import { HttpRequest, HttpParams } from '@angular/common/http';
+import { HttpService } from '../services/http.service';
 
 import { BaseApiService } from "./base-api.service";
 
@@ -21,7 +23,7 @@ export class UserService extends BaseApiService{
   private idContactSource = new BehaviorSubject<number>(null);
   changeContactId = this.idContactSource.asObservable();
 
-	constructor(http : HttpClient) {
+	constructor(http : HttpService) {
 		super(http);
 		this.parUrl = "users";
 	}
@@ -33,61 +35,96 @@ export class UserService extends BaseApiService{
     this.idContactSource.next(contactId);
   }
   searchResult(name:string){
-  	return this.http
-  	.get<UserSearch[]>(this.generateUrl(),{
+    let req = new HttpRequest("GET", this.generateUrl(), {
   		params: new HttpParams().set('name',name)
-  	});
+    });
+    return this.http.sendRequest<UserSearch[]>(req);
+    //return this.http
+  	//.get<UserSearch[]>(this.generateUrl(),{
+  	//	params: new HttpParams().set('name',name)
+  	//});
   }
 
   // contacts
   getAllContacts(){
-    return this.http
-    .get<UserContact[]>(this.generateUrl()+ "/all-contact");
+    let req = new HttpRequest("GET", this.generateUrl()+ "/all-contact");
+    return this.http.sendRequest<UserContact[]>(req);
+    //return this.http
+    //.get<UserContact[]>(this.generateUrl()+ "/all-contact");
   }
   getContacts(){
-    return this.http
-    .get<Contact[]>(this.generateUrl()+ "/contact");
+    let req = new HttpRequest("GET", this.generateUrl()+ "/contact");
+    return this.http.sendRequest<Contact[]>(req);
+    //return this.http
+    //.get<Contact[]>(this.generateUrl()+ "/contact");
   }
   addContact(contactId:number){
-  	return this.http
-  	.post(this.generateUrl() + "/contact",
-      {  	  "ContactId":contactId ,"State": ContactState.New 	});
+    let req = new HttpRequest("POST", this.generateUrl() + "/contact",
+      { "ContactId": contactId, "State": ContactState.New });
+    return this.http.sendRequest(req);
+  	//return this.http
+  	//.post(this.generateUrl() + "/contact",
+    //  {  	  "ContactId":contactId ,"State": ContactState.New 	});
   }
   confirmContact(contactId:number){
-     return this.http
-    .post(this.generateUrl() + "/confirm-contact",
-      {      "ContactId":contactId ,"State": ContactState.Accept });
+    let req = new HttpRequest("POST", this.generateUrl() + "/confirm-contact",
+      { "ContactId":contactId ,"State": ContactState.Accept });
+    return this.http.sendRequest(req);
+     //return this.http
+    //.post(this.generateUrl() + "/confirm-contact",
+     // {      "ContactId":contactId ,"State": ContactState.Accept });
   }
   declineContact(contactId:number){
-     return this.http
-    .post(this.generateUrl() + "/decline-contact",
-      {      "ContactId":contactId ,"State": ContactState.Decline });
+    let req = new HttpRequest("POST", this.generateUrl() + "/decline-contact", { 
+      "ContactId": contactId ,"State": ContactState.Decline });
+    return this.http.sendRequest(req);
+    //.post(this.generateUrl() + "/decline-contact",
+    //  {      "ContactId":contactId ,"State": ContactState.Decline });
   }
   deleteContact(contactId:number){
-  	return this.http
-  	.delete(this.generateUrl() + "/contact",{
+    let req = new HttpRequest("DELETE", this.generateUrl() + "/contact", {
   		params: new HttpParams().set('id', contactId.toString())
-  	});
+    });
+    return this.http.sendRequest(req);
+  	//return this.http
+  	//.delete(this.generateUrl() + "/contact",{
+  	//	params: new HttpParams().set('id', contactId.toString())
+  	//});
   }
 
   confirmRegistration(key: string) {
-      let url = this.generateUrl() + '/confirmregistration/' + key;
-      return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
+      let req = new HttpRequest("GET", this.generateUrl() + '/confirmregistration/' + key);
+      return this.http.sendRequest(req).subscribe();
+      //return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
 
   }
 
    getUserDetails(id: number){
-    return this.http.get<UserDetail>(this.generateUrl(), {
+    let req = new HttpRequest("GET", this.generateUrl(), {
       params: new HttpParams().set('id', id.toString())
     });
+    return this.http.sendRequest<UserDetail>(req);
+    //return this.http.get<UserDetail>(this.generateUrl(), {
+    //  params: new HttpParams().set('id', id.toString())
+    //});
   }
     
   getUser() {
-    return this.http.get<User>(this.generateUrl() + '/myprofile');
+    let req = new HttpRequest("GET", this.generateUrl() + '/myprofile');
+    return this.http.sendRequest<User>(req)
+    //return this.http.get<User>(this.generateUrl() + '/myprofile');
   }
   
   updateUser(user: User) {
-    return this.http.put<User>(this.generateUrl() + '/' + user.Id.toString(), JSON.stringify(user)).subscribe();
+    let req = new HttpRequest("PUT", this.generateUrl() + '/' + user.Id.toString(), JSON.stringify(user));
+    return this.http.sendRequest<User>(req).subscribe(data => { },
+      async err => {
+        await this.http.handleTokenErrorIfExist(err).then(ok => { 
+          if (ok) this.http.sendRequest<User>(req).subscribe();
+      });
+      }
+    );
+    //return this.http.put<User>(this.generateUrl() + '/' + user.Id.toString(), JSON.stringify(user)).subscribe();
   }
 
   
