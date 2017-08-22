@@ -6,6 +6,7 @@ import 'rxjs/add/operator/switchMap';
 
 import { UserService } from "../../services/user.service";
 import { UserDetail } from "../../models/user-detail";
+import { Contact } from "../../models/contact";
 
 import { MDL } from '../mdl-base.component';
 declare var componentHandler: any;
@@ -39,28 +40,64 @@ export class UserDetailsComponent extends MDL implements OnInit {
         this.isLoadFinished = true;
         this.checkInContact(user.Id);
       },
-      err=> {
-        this.isError = true;
-        console.log(this.isError);
-      }
-    );
+      async err=> {
+        await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+          if (ok) {
+            this.route.paramMap
+            .switchMap((params: ParamMap) => this.userService.getUserDetails(+params.get('id'))).subscribe(user => {
+              this.user = user;
+              this.isLoadFinished = true;
+              this.checkInContact(user.Id);
+            });
+          }
+        });
+        //this.isError = true;
+        //console.log(this.isError);
+      });
   }
 
   addToContact(contactId:number){
 		this.userService.addContact(contactId).subscribe(() =>{
       this.isFriend = true;
-		});
+    },
+    async err=> {
+      await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+        if (ok) {
+          this.userService.addContact(contactId).subscribe(() => {
+            this.isFriend = true;
+          });
+        }
+      });
+    });
   }
 
   deleteFromContact(contactId:number){
 		this.userService.deleteContact(contactId).subscribe(() =>{
       this.isFriend = false;
-		});
+    },
+    async err=> {
+      await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+        if (ok) {
+          this.userService.deleteContact(contactId).subscribe(() => {
+            this.isFriend = false;
+          });
+        }
+      });
+    });
   }
   
 	checkInContact(id:number):void {
 		this.userService.getContacts().subscribe( list => {
       this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0;
+    },
+    async err=> {
+      await this.userService.handleTokenErrorIfExist(err).then(ok => {
+        if (ok) { 
+          this.userService.getContacts().subscribe(list => {
+            this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0;
+          });
+        }
+      });
     });
 	}
 

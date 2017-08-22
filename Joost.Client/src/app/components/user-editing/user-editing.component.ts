@@ -58,8 +58,19 @@ export class UserEditingComponent extends MDL implements OnInit {
       this.getUserBirthDate();
       this.isLoadFinished = true;
     },
-    err=> {
-      this.isError = true;
+    async err=> {
+      await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+        if (ok) {
+          this.userService.getUser().subscribe(d => {
+            this.user = d;
+            this.getUserBirthDate();
+            this.isLoadFinished = true;
+          },
+          err => {
+            this.isError = true;
+          });
+        }
+      });
     });
   }
 
