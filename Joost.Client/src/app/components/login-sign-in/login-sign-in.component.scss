@@ -6,7 +6,8 @@ button{
 .mdl-textfield.is-invalid .mdl-textfield__input{
 	border-color: #9698ab; 
 }
-.mdl-textfield.is-invalid.is-focused .mdl-textfield__input{
+.mdl-textfield.is-invalid.is-focused .mdl-textfield__input,
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__input{
 	border-color: #d50000; 
 	box-shadow: none;
 }
@@ -14,7 +15,8 @@ button{
 	color: #9698ab; 
 	font-size: 16px;
 }
-.mdl-textfield.is-invalid.is-focused .mdl-textfield__label{
+.mdl-textfield.is-invalid.is-focused .mdl-textfield__label,
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__label{
 	color: #d50000; 
 	font-size:12px;
 }

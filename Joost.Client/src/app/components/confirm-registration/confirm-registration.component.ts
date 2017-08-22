@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { MDL } from "../mdl-base.component";
@@ -20,11 +20,11 @@ export class ConfirmRegistrationComponent extends MDL implements OnInit {
   }
 
   confirm() {
-      this.route.params.subscribe(params => {
-          this.key = params['key'];
-          this.userService.confirmRegistration(this.key);
-      });
-      this.router.navigate(['/login']);
-      location.reload();
+    this.route.params.subscribe(params => {
+        this.key = params['key'];
+        this.userService.confirmRegistration(this.key);
+    });
+    this.router.navigate(['/login']);
+    location.reload();
   }
 }

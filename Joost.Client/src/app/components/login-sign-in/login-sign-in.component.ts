@@ -23,7 +23,7 @@ export class LoginSignInComponent implements OnInit {
           data => {
           console.log('get userId');
           this.authService.getUserId().subscribe(id => {
-          this.router.navigate(['/menu/user-editing/', id]/*, {skipLocationChange: true}*/);
+          this.router.navigate(['menu/user-editing']/*, {skipLocationChange: true}*/);
         }),
          error =>{
            console.log(error);

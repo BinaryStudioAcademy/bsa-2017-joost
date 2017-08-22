@@ -15,7 +15,7 @@ export class LoginService extends BaseApiService {
     }
 
     confirmRegistration(key: string) {
-        return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
+        return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe(ok=>console.log(ok),error=>console.log(error));
     }
 
     addUser(user: Login) {

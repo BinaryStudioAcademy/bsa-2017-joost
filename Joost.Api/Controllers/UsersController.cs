@@ -317,9 +317,9 @@ namespace Joost.Api.Controllers
             return Ok();
         }
 
-        // GET: api/users/confirmregistration/{key}
+        // GET: api/users/confirmregistration
         [HttpGet]
-        [Route("confirmregistration/{key}")]
+        [Route("confirmregistration")]
         public async Task<IHttpActionResult> ConfirmRegistration(string key)
         {
             if (string.IsNullOrEmpty(key))
@@ -331,9 +331,9 @@ namespace Joost.Api.Controllers
             {
                 return BadRequest();
             }
-
-            user.User.IsActived = true;
-            _unitOfWork.Repository<User>().Attach(user.User);
+            var activeUser = await _unitOfWork.Repository<User>().FindAsync(t => t.Id == user.Id);
+            activeUser.IsActived = true;
+            await _unitOfWork.SaveAsync();
             _unitOfWork.Repository<ConfirmRegistration>().Delete(user);
             await _unitOfWork.SaveAsync();
 

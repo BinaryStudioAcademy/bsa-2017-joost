@@ -63,4 +63,6 @@ html, body {
 .busy-state{
  color: $color-offline-indecator;
 }
-
+.data-container {
+    height: 100vh !important;
+}
