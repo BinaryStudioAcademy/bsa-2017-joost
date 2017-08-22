@@ -147,13 +147,13 @@
                   <h5>Gender:</h5>
                   <div class="padding-vertical-10">
                     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGenderMale">
-                      <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="0">
+                      <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="0" [checked]="user.Gender==0">
                       <span class="mdl-radio__label">Male</span>
                     </label>
                   </div>
                 <div class="padding-vertical-10">
                   <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGendeFemale">
-                    <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="1">
+                    <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="1" [checked]="user.Gender==1">
                     <span class="mdl-radio__label">Female</span>
                     </label>
                   </div>

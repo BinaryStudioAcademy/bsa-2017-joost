@@ -5,13 +5,14 @@ import { UserService } from '../../services/user.service';
 import { UserContact } from "../../models/user-contact";
 import { ContactState} from "../../models/contact";
 import { AuthenticationService } from '../../services/authentication.service';
+import { MDL } from "../mdl-base.component";
 
 @Component({
   selector: 'app-user-add-contact',
   templateUrl: './user-add-contact.component.html',
   styleUrls: ['./user-add-contact.component.scss'],
 })
-export class UserAddContactComponent implements OnInit{
+export class UserAddContactComponent extends MDL implements OnInit{
 	@Input()
 	private userId:number;
 	private isError?:boolean = null;
@@ -21,7 +22,9 @@ export class UserAddContactComponent implements OnInit{
 		private userService: UserService,
 		private router: Router,
 		private location: Location
-	) { }
+	) {
+		super();
+	}
 
 	ngOnInit() {
 		this.isError = null;

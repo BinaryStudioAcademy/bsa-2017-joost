@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { Location } from '@angular/common';
 import { Observable } from "rxjs/Observable";
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -6,14 +6,15 @@ import 'rxjs/add/operator/switchMap';
 
 import { UserService } from "../../services/user.service";
 import { UserDetail } from "../../models/user-detail";
-declare var componentHandler: any;
 
+import { MDL } from '../mdl-base.component';
+declare var componentHandler: any;
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss']
 })
-export class UserDetailsComponent implements OnInit {
+export class UserDetailsComponent extends MDL implements OnInit {
 
   
   user: UserDetail;
@@ -25,7 +26,9 @@ export class UserDetailsComponent implements OnInit {
     private location: Location,
     private userService: UserService,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
 
@@ -41,20 +44,17 @@ export class UserDetailsComponent implements OnInit {
         console.log(this.isError);
       }
     );
-    componentHandler.upgradeDom();
   }
 
   addToContact(contactId:number){
 		this.userService.addContact(contactId).subscribe(() =>{
       this.isFriend = true;
-      componentHandler.upgradeDom();
 		});
   }
 
   deleteFromContact(contactId:number){
 		this.userService.deleteContact(contactId).subscribe(() =>{
       this.isFriend = false;
-      componentHandler.upgradeDom();
 		});
   }
   

@@ -7,13 +7,14 @@ import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
 import { AvatarService } from "../../services/avatar.service";
 import { AvatarPipe} from "../../pipes/avatar.pipe";
+import { MDL } from "../mdl-base.component";
 
 @Component({
   selector: 'app-user-editing',
   templateUrl: './user-editing.component.html',
   styleUrls: ['./user-editing.component.scss']
 })
-export class UserEditingComponent implements OnInit {
+export class UserEditingComponent extends MDL implements OnInit {
 
   user: User;
   userId: number; // initialize from router on init
@@ -37,7 +38,9 @@ export class UserEditingComponent implements OnInit {
     public route: ActivatedRoute,
     public router: Router,
     private location: Location
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.userId = this.route.snapshot.params.id;
@@ -63,7 +66,6 @@ export class UserEditingComponent implements OnInit {
   }
 
   Cancel() {
-     this.location.back();
      this.router.navigate(['menu']);
   }
 
@@ -95,7 +97,6 @@ export class UserEditingComponent implements OnInit {
     }
   }
   
-  
   CancelPassword() {
     this.passwordDiv = !this.passwordDiv;
     this.passwordOld = this.passwordFirst = this.passwordSecond ="";
@@ -105,6 +106,7 @@ export class UserEditingComponent implements OnInit {
   SendAvatar(e: Event) {
     var target: HTMLInputElement = e.target as HTMLInputElement;
     this.avatarService.SetAvatar(target.files[0],this.userId);
+    location.reload();
   }
 
   getUserBirthDate() {
