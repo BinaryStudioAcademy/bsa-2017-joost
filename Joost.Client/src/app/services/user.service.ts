@@ -71,9 +71,11 @@ export class UserService extends BaseApiService{
   }
 
   confirmRegistration(key: string) {
-      let url = this.generateUrl() + '/confirmregistration/' + key;
       return this.http.get(this.generateUrl() + '/confirmregistration/' + key).subscribe();
+  }
 
+  checkUserForUniqueness(email: string) {
+      return this.http.get(this.generateUrl() + '/check/' + email);
   }
 
    getUserDetails(id: number){
