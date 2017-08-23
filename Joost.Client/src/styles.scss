@@ -50,6 +50,7 @@ html, body {
 	background-color: #555;
 }
 
+
 .user-state-container{
     display: flex;
     align-items:center;
@@ -63,6 +64,23 @@ html, body {
 .busy-state{
  color: $color-offline-indecator;
 }
-.data-container {
-    height: 100vh !important;
+
+// new style guide
+.jg-buttons-bottom-cantainer{
+    margin-top: auto;
+    display: flex;
+    justify-content:flex-end;
+}
+.jg-button-bottom{
+    margin-left: 16px;
+}
+
+.jg-full-width-container{
+    width: 100%;
+}
+
+.jg-container{
+    width: calc(100% - 10px);
+    height: calc(100vh - 10px);
+    margin: 5px auto;
 }

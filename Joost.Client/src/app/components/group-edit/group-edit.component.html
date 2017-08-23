@@ -1,4 +1,121 @@
-﻿<form (ngSubmit)="onSubmit()" #groupForm="ngForm">
+﻿<form action="#"> 
+    <div class="mdl-card mdl-shadow--2dp jg-container">
+        <div class="mdl-card__title">
+            <h2 class="mdl-card__title-text">Create new group</h2>
+        </div>
+        <div class="mdl-card__title jc-group-edit-title-container">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
+                <input class="mdl-textfield__input" type="text" id="ge-groupName">
+                <label class="mdl-textfield__label" for="ge-groupName">Group name</label>
+            </div>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
+                <input class="mdl-textfield__input" type="text" id="ge-description">
+                <label class="mdl-textfield__label" for="ge-description">Descrption</label>
+            </div>
+        </div>
+        <div class="mdl-card__supporting-text mdl-grid">
+            <div class="mdl-cell mdl-cell--6-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
+                        <input class="mdl-textfield__input" type="text" id="ge-search">
+                        <label class="mdl-textfield__label" for="ge-search">Search...</label>
+                </div>
+                <ul class="jc-list-user mdl-list mdl-shadow--2dp scrollable">
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">person</i>
+                        Bryan Cranston
+                    </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">person</i>
+                        Aaron Paul
+                    </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-icon">person</i>
+                        Bob Odenkirk
+                    </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="mdl-cell mdl-cell--6-col">
+                <ul class="jc-list-user jc-list-added mdl-list mdl-shadow--2dp scrollable">
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Bryan Cranston
+                        </span>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Bryan Cranston
+                        </span>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Bryan Cranston
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Aaron Paul
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Bob Odenkirk
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Aaron Paul
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Bob Odenkirk
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Aaron Paul
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Bob Odenkirk
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Aaron Paul
+                        </span>
+                    </li>
+                    <li class="mdl-list__item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon">person</i>
+                            Bob Odenkirk
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="mdl-card__actions mdl-card--border jg-buttons-bottom-cantainer">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="Create()">Create</button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="Cancel()">Cancel</button>    
+        </div>
+    </div>
+</form>
+<!-- <form (ngSubmit)="onSubmit()" #groupForm="ngForm">
     <div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
         <div class="user-editing-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">        
             <div class="user-editing-group mdl-card__actions mdl-card--border">
@@ -91,4 +208,4 @@
             </div>        
         </div>
     </div>
-</form>
+</form> -->
