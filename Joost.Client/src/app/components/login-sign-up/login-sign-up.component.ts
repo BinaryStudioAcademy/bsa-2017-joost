@@ -1,4 +1,5 @@
 ﻿import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormControl, Validators, NgModel } from '@angular/forms';
 import { LoginService } from "../../services/login.service";
 import { Login } from "../../models/user-detail";
 import { Router } from '@angular/router';
@@ -12,7 +13,8 @@ import { UserService } from "../../services/user.service";
 export class LoginSignUpComponent implements OnInit {
   email: string;
   password: string;
-  
+  private emailFormControl = new FormControl('', [Validators.required]);
+
   //showing loading progressbar
   @Output() 
   loadEvent = new EventEmitter<boolean>();
@@ -43,6 +45,7 @@ export class LoginSignUpComponent implements OnInit {
   }
 
   checkEmailIsEmpty(email: string): void {
+      debugger;
       let userIsEmpty = this.userService.checkUserForUniqueness(email).subscribe(response => {
           if (response) {
               this.userIsEmpty = true;
