@@ -16,9 +16,8 @@ namespace Joost.Api.Controllers
 
         // GET api/avatars/5
         [HttpGet]
-        public async Task<IHttpActionResult> GetAvatar()
+        public async Task<IHttpActionResult> GetAvatar(int id)
         {
-            int id = GetCurrentUserId();
             try
             {
                 User user = await _unitOfWork.Repository<User>().FindAsync(item => item.Id == id);
