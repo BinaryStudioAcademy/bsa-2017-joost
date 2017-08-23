@@ -13,11 +13,15 @@ import { MDL } from "../mdl-base.component";
     templateUrl: './group-edit.component.html',
     styleUrls: ['./group-edit.component.scss']
 })
+// поки зроблю працююча лише для сценарію  сторення новрї групи
 export class GroupEditComponent extends MDL implements OnInit {
     group: Group;
-    filteringArray: Array<UserContact> = [];
+    unselectedMembers: Array<UserContact> = [];
+    selectedMembers: Array<UserContact> = [];
+    filteredMembers: Array<UserContact> = [];
+    filterStr: string;
     editMode: boolean = false;
-
+    
     constructor(
         private route: ActivatedRoute,
         private userService: UserService,
@@ -25,63 +29,9 @@ export class GroupEditComponent extends MDL implements OnInit {
         private location: Location) {
             super();
     }
-        
-    onFilterArray(substr){
-        this.filteringArray = this.group.UnselectedMembers
-            .filter(member => member.Name.includes(substr));
-    }
-
-    onAddMember(userIndex: number) {
-        this.group.SelectedMembersId.push(this.group.UnselectedMembers[userIndex].Id);
-        this.group.SelectedMembers.push(this.group.UnselectedMembers[userIndex]);
-
-        this.group.UnselectedMembers.splice(userIndex, 1);
-    }
-
-    onDeleteMember(userIndex: number) {
-        this.group.UnselectedMembers.push(this.group.SelectedMembers[userIndex]);
-
-        this.group.SelectedMembers.splice(userIndex, 1);
-        this.group.SelectedMembersId.splice(userIndex, 1);
-    }
-
-    onSubmit() {
-        if (!this.editMode) {
-            // route: /groups/new
-            this.groupService.addGroup(this.group).subscribe(response => {                
-                console.log("Inserted");
-            },
-            async err => {
-                await this.userService.handleTokenErrorIfExist(err).then(ok => {
-                    if (ok) { 
-                        this.groupService.addGroup(this.group).subscribe(response => {                
-                            console.log("Inserted");
-                        });
-                    }
-                });
-            });
-        } else {
-            // route: /groups/edit/:id
-            this.groupService.putGroup(this.group.Id, this.group).subscribe(response => {                
-                console.log("Updated");
-            }, 
-            async err => {
-                await this.userService.handleTokenErrorIfExist(err).then(ok => {
-                    if (ok) { 
-                        this.groupService.putGroup(this.group.Id, this.group).subscribe(response => {                
-                            console.log("Updated");
-                        });
-                    }
-                });
-            });
-        }
-    }
-
-    onCancel() {
-        this.location.back();
-    }
-
+    
     ngOnInit() {
+        // get group id (if it exist)
         this.route.params
             .subscribe(
             (params: Params) => {
@@ -89,50 +39,122 @@ export class GroupEditComponent extends MDL implements OnInit {
                     this.group.Id = +params['id'];
                     this.editMode = true;
                 }
-            }, 
+            });
+        
+        // get current user contact list
+        this.userService.getAllContacts()
+        .subscribe(response => this.unselectedMembers = response,
             async err => {
                 await this.userService.handleTokenErrorIfExist(err).then(ok => {
                     if (ok) { 
-                        this.route.params.subscribe((params: Params) => {
-                            if (params['id']) {                
-                                this.group.Id = +params['id'];
-                                this.editMode = true;
-                            }
-                        });
+                        this.userService.getAllContacts().subscribe(response => this.unselectedMembers = response)
                     }
                 });
-            });
-
+            }
+        );
+        
+        // init class members
         if (!this.editMode) {
             // route: /groups/new
             this.group = new Group();
-            this.userService.getAllContacts()
-                .subscribe(response => this.group.UnselectedMembers = this.filteringArray = response,
-                    async err => {
-                        await this.userService.handleTokenErrorIfExist(err).then(ok => {
-                            if (ok) { 
-                                this.userService.getAllContacts().subscribe(response => this.group.UnselectedMembers = this.filteringArray = response)
-                            }
-                        });
-                    }
-                );
+            
         } else {
             // route: /groups/edit/:id
             this.groupService.getGroup(this.group.Id)
                 .subscribe(response => {
                     this.group = response;
-                    this.filteringArray = response.UnselectedMembers;
+                    this.initArrays();
                 },
                 async err => {
                     await this.userService.handleTokenErrorIfExist(err).then(ok => { 
                         if (ok) {
                             this.groupService.getGroup(this.group.Id).subscribe(response => {                
                                 this.group = response;
-                                this.filteringArray = response.UnselectedMembers;
+                                this.initArrays();
                             });
                         }
                     });
                 });
         }            
+    }
+
+    onSearch(substr: string){
+        this.filterStr = substr;
+        this.filteredMembers = this.unselectedMembers.filter(member => member.Name.includes(substr));
+    }
+
+    onClick(e:number){
+        console.log(e);
+    }
+
+    onAddMember(userId: number) {
+        let index = this.unselectedMembers.findIndex( u=> u.Id == userId);
+        if(index != -1) {
+            this.group.SelectedMembersId.push(userId);
+            this.selectedMembers.push(this.unselectedMembers[index]);
+            this.unselectedMembers.splice(index, 1);
+        };
+    }
+
+    onDeleteMember(userId: number) {
+        let index = this.selectedMembers.findIndex( u=> u.Id == userId);
+        if(index != -1) {
+            this.group.SelectedMembersId.splice(index, 1);
+            this.unselectedMembers.push(this.selectedMembers[index]);
+            this.selectedMembers.splice(index, 1);
+        };
+    }
+
+    onSubmit() {
+        // if (!this.editMode) {
+        //     // route: /groups/new
+        //     this.groupService.addGroup(this.group).subscribe(response => {                
+        //         console.log("Inserted");
+        //     },
+        //     async err => {
+        //         await this.userService.handleTokenErrorIfExist(err).then(ok => {
+        //             if (ok) { 
+        //                 this.groupService.addGroup(this.group).subscribe(response => {                
+        //                     console.log("Inserted");
+        //                 });
+        //             }
+        //         });
+        //     });
+        // } else {
+        //     // route: /groups/edit/:id
+        //     this.groupService.putGroup(this.group.Id, this.group).subscribe(response => {                
+        //         console.log("Updated");
+        //     }, 
+        //     async err => {
+        //         await this.userService.handleTokenErrorIfExist(err).then(ok => {
+        //             if (ok) { 
+        //                 this.groupService.putGroup(this.group.Id, this.group).subscribe(response => {                
+        //                     console.log("Updated");
+        //                 });
+        //             }
+        //         });
+        //     });
+        // }
+    }
+
+    onCancel() {
+        this.location.back();
+    }
+
+    initArrays(){
+        if(this.group) {
+            for(let id in this.group.SelectedMembersId) {
+                let index = this.unselectedMembers.findIndex( u=> u.Id == +id);
+                if(index != -1) {
+                    this.selectedMembers.push(this.unselectedMembers[index]);
+                    this.unselectedMembers.splice(index, 1);
+                }
+            }
+        }
+    }
+
+
+    trackByUsers(index: number, user: UserContact): number { 
+        return user.Id;
     }
 }
