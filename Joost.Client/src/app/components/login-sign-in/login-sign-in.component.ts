@@ -21,14 +21,11 @@ export class LoginSignInComponent implements OnInit {
   logIn() {
       this.authService.login(this.email, this.password).subscribe(
           data => {
-          console.log('get userId');
-          this.authService.getUserId().subscribe(id => {
           this.router.navigate(['menu/user-editing']/*, {skipLocationChange: true}*/);
-        }),
-         error =>{
+        },
+        error =>{
            console.log(error);
            this.isError = "User with this login and password not found!"
-         }
-      });
+         })
+      };
   }
-}
