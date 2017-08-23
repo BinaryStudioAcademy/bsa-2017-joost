@@ -1,13 +1,14 @@
 ﻿import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpService } from './services/http.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { UserService } from './services/user.service';
+import { AccountService } from './services/account.service';
+import { ContactService } from './services/contact.service';
 import { AuthenticationService } from './services/authentication.service';
 
 import { AppComponent } from './components/app/app.component';
@@ -86,7 +87,9 @@ import { GenderPipe } from "./pipes/gender.pipe";
     AvatarService,
     AuthenticationService,
     DialogsService,
-    MessagesService
+    MessagesService,
+    AccountService,
+    ContactService
     // {
     //   provide: ToastOptions,
     //   useClass: CustomOption

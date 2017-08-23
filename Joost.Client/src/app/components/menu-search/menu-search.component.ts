@@ -1,6 +1,7 @@
-import { Component, OnInit,OnDestroy } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 
-import { UserService } from '../../services/user.service';
+import { AccountService } from '../../services/account.service';
+import { ContactService } from "../../services/contact.service";
 import { AuthenticationService } from '../../services/authentication.service';
 
 import { UserSearch } from "../../models/user-search";
@@ -12,28 +13,32 @@ import { UserContact} from "../../models/user-contact";
   templateUrl: './menu-search.component.html',
   styleUrls: ['./menu-search.component.scss']
 })
-export class MenuSearchComponent implements OnInit,OnDestroy {
+export class MenuSearchComponent implements OnInit{
 
     private result:UserSearch[];
 	private searchString:string;
 	private isLoad:boolean = false;
 	private contactList:Contact[];
 
-	constructor(private userService: UserService,private authService: AuthenticationService) { }
+	constructor(
+		private accountService: AccountService,
+		private authService: AuthenticationService,
+		private contactService: ContactService,
+	) { }
 
 	ngOnInit() {
-		this.userService.getContacts().subscribe(data=>this.contactList = data,
+		this.contactService.getContacts().subscribe(data=>this.contactList = data,
 			async err => {
-                await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+                await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 					if (ok) {
-                        this.userService.getContacts().subscribe(data => {                
+                        this.contactService.getContacts().subscribe(data => {                
                             this.contactList = data;
 					    });
 				    }
                 });
             }
 		);
-		this.userService.changeContact.subscribe(user=>{
+		this.contactService.changeContact.subscribe(user=>{
 			if (user) {
 				let contact = this.contactList.filter(t=>t.ContactId==user.Id)[0];
 				if (contact!==undefined) {
@@ -49,9 +54,9 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 			}
 		},
 	    async err => {
-			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 				if (ok) {
-				this.userService.changeContact.subscribe(user => {                
+				this.contactService.changeContact.subscribe(user => {                
 			     	if (user) {
 				    		let contact = this.contactList.filter(t=>t.ContactId==user.Id)[0];
 				    		if (contact!==undefined) {
@@ -70,17 +75,15 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 			});
 		});
 	}
-	ngOnDestroy() {
-		this.authService.logout();
-	}
+
 	search(){
-		this.userService.getContacts().subscribe(data=>{
+		this.contactService.getContacts().subscribe(data=>{
 			this.contactList= data;
 		},
 	    async err => {
-			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 				if (ok) {
-				    this.userService.getContacts().subscribe(data => {                
+				    this.contactService.getContacts().subscribe(data => {                
 					    this.contactList = data;
 				    });
 			    }
@@ -89,16 +92,16 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 
 		this.isLoad = false;
 		if (this.searchString) {
-			this.userService
+			this.accountService
 			.searchResult(this.searchString)
 			.subscribe(data =>{
 					this.result = data;
 					this.isLoad = true;
 			},
 		    async err => {
-                await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+                await this.accountService.handleTokenErrorIfExist(err).then(ok => { 
 					if (ok) {
-                        this.userService
+                        this.accountService
 						.searchResult(this.searchString).subscribe(data => {                
                             this.result = data;
 						    this.isLoad = true;
@@ -111,7 +114,7 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 		
 	}
 	addToContact(contactId:number){
-		this.userService.addContact(contactId).subscribe(succes=>{
+		this.contactService.addContact(contactId).subscribe(succes=>{
 			let userInfo = this.result.filter(t=>t.Id==contactId)[0];
 			let newContact = new UserContact();
 			newContact.Id = contactId;
@@ -119,12 +122,12 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 			newContact.City= userInfo.City;
 			newContact.Avatar = userInfo.Avatar;
 			newContact.State = ContactState.Sent;
-			this.userService.changeContactNotify(newContact);
+			this.contactService.changeContactNotify(newContact);
 		},
 	    async err => {
-			await this.userService.handleTokenErrorIfExist(err).then(ok => {
+			await this.contactService.handleTokenErrorIfExist(err).then(ok => {
 				if (ok) { 
-		    		this.userService.addContact(contactId).subscribe(succes => {                
+		    		this.contactService.addContact(contactId).subscribe(succes => {                
 		    			let userInfo = this.result.filter(t=>t.Id==contactId)[0];
 			    		let newContact = new UserContact();
 			    		newContact.Id = contactId;
@@ -132,7 +135,7 @@ export class MenuSearchComponent implements OnInit,OnDestroy {
 					    newContact.City= userInfo.City;
 				    	newContact.Avatar = userInfo.Avatar;
 			    		newContact.State = ContactState.Sent;
-				    	this.userService.changeContactNotify(newContact);
+				    	this.contactService.changeContactNotify(newContact);
 			    	});
 		     	}
 			});

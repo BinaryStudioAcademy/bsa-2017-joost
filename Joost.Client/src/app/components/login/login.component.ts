@@ -9,13 +9,13 @@ import { MDL } from "../mdl-base.component";
 export class LoginComponent extends MDL implements OnInit {
 
 	isLoadComplete:boolean = true;
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  ngOnInit() {
-  }
-  receiveLoadResult($event){
-  	this.isLoadComplete = $event;
-  }
+	ngOnInit() { }
+
+	receiveLoadResult($event){
+		this.isLoadComplete = $event;
+	}
 }

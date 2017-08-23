@@ -2,6 +2,7 @@ import {Component, Input, OnInit, ViewChild, ElementRef, AfterViewInit} from '@a
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MessagesService } from "../../services/messages.service";
 import { Message } from "../../models/message";
+import { AccountService } from "../../services/account.service";
 import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
 import { MDL } from "../mdl-base.component";
@@ -24,6 +25,7 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 private router: ActivatedRoute,
                 private messagesService: MessagesService,
                 private userService: UserService,
+                private accountService: AccountService,
                 private groupService: GroupService) {
         super();
     }
@@ -73,7 +75,7 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
      }
 
    ngOnInit() {
-    this.userService.getUser().subscribe(u => {
+    this.accountService.getUser().subscribe(u => {
     this.currnetUserId = u.Id;
     this.route.paramMap
         .subscribe((params: ParamMap) => {

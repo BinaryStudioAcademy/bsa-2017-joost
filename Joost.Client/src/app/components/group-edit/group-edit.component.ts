@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Params } from "@angular/router";
 
 import { UserService } from "../../services/user.service";
+import { ContactService } from "../../services/contact.service";
 import { Group } from "../../models/group";
 import { GroupService } from "../../services/group.service";
 import { UserContact } from "../../models/user-contact";
@@ -22,7 +23,9 @@ export class GroupEditComponent extends MDL implements OnInit {
         private route: ActivatedRoute,
         private userService: UserService,
         private groupService: GroupService,
-        private location: Location) {
+        private location: Location,
+        private contactService: ContactService
+    ) {
             super();
     }
         
@@ -106,12 +109,12 @@ export class GroupEditComponent extends MDL implements OnInit {
         if (!this.editMode) {
             // route: /groups/new
             this.group = new Group();
-            this.userService.getAllContacts()
+            this.contactService.getAllContacts()
                 .subscribe(response => this.group.UnselectedMembers = this.filteringArray = response,
                     async err => {
-                        await this.userService.handleTokenErrorIfExist(err).then(ok => {
+                        await this.contactService.handleTokenErrorIfExist(err).then(ok => {
                             if (ok) { 
-                                this.userService.getAllContacts().subscribe(response => this.group.UnselectedMembers = this.filteringArray = response)
+                                this.contactService.getAllContacts().subscribe(response => this.group.UnselectedMembers = this.filteringArray = response)
                             }
                         });
                     }

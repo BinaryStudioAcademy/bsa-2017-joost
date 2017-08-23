@@ -13,6 +13,7 @@ namespace Joost.Api.Controllers
 
     using Joost.Api.Models;
 
+    [RoutePrefix("api/messages")]
     public class MessagesController : BaseApiController
     {
         private IChatHubService _chatHubService;
@@ -23,6 +24,37 @@ namespace Joost.Api.Controllers
         }
 
         [HttpGet]
+        [Route("dialogs")]
+        public async Task<IHttpActionResult> GetUsersDialogsWith(int take, int skip)
+        {
+            var userWithDialogs = await this._unitOfWork.Repository<Message>().AllAsync();
+            return this.Ok(
+                userWithDialogs
+                    .Where(m => m.Receiver.Id == this.GetCurrentUserId() || m.Sender.Id == this.GetCurrentUserId())
+                    .Aggregate(
+                        new List<User>(),
+                        (list, message) =>
+                        {
+                            if (message.Receiver.Id == this.GetCurrentUserId())
+                            {
+                                if (!list.Contains(message.Sender))
+                                {
+                                    list.Add(message.Sender);
+                                }
+                            }
+                            else
+                            {
+                                if (!list.Contains(message.Receiver))
+                                {
+                                    list.Add(message.Receiver);
+                                }
+                            }
+                            return list;
+                        }));
+        }
+
+        [HttpGet]
+        [Route("group-messages")]
         public async Task<IHttpActionResult> GetGroupsMessages(int groupId, int skip, int take)
         {
             var gropMessages = await this._unitOfWork.Repository<GroupMessage>().AllAsync();
@@ -30,6 +62,7 @@ namespace Joost.Api.Controllers
         }
 
         [HttpGet]
+        [Route("user-messages")]
         public async Task<IHttpActionResult> GetMessagesWith(int userId, int skip, int take)
         {
             var messagesWith = await this._unitOfWork.Repository<Message>().AllAsync();
@@ -41,6 +74,7 @@ namespace Joost.Api.Controllers
 
         // POST: api/Messages
         [HttpPost]
+        [Route("user-messages")]
         public async Task<IHttpActionResult> AddUserMessage([FromBody]Message message)
         {
             if (!ModelState.IsValid)
@@ -57,6 +91,7 @@ namespace Joost.Api.Controllers
 
         // POST: api/Messages
         [HttpPost]
+        [Route("group-messages")]
         public async Task<IHttpActionResult> AddGroupMessage([FromBody]GroupMessage message)
         {
             if (!ModelState.IsValid)
@@ -73,6 +108,7 @@ namespace Joost.Api.Controllers
 
         // PUT: api/Messages/5
         [HttpPut]
+        [Route("user-messages")]
         public async Task<IHttpActionResult> EditUserMessage(int id, [FromBody]Message message)
         {
             _unitOfWork.Repository<Message>().Attach(message);
@@ -83,6 +119,7 @@ namespace Joost.Api.Controllers
 
         // PUT: api/Messages/5
         [HttpPut]
+        [Route("group-messages")]
         public async Task<IHttpActionResult> EditGroupMessage(int id, [FromBody]GroupMessage message)
         {
             _unitOfWork.Repository<GroupMessage>().Attach(message);
@@ -93,6 +130,7 @@ namespace Joost.Api.Controllers
 
         // DELETE: api/Messages/5
         [HttpDelete]
+        [Route("user-messages")]
         public async Task DeleteUserMessage(int id)
         {
             var message = await _unitOfWork.Repository<Message>().FindAsync(item => item.Id == id);
@@ -105,6 +143,7 @@ namespace Joost.Api.Controllers
 
         // DELETE: api/Messages/5
         [HttpDelete]
+        [Route("group-messages")]
         public async Task DeleteGroupMessage(int id)
         {
             var message = await _unitOfWork.Repository<GroupMessage>().FindAsync(item => item.Id == id);

@@ -15,8 +15,9 @@ namespace Joost.Api.Controllers
 
         // GET: api/Groups/5
         [HttpGet]
-        public async Task<IHttpActionResult> GetGroups(int userId)
+        public async Task<IHttpActionResult> GetGroups()
         {
+            int userId = GetCurrentUserId();
             var groups = (await _unitOfWork.Repository<Group>().AllAsync()).Where(item => item.Members.Any(i => i.Id == userId));
             if (groups == null)
             {

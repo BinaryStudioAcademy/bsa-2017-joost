@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { User } from "../../models/user";
 import { UserService } from "../../services/user.service";
 import { AvatarService } from "../../services/avatar.service";
+import { AccountService } from "../../services/account.service";
 import { AvatarPipe} from "../../pipes/avatar.pipe";
 import { MDL } from "../mdl-base.component";
 
@@ -36,7 +37,8 @@ export class UserEditingComponent extends MDL implements OnInit {
     private avatarService: AvatarService,
     public route: ActivatedRoute,
     public router: Router,
-    private location: Location
+    private location: Location,
+    private accountService: AccountService
   ) {
     super();
   }
@@ -47,13 +49,13 @@ export class UserEditingComponent extends MDL implements OnInit {
 
   SaveUser() {
     this.user.BirthDate = new Date(+this.inputYear, +this.inputMonth-1, +this.inputDay +1);
-    this.userService.updateUser(this.user);
+    this.accountService.updateUser(this.user);
     this.router.navigate(['menu']);
     location.reload();
   }
 
   GetUser() {
-    this.userService.getUser().subscribe( d => {
+    this.accountService.getUser().subscribe( d => {
       this.user = d;
       this.getUserBirthDate();
       this.isLoadFinished = true;
@@ -61,7 +63,7 @@ export class UserEditingComponent extends MDL implements OnInit {
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => { 
         if (ok) {
-          this.userService.getUser().subscribe(d => {
+          this.accountService.getUser().subscribe(d => {
             this.user = d;
             this.getUserBirthDate();
             this.isLoadFinished = true;
@@ -99,7 +101,7 @@ export class UserEditingComponent extends MDL implements OnInit {
         }
         else {
           this.user.Password = this.passwordFirst;
-          this.userService.updateUser(this.user);
+          this.accountService.updateUser(this.user);
           this.passwordDiv = false;
         }
       }
@@ -114,7 +116,7 @@ export class UserEditingComponent extends MDL implements OnInit {
   
   SendAvatar(e: Event) {
     var target: HTMLInputElement = e.target as HTMLInputElement;
-    this.avatarService.SetAvatar(target.files[0],this.user.Id);
+    this.avatarService.SetAvatar(target.files[0]);
     location.reload();
   }
 
