@@ -25,7 +25,6 @@ export class GroupEditComponent extends MDL implements OnInit {
     
     constructor(
         private route: ActivatedRoute,
-        private userService: UserService,
         private groupService: GroupService,
         private location: Location,
         private contactService: ContactService
@@ -45,12 +44,12 @@ export class GroupEditComponent extends MDL implements OnInit {
             });
         
         // get current user contact list
-        this.userService.getAllContacts()
+        this.contactService.getAllContacts()
         .subscribe(response => this.unselectedMembers = response,
             async err => {
-                await this.userService.handleTokenErrorIfExist(err).then(ok => {
+                await this.contactService.handleTokenErrorIfExist(err).then(ok => {
                     if (ok) { 
-                        this.userService.getAllContacts().subscribe(response => this.unselectedMembers = response)
+                        this.contactService.getAllContacts().subscribe(response => this.unselectedMembers = response)
                     }
                 });
             }
@@ -60,16 +59,6 @@ export class GroupEditComponent extends MDL implements OnInit {
         if (!this.editMode) {
             // route: /groups/new
             this.group = new Group();
-            this.userService.getAllContacts()
-                .subscribe(response => this.group.UnselectedMembers = this.filteringArray = response,
-                    async err => {
-                        await this.userService.handleTokenErrorIfExist(err).then(ok => {
-                            if (ok) { 
-                                this.userService.getAllContacts().subscribe(response => this.group.UnselectedMembers = this.filteringArray = response)
-                            }
-                        });
-                    }
-                );
         } else {
             // route: /groups/edit/:id
             this.groupService.getGroup(this.group.Id)
@@ -78,7 +67,7 @@ export class GroupEditComponent extends MDL implements OnInit {
                     this.initArrays();
                 },
                 async err => {
-                    await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+                    await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
                         if (ok) {
                             this.groupService.getGroup(this.group.Id).subscribe(response => {                
                                 this.group = response;

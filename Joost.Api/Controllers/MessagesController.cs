@@ -3,23 +3,13 @@ using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace Joost.Api.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Linq;
-    using System.Runtime.InteropServices;
-
-    using Joost.Api.Models;
-
-<<<<<<< Updated upstream
     [RoutePrefix("api/messages")]
-=======
-    using Newtonsoft.Json;
-
->>>>>>> Stashed changes
     public class MessagesController : BaseApiController
     {
         private IChatHubService _chatHubService;
