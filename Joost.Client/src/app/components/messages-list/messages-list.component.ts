@@ -2,6 +2,7 @@ import {Component, Input, OnInit, ViewChild, ElementRef, AfterViewInit} from '@a
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MessagesService } from "../../services/messages.service";
 import { Message } from "../../models/message";
+import { AccountService } from "../../services/account.service";
 import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
 import { MDL } from "../mdl-base.component";
@@ -24,13 +25,13 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 private router: ActivatedRoute,
                 private messagesService: MessagesService,
                 private userService: UserService,
+                private accountService: AccountService,
                 private groupService: GroupService) {
         super();
     }
 
     private isOwnMessage(message) {
-        console.log(message, this.currnetUserId);
-        return message.SenderId === this.currnetUserId;
+        return message.SenderId == this.currnetUserId;
     }
 
     private getDate(date) {
@@ -43,7 +44,7 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 this.messagesService.getGroupMessages(this.id, 20, this.skip)
                     .subscribe(m => {
                         this.messages = this.messages.concat(m.map(me => {
-                            me.Own = me.SenderId === this.currnetUserId.toString();
+                            me.Own = me.SenderId == this.currnetUserId.toString();
                             return me;
                         }));
                         this.skip += 20;
@@ -52,10 +53,10 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 this.messagesService.getUsersMessages(this.id, 20, this.skip)
                     .subscribe(m => {
                         this.messages = this.messages.concat(m.map(me => {
-                            me.Own = me.SenderId === this.currnetUserId.toString();
+                            me.Own = me.SenderId == this.currnetUserId.toString();
+
                             return me;
                         }));
-                        console.log(m);
                         this.skip += 20;
                     });
             }
@@ -73,10 +74,11 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
      }
 
    ngOnInit() {
-    this.userService.getUser().subscribe(u => {
+    this.accountService.getUser().subscribe(u => {
     this.currnetUserId = u.Id;
     this.route.paramMap
         .subscribe((params: ParamMap) => {
+            this.skip = 0;
             this.id = params.get("id");
             this.isGroup = params.get("type") === "group" ? true : false;
             if (this.isGroup) {
@@ -85,10 +87,11 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 this.messagesService.getGroupMessages(this.id, 20, this.skip)
                     .subscribe(m => {
                         this.messages = m.map(me => {
-                            me.Own = me.SenderId === this.currnetUserId.toString();
+                            me.Own = (me.SenderId == this.currnetUserId.toString());
                             return me;
                         });
                         this.skip += 20;
+                        console.log(this.messages)
                     });
                 });
             } else {
@@ -97,10 +100,11 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 this.messagesService.getUsersMessages(this.id, 20, this.skip)
                     .subscribe(m => {
                         this.messages = m.map(me => {
-                            me.Own = me.SenderId === this.currnetUserId.toString();
+                            me.Own = (me.SenderId == this.currnetUserId.toString());
                             return me;
                         });
                         this.skip += 20;
+                        console.log(this.messages)
                     });
                 })
             }

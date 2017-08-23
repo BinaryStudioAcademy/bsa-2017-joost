@@ -1,8 +1,7 @@
-import { Component, OnInit,OnDestroy } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UserService } from '../../services/user.service';
-import { AuthenticationService } from '../../services/authentication.service';
+import { ContactService } from "../../services/contact.service";
 
 import { UserSearch } from "../../models/user-search";
 import { Contact,ContactState} from "../../models/contact";
@@ -16,14 +15,17 @@ import { UserContact} from "../../models/user-contact";
 export class MenuUsersComponent implements OnInit {
 
 	private result:UserContact[];
-	constructor(private userService: UserService,private router: Router,private authService: AuthenticationService) { }
+	constructor(
+		private router: Router,
+		private contactService: ContactService
+		) { }
 
 	ngOnInit() {
-		this.userService.getAllContacts().subscribe(data=> this.result = data,
+		this.contactService.getAllContacts().subscribe(data=> this.result = data,
 			async err => {
-				await this.userService.handleTokenErrorIfExist(err).then(ok => {
+				await this.contactService.handleTokenErrorIfExist(err).then(ok => {
 					if (ok) { 
-					    this.userService.getAllContacts().subscribe(data => {
+					    this.contactService.getAllContacts().subscribe(data => {
 						    this.result = data
 					    });
 				    }
@@ -31,7 +33,7 @@ export class MenuUsersComponent implements OnInit {
 			}
 		);
 
-		this.userService.changeContact.subscribe(user=>{
+		this.contactService.changeContact.subscribe(user=>{
 			if (user) {
 				let contact = this.result.filter(t=>t.Id==user.Id)[0];
 				if (contact!==undefined) {
@@ -49,9 +51,9 @@ export class MenuUsersComponent implements OnInit {
 			}
 		},
 	    async err => {
-			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 				if (ok) {
-					this.userService.changeContact.subscribe(user => {
+					this.contactService.changeContact.subscribe(user => {
 					    if (user) {
 						    let contact = this.result.filter(t=>t.Id==user.Id)[0];
 						    if (contact!==undefined) {
@@ -72,12 +74,10 @@ export class MenuUsersComponent implements OnInit {
 			});
 		});
 	}
-	ngOnDestroy() {
-		this.authService.logout();
-	}
+
 	goToConfirm(id:number){
 		if (this.isNewContact(id) || this.isDeclineContact(id)) {
-			this.userService.changeContactIdNotify(id);
+			this.contactService.changeContactIdNotify(id);
 			this.router.navigate(['menu/add-contact']);
 		}
 	}

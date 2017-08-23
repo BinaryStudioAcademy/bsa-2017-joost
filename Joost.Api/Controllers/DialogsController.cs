@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace Joost.Api.Controllers
 {
+    using System.Data.Entity;
     using System.Threading.Tasks;
 
     using Joost.Api.Models;
@@ -22,14 +23,18 @@ namespace Joost.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetDialogs()
         {
-            var messages = await this._unitOfWork.Repository<Message>().AllAsync();
+            var currentUserId = this.GetCurrentUserId();
+            var messages = this._unitOfWork.Repository<Message>().Query();
             var usersDialogs = messages
-                .Where(m => m.Receiver.Id == this.GetCurrentUserId() || m.Sender.Id == this.GetCurrentUserId())
+                .Include(m => m.Receiver)
+                .Include(m => m.Sender)
+                .Where(m => m.Receiver.Id == currentUserId || m.Sender.Id == currentUserId)
+                .ToArray()
                 .Aggregate(
                     new List<User>(),
                     (list, message) =>
                         {
-                            if (message.Receiver.Id == this.GetCurrentUserId())
+                            if (message.Receiver.Id == currentUserId)
                             {
                                 if (!list.Contains(message.Sender))
                                 {
@@ -53,8 +58,8 @@ namespace Joost.Api.Controllers
                                        LastMessage = (await LastMessageInUsersDialog(u.Id)).Text,
                                        Name = u.FirstName
                                    });
-            var groups = await this._unitOfWork.Repository<Group>().AllAsync();
-            var groupDialogs = groups.Where(item => item.Members.Any(i => i.Id == this.GetCurrentUserId())).Select(
+            var groups = this._unitOfWork.Repository<Group>().Query();
+            var groupDialogs = groups.Where(item => item.Members.Any(i => i.Id == currentUserId)).ToArray().Select(
                 async g => new Dialog
                                {
                                    Id = g.Id.ToString(),
@@ -69,15 +74,16 @@ namespace Joost.Api.Controllers
 
         private async Task<Message> LastMessageInUsersDialog(int id)
         {
-            var messagesWith = await this._unitOfWork.Repository<Message>().AllAsync();
+            var currentUserId = this.GetCurrentUserId();
+            var messagesWith = this._unitOfWork.Repository<Message>().Query();
             return messagesWith
-                .Where(m => m.Sender.Id == this.GetCurrentUserId() || m.Receiver.Id == this.GetCurrentUserId())
+                .Where(m => m.Sender.Id == currentUserId || m.Receiver.Id == currentUserId)
                 .Where(m => m.Sender.Id == id || m.Receiver.Id == id).OrderByDescending(m => m.CreatedAt).First();
         }
 
         private async Task<GroupMessage> LastMessageInGroupDialog(int groupId)
         {
-            var messages = await this._unitOfWork.Repository<GroupMessage>().AllAsync();
+            var messages = this._unitOfWork.Repository<GroupMessage>().Query();
             return messages.Where(m => m.Receiver.Id == groupId).OrderByDescending(m => m.CreatedAt).First();
         }
     }

@@ -5,6 +5,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 
 import { UserService } from "../../services/user.service";
+import { ContactService } from "../../services/contact.service";
 import { UserDetail } from "../../models/user-detail";
 import { Contact } from "../../models/contact";
 
@@ -26,6 +27,7 @@ export class UserDetailsComponent extends MDL implements OnInit {
   constructor(
     private location: Location,
     private userService: UserService,
+    private contactService: ContactService,
     private route: ActivatedRoute
   ) {
     super();
@@ -57,13 +59,13 @@ export class UserDetailsComponent extends MDL implements OnInit {
   }
 
   addToContact(contactId:number){
-		this.userService.addContact(contactId).subscribe(() =>{
+		this.contactService.addContact(contactId).subscribe(() =>{
       this.isFriend = true;
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => { 
         if (ok) {
-          this.userService.addContact(contactId).subscribe(() => {
+          this.contactService.addContact(contactId).subscribe(() => {
             this.isFriend = true;
           });
         }
@@ -72,13 +74,13 @@ export class UserDetailsComponent extends MDL implements OnInit {
   }
 
   deleteFromContact(contactId:number){
-		this.userService.deleteContact(contactId).subscribe(() =>{
+		this.contactService.deleteContact(contactId).subscribe(() =>{
       this.isFriend = false;
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => { 
         if (ok) {
-          this.userService.deleteContact(contactId).subscribe(() => {
+          this.contactService.deleteContact(contactId).subscribe(() => {
             this.isFriend = false;
           });
         }
@@ -87,13 +89,13 @@ export class UserDetailsComponent extends MDL implements OnInit {
   }
   
 	checkInContact(id:number):void {
-		this.userService.getContacts().subscribe( list => {
+		this.contactService.getContacts().subscribe( list => {
       this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0;
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => {
         if (ok) { 
-          this.userService.getContacts().subscribe(list => {
+          this.contactService.getContacts().subscribe(list => {
             this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0;
           });
         }
