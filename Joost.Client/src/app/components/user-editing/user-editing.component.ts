@@ -3,21 +3,25 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { User } from "../../models/user";
+import { UserProfile } from "../../models/user-profile";
 import { UserService } from "../../services/user.service";
-import { AvatarService } from "../../services/avatar.service";
 import { AccountService } from "../../services/account.service";
+import { AvatarService } from "../../services/avatar.service";
 import { AvatarPipe} from "../../pipes/avatar.pipe";
+import { NamePipe } from "../../pipes/name.pipe";
 import { MDL } from "../mdl-base.component";
+
+import {IMyDpOptions} from 'mydatepicker';
 
 @Component({
   selector: 'app-user-editing',
   templateUrl: './user-editing.component.html',
   styleUrls: ['./user-editing.component.scss']
 })
+
 export class UserEditingComponent extends MDL implements OnInit {
 
-  user: User;
+  user: UserProfile;
   private isLoadFinished:boolean = false;
   private isError:boolean = false;
   private passwordDiv: boolean = false;
@@ -28,17 +32,21 @@ export class UserEditingComponent extends MDL implements OnInit {
   private passwordFirst: string = "";
   private passwordSecond: string = "";
 
-  private inputDay: string = "";
-  private inputMonth: string = "";
-  private inputYear: string = "";
+  private datePickerValue : any;
+  private datePickerOptions: IMyDpOptions = {
+    dateFormat: 'dd.mm.yyyy',
+    showTodayBtn: false,
+    minYear: 1990,
+    maxYear: 2017,
+    editableDateField: true
+  };
 
   constructor(
     private userService: UserService,
+    private accountService: AccountService,
     private avatarService: AvatarService,
-    public route: ActivatedRoute,
     public router: Router,
-    private location: Location,
-    private accountService: AccountService
+    private location: Location
   ) {
     super();
   }
@@ -48,10 +56,11 @@ export class UserEditingComponent extends MDL implements OnInit {
   }
 
   SaveUser() {
-    this.user.BirthDate = new Date(+this.inputYear, +this.inputMonth-1, +this.inputDay +1);
+    this.user.BirthDate = new Date(this.datePickerValue.date.year, this.datePickerValue.date.month-1, this.datePickerValue.date.day+1);
     this.accountService.updateUser(this.user);
+    
     this.router.navigate(['menu']);
-    location.reload();
+    //location.reload();
   }
 
   GetUser() {
@@ -120,14 +129,18 @@ export class UserEditingComponent extends MDL implements OnInit {
     location.reload();
   }
 
-  getUserBirthDate() {
-    let date = new Date(this.user.BirthDate);
-    this.inputDay =  (date.getDate()).toString();
-    this.inputMonth =  (date.getMonth() + 1).toString();
-    this.inputYear =  (date.getFullYear()).toString();
+  getUserBirthDate() { // convertung date from server to date for datePicker
+    let receivedDate = new Date(this.user.BirthDate);
+    this.datePickerValue = {  date: { year: +(receivedDate.getFullYear()).toString(), month: +(receivedDate.getMonth() + 1).toString(), day: +(receivedDate.getDate()).toString() } };
   }
 
+
+
 }
+
+
+
+
 
 
 

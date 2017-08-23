@@ -41,6 +41,28 @@ namespace Joost.Api.Controllers
             return Ok(UserProfileDto.FromModel(user));
         }
 
+        // PUT: api/account/myprofile
+        [HttpPut]
+        [Route("myprofile")]
+        public async Task<IHttpActionResult> SetProfile([FromBody]UserProfileDto profile)
+        {
+            var user = await _unitOfWork.Repository<User>().GetAsync(profile.Id);
+            user.Email = profile.Email;
+            user.Password = profile.Password;
+            user.FirstName = profile.FirstName;
+            user.LastName = profile.LastName;
+            user.City = profile.City;
+            user.Country = profile.Country;
+            user.BirthDate = profile.BirthDate;
+            user.Gender = profile.Gender;
+            user.Status = profile.Status;
+            user.Avatar = profile.Avatar;
+            user.State = profile.State;
+
+            await _unitOfWork.SaveAsync();
+            return Ok(user);
+        }
+
         // GET: api/account/name
         [HttpGet]
         [AccessTokenAuthorization]
@@ -124,13 +146,6 @@ namespace Joost.Api.Controllers
             return Ok(user.Status);
         }
 
-        // Get api/account
-        [HttpGet]
-        [AccessTokenAuthorization]
-		public IHttpActionResult GetId()
-		{
-			return Ok(GetCurrentUserId());
-		}
 
         // Get api/account/refresh
         [Route("refresh")]

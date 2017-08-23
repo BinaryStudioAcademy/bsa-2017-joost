@@ -116,7 +116,7 @@
               <div class="mdl-cell mdl-cell--12-col">
                 <div class="mdl-textfield mdl-js-textfield autowide padding-vertical-10">
                   <h5>Birthday:</h5>
-                  <div class="date-container">              
+                  <!-- <div class="date-container">              
                     <div class="date-item">
                       Day:
                       <input class="mdl-textfield__input" type="text"  [(ngModel)]="inputDay" pattern="^([1-9]|[12][0-9]|3[01])$" id="inputDay" />
@@ -132,7 +132,9 @@
                       <input class="mdl-textfield__input" type="text"  [(ngModel)]="inputYear" pattern="^(19[5-9]\d|20[0-4]\d|2017)$" id="inputYear" />
                       <label class="mdl-textfield__label" for="inputYear"></label>
                     </div>
-                  </div>
+                  </div> -->
+
+                    <my-date-picker [(ngModel)]="datePickerValue" [options]="datePickerOptions" ></my-date-picker>
 
                 </div>
               </div>
