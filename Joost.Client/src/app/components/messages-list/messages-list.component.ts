@@ -31,8 +31,7 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
     }
 
     private isOwnMessage(message) {
-        console.log(message, this.currnetUserId);
-        return message.SenderId === this.currnetUserId;
+        return message.SenderId == this.currnetUserId;
     }
 
     private getDate(date) {
@@ -45,7 +44,7 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 this.messagesService.getGroupMessages(this.id, 20, this.skip)
                     .subscribe(m => {
                         this.messages = this.messages.concat(m.map(me => {
-                            me.Own = me.SenderId === this.currnetUserId.toString();
+                            me.Own = me.SenderId == this.currnetUserId.toString();
                             return me;
                         }));
                         this.skip += 20;
@@ -54,10 +53,10 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 this.messagesService.getUsersMessages(this.id, 20, this.skip)
                     .subscribe(m => {
                         this.messages = this.messages.concat(m.map(me => {
-                            me.Own = me.SenderId === this.currnetUserId.toString();
+                            me.Own = me.SenderId == this.currnetUserId.toString();
+
                             return me;
                         }));
-                        console.log(m);
                         this.skip += 20;
                     });
             }
@@ -79,6 +78,7 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
     this.currnetUserId = u.Id;
     this.route.paramMap
         .subscribe((params: ParamMap) => {
+            this.skip = 0;
             this.id = params.get("id");
             this.isGroup = params.get("type") === "group" ? true : false;
             if (this.isGroup) {
@@ -87,10 +87,11 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 this.messagesService.getGroupMessages(this.id, 20, this.skip)
                     .subscribe(m => {
                         this.messages = m.map(me => {
-                            me.Own = me.SenderId === this.currnetUserId.toString();
+                            me.Own = (me.SenderId == this.currnetUserId.toString());
                             return me;
                         });
                         this.skip += 20;
+                        console.log(this.messages)
                     });
                 });
             } else {
@@ -99,10 +100,11 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 this.messagesService.getUsersMessages(this.id, 20, this.skip)
                     .subscribe(m => {
                         this.messages = m.map(me => {
-                            me.Own = me.SenderId === this.currnetUserId.toString();
+                            me.Own = (me.SenderId == this.currnetUserId.toString());
                             return me;
                         });
                         this.skip += 20;
+                        console.log(this.messages)
                     });
                 })
             }

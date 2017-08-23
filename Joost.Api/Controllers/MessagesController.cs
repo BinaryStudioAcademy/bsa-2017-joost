@@ -8,12 +8,18 @@ namespace Joost.Api.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Runtime.InteropServices;
 
     using Joost.Api.Models;
 
+<<<<<<< Updated upstream
     [RoutePrefix("api/messages")]
+=======
+    using Newtonsoft.Json;
+
+>>>>>>> Stashed changes
     public class MessagesController : BaseApiController
     {
         private IChatHubService _chatHubService;
@@ -57,19 +63,35 @@ namespace Joost.Api.Controllers
         [Route("group-messages")]
         public async Task<IHttpActionResult> GetGroupsMessages(int groupId, int skip, int take)
         {
-            var gropMessages = await this._unitOfWork.Repository<GroupMessage>().AllAsync();
-            return this.Ok(gropMessages.Where(gm => gm.Receiver.Id == groupId).Skip(skip).Take(take));
+            var gropMessages = this._unitOfWork.Repository<GroupMessage>().Query().Include(m => m.Receiver).Include(m => m.Sender)
+                ;
+            return this.Ok(gropMessages.Where(gm => gm.Receiver.Id == groupId).Skip(skip).Take(take)
+                .Select(m => new
+                                 {
+                                     SenderId = m.Sender.Id,
+                                     m.Text,
+                                     DateTime = m.CreatedAt,
+                                     Image = m.Sender.Avatar,
+                                 }));
         }
 
         [HttpGet]
         [Route("user-messages")]
         public async Task<IHttpActionResult> GetMessagesWith(int userId, int skip, int take)
         {
-            var messagesWith = await this._unitOfWork.Repository<Message>().AllAsync();
-            return this.Ok(
-                messagesWith
-                    .Where(m => m.Sender.Id == this.GetCurrentUserId() || m.Receiver.Id == this.GetCurrentUserId())
-                    .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId));
+            var messagesWith = this._unitOfWork.Repository<Message>().Query().Include(m => m.Receiver).Include(m => m.Sender);
+            var currentUserId = this.GetCurrentUserId();
+            var queryable = messagesWith.Where(m => m.Sender.Id == currentUserId || m.Receiver.Id == currentUserId)
+                .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId).ToArray()
+                .Skip(skip).Take(take)
+                .Select(m => new
+                                 {
+                                     SenderId = m.Sender.Id,
+                                     m.Text,
+                                     DateTime = m.CreatedAt,
+                                     Image = m.Sender.Avatar,
+                                 });
+            return this.Ok(queryable);
         }
 
         // POST: api/Messages
