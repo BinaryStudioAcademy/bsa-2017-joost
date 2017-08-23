@@ -26,7 +26,7 @@ namespace Joost.Api.Controllers
         public async Task<IHttpActionResult> GetGroupsMessages(int groupId, int skip, int take)
         {
             var gropMessages = await this._unitOfWork.Repository<GroupMessage>().AllAsync();
-            return this.Ok(gropMessages.Where(gm => gm.Sender.Id == groupId).Skip(skip).Take(take));
+            return this.Ok(gropMessages.Where(gm => gm.Receiver.Id == groupId).Skip(skip).Take(take));
         }
 
         [HttpGet]

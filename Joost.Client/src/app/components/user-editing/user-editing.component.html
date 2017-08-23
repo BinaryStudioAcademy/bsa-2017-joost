@@ -28,15 +28,9 @@
                 <input class="mdl-textfield__input " type="text"  [(ngModel)]="user.Status" id="userStatus" />
               </div>
               
-              <div class="user-state-container">
-                <div [innerHtml]="user.State | stateIconPipe"></div>
-                <span>{{user.State | stateStringPipe}}</span>
-              </div> 
-               <!-- <div class="user-editing-state">
-                <i class="material-icons">check_circle</i>
-                <span>Online</span>
-              </div>  -->
-               <div>
+              <div [innerHtml]="user.State | statePipe"></div>
+              
+              <div>
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                  
               </div>
               <!-- <div>
