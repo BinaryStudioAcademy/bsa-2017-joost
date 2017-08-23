@@ -111,3 +111,12 @@
     width: calc(100% -  400px); //  400px - $left-panel-width
     height: 100%
 }
+#status i{
+    visibility: hidden;
+    cursor: pointer;
+    font-size: 15px!important;
+    color: white!important;
+}
+#status:hover i{
+    visibility: visible;
+}

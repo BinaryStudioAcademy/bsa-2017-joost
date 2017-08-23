@@ -13,12 +13,28 @@ import { UserProfile } from "../../models/user-profile";
 })
 export class MainMenuComponent extends MDL implements OnInit {
 
+  private editMode: boolean = false;
+  private previousStatus: string;
+
   private curUser: UserProfile; 
   constructor(
     private router: Router, 
     private route: ActivatedRoute,
     private accountService: AccountService) {
       super();
+  }
+
+  onEditStatus(){
+    this.editMode = true;
+    this.previousStatus = this.curUser.Status;
+  }
+  onSaveStatus(){
+    this.accountService.updateStatus(this.curUser.Status)
+      .subscribe(response => this.editMode = false);
+  }
+  onCancelEdit(){
+    this.editMode = false;
+    this.curUser.Status = this.previousStatus;
   }
 
   ngOnInit() {

@@ -13,7 +13,22 @@
               <div class="header-user-name" *ngIf="curUser.FirstName">{{curUser.FirstName + ' ' + curUser.LastName}}</div>
               <div class="header-user-name" *ngIf="!curUser.FirstName">{{curUser.Email}}</div>
           </a>
-          <div *ngIf="curUser.Status">{{curUser.Status}}</div>
+          <div id="status">
+            <div *ngIf="editMode; else showMode">
+              <input                
+                type="text" 
+                [(ngModel)]="curUser.Status">
+                <i class="material-icons" (click)="onSaveStatus()">done</i>
+                <i class="material-icons" (click)="onCancelEdit()">cancel</i>
+              </div>
+            <ng-template #showMode>
+              <span *ngIf="curUser.Status; else showLabel">{{ curUser.Status }}</span>
+              <ng-template #showLabel>
+                change status...
+              </ng-template>
+              <i class="material-icons" (click)="onEditStatus()">create</i>
+            </ng-template>
+          </div>
         </div>
       </div>
     </header>
