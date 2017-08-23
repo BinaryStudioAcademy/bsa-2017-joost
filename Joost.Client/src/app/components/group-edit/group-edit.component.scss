@@ -1,38 +1,5 @@
 @import '../../../vars.scss';
 
-// .data-container{
-//    width:100%;
-// }
-
-// .autowide{
-//     width: auto;
-// }
-
-// .padding-vertical-10{
-//     padding-left: 10px;
-//     padding-right: 10px;
-//     display: inline-block;
-// }
-// .group-image{
-//     height: 100px;
-//     width: 100px;
-//     border-radius: 50px;
-// }
-// .user-editing-main{
-//     flex-direction: column;
-// }
-// .user-editing-group h6{
-//     margin: 0;
-// }
-
-// .user-editing-group h5{
-//     margin: 8px 0;
-// }
-// .user-editing-button-container {
-//     float: right;
-//     padding-right: 10px;
-// }
-
 .jc-group-edit-title-container{
     display: flex;
     flex-direction: column;
@@ -52,4 +19,24 @@
 .jc-list-added{
     overflow :auto;
     margin-top: 82px;
+}
+
+.jg-buttons-bottom-cantainer{
+    margin-top: auto;
+    display: flex;
+    justify-content:flex-end;
+}
+.jg-button-bottom{
+    margin-left: 16px;
+}
+
+.jg-full-width-container{
+    width: 100%;
+}
+
+.jg-container{
+    width: calc(100% - 10px);
+    height: calc(100vh - 10px);
+    margin: 5px auto;
+    min-height: 600px;
 }
