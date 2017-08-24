@@ -94,8 +94,8 @@
       }
   }
   .jc-list-user{
-      //height: 300px;
-      flex: 1;
+      height: 300px;
+
       li:hover{
           background-color: #F5F5F5;
           margin-left: 1px;
@@ -175,4 +175,9 @@
     .message-text{
         float: right;
     }
+}
+
+.message-input-container{
+    position: absolute;
+    bottom: 0;
 }

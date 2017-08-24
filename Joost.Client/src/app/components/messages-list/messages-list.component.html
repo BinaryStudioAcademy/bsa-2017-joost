@@ -4,7 +4,7 @@
   </div>
   <div class="mdl-card__title jc-group-edit-title-container">
     <div class="mainCl"> 
-      <ul #scroll class="messages-container" (scroll)="scrolEvent($event)" >
+      <ul #scroll class="mdl-list scrollable" (scroll)="scrolEvent($event)" >
         <li *ngFor="let message of messages"
           class="mdl-list__item mdl-list__item--three-line">
             <div class="message-container">
@@ -29,7 +29,7 @@
               </div>
             </div>
         </li>
-        <li *ngFor="let message of messages"
+        <!-- <li *ngFor="let message of messages"
           class="mdl-list__item mdl-list__item--three-line self-message">
           <div class="message-container">
             <div class="main-message-content">
@@ -49,16 +49,14 @@
                   
             </div>
           </div>
-      </li>
+      </li> -->
       </ul>    
     </div>
-    <div class="mdl-card__actions mdl-card--border jg-buttons-bottom-cantainer">
-      <form action="#">
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="text" id="sample3">
-            <label class="mdl-textfield__label" for="sample3">Text...</label>
-          </div>
-        </form>
+    <div class="mdl-card__actions mdl-card--border message-input-container">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="sample3">
+        <label class="mdl-textfield__label" for="sample3">Text...</label>
       </div>
     </div>
+  </div>
 </div>
