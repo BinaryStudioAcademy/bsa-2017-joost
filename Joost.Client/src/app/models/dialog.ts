@@ -1,7 +1,7 @@
 export class Dialog {
+  public Id: string;
   public Name: string;
   public LastMessage: string;
-  public Image: string;
+  public Avatar: string;
   public IsGroup: boolean;
-  public Id: string;
 }

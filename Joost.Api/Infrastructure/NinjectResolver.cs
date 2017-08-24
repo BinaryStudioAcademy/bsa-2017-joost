@@ -32,6 +32,8 @@ namespace WeatherApp.Infrastructure
 		{
             kernel.Bind<IUnitOfWork>().To<UnitOfWork>();
             kernel.Bind<IChatHubService>().To<ChatHubService>();
+            kernel.Bind<IDialogDataService>().To<DialogDataService>();
+            kernel.Bind<IMessageService>().To<MessageService>();
         }
 	}
 }

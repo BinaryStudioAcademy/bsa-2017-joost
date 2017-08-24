@@ -37,8 +37,8 @@ import { UserEditingComponent } from './components/user-editing/user-editing.com
 
 import { DialogsListComponent } from "./components/dialogs-list/dialogs-list.component";
 import { MessagesListComponent } from "./components/messages-list/messages-list.component";
-import { DialogsService } from "./services/dialogs.service";
-import { MessagesService } from "./services/messages.service"
+import { DialogService } from "./services/dialog.service";
+import { MessageService } from "./services/message.service"
 
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 // import {CustomOption} from './notification-options/custom-option'
@@ -93,8 +93,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     LoginService,
     AvatarService,
     AuthenticationService,
-    DialogsService,
-    MessagesService,
+    DialogService,
+    MessageService,
     AccountService,
     ContactService
     // {
