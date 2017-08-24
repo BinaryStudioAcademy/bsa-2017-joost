@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router} from '@angular/router';
 import { Location } from '@angular/common';
-import { UserService } from '../../services/user.service';
+import { ContactService } from "../../services/contact.service";
 import { UserContact } from "../../models/user-contact";
 import { ContactState} from "../../models/contact";
 import { AuthenticationService } from '../../services/authentication.service';
@@ -19,9 +19,9 @@ export class UserAddContactComponent extends MDL implements OnInit{
 	private isLoad:boolean =false;
 	private contact: UserContact;
 	constructor(
-		private userService: UserService,
 		private router: Router,
-		private location: Location
+		private location: Location,
+		private contactService: ContactService
 	) {
 		super();
 	}
@@ -29,16 +29,16 @@ export class UserAddContactComponent extends MDL implements OnInit{
 	ngOnInit() {
 		this.isError = null;
 		this.isLoad = false;
-		this.userService.changeContactId.subscribe(id =>{
-			this.userService.getAllContacts().subscribe(
+		this.contactService.changeContactId.subscribe(id =>{
+			this.contactService.getAllContacts().subscribe(
 			data =>{
 				this.contact = data.filter(t=>t.Id==id)[0];
 				this.isLoad = true;
 			},
 			async err => {
-				await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+				await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 					if (ok) {
-					  this.userService.getAllContacts().subscribe(data => {
+					  this.contactService.getAllContacts().subscribe(data => {
 						  this.contact = data.filter(t=>t.Id==id)[0];
 						  this.isLoad = true;
 					  },
@@ -52,10 +52,10 @@ export class UserAddContactComponent extends MDL implements OnInit{
 		);
 		},
 	    async err => {
-			await this.userService.handleTokenErrorIfExist(err).then(ok => {
+			await this.contactService.handleTokenErrorIfExist(err).then(ok => {
 				if (ok) { 
-  				this.userService.changeContactId.subscribe(id => {
-  					this.userService.getAllContacts().subscribe(
+  				this.contactService.changeContactId.subscribe(id => {
+  					this.contactService.getAllContacts().subscribe(
 	  					data =>{
 	  						this.contact = data.filter(t=>t.Id==id)[0];
 		  					this.isLoad = true;
@@ -75,54 +75,54 @@ export class UserAddContactComponent extends MDL implements OnInit{
 		this.router.navigate(["menu"]);
 	}
 	accept(id:number){
-		this.userService.confirmContact(id).subscribe(ok =>{
+		this.contactService.confirmContact(id).subscribe(ok =>{
 			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Accept;
-			this.userService.changeContactNotify(this.contact);
+			this.contactService.changeContactNotify(this.contact);
 		},
 	    async err=> {
-			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 				if (ok) {
-			    this.userService.confirmContact(id).subscribe(ok => {
+			    this.contactService.confirmContact(id).subscribe(ok => {
 				  this.router.navigate(["menu"]);
 				  this.contact.State = ContactState.Accept;
-				  this.userService.changeContactNotify(this.contact);
+				  this.contactService.changeContactNotify(this.contact);
 			  	});
 			  }
 			});
 		});
 	}
 	decline(id:number){
-		this.userService.declineContact(id).subscribe(ok=>{
+		this.contactService.declineContact(id).subscribe(ok=>{
 			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Decline;
-			this.userService.changeContactNotify(this.contact);
+			this.contactService.changeContactNotify(this.contact);
 		},
 	    async err=> {
-			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 				if (ok) {
-			    this.userService.declineContact(id).subscribe(ok => {
+			    this.contactService.declineContact(id).subscribe(ok => {
 				  this.router.navigate(["menu"]);
 				  this.contact.State = ContactState.Decline;
-				  this.userService.changeContactNotify(this.contact);
+				  this.contactService.changeContactNotify(this.contact);
 				  });
 			  }
 			});
 		});
 	}
 	retry(id:number){
-		this.userService.addContact(id).subscribe(succes=>{
+		this.contactService.addContact(id).subscribe(succes=>{
 			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Sent;
-			this.userService.changeContactNotify(this.contact);
+			this.contactService.changeContactNotify(this.contact);
 		},
 		async err=> {
-			await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 				if (ok) {
-			    this.userService.addContact(id).subscribe(succes => {
+			    this.contactService.addContact(id).subscribe(succes => {
 				  this.router.navigate(["menu"]);
 				  this.contact.State = ContactState.Sent;
-				  this.userService.changeContactNotify(this.contact);
+				  this.contactService.changeContactNotify(this.contact);
 				  });
 			  }
 			});

@@ -1,127 +1,112 @@
 ﻿using Joost.Api.Services;
-using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Joost.Api.Models;
+using System;
 
 namespace Joost.Api.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.InteropServices;
-
-    using Joost.Api.Models;
-
+    [RoutePrefix("api/messages")]
     public class MessagesController : BaseApiController
     {
-        private IChatHubService _chatHubService;
+        private IMessageService _messageService;
 
-        public MessagesController(IUnitOfWork unitOfWork, IChatHubService chatHubService) : base(unitOfWork)
+        public MessagesController(IMessageService messageService, IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            _chatHubService = chatHubService;
+            _messageService = messageService;
         }
 
         [HttpGet]
-        public async Task<IHttpActionResult> GetGroupsMessages(int groupId, int skip, int take)
-        {
-            var gropMessages = await this._unitOfWork.Repository<GroupMessage>().AllAsync();
-            return this.Ok(gropMessages.Where(gm => gm.Receiver.Id == groupId).Skip(skip).Take(take));
-        }
-
-        [HttpGet]
-        public async Task<IHttpActionResult> GetMessagesWith(int userId, int skip, int take)
-        {
-            var messagesWith = await this._unitOfWork.Repository<Message>().AllAsync();
-            return this.Ok(
-                messagesWith
-                    .Where(m => m.Sender.Id == this.GetCurrentUserId() || m.Receiver.Id == this.GetCurrentUserId())
-                    .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId));
-        }
-
-        // POST: api/Messages
-        [HttpPost]
-        public async Task<IHttpActionResult> AddUserMessage([FromBody]Message message)
+        [Route("user-messages")]
+        public async Task<IHttpActionResult> GetUserMessages(int userId, int count)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            _unitOfWork.Repository<Message>().Add(message);
-            await _unitOfWork.SaveAsync();
-
-            await _chatHubService.SendToUser(message.Sender.Id, message.Receiver.Id, message.Text);
-
-            return Ok();
+            var messages = await _messageService.GetUserMessages(userId, count);
+            return Ok(messages);
         }
 
-        // POST: api/Messages
-        [HttpPost]
-        public async Task<IHttpActionResult> AddGroupMessage([FromBody]GroupMessage message)
+        [HttpGet]
+        [Route("group-messages")]
+        public async Task<IHttpActionResult> GetGroupMessages(int groupId, int count)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            _unitOfWork.Repository<GroupMessage>().Add(message);
-            await _unitOfWork.SaveAsync();
+            var groupMessages = await _messageService.GetGroupMessages(groupId, count);
+            return Ok(groupMessages);
+        }
 
-            await _chatHubService.SendToGroup(message.Sender.Id, message.Receiver.Id, message.Text);
+        // POST: api/Messages
+        [HttpPost]
+        [Route("user-messages")]
+        public async Task<IHttpActionResult> AddUserMessage([FromBody]MessageDto message)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _messageService.AddUserMessage(message);
+            return Ok();
+        }
 
+        // POST: api/Messages
+        [HttpPost]
+        [Route("group-messages")]
+        public async Task<IHttpActionResult> AddGroupMessage([FromBody]MessageDto message)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            await _messageService.AddGroupMessage(message);
             return Ok();
         }
 
         // PUT: api/Messages/5
         [HttpPut]
-        public async Task<IHttpActionResult> EditUserMessage(int id, [FromBody]Message message)
+        [Route("user-messages")]
+        public async Task<IHttpActionResult> EditUserMessage(int messageId, DateTime editedTime, [FromBody]string text)
         {
-            _unitOfWork.Repository<Message>().Attach(message);
-            await _unitOfWork.SaveAsync();
-
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var message = await _messageService.EditGroupMessage(messageId, text, editedTime);
             return Ok(message);
         }
 
         // PUT: api/Messages/5
         [HttpPut]
-        public async Task<IHttpActionResult> EditGroupMessage(int id, [FromBody]GroupMessage message)
+        [Route("group-messages")]
+        public async Task<IHttpActionResult> EditGroupMessage(int groupMessageId, DateTime editedTime, [FromBody]string text)
         {
-            _unitOfWork.Repository<GroupMessage>().Attach(message);
-            await _unitOfWork.SaveAsync();
-
-            return Ok(message);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var groupMessage = await _messageService.EditGroupMessage(groupMessageId, text, editedTime);
+            return Ok(groupMessage);
         }
 
         // DELETE: api/Messages/5
         [HttpDelete]
-        public async Task DeleteUserMessage(int id)
+        [Route("user-messages")]
+        public async Task DeleteUserMessage(int messageId)
         {
-            var message = await _unitOfWork.Repository<Message>().FindAsync(item => item.Id == id);
-            if (message != null)
-            {
-                _unitOfWork.Repository<Message>().Delete(message);
-                await _unitOfWork.SaveAsync();
-            }
+            await _messageService.DeleteUserMessage(messageId);
         }
 
         // DELETE: api/Messages/5
         [HttpDelete]
-        public async Task DeleteGroupMessage(int id)
+        [Route("group-messages")]
+        public async Task DeleteGroupMessage(int groupMessageId)
         {
-            var message = await _unitOfWork.Repository<GroupMessage>().FindAsync(item => item.Id == id);
-            if (message != null)
-            {
-                _unitOfWork.Repository<GroupMessage>().Delete(message);
-                await _unitOfWork.SaveAsync();
-            }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _unitOfWork.Dispose();
-            }
-            base.Dispose(disposing);
+            await _messageService.DeleteGroupMessage(groupMessageId);
         }
     }
 }

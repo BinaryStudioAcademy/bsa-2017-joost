@@ -1,34 +1,55 @@
 @import '../../../vars.scss';
 
-.data-container{
-   width:100%;
-}
-
-.autowide{
-    width: auto;
-}
-
-.padding-vertical-10{
-    padding-left: 10px;
-    padding-right: 10px;
-    display: inline-block;
-}
-.group-image{
-    height: 100px;
-    width: 100px;
-    border-radius: 50px;
-}
-.user-editing-main{
+.jc-group-edit-title-container{
+    display: flex;
     flex-direction: column;
+    padding-top: 0;
+    padding-bottom: 0;
 }
-.user-editing-group h6{
-    margin: 0;
+.groups-list-container{
+    display: flex;
+    flex-direction: row;
+    align-items:stretch;
+    > div{
+        flex-direction: column;
+        display: flex;
+    }
+}
+.jc-list-user{
+    //height: 300px;
+    flex: 1;
+    li:hover{
+        background-color: #F5F5F5;
+        margin-left: 1px;
+    }
 }
 
-.user-editing-group h5{
-    margin: 8px 0;
+.jc-list-added{
+    overflow :auto;
+    margin-top: 82px;
 }
-.user-editing-button-container {
-    float: right;
-    padding-right: 10px;
+
+.jg-buttons-bottom-cantainer{
+    margin-top: auto;
+    display: flex;
+    justify-content:flex-end;
+}
+.jg-button-bottom{
+    margin-left: 16px;
+}
+
+.jg-full-width-container{
+    width: 100%;
+}
+
+.jg-container{
+    width: calc(100% - 10px);
+    height: calc(100vh - 10px);
+    margin: 5px auto;
+    min-height: 600px;
+    > div{
+        &:nth-last-child(2){
+            flex: 1;
+        }
+    }
 }

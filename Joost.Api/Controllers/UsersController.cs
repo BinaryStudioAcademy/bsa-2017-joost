@@ -389,21 +389,29 @@ namespace Joost.Api.Controllers
 			return Ok(UserProfileDto.FromModel(user));
 		}
 
-        // GET: api/users/notifications
-        [HttpGet]
-        [Route("notifications")]
-        public async Task<IHttpActionResult> GetNotifications()
-        {
-            var userId = GetCurrentUserId();
-            var user = await _unitOfWork.Repository<User>().GetAsync(userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(UserProfileDto.FromModel(user).No)
-        }
+		// GET: api/users/notifications
+		[HttpGet]
+		[Route("notifications")]
+		public async Task<IHttpActionResult> GetGlobalNotifications()
+		{
+			var userId = GetCurrentUserId();
+			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			return Ok(UserDetailsDto.FromModel(user).Notifications);
+		}
+		//PUT: api/users/notificatations/1
+		[HttpPut]
+		public async Task<IHttpActionResult> EditGlobalNotifications(int id, bool notifications)
+		{
+			var user = await _unitOfWork.Repository<User>().FindAsync(n => n.Id == id);
+			user.Notifications = notifications;
+			return Ok(user);
+		}
 
-        protected override void Dispose(bool disposing)
+		protected override void Dispose(bool disposing)
 		{
 			if (disposing)
 			{

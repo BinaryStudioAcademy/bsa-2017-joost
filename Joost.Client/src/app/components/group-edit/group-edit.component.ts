@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Params } from "@angular/router";
 
 import { UserService } from "../../services/user.service";
+import { ContactService } from "../../services/contact.service";
 import { Group } from "../../models/group";
 import { GroupService } from "../../services/group.service";
 import { UserContact } from "../../models/user-contact";
@@ -13,46 +14,117 @@ import { MDL } from "../mdl-base.component";
     templateUrl: './group-edit.component.html',
     styleUrls: ['./group-edit.component.scss']
 })
+// поки зроблю працююча лише для сценарію  сторення новрї групи
 export class GroupEditComponent extends MDL implements OnInit {
     group: Group;
-    filteringArray: Array<UserContact> = [];
+    unselectedMembers: Array<UserContact> = [];
+    selectedMembers: Array<UserContact> = [];
+    filteredMembers: Array<UserContact> = [];
+    filterStr: string;
     editMode: boolean = false;
-
+    
     constructor(
         private route: ActivatedRoute,
-        private userService: UserService,
         private groupService: GroupService,
-        private location: Location) {
+        private location: Location,
+        private contactService: ContactService
+    ) {
             super();
     }
+    
+    ngOnInit(): void {
+        // get group id (if it exist)
+        this.route.params
+            .subscribe(
+            (params: Params) => {
+                if (params['id']) {                
+                    this.group.Id = +params['id'];
+                    this.editMode = true;
+                }
+            });
         
-    onFilterArray(substr){
-        this.filteringArray = this.group.UnselectedMembers
-            .filter(member => member.Name.includes(substr));
+        // get current user contact list
+        this.contactService.getAllContacts()
+        .subscribe(response => {
+            this.unselectedMembers = response;
+            this.filteredMembers = response;
+        },
+            async err => {
+                await this.contactService.handleTokenErrorIfExist(err).then(ok => {
+                    if (ok) {
+                        this.contactService.getAllContacts().subscribe(response => {
+                            this.unselectedMembers = response;
+                            this.filteredMembers = response;
+                        })
+                    }
+                });
+            }
+        );
+        
+        // init class members
+        if (!this.editMode) {
+            // route: /groups/new
+            this.group = new Group();
+        } else {
+            // route: /groups/edit/:id
+            this.groupService.getGroup(this.group.Id)
+                .subscribe(response => {
+                    this.group = response;
+                    this.initArrays();
+                },
+                async err => {
+                    await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
+                        if (ok) {
+                            this.groupService.getGroup(this.group.Id).subscribe(response => {                
+                                this.group = response;
+                                this.initArrays();
+                            });
+                        }
+                    });
+                });
+        }            
     }
 
-    onAddMember(userIndex: number) {
-        this.group.SelectedMembersId.push(this.group.UnselectedMembers[userIndex].Id);
-        this.group.SelectedMembers.push(this.group.UnselectedMembers[userIndex]);
-
-        this.group.UnselectedMembers.splice(userIndex, 1);
+    onSearch(substr: string): void{
+        this.filterStr = substr.toLocaleLowerCase();
+        this.filteredMembers = this.unselectedMembers.filter(member => member.Name.toLocaleLowerCase().includes(substr));
     }
 
-    onDeleteMember(userIndex: number) {
-        this.group.UnselectedMembers.push(this.group.SelectedMembers[userIndex]);
-
-        this.group.SelectedMembers.splice(userIndex, 1);
-        this.group.SelectedMembersId.splice(userIndex, 1);
+    onClick(e:number): void{
+        console.log(e);
     }
 
-    onSubmit() {
+    onAddMember(userId: number): void {
+        let index = this.unselectedMembers.findIndex( u=> u.Id == userId);
+        if(index != -1) {
+            this.group.SelectedMembersId.push(userId);
+            this.selectedMembers.push(this.unselectedMembers[index]);
+            this.unselectedMembers.splice(index, 1);
+            this.filteredMembers = this.unselectedMembers;
+        };
+    }
+
+    onDeleteMember(userId: number): void {
+        let index = this.selectedMembers.findIndex( u=> u.Id == userId);
+        if(index != -1) {
+            this.group.SelectedMembersId.splice(index, 1);
+            this.unselectedMembers.push(this.selectedMembers[index]);
+            this.selectedMembers.splice(index, 1);
+            this.filteredMembers = this.unselectedMembers;
+        };
+    }
+
+    onSubmit(): void {
+        if(!this.isCanSaveOrCreate())
+            return;
+        debugger;
         if (!this.editMode) {
             // route: /groups/new
             this.groupService.addGroup(this.group).subscribe(response => {                
                 console.log("Inserted");
             },
             async err => {
-                await this.userService.handleTokenErrorIfExist(err).then(ok => {
+                await this.groupService.handleTokenErrorIfExist(err).then(ok => {
                     if (ok) { 
                         this.groupService.addGroup(this.group).subscribe(response => {                
                             console.log("Inserted");
@@ -66,7 +138,7 @@ export class GroupEditComponent extends MDL implements OnInit {
                 console.log("Updated");
             }, 
             async err => {
-                await this.userService.handleTokenErrorIfExist(err).then(ok => {
+                await this.groupService.handleTokenErrorIfExist(err).then(ok => {
                     if (ok) { 
                         this.groupService.putGroup(this.group.Id, this.group).subscribe(response => {                
                             console.log("Updated");
@@ -77,62 +149,45 @@ export class GroupEditComponent extends MDL implements OnInit {
         }
     }
 
-    onCancel() {
+    onGroupNameKeyUp(value: string): void{
+        this.group.Name = value;
+    }
+
+    onGroupDescriptionKeyUp(value: string): void{
+        this.group.Description = value;
+    }
+
+    onCancel(): void {
         this.location.back();
     }
 
-    ngOnInit() {
-        this.route.params
-            .subscribe(
-            (params: Params) => {
-                if (params['id']) {                
-                    this.group.Id = +params['id'];
-                    this.editMode = true;
+    initArrays(): void{
+        if(this.group) {
+            for(let id in this.group.SelectedMembersId) {
+                let index = this.unselectedMembers.findIndex( u=> u.Id == +id);
+                if(index != -1) {
+                    this.selectedMembers.push(this.unselectedMembers[index]);
+                    this.unselectedMembers.splice(index, 1);
                 }
-            }, 
-            async err => {
-                await this.userService.handleTokenErrorIfExist(err).then(ok => {
-                    if (ok) { 
-                        this.route.params.subscribe((params: Params) => {
-                            if (params['id']) {                
-                                this.group.Id = +params['id'];
-                                this.editMode = true;
-                            }
-                        });
-                    }
-                });
-            });
+            }
+            this.filteredMembers = this.unselectedMembers;
+        }
+    }
 
-        if (!this.editMode) {
-            // route: /groups/new
-            this.group = new Group();
-            this.userService.getAllContacts()
-                .subscribe(response => this.group.UnselectedMembers = this.filteringArray = response,
-                    async err => {
-                        await this.userService.handleTokenErrorIfExist(err).then(ok => {
-                            if (ok) { 
-                                this.userService.getAllContacts().subscribe(response => this.group.UnselectedMembers = this.filteringArray = response)
-                            }
-                        });
-                    }
-                );
-        } else {
-            // route: /groups/edit/:id
-            this.groupService.getGroup(this.group.Id)
-                .subscribe(response => {
-                    this.group = response;
-                    this.filteringArray = response.UnselectedMembers;
-                },
-                async err => {
-                    await this.userService.handleTokenErrorIfExist(err).then(ok => { 
-                        if (ok) {
-                            this.groupService.getGroup(this.group.Id).subscribe(response => {                
-                                this.group = response;
-                                this.filteringArray = response.UnselectedMembers;
-                            });
-                        }
-                    });
-                });
-        }            
+
+    trackByUsers(index: number, user: UserContact): number { 
+        return user.Id;
+    }
+
+    canShowWrongNameTip(): boolean{
+        return !(this.group && this.group.Name && this.group.Name.length >=4)
+    }
+
+    canShowNotEnoughMembers(): boolean{
+        return !this.canShowWrongNameTip() && this.group.SelectedMembersId.length < 1;
+    }
+
+    isCanSaveOrCreate(): boolean{
+        return !(this.canShowNotEnoughMembers() || this.canShowWrongNameTip());
     }
 }

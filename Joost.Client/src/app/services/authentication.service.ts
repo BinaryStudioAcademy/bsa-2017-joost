@@ -53,11 +53,4 @@ export class AuthenticationService extends BaseApiService {
     this.token = null;
     localStorage.removeItem('joostUserAccessToken');
   }
-
-  getUserId() {
-    let req = new HttpRequest("GET", this.generateUrl());
-    return this.http.sendRequest<number>(req);
-    //return this.http
-    //.get<number>(this.generateUrl());
-  }
 }

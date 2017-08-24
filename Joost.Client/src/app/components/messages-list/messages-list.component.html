@@ -1,27 +1,62 @@
-
-<div class="mainCl"> 
-
-  <div class="header">
-    {{ dialogName }}
+<div class="jg-container mdl-card mdl-shadow--2dp">
+  <div class="mdl-card__title mdl-shadow--2dp">
+      <h2 class="mdl-card__title-text">{{ dialogName }}</h2>
   </div>
-
-  <ul #scroll class="messages-container" (scroll)="scrolEvent($event)" >
-    <div class="messages">
-      <li *ngFor="let message of messages" [class.own]="message.Own" [class.alien]="!message.Own">
-        <div class= "NamePh">
-        <img src="{{message.image}}">
-        <span>{{message.Sender}}</span>
-        <span class="date">{{ getDate(message.DateTime) }}</span>
-        </div>
-        <span class="text"> {{message.Text}} </span>
-      </li>
+  <div class="mdl-card__title jc-group-edit-title-container">
+    <div class="mainCl"> 
+      <ul #scroll class="mdl-list scrollable" (scroll)="scrolEvent($event)" >
+        <li *ngFor="let message of messages"
+          class="mdl-list__item mdl-list__item--three-line">
+            <div class="message-container">
+              <div>
+                  <img src="{{null | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+              </div>
+              <div class="main-message-content">
+                <div class="message-header">
+                  <div>
+                      Diana Kolisnichenko
+                  </div>
+                  <div>
+                      15:50
+                  </div>   
+                </div>
+                <div class="message-text">
+                    {{message.Text}}
+                </div>
+              </div>
+              <div>
+                    
+              </div>
+            </div>
+        </li>
+        <!-- <li *ngFor="let message of messages"
+          class="mdl-list__item mdl-list__item--three-line self-message">
+          <div class="message-container">
+            <div class="main-message-content">
+              <div class="message-header">
+                <div>
+                  Oleh Dovhan
+                </div>
+                <div>
+                    15:50
+                </div>   
+              </div>
+              <div class="message-text">
+                  {{message.Text}}
+              </div>
+            </div>
+            <div>
+                  
+            </div>
+          </div>
+      </li> -->
+      </ul>    
     </div>
-  </ul>  
-  
-  <form action="#">
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-      <input class="mdl-textfield__input" type="text" id="sample3">
-      <label class="mdl-textfield__label" for="sample3">Text...</label>
+    <div class="mdl-card__actions mdl-card--border message-input-container">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="sample3">
+        <label class="mdl-textfield__label" for="sample3">Text...</label>
+      </div>
     </div>
-  </form>
+  </div>
 </div>

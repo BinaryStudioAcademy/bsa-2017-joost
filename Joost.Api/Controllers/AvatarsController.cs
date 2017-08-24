@@ -59,8 +59,9 @@ namespace Joost.Api.Controllers
 
         // POST api/avatars/5
         [HttpPost, HttpPut] // AND PUT?
-        public async Task<IHttpActionResult> SetAvatar(int id)
+        public async Task<IHttpActionResult> SetAvatar()
         {
+            int id = GetCurrentUserId();
             List<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
             int MaxContentLength = 1024 * 1024 * 1; // 1 MB  
 
@@ -122,8 +123,5 @@ namespace Joost.Api.Controllers
             }
 
         }
-
-
-
     }
 }

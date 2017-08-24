@@ -50,6 +50,7 @@ html, body {
 	background-color: #555;
 }
 
+
 .user-state-container{
     display: flex;
     align-items:center;
@@ -62,7 +63,4 @@ html, body {
 
 .busy-state{
  color: $color-offline-indecator;
-}
-.data-container {
-    height: 100vh !important;
 }

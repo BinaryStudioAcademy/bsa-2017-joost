@@ -1,13 +1,14 @@
 ﻿import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpService } from './services/http.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
 import { UserService } from './services/user.service';
+import { AccountService } from './services/account.service';
+import { ContactService } from './services/contact.service';
 import { AuthenticationService } from './services/authentication.service';
 
 import { AppComponent } from './components/app/app.component';
@@ -36,8 +37,8 @@ import { UserEditingComponent } from './components/user-editing/user-editing.com
 
 import { DialogsListComponent } from "./components/dialogs-list/dialogs-list.component";
 import { MessagesListComponent } from "./components/messages-list/messages-list.component";
-import { DialogsService } from "./services/dialogs.service";
-import { MessagesService } from "./services/messages.service"
+import { DialogService } from "./services/dialog.service";
+import { MessageService } from "./services/message.service"
 
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 // import {CustomOption} from './notification-options/custom-option'
@@ -45,6 +46,10 @@ import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 import { AvatarService } from './services/avatar.service';
 import { AvatarPipe } from "./pipes/avatar.pipe";
 import { GenderPipe } from "./pipes/gender.pipe";
+
+import { MyDatePickerModule } from 'mydatepicker';
+import { NamePipe } from "./pipes/name.pipe";
+import { SettingsComponent } from './components/settings/settings.component';
 
 
 @NgModule({
@@ -69,12 +74,15 @@ import { GenderPipe } from "./pipes/gender.pipe";
     AvatarPipe,
     DialogsListComponent,
     MessagesListComponent,
-    GenderPipe
+    GenderPipe,
+    NamePipe,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    MyDatePickerModule,
     FormsModule,
     ToastModule.forRoot()
   ],
@@ -85,8 +93,10 @@ import { GenderPipe } from "./pipes/gender.pipe";
     LoginService,
     AvatarService,
     AuthenticationService,
-    DialogsService,
-    MessagesService
+    DialogService,
+    MessageService,
+    AccountService,
+    ContactService
     // {
     //   provide: ToastOptions,
     //   useClass: CustomOption

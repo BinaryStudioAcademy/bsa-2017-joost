@@ -15,8 +15,9 @@ namespace Joost.Api.Controllers
 
         // GET: api/Groups/5
         [HttpGet]
-        public async Task<IHttpActionResult> GetGroups(int userId)
+        public async Task<IHttpActionResult> GetGroups()
         {
+            int userId = GetCurrentUserId();
             var groups = (await _unitOfWork.Repository<Group>().AllAsync()).Where(item => item.Members.Any(i => i.Id == userId));
             if (groups == null)
             {
@@ -73,15 +74,7 @@ namespace Joost.Api.Controllers
                 Name = group.Name,
                 Description = group.Description,
                 SelectedMembersId = group.Members.Select(m => m.Id).ToList(),
-                SelectedMembers = group.Members.Select(m => new UserContactDto {
-                    Id = m.Id,
-                    City = m.City,
-                    Name = $"{m.FirstName} {m.LastName}",
-                    Avatar = m.Avatar
-                }).ToList()                
             };
-            groupDto.UnselectedMembers = groupCreatorContacts.Except(groupDto.SelectedMembers).ToList();
-                       
             return Ok(groupDto);
         }
 
