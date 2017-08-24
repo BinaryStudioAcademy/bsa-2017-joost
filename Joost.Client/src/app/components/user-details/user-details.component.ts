@@ -20,8 +20,6 @@ export class UserDetailsComponent extends MDL implements OnInit {
 
   
   user: UserDetail;
-  private isLoadFinished:boolean = false;
-  private isError:boolean = false;
   private isFriend = false;
 
   constructor(
@@ -39,7 +37,6 @@ export class UserDetailsComponent extends MDL implements OnInit {
       .switchMap((params: ParamMap) => this.userService.getUserDetails(+params.get('id')))
       .subscribe(user => {
         this.user = user;
-        this.isLoadFinished = true;
         this.checkInContact(user.Id);
       },
       async err=> {
@@ -48,7 +45,6 @@ export class UserDetailsComponent extends MDL implements OnInit {
             this.route.paramMap
             .switchMap((params: ParamMap) => this.userService.getUserDetails(+params.get('id'))).subscribe(user => {
               this.user = user;
-              this.isLoadFinished = true;
               this.checkInContact(user.Id);
             });
           }
@@ -90,7 +86,7 @@ export class UserDetailsComponent extends MDL implements OnInit {
   
 	checkInContact(id:number):void {
 		this.contactService.getContacts().subscribe( list => {
-      this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0;
+      this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0; 
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => {

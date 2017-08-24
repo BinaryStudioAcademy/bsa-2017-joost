@@ -104,6 +104,7 @@
     align-content:center;
     margin:10px;
     color: $color-text-secondary;
+    flex:1;
 }
 
 .main-content-container{
@@ -111,12 +112,62 @@
     width: calc(100% -  400px); //  400px - $left-panel-width
     height: 100%
 }
-#status i{
+.status i.create-icon{
     visibility: hidden;
-    cursor: pointer;
-    font-size: 15px!important;
-    color: white!important;
 }
-#status:hover i{
+.status:hover i.create-icon{
     visibility: visible;
+}
+
+.status i{
+    cursor: pointer;
+    font-size: 15px;
+    color: darkgray;
+    vertical-align: middle;
+    align-self:center;
+    padding:0 3px;
+
+}
+.status i:hover{
+    color: white;
+}
+
+a.setting-icon {
+    margin-top: auto;
+    margin-left: auto;
+    padding: 0;
+}
+.status-message{
+    font-size: 13px;
+}
+.setting-button{
+  color:#9698ab;
+  display: flex;
+  align-self: center;
+  padding:0;
+  height:auto;
+  width:auto
+}
+.setting-button:hover{
+  color:white;
+}
+.status .mdl-textfield{
+  padding:0;
+  display:flex;
+  width:100%;
+}
+.status .mdl-textfield .mdl-textfield__input{
+  font-size:14px;
+  border-color: #9698ab;
+  outline:none;
+}
+.status .status-text {
+  cursor:pointer;
+  display:inline-block;
+  vertical-align:middle;
+  padding: 2px 0;
+  border-bottom: 1px solid transparent;
+}
+.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after{
+  display:none;
 }

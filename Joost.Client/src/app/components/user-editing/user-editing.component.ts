@@ -23,7 +23,6 @@ export class UserEditingComponent extends MDL implements OnInit {
 
   user: UserProfile;
   private isLoadFinished:boolean = false;
-  private isError:boolean = false;
   private passwordDiv: boolean = false;
   private errorPasswordDiv: boolean = false;
   private errorPasswordDivMessage: string;
@@ -78,7 +77,7 @@ export class UserEditingComponent extends MDL implements OnInit {
             this.isLoadFinished = true;
           },
           err => {
-            this.isError = true;
+            
           });
         }
       });
