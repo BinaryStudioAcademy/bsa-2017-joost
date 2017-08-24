@@ -111,12 +111,33 @@
     width: calc(100% -  400px); //  400px - $left-panel-width
     height: 100%
 }
-#status i{
+.status i.create-icon{
     visibility: hidden;
+}
+.status:hover i.create-icon{
+    visibility: visible;
+}
+
+.status i{
     cursor: pointer;
     font-size: 15px!important;
     color: white!important;
 }
-#status:hover i{
-    visibility: visible;
+
+
+a.setting-icon {
+    margin-top: auto;
+    margin-left: auto;
+    padding: 0;
+}
+.status div input{
+    background: transparent;
+    color: white;
+    border: 0;
+    border-bottom: 1.5px solid #3f51b5;
+    width: 65%;
+    outline: none;
+}
+.status-message{
+    font-size: 13px;
 }

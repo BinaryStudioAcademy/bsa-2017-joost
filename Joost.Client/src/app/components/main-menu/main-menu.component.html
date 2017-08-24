@@ -1,61 +1,64 @@
 ﻿<div class="main-layout mdl-js-layout mdl-layout--fixed-drawer">
   <div class="left-panel mdl-layout__drawer mdl-color-text--blue-grey-50">
-    <header>
-      <div *ngIf="curUser" class="left-panel-header">
-        <a [routerLink]="['user-editing']">
-          <div class="avatar-container">
-            <img src="{{curUser.Avatar | avatarPipe}}" class="main-avatar">
-            <div class="online-indecator"></div>
-          </div>
-        </a>
-        <div class="left-panel-user-info">
-          <a [routerLink]="['user-editing']" skipLocationChange>
-              <div class="header-user-name" *ngIf="curUser.FirstName">{{curUser.FirstName + ' ' + curUser.LastName}}</div>
-              <div class="header-user-name" *ngIf="!curUser.FirstName">{{curUser.Email}}</div>
-          </a>
-          <div id="status">
-            <div *ngIf="editMode; else showMode">
-              <input                
-                type="text" 
-                [(ngModel)]="curUser.Status">
-                <i class="material-icons" (click)="onSaveStatus()">done</i>
-                <i class="material-icons" (click)="onCancelEdit()">cancel</i>
+    <div *ngIf="curUser">
+      <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+        <header>
+          <div class="left-panel-header">
+            <a [routerLink]="['user-editing']">
+              <div class="avatar-container">
+                <img src="{{curUser.Avatar | avatarPipe}}" class="main-avatar">
+                <div class="online-indecator"></div>
               </div>
-            <ng-template #showMode>
-              <span *ngIf="curUser.Status; else showLabel">{{ curUser.Status }}</span>
-              <ng-template #showLabel>
-                change status...
-              </ng-template>
-              <i class="material-icons" (click)="onEditStatus()">create</i>
-            </ng-template>
-          </div>
+            </a>
+            <div class="left-panel-user-info">
+              <a [routerLink]="['user-editing']" skipLocationChange>
+                  <div class="header-user-name" *ngIf="curUser.FirstName">{{curUser.FirstName + ' ' + curUser.LastName}}</div>
+                  <div class="header-user-name" *ngIf="!curUser.FirstName">{{curUser.Email}}</div>
+              </a>
+              <div class="status">
+                <div *ngIf="editMode; else showMode">
+                  <input                
+                    type="text" 
+                    [(ngModel)]="curUser.Status">
+                    <i class="material-icons" (click)="onSaveStatus()">done</i>
+                    <i class="material-icons" (click)="onCancelEdit()">clear</i>
+                  </div>
+                <ng-template #showMode>
+                  <span (click)="onEditStatus()" style="cursor: pointer">
+                    <span *ngIf="curUser.Status; else showLabel">{{ curUser.Status }}</span>
+                    <ng-template #showLabel>
+                      <label class="status-message">change status...</label>
+                    </ng-template>
+                    <i class="material-icons create-icon">create</i>
+                  </span>
+                </ng-template>
+              </div>
+            </div>
+            <a href="#settings-panel" class="mdl-tabs__tab setting-icon"><i class="material-icons">settings</i></a>
+          </div>        
+        </header>      
+        <div class="mdl-tabs__tab-bar">
+          <a href="#message-panel" class="mdl-tabs__tab is-active"><i class="material-icons">message</i></a>
+          <a href="#people-panel" class="mdl-tabs__tab"><i class="material-icons">people</i></a>
+          <a href="#search-panel" class="mdl-tabs__tab"><i class="material-icons">search</i></a>
+          <a href="#add-panel" class="mdl-tabs__tab" (click)="onCreateGroup()">
+            <i class="material-icons">add_circle</i>
+          </a>          
+        </div>
+        <div class="mdl-tabs__panel is-active" id="message-panel">
+          <app-menu-messages></app-menu-messages>
+        </div>
+        <div class="mdl-tabs__panel" id="people-panel">
+          <app-menu-users></app-menu-users>
+        </div>
+        <div class="mdl-tabs__panel" id="search-panel">
+          <app-menu-search></app-menu-search>
+        </div>
+        <div class="mdl-tabs__panel" id="settings-panel">
+          <app-menu-settings></app-menu-settings>
         </div>
       </div>
-    </header>
-    <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-      <div class="mdl-tabs__tab-bar">
-        <a href="#message-panel" class="mdl-tabs__tab is-active"><i class="material-icons">message</i></a>
-        <a href="#people-panel" class="mdl-tabs__tab"><i class="material-icons">people</i></a>
-        <a href="#search-panel" class="mdl-tabs__tab"><i class="material-icons">search</i></a>
-        <a href="#add-panel" class="mdl-tabs__tab" (click)="onCreateGroup()">
-          <i class="material-icons">add_circle</i>
-        </a>
-        <a href="#settings-panel" class="mdl-tabs__tab"><i class="material-icons">settings</i></a>
-      </div>
-
-      <div class="mdl-tabs__panel is-active" id="message-panel">
-        <app-menu-messages></app-menu-messages>
-      </div>
-      <div class="mdl-tabs__panel" id="people-panel">
-        <app-menu-users></app-menu-users>
-      </div>
-      <div class="mdl-tabs__panel" id="search-panel">
-        <app-menu-search></app-menu-search>
-      </div>
-      <div class="mdl-tabs__panel" id="settings-panel">
-        <app-menu-settings></app-menu-settings>
-      </div>
-    </div>  
+    </div> 
   </div>
 </div>
 <main class="main-content-container mdl-color--grey-100">
