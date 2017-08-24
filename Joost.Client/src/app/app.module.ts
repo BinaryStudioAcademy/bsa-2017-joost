@@ -47,6 +47,9 @@ import { AvatarService } from './services/avatar.service';
 import { AvatarPipe } from "./pipes/avatar.pipe";
 import { GenderPipe } from "./pipes/gender.pipe";
 
+import { MyDatePickerModule } from 'mydatepicker';
+import { NamePipe } from "./pipes/name.pipe";
+
 
 @NgModule({
   declarations: [
@@ -70,12 +73,14 @@ import { GenderPipe } from "./pipes/gender.pipe";
     AvatarPipe,
     DialogsListComponent,
     MessagesListComponent,
-    GenderPipe
+    GenderPipe,
+    NamePipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    MyDatePickerModule,
     FormsModule,
     ToastModule.forRoot()
   ],

@@ -41,6 +41,28 @@ namespace Joost.Api.Controllers
             return Ok(UserProfileDto.FromModel(user));
         }
 
+        // PUT: api/account/myprofile
+        [HttpPut]
+        [Route("myprofile")]
+        public async Task<IHttpActionResult> SetProfile([FromBody]UserProfileDto profile)
+        {
+            var user = await _unitOfWork.Repository<User>().GetAsync(profile.Id);
+            user.Email = profile.Email;
+            user.Password = profile.Password;
+            user.FirstName = profile.FirstName;
+            user.LastName = profile.LastName;
+            user.City = profile.City;
+            user.Country = profile.Country;
+            user.BirthDate = profile.BirthDate;
+            user.Gender = profile.Gender;
+            user.Status = profile.Status;
+            user.Avatar = profile.Avatar;
+            user.State = profile.State;
+
+            await _unitOfWork.SaveAsync();
+            return Ok(user);
+        }
+
         // GET: api/account/name
         [HttpGet]
         [AccessTokenAuthorization]
@@ -124,13 +146,6 @@ namespace Joost.Api.Controllers
             return Ok(user.Status);
         }
 
-        // Get api/account
-        [HttpGet]
-        [AccessTokenAuthorization]
-		public IHttpActionResult GetId()
-		{
-			return Ok(GetCurrentUserId());
-		}
 
         // Get api/account/refresh
         [Route("refresh")]
@@ -171,6 +186,19 @@ namespace Joost.Api.Controllers
             var newAccessToken = new AccessTokenDto() { AT_UserId = user.Id, AT_Time = DateTime.Now };
             var newRefreshToken = new RefreshTokenDto() { RT_UserId = user.Id, RT_Time = DateTime.Now, RT_AccessToken = newAccessToken };
             return Ok(new { accessToken = Encrypt.EncryptAccessToken(newAccessToken), refreshToken = Encrypt.EncryptRefreshToken(newRefreshToken) });
+        }
+
+        [HttpPost]
+        [Route("updatestatus")]
+        public async Task<IHttpActionResult> UpdateStatus([FromBody] string newStatus)
+        {
+            var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
+
+            currentUser.Status = newStatus;
+            _unitOfWork.Repository<User>().Attach(currentUser);
+            await _unitOfWork.SaveAsync();
+
+            return Ok();
         }
     }
 }

@@ -1,51 +1,28 @@
-﻿<div class="loading-container" [hidden]="!isError">
-  <div><i class="material-icons error-icon">error_outline</i></div>
-  <div>An error occured, please try again later</div>
-</div>
-
-<div class="loading-container" [hidden]="isLoadFinished">
-  <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active test"></div>
-  <div>Please wait, data is loading...</div>
-</div>
-
-<div [hidden]="!isLoadFinished">
-  <div *ngIf="user">
-    <div class="user-details-header mdl-layout__header-row mdl-shadow--2dp">
-      <button class="mdl-button mdl-js-button mdl-js-ripple-effect" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
-      <button class="mdl-button mdl-js-button mdl-js-ripple-effect" (click)="contactActionClick(user.Id)">{{isFriend ? 'Delete' : 'Add'}}</button>
-    </div>
-
-    <div class="mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-      <div class="mdl-cell mdl-cell--3-col">
-        <i class="material-icons mdl-list__item user-avatar-img user-avatar-mIcon">person</i>
-      </div>
-      <div class="user-details-main-info mdl-cell mdl-cell--9-col">
-        <div>
-          <h3>{{user.FirstName}} {{user.LastName}}</h3>
-          <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
-          <div [innerHtml]="user.State | statePipe"></div>
-          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Send Message</button>
+﻿<div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="user">
+    <div class="jg-header-container mdl-shadow--2dp">
+        <img src="{{user.Avatar | avatarPipe}}" class="jc-user-avatar-container">
+        <div class="ud-main-info-container">
+            <h3>{{user.FirstName}} {{user.LastName}}</h3>
+            <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
+            <div [innerHtml]="user.State | statePipe"></div>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Send Message</button>
         </div>
+    </div>
+    <div class="jc-user-details-container">
+      <div>
+        <h5>Address:</h5>
+        <span>{{user.City ? user.City : 'Unknown'}}, {{user.Country ? user.Country : 'Unknown'}}</span>
+      </div>
+      <div>
+        <h5>Birthday:</h5>
+        <span>{{user.BirthDate | date:'shortDate'}}</span>
+      </div>
+      <div>
+        <h5>Gender:</h5>
+        <span>{{user.Gender | genderPipe}}</span>
       </div>
     </div>
-    <div class="user-details-main mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-      <div class="user-details-group mdl-card__actions mdl-card--border">
-        <!-- <h5> Info</h5> -->
-        <div>
-          <h5>Address:</h5>
-          <span>{{user.City ? user.City : 'Unknown'}}, {{user.Country ? user.Country : 'Unknown'}}</span>
-        </div>
-        <div>
-          <h5>Birthday:</h5>
-          <span>{{user.BirthDate | date:'shortDate'}}</span>
-        </div>
-        <div>
-          <h5>Gender:</h5>
-          <span>{{user.Gender | genderPipe}}</span>
-        </div>
-      </div>
-    </div>
-    <div mdl [hidden] = "!isFriend" class="user-details-main mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+    <div mdl [hidden] = "!isFriend" class="user-details-main mdl-layout__content jc-user-actions-container">
       <div class="user-details-group mdl-card__actions mdl-card--border">
         <!-- <h5>Settings</h5> -->
         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
@@ -55,10 +32,17 @@
       </div>
       <div class="user-details-group mdl-card__actions mdl-card--border">
         <!-- <h5>Actions</h5> -->
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Clear History</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Delete Conversation</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Block User</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Clear History</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Delete Conversation</button>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Block User</button>
       </div>
     </div>
-  </div>
+    <div class="jg-buttons-bottom-cantainer jc-user-details-bottom-buttons mdl-card__actions mdl-card--border">
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jc-back-btn" (click)="goBack()">
+          <i class="material-icons">arrow_back</i>Back
+      </button>
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="contactActionClick(user.Id)">
+        {{isFriend ? 'Delete' : 'Add'}}
+      </button>
+    </div>
 </div>

@@ -5,6 +5,4 @@ export class Group {
     Name: string = "";
     Description: string = "";
     SelectedMembersId: Array<number> = [];
-    SelectedMembers: Array<UserContact> = [];
-    UnselectedMembers: Array<UserContact> = [];
 }

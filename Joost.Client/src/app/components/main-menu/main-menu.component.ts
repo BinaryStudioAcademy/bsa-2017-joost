@@ -1,11 +1,10 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AuthenticationService } from "../../services/authentication.service";
-import { UserService } from "../../services/user.service";
+import { AccountService } from "../../services/account.service";
 
-import { UserDetail } from "../../models/user-detail";
 import { MDL } from "../mdl-base.component";
+import { UserProfile } from "../../models/user-profile";
 
 @Component({
   selector: 'app-main-menu',
@@ -14,35 +13,40 @@ import { MDL } from "../mdl-base.component";
 })
 export class MainMenuComponent extends MDL implements OnInit {
 
-  private curUser: UserDetail; 
+  private editMode: boolean = false;
+  private previousStatus: string;
+
+  private curUser: UserProfile; 
   constructor(
     private router: Router, 
     private route: ActivatedRoute,
-    private userService: UserService,
-    private authService: AuthenticationService) {
+    private accountService: AccountService) {
       super();
   }
 
+  onEditStatus(){
+    this.editMode = true;
+    this.previousStatus = this.curUser.Status;
+  }
+  onSaveStatus(){
+    this.accountService.updateStatus(this.curUser.Status)
+      .subscribe(response => this.editMode = false);
+  }
+  onCancelEdit(){
+    this.editMode = false;
+    this.curUser.Status = this.previousStatus;
+  }
+
   ngOnInit() {
-    this.authService.getUserId().subscribe(data => {
-      this.userService.getUserDetails(data).subscribe( d => this.curUser = d, 
-        async err => {
-          await this.userService.handleTokenErrorIfExist(err).then(ok => {
-            if (ok) { 
-              this.userService.getUserDetails(data).subscribe(d => this.curUser = d);
-            }
-          });
+    this.accountService.getUser().subscribe(data => {
+      this.curUser = data;
+    },
+    async error => {
+      await this.accountService.handleTokenErrorIfExist(error).then( ok => {
+        if(ok) {
+          this.accountService.getUser().subscribe(data => this.curUser = data);
         }
-      );
-    }, 
-    async err => {
-      await this.authService.handleTokenErrorIfExist(err).then(ok => {
-        if (ok) { 
-          this.authService.getUserId().subscribe(data => {
-            this.userService.getUserDetails(data).subscribe( d => this.curUser = d);
-          })
-        }
-      });
+      })
     });
   }
 
