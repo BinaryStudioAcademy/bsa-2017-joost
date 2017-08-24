@@ -104,6 +104,7 @@
     align-content:center;
     margin:10px;
     color: $color-text-secondary;
+    flex:1;
 }
 
 .main-content-container{
@@ -122,6 +123,10 @@
     cursor: pointer;
     font-size: 15px;
     color: darkgray;
+    vertical-align: middle;
+    align-self:center;
+    padding:0 3px;
+
 }
 .status i:hover{
     color: white;
@@ -132,14 +137,31 @@ a.setting-icon {
     margin-left: auto;
     padding: 0;
 }
-.status div input{
-    background: transparent;
-    color: white;
-    border: 0;
-    border-bottom: 1.5px solid #3f51b5;
-    width: 65%;
-    outline: none;
-}
 .status-message{
     font-size: 13px;
+}
+.setting-button{
+  color:#9698ab;
+  display: flex;
+  align-self: center;
+}
+.setting-button:hover{
+  color:white;
+}
+.status .mdl-textfield{
+  padding:0;
+  display:flex;
+  width:100%;
+}
+.status .mdl-textfield .mdl-textfield__input{
+  font-size:14px;
+  border-color: #9698ab;
+  outline:none;
+}
+.status .status-text {
+  cursor:pointer;
+  display:inline-block;
+  vertical-align:middle;
+  padding: 2px 0;
+  border-bottom: 1px solid transparent;
 }
