@@ -27,7 +27,7 @@
                   <span (click)="onEditStatus()" style="cursor: pointer">
                     <span *ngIf="curUser.Status; else showLabel">{{ curUser.Status }}</span>
                     <ng-template #showLabel>
-                      <label class="status-message">change status...</label>
+                      <span class="status-message">change status...</span>
                     </ng-template>
                     <i class="material-icons create-icon">create</i>
                   </span>

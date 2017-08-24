@@ -120,10 +120,12 @@
 
 .status i{
     cursor: pointer;
-    font-size: 15px!important;
-    color: white!important;
+    font-size: 15px;
+    color: darkgray;
 }
-
+.status i:hover{
+    color: white;
+}
 
 a.setting-icon {
     margin-top: auto;
