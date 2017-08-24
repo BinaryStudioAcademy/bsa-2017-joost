@@ -49,6 +49,7 @@ import { GenderPipe } from "./pipes/gender.pipe";
 
 import { MyDatePickerModule } from 'mydatepicker';
 import { NamePipe } from "./pipes/name.pipe";
+import { SettingsComponent } from './components/settings/settings.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { NamePipe } from "./pipes/name.pipe";
     DialogsListComponent,
     MessagesListComponent,
     GenderPipe,
-    NamePipe
+    NamePipe,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,

@@ -40,7 +40,7 @@
         <a href="#add-panel" class="mdl-tabs__tab" (click)="onCreateGroup()">
           <i class="material-icons">add_circle</i>
         </a>
-        <a href="#settings-panel" class="mdl-tabs__tab"><i class="material-icons">settings</i></a>
+        <a href="#settings-panel" class="mdl-tabs__tab" [routerLink]="['settings']"><i class="material-icons">settings</i></a>
       </div>
 
       <div class="mdl-tabs__panel is-active" id="message-panel">
