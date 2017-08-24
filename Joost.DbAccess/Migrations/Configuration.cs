@@ -4,6 +4,7 @@
     using Joost.DbAccess.Entities;
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;
+    using System;
 
     internal sealed class Configuration : DbMigrationsConfiguration<JoostDbContext>
     {
@@ -51,6 +52,21 @@
             context.Users.Add(vitaliy);
             context.Users.Add(vasyl);
             context.Users.Add(user);
+
+            var messages = new List<Message>
+            {
+                new Message { Sender = users[5], Receiver = users[3],
+                    CreatedAt = DateTime.Now, Text = "Привіт)" },
+                new Message { Sender = users[3], Receiver = users[5],
+                    CreatedAt = DateTime.Now, Text = "Привіт!" },
+                new Message { Sender = users[5], Receiver = users[3],
+                    CreatedAt = DateTime.Now, Text = "Як справи?" },
+                new Message { Sender = users[3], Receiver = users[5],
+                    CreatedAt = DateTime.Now, Text = "Норма, а в тебе?" }
+            };
+
+            messages.ForEach(c => context.Messages.Add(c));
+
             context.SaveChanges();
         }
     }
