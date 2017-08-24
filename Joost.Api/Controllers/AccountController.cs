@@ -187,5 +187,18 @@ namespace Joost.Api.Controllers
             var newRefreshToken = new RefreshTokenDto() { RT_UserId = user.Id, RT_Time = DateTime.Now, RT_AccessToken = newAccessToken };
             return Ok(new { accessToken = Encrypt.EncryptAccessToken(newAccessToken), refreshToken = Encrypt.EncryptRefreshToken(newRefreshToken) });
         }
+
+        [HttpPost]
+        [Route("updatestatus")]
+        public async Task<IHttpActionResult> UpdateStatus([FromBody] string newStatus)
+        {
+            var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
+
+            currentUser.Status = newStatus;
+            _unitOfWork.Repository<User>().Attach(currentUser);
+            await _unitOfWork.SaveAsync();
+
+            return Ok();
+        }
     }
 }

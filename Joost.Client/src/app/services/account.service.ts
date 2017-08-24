@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpRequest, HttpParams } from '@angular/common/http';
+import { HttpRequest, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
 
 import { BaseApiService } from "./base-api.service";
@@ -45,5 +45,15 @@ export class AccountService extends BaseApiService {
 	  	//.get<UserSearch[]>(this.generateUrl(),{
 	  	//	params: new HttpParams().set('name',name)
 	  	//});
-  	}
+  }
+
+  updateStatus(newStatus: string){
+    const httpHeaders = new HttpHeaders().set('Content-Type', 'application/json;charset=utf8');
+    const request = new HttpRequest<string>("POST", 
+      `${this.generateUrl()}/updatestatus`, 
+      JSON.stringify(newStatus),
+      { headers: httpHeaders }
+    );
+    return this.http.sendRequest(request);
+  }
 }
