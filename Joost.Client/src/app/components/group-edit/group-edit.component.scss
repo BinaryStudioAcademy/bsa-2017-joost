@@ -16,7 +16,6 @@
     }
 }
 .jc-list-user{
-    //height: 300px;
     max-height: 300px;
     overflow :auto;
     flex: 1;
@@ -52,4 +51,22 @@
             flex: 1;
         }
     }
+}
+
+.mdl-textfield.is-invalid .mdl-textfield__input{
+	border-color: rgba(0,0,0,.12); 
+}
+.mdl-textfield.is-invalid.is-focused .mdl-textfield__input,
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__input{
+	border-color: #d50000; 
+	box-shadow: none;
+}
+.mdl-textfield.is-invalid .mdl-textfield__label{
+    color: rgb(189,189,189); 
+	font-size: 16px;
+}
+.mdl-textfield.is-invalid.is-focused .mdl-textfield__label,
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__label{
+	color: #d50000; 
+	font-size:12px;
 }
