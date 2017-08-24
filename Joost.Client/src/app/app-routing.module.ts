@@ -15,6 +15,7 @@ import { AppComponent } from "./components/app/app.component";
 
 import { DialogsListComponent } from "./components/dialogs-list/dialogs-list.component";
 import { MessagesListComponent } from "./components/messages-list/messages-list.component";
+import { SettingsComponent } from "./components/settings/settings.component";
 
 const routes: Routes = [
   {
@@ -57,6 +58,10 @@ const routes: Routes = [
     {
       path: 'add-contact',
       component: UserAddContactComponent
+    },
+    {
+        path: 'settings',
+        component: SettingsComponent
     }]
   },
   {

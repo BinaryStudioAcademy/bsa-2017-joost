@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DialogsService } from "../../services/dialogs.service";
-import { Dialog } from "../../models/dialog";
 import { Router } from "@angular/router";
+import { Dialog } from "../../models/dialog";
+import { DialogService } from "../../services/dialog.service";
 
 @Component({
   selector: 'app-menu-messages',
@@ -12,18 +12,14 @@ export class MenuMessagesComponent implements OnInit {
 
   private dialogs: Dialog[];
 
-  private navigateToMessages(dialog: Dialog) {
-    this.router.navigate(["/menu/messages", dialog.IsGroup ? "group" : "user" , dialog.Id ]);
-  }
-
-  constructor(private dialogsService: DialogsService, private router: Router) {
-    dialogsService.getAllDialogs().subscribe(d => {
+  constructor(private dialogService: DialogService, private router: Router) {
+    dialogService.getDialogs().subscribe(d => {
       this.dialogs = d;
     },
     async err => {
-      await this.dialogsService.handleTokenErrorIfExist(err).then(ok => { 
+      await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
         if (ok) {
-          dialogsService.getAllDialogs().subscribe(d => {
+          dialogService.getDialogs().subscribe(d => {
             this.dialogs = d;
           });
         }
@@ -32,6 +28,10 @@ export class MenuMessagesComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  private navigateToMessages(dialog: Dialog) {
+    this.router.navigate(["/menu/messages", dialog.IsGroup ? "group": "user", dialog.Id]);
   }
 
 }

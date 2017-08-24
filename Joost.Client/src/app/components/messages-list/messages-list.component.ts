@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { MessagesService } from "../../services/messages.service";
+import { MessageService } from "../../services/message.service";
 import { Message } from "../../models/message";
 import { AccountService } from "../../services/account.service";
 import { UserService } from "../../services/user.service";
@@ -21,9 +21,8 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
     private currnetUserId: number;
     private dialogName: string;
 
-    constructor(private route: ActivatedRoute,
-                private router: ActivatedRoute,
-                private messagesService: MessagesService,
+    constructor(private router: ActivatedRoute,
+                private messagesService: MessageService,
                 private userService: UserService,
                 private accountService: AccountService,
                 private groupService: GroupService) {
@@ -41,19 +40,17 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
     private scrolEvent(event) {
         if (event.target.scrollTop === event.target.scrollHeight - 640) {
              if (this.isGroup) {
-                this.messagesService.getGroupMessages(this.id, 20, this.skip)
+                this.messagesService.getGroupMessages(this.id, 20)
                     .subscribe(m => {
                         this.messages = this.messages.concat(m.map(me => {
-                            me.Own = me.SenderId == this.currnetUserId.toString();
                             return me;
                         }));
                         this.skip += 20;
                     });
             } else {
-                this.messagesService.getUsersMessages(this.id, 20, this.skip)
+                this.messagesService.getUserMessages(this.id, 20)
                     .subscribe(m => {
                         this.messages = this.messages.concat(m.map(me => {
-                            me.Own = me.SenderId == this.currnetUserId.toString();
 
                             return me;
                         }));
@@ -76,7 +73,7 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
    ngOnInit() {
     this.accountService.getUser().subscribe(u => {
     this.currnetUserId = u.Id;
-    this.route.paramMap
+    this.router.paramMap
         .subscribe((params: ParamMap) => {
             this.skip = 0;
             this.id = params.get("id");
@@ -84,10 +81,9 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
             if (this.isGroup) {
                 this.groupService.getGroup(+this.id).subscribe(g => {
                 this.dialogName = g.Name;
-                this.messagesService.getGroupMessages(this.id, 20, this.skip)
+                this.messagesService.getGroupMessages(this.id, 20)
                     .subscribe(m => {
                         this.messages = m.map(me => {
-                            me.Own = (me.SenderId == this.currnetUserId.toString());
                             return me;
                         });
                         this.skip += 20;
@@ -97,10 +93,9 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
             } else {
                 this.userService.getUserDetails(+this.id).subscribe(user => {
                 this.dialogName = user.FirstName + " " + user.LastName;
-                this.messagesService.getUsersMessages(this.id, 20, this.skip)
+                this.messagesService.getUserMessages(this.id, 20)
                     .subscribe(m => {
                         this.messages = m.map(me => {
-                            me.Own = (me.SenderId == this.currnetUserId.toString());
                             return me;
                         });
                         this.skip += 20;
@@ -108,6 +103,7 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                     });
                 })
             }
+
         });
     });
     }

@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="src\app\app\**" />
+    <Content Remove="src\app\app\**" />
+    <EmbeddedResource Remove="src\app\app\**" />
+    <None Remove="src\app\app\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AfominDotCom.NgProjectTemplate.Server" Version="1.0.4" />
   </ItemGroup>
 

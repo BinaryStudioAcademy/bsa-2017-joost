@@ -16,15 +16,16 @@
                   <div class="header-user-name" *ngIf="!curUser.FirstName">{{curUser.Email}}</div>
               </a>
               <div class="status">
-                <div *ngIf="editMode; else showMode">
-                  <input                
+                <div class="mdl-textfield " *ngIf="editMode; else showMode">
+                  <input      
+                    class="mdl-textfield__input"          
                     type="text" 
                     [(ngModel)]="curUser.Status">
                     <i class="material-icons" (click)="onSaveStatus()">done</i>
                     <i class="material-icons" (click)="onCancelEdit()">clear</i>
                   </div>
                 <ng-template #showMode>
-                  <span (click)="onEditStatus()" style="cursor: pointer">
+                  <span class="status-text" (click)="onEditStatus()">
                     <span *ngIf="curUser.Status; else showLabel">{{ curUser.Status }}</span>
                     <ng-template #showLabel>
                       <span class="status-message">change status...</span>
@@ -34,7 +35,7 @@
                 </ng-template>
               </div>
             </div>
-            <a href="#settings-panel" class="mdl-tabs__tab setting-icon"><i class="material-icons">settings</i></a>
+            <a href="#settings-panel" class="mdl-tabs__tab setting-button" [routerLink]="['settings']"><i class="material-icons">settings</i></a>
           </div>        
         </header>      
         <div class="mdl-tabs__tab-bar">
