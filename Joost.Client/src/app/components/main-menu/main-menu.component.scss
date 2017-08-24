@@ -144,6 +144,9 @@ a.setting-icon {
   color:#9698ab;
   display: flex;
   align-self: center;
+  padding:0;
+  height:auto;
+  width:auto
 }
 .setting-button:hover{
   color:white;
@@ -164,4 +167,7 @@ a.setting-icon {
   vertical-align:middle;
   padding: 2px 0;
   border-bottom: 1px solid transparent;
+}
+.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after{
+  display:none;
 }
