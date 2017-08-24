@@ -6,10 +6,18 @@
     padding-top: 0;
     padding-bottom: 0;
 }
-
+.groups-list-container{
+    display: flex;
+    flex-direction: row;
+    align-items:stretch;
+    > div{
+        flex-direction: column;
+        display: flex;
+    }
+}
 .jc-list-user{
-    height: 300px;
-
+    //height: 300px;
+    flex: 1;
     li:hover{
         background-color: #F5F5F5;
         margin-left: 1px;
@@ -39,7 +47,9 @@
     height: calc(100vh - 10px);
     margin: 5px auto;
     min-height: 600px;
-    // > div{
-    //     flex: 1;
-    // }
+    > div{
+        &:nth-last-child(2){
+            flex: 1;
+        }
+    }
 }
