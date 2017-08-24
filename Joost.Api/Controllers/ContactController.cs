@@ -83,7 +83,8 @@ namespace Joost.Api.Controllers
                 return NotFound();
             }
 
-            var contact = user.Contacts.FirstOrDefault(u => u.Id == id);
+            var contact = user.Contacts.FirstOrDefault(u => u.ContactUser.Id == id);
+
             if (contact == null)
             {
                 return NotFound();
