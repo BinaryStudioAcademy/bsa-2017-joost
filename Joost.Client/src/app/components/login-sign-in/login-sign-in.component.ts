@@ -19,11 +19,11 @@ export class LoginSignInComponent implements OnInit {
   }
 
   logIn() {
-    var regexp = new RegExp('^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
-    if (!regexp.test(this.email)){
-      this.isError = "Email is invalid!";
-      return;
-    }
+    // var regexp = new RegExp('^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    // if (!regexp.test(this.email)){
+    //   this.isError = "Email is invalid!";
+    //   return;
+    // }
     if (this.password.length < 6){
       this.isError = "Password length shold be at least 6 symbols!";
       return;

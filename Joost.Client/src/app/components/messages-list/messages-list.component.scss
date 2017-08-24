@@ -1,0 +1,178 @@
+@import '../../../vars.scss';
+
+// .mainCl{
+//   position: relative;
+//   overflow: hidden;
+// }
+
+// .messages-container{
+//   width: 100%;
+//   height: 640px;
+//   overflow: scroll;
+//   overflow-x: hidden;
+//   margin: 0;
+// }
+
+// .date{
+//   font-size: 10px;
+// }
+
+// .header{
+//   text-align: center;
+//   font-size: 20px;
+// }
+
+// .messages {
+ 
+
+//   /*margin: 5% 5% 10% 5%; */
+  
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   overflow-y: scroll;
+// }
+
+// .messages .own {
+//   align-self: flex-end;
+//   margin-top: 5px;
+//   border-radius: 4px;
+//   width: 30%;
+// }
+
+// .messages .own .text{
+//     background-color: #7070b5 ;
+//       align-self: flex-start;
+  
+//   padding: 10px;
+//   margin-top: 5px;
+//   border-radius: 4px;
+//   width: 30%;
+// }
+
+// .messages .alien {
+//   align-self: flex-start;
+//   margin-top: 5px;
+//   border-radius: 4px;
+//   width: 30%;
+// }
+
+// .messages .alien .text{
+//   background-color: #3b628e;
+
+//   padding: 10px;
+//   margin-top: 5px;
+//   border-radius: 4px;
+//   width: 30%;
+// }
+
+// img{
+//     height: 40px;
+//     width: 40px;
+//     border-radius: 50%;
+// }
+//   .NamePh{
+//     margin: 10px;
+//   }
+  
+
+ 
+  
+  .jc-group-edit-title-container{
+      display: flex;
+      flex-direction: column;
+      padding-top: 0;
+      padding-bottom: 0;
+  }
+  .groups-list-container{
+      display: flex;
+      flex-direction: row;
+      align-items:stretch;
+      > div{
+          flex-direction: column;
+          display: flex;
+      }
+  }
+  .jc-list-user{
+      //height: 300px;
+      flex: 1;
+      li:hover{
+          background-color: #F5F5F5;
+          margin-left: 1px;
+      }
+  }
+  
+  .jc-list-added{
+      overflow :auto;
+      margin-top: 82px;
+  }
+  
+  .jg-buttons-bottom-cantainer{
+      margin-top: auto;
+      display: flex;
+      justify-content:flex-end;
+  }
+  .jg-button-bottom{
+      margin-left: 16px;
+  }
+  
+  .jg-full-width-container{
+      width: 100%;
+  }
+  
+  .jg-container{
+      width: calc(100% - 10px);
+      height: calc(100vh - 10px);
+      margin: 5px auto;
+  }
+
+  //////////
+
+  .message-container{
+      font-size: 0.8em;
+      display: flex;
+  }
+
+  .main-content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .message-header{
+      display: flex;
+      flex-direction: row;
+      margin-bottom:5px;
+      > div{
+        &:nth-last-child(1){
+            padding-left: 7px;
+        } 
+      } 
+  }
+
+  .message-text{
+      padding: 5px;
+      background-color: #BBDEFB;
+      font-size: 1.2em;
+      border-radius: 5px;
+      display: -webkit-inline-box;
+      min-height: 25px;
+  }
+
+.main-message-content{
+    margin-left: 10px;
+}
+
+.mainCl{
+    width: 100%;
+    > ul{
+        padding: 0;
+    }
+}
+
+.self-message{
+    justify-content: flex-end;
+    
+    .message-text{
+        float: right;
+    }
+}
