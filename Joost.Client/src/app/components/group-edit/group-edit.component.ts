@@ -87,7 +87,7 @@ export class GroupEditComponent extends MDL implements OnInit {
 
     onSearch(substr: string): void{
         this.filterStr = substr.toLocaleLowerCase();
-        this.filteredMembers = this.unselectedMembers.filter(member => member.Name.toLocaleLowerCase().includes(substr));
+        this.filteredMembers = this.unselectedMembers.filter(member => member.Name.toLocaleLowerCase().includes(this.filterStr));
     }
 
     onClick(e:number): void{

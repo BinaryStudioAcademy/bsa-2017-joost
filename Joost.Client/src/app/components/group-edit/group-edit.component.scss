@@ -17,6 +17,8 @@
 }
 .jc-list-user{
     //height: 300px;
+    max-height: 300px;
+    overflow :auto;
     flex: 1;
     li:hover{
         background-color: #F5F5F5;
@@ -25,7 +27,6 @@
 }
 
 .jc-list-added{
-    overflow :auto;
     margin-top: 82px;
 }
 
@@ -44,9 +45,8 @@
 
 .jg-container{
     width: calc(100% - 10px);
-    height: calc(100vh - 10px);
+    min-height: calc(100vh - 10px);
     margin: 5px auto;
-    min-height: 600px;
     > div{
         &:nth-last-child(2){
             flex: 1;
