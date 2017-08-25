@@ -32,7 +32,7 @@ export class GroupEditComponent extends MDL implements OnInit {
             super();
     }
     
-    ngOnInit() {
+    ngOnInit(): void {
         // get group id (if it exist)
         this.route.params
             .subscribe(
@@ -45,11 +45,17 @@ export class GroupEditComponent extends MDL implements OnInit {
         
         // get current user contact list
         this.contactService.getAllContacts()
-        .subscribe(response => this.unselectedMembers = response,
+        .subscribe(response => {
+            this.unselectedMembers = response;
+            this.filteredMembers = response;
+        },
             async err => {
                 await this.contactService.handleTokenErrorIfExist(err).then(ok => {
-                    if (ok) { 
-                        this.contactService.getAllContacts().subscribe(response => this.unselectedMembers = response)
+                    if (ok) {
+                        this.contactService.getAllContacts().subscribe(response => {
+                            this.unselectedMembers = response;
+                            this.filteredMembers = response;
+                        })
                     }
                 });
             }
@@ -79,70 +85,83 @@ export class GroupEditComponent extends MDL implements OnInit {
         }            
     }
 
-    onSearch(substr: string){
-        this.filterStr = substr;
-        this.filteredMembers = this.unselectedMembers.filter(member => member.Name.includes(substr));
+    onSearch(substr: string): void{
+        this.filterStr = substr.toLocaleLowerCase();
+        this.filteredMembers = this.unselectedMembers.filter(member => member.Name.toLocaleLowerCase().includes(this.filterStr));
     }
 
-    onClick(e:number){
+    onClick(e:number): void{
         console.log(e);
     }
 
-    onAddMember(userId: number) {
+    onAddMember(userId: number): void {
         let index = this.unselectedMembers.findIndex( u=> u.Id == userId);
         if(index != -1) {
             this.group.SelectedMembersId.push(userId);
             this.selectedMembers.push(this.unselectedMembers[index]);
             this.unselectedMembers.splice(index, 1);
+            this.filteredMembers = this.unselectedMembers;
         };
     }
 
-    onDeleteMember(userId: number) {
+    onDeleteMember(userId: number): void {
         let index = this.selectedMembers.findIndex( u=> u.Id == userId);
         if(index != -1) {
             this.group.SelectedMembersId.splice(index, 1);
             this.unselectedMembers.push(this.selectedMembers[index]);
             this.selectedMembers.splice(index, 1);
+            this.filteredMembers = this.unselectedMembers;
         };
     }
 
-    onSubmit() {
-        // if (!this.editMode) {
-        //     // route: /groups/new
-        //     this.groupService.addGroup(this.group).subscribe(response => {                
-        //         console.log("Inserted");
-        //     },
-        //     async err => {
-        //         await this.userService.handleTokenErrorIfExist(err).then(ok => {
-        //             if (ok) { 
-        //                 this.groupService.addGroup(this.group).subscribe(response => {                
-        //                     console.log("Inserted");
-        //                 });
-        //             }
-        //         });
-        //     });
-        // } else {
-        //     // route: /groups/edit/:id
-        //     this.groupService.putGroup(this.group.Id, this.group).subscribe(response => {                
-        //         console.log("Updated");
-        //     }, 
-        //     async err => {
-        //         await this.userService.handleTokenErrorIfExist(err).then(ok => {
-        //             if (ok) { 
-        //                 this.groupService.putGroup(this.group.Id, this.group).subscribe(response => {                
-        //                     console.log("Updated");
-        //                 });
-        //             }
-        //         });
-        //     });
-        // }
+    onSubmit(): void {
+        if(!this.isCanSaveOrCreate())
+            return;
+        debugger;
+        if (!this.editMode) {
+            // route: /groups/new
+            this.groupService.addGroup(this.group).subscribe(response => {                
+                console.log("Inserted");
+            },
+            async err => {
+                await this.groupService.handleTokenErrorIfExist(err).then(ok => {
+                    if (ok) { 
+                        this.groupService.addGroup(this.group).subscribe(response => {                
+                            console.log("Inserted");
+                        });
+                    }
+                });
+            });
+        } else {
+            // route: /groups/edit/:id
+            this.groupService.putGroup(this.group.Id, this.group).subscribe(response => {                
+                console.log("Updated");
+            }, 
+            async err => {
+                await this.groupService.handleTokenErrorIfExist(err).then(ok => {
+                    if (ok) { 
+                        this.groupService.putGroup(this.group.Id, this.group).subscribe(response => {                
+                            console.log("Updated");
+                        });
+                    }
+                });
+            });
+        }
     }
 
-    onCancel() {
+    onGroupNameKeyUp(value: string): void{
+        this.group.Name = value;
+    }
+
+    onGroupDescriptionKeyUp(value: string): void{
+        this.group.Description = value;
+    }
+
+    onCancel(): void {
         this.location.back();
     }
 
-    initArrays(){
+    initArrays(): void{
         if(this.group) {
             for(let id in this.group.SelectedMembersId) {
                 let index = this.unselectedMembers.findIndex( u=> u.Id == +id);
@@ -151,11 +170,24 @@ export class GroupEditComponent extends MDL implements OnInit {
                     this.unselectedMembers.splice(index, 1);
                 }
             }
+            this.filteredMembers = this.unselectedMembers;
         }
     }
 
 
     trackByUsers(index: number, user: UserContact): number { 
         return user.Id;
+    }
+
+    canShowWrongNameTip(): boolean{
+        return !(this.group && this.group.Name && this.group.Name.length >=4)
+    }
+
+    canShowNotEnoughMembers(): boolean{
+        return !this.canShowWrongNameTip() && this.group.SelectedMembersId.length < 1;
+    }
+
+    isCanSaveOrCreate(): boolean{
+        return !(this.canShowNotEnoughMembers() || this.canShowWrongNameTip());
     }
 }

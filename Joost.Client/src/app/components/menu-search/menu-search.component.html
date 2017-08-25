@@ -1,6 +1,6 @@
 <form>
   <div class="text-input-container">
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <div class="menu-input mdl-textfield mdl-js-textfield mdl-textfield--floating-label menu-input">
       <input class="mdl-textfield__input" name="search" type="text" [(ngModel)]="searchString" (keyup)="search()" id="search-users">
       <label class="mdl-textfield__label" for="search-users">Find...</label>
     </div>
@@ -25,5 +25,4 @@
 	<div class="wrapper__spiner">
 		<div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" [hidden]="(isLoad && searchString) || !searchString"></div>
 	</div>
-	
 </form>

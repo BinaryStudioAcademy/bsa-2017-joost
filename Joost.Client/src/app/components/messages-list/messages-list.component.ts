@@ -11,7 +11,7 @@ import { MDL } from "../mdl-base.component";
 @Component({
     selector: "messages-list",
     templateUrl: "./messages-list.component.html",
-    styleUrls: ["./messages-list.component.css"] 
+    styleUrls: ["./messages-list.component.scss"] 
 })
 export class MessagesListComponent extends MDL implements OnInit, AfterViewInit {
     private id: string;

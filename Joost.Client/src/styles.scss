@@ -24,11 +24,6 @@ html, body {
     width: 100%;
 }
 
-.text-input-container{
-    width: $left-panel-width - 48px;
-    padding:0 16px;
-}
-
 .mdl-textfield__label:after{
     background-color: $color-after-elements;
 }
@@ -63,4 +58,27 @@ html, body {
 
 .busy-state{
  color: $color-offline-indecator;
+}
+
+// style for inputs on menu tabs
+
+.text-input-container{
+    padding:0 16px;
+}
+
+.menu-input{
+	width: 100% !important;
+}
+
+.menu-input.mdl-textfield .mdl-textfield__input{
+	border-color: #9698ab; 
+}
+
+.menu-input.mdl-textfield .mdl-textfield__label{
+	color: #9698ab !important; 
+}
+
+.menu-input.mdl-textfield.is-focused .mdl-textfield__label,
+.menu-input.mdl-textfield.is-dirty .mdl-textfield__label{
+	color: rgb(63, 81, 181) !important; 
 }

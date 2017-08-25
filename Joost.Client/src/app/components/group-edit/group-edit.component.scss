@@ -6,10 +6,19 @@
     padding-top: 0;
     padding-bottom: 0;
 }
-
+.groups-list-container{
+    display: flex;
+    flex-direction: row;
+    align-items:stretch;
+    > div{
+        flex-direction: column;
+        display: flex;
+    }
+}
 .jc-list-user{
-    height: 300px;
-
+    max-height: 300px;
+    overflow :auto;
+    flex: 1;
     li:hover{
         background-color: #F5F5F5;
         margin-left: 1px;
@@ -17,7 +26,6 @@
 }
 
 .jc-list-added{
-    overflow :auto;
     margin-top: 82px;
 }
 
@@ -36,10 +44,29 @@
 
 .jg-container{
     width: calc(100% - 10px);
-    height: calc(100vh - 10px);
+    min-height: calc(100vh - 10px);
     margin: 5px auto;
-    min-height: 600px;
-    // > div{
-    //     flex: 1;
-    // }
+    > div{
+        &:nth-last-child(2){
+            flex: 1;
+        }
+    }
+}
+
+.mdl-textfield.is-invalid .mdl-textfield__input{
+	border-color: rgba(0,0,0,.12); 
+}
+.mdl-textfield.is-invalid.is-focused .mdl-textfield__input,
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__input{
+	border-color: #d50000; 
+	box-shadow: none;
+}
+.mdl-textfield.is-invalid .mdl-textfield__label{
+    color: rgb(189,189,189); 
+	font-size: 16px;
+}
+.mdl-textfield.is-invalid.is-focused .mdl-textfield__label,
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__label{
+	color: #d50000; 
+	font-size:12px;
 }
