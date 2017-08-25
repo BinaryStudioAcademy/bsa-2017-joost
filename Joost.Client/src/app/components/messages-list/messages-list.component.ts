@@ -6,6 +6,7 @@ import { AccountService } from "../../services/account.service";
 import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
 import { MDL } from "../mdl-base.component";
+import { DialogService } from "../../services/dialog.service";
 
 
 @Component({
@@ -25,7 +26,8 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 private messagesService: MessageService,
                 private userService: UserService,
                 private accountService: AccountService,
-                private groupService: GroupService) {
+                private groupService: GroupService,
+                private dialogService: DialogService) {
         super();
     }
 

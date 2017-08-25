@@ -15,6 +15,7 @@ export class MenuMessagesComponent implements OnInit {
   constructor(private dialogService: DialogService, private router: Router) {
     dialogService.getDialogs().subscribe(d => {
       this.dialogs = d;
+      console.log(d);
     },
     async err => {
       await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 

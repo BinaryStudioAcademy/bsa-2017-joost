@@ -5,8 +5,8 @@
   <div class="mdl-card__title jc-group-edit-title-container">
     <div class="mainCl"> 
       <ul #scroll class="mdl-list scrollable" (scroll)="scrolEvent($event)" >
-        <li *ngFor="let message of messages"
-          class="mdl-list__item mdl-list__item--three-line">
+        <div *ngFor="let message of messages">
+        <li *ngIf="messagesService.isOwnMessage(message, id)" class="mdl-list__item mdl-list__item--three-line">
             <div class="message-container">
               <div>
                   <img src="{{null | avatarPipe}}" class="material-icons mdl-list__item-avatar">
@@ -29,8 +29,7 @@
               </div>
             </div>
         </li>
-        <!-- <li *ngFor="let message of messages"
-          class="mdl-list__item mdl-list__item--three-line self-message">
+        <li *ngIf="messagesService.isOwnMessage(message, id)==false" class="mdl-list__item mdl-list__item--three-line self-message">
           <div class="message-container">
             <div class="main-message-content">
               <div class="message-header">
@@ -49,14 +48,18 @@
                   
             </div>
           </div>
-      </li> -->
+      </li>
+    </div> 
       </ul>    
     </div>
-    <div class="mdl-card__actions mdl-card--border message-input-container">
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="sample3">
-        <label class="mdl-textfield__label" for="sample3">Text...</label>
-      </div>
-    </div>
   </div>
+  <form action="#">
+      <div class ="mdl-card__actions mdl-card--border message-input-container send-message-container">     
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="text" id="messageForm">
+          <label class="mdl-textfield__label" for="messageForm">Message text...</label>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button">Send</button>
+      </div>
+    </form>
 </div>

@@ -7,7 +7,7 @@
     <ul class="demo-list-three mdl-list">
         <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let dialog of dialogs" (click)="navigateToMessages(dialog)">
           <span class="mdl-list__item-primary-content">
-            <img src="{{ dialog.Image }}" class="material-icons mdl-list__item-avatar">
+            <img src="{{dialog.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">            
             <span>{{ dialog.Name }}</span>
             <span class="mdl-list__item-text-body">
               {{ dialog.LastMessage }}

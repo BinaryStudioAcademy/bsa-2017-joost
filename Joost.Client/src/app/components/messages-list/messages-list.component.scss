@@ -1,83 +1,5 @@
 @import '../../../vars.scss';
 
-// .mainCl{
-//   position: relative;
-//   overflow: hidden;
-// }
-
-// .messages-container{
-//   width: 100%;
-//   height: 640px;
-//   overflow: scroll;
-//   overflow-x: hidden;
-//   margin: 0;
-// }
-
-// .date{
-//   font-size: 10px;
-// }
-
-// .header{
-//   text-align: center;
-//   font-size: 20px;
-// }
-
-// .messages {
- 
-
-//   /*margin: 5% 5% 10% 5%; */
-  
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   overflow-y: scroll;
-// }
-
-// .messages .own {
-//   align-self: flex-end;
-//   margin-top: 5px;
-//   border-radius: 4px;
-//   width: 30%;
-// }
-
-// .messages .own .text{
-//     background-color: #7070b5 ;
-//       align-self: flex-start;
-  
-//   padding: 10px;
-//   margin-top: 5px;
-//   border-radius: 4px;
-//   width: 30%;
-// }
-
-// .messages .alien {
-//   align-self: flex-start;
-//   margin-top: 5px;
-//   border-radius: 4px;
-//   width: 30%;
-// }
-
-// .messages .alien .text{
-//   background-color: #3b628e;
-
-//   padding: 10px;
-//   margin-top: 5px;
-//   border-radius: 4px;
-//   width: 30%;
-// }
-
-// img{
-//     height: 40px;
-//     width: 40px;
-//     border-radius: 50%;
-// }
-//   .NamePh{
-//     margin: 10px;
-//   }
-  
-
- 
-  
   .jc-group-edit-title-container{
       display: flex;
       flex-direction: column;
@@ -181,3 +103,21 @@
     position: absolute;
     bottom: 0;
 }
+
+.send-message-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    vertical-align: center;
+    > div{
+        width: 80%;
+    }
+}
+
+.send-button{
+    align-self: center;
+    margin-left: 14px;
+}
+
+
+
