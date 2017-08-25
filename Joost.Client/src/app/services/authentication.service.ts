@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 //import { HttpClient } from "@angular/common/http";
 import { HttpRequest, HttpResponse } from "@angular/common/http";
 import { HttpService } from '../services/http.service';
@@ -52,5 +52,6 @@ export class AuthenticationService extends BaseApiService {
   logout() {
     this.token = null;
     localStorage.removeItem('joostUserAccessToken');
+    localStorage.removeItem('joostUserRefreshToken');
   }
 }

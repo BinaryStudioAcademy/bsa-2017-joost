@@ -1,22 +1,23 @@
 ﻿<div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
     <div class="user-editing-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
+        <div class="settings-header"><h3>Settings</h3></div><hr />
         <div class="user-editing-group mdl-card__actions mdl-card--border">
             <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--12-col">
                     <div class="settings-item">
                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-users">
                             <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input" (ngModelChange)="onNotificationsForUsers()" checked>
-                            <span class="mdl-switch__label">Notifications for all users</span>
+                            <span class="mdl-switch__label">Notifications from users</span>
                         </label>
                     </div>
                     <div class="settings-item">
                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-groups">
                             <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input" (ngModelChange)="onNotificationsForGroups()" checked>
-                            <span class="mdl-switch__label">Notifications for all groups</span>
+                            <span class="mdl-switch__label">Notifications from groups</span>
                         </label>
                     </div>
                     <div class="settings-item">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Logout</button>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="logout()">Logout</button>
                     </div>
                 </div>
             </div>
