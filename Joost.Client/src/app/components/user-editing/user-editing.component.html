@@ -3,11 +3,15 @@
 
       <div class="jg-header-container mdl-grid mdl-shadow--2dp">
             <div class="avatar-upload-container">
-              <label for="file-upload" class="custom-file-upload"><img src="{{user.Avatar | avatarPipe}}" class="avatar-upload-image"></label>
-              <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
-              <div class="avatar-upload-overlay">
-                <div class="avatar-upload-overlay-text">Click to change avatar</div>
+              <label for="file-upload" class="custom-file-upload">
+              <div class="wrapper-avatar">
+	              <div class="avatar-upload-overlay">
+	                <i class="material-icons">create</i>
+	              </div>
               </div>
+              <img src="{{user.Avatar | avatarPipe}}" class="avatar-upload-image"></label>
+              <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
+              
             </div>
             <div>
               <h3>{{user | namePipe}}</h3>
