@@ -5,6 +5,7 @@ import 'rxjs/add/operator/switchMap';
 
 import { MDL } from '../mdl-base.component';
 import { AuthenticationService } from "../../services/authentication.service";
+import { AccountService } from "../../services/account.service";
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -12,19 +13,23 @@ import { AuthenticationService } from "../../services/authentication.service";
 })
 export class SettingsComponent extends MDL implements OnInit {
 
-    constructor(private router: Router, private authService: AuthenticationService) {
-        super();
-    }
+  constructor(private router: Router, private authService: AuthenticationService, private accountService: AccountService) {
+      super();
+  }
+  notificationFromUsers: boolean = false;
+  notificationFromGroups: boolean = false;
 
   ngOnInit() {
+      this.accountService.getNotificationFromUsers().subscribe(data => { this.notificationFromUsers = data; });
+      this.accountService.getNotificationFromGroups().subscribe(data => { this.notificationFromGroups = data; });
   }
 
-  onNotificationsForUsers() {
-
+  onNotificationsFromUsers() {
+      this.accountService.updateNotificationFromUsers(this.notificationFromUsers);
   }
 
-  onNotificationsForGroups() {
-
+  onNotificationsFromGroups() {
+      this.accountService.updateNotificationFromGroups(this.notificationFromGroups);
   }
 
   logout() {

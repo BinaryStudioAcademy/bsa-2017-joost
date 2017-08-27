@@ -6,13 +6,13 @@
                 <div class="mdl-cell mdl-cell--12-col">
                     <div class="settings-item">
                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-users">
-                            <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input" (ngModelChange)="onNotificationsForUsers()" checked>
+                            <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input"  [(ngModel)]="notificationFromUsers" (ngModelChange)="onNotificationsFromUsers()">
                             <span class="mdl-switch__label">Notifications from users</span>
                         </label>
                     </div>
                     <div class="settings-item">
                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-groups">
-                            <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input" (ngModelChange)="onNotificationsForGroups()" checked>
+                            <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input"  [(ngModel)]="notificationFromGroups" (ngModelChange)="onNotificationsFromGroups()">
                             <span class="mdl-switch__label">Notifications from groups</span>
                         </label>
                     </div>

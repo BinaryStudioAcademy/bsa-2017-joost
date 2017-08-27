@@ -71,6 +71,10 @@
     <Compile Include="Migrations\201708232028066_NotificationProperties.Designer.cs">
       <DependentUpon>201708232028066_NotificationProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708272131470_AddNotificationsPropertiesFromUsersAndGroups.cs" />
+    <Compile Include="Migrations\201708272131470_AddNotificationsPropertiesFromUsersAndGroups.Designer.cs">
+      <DependentUpon>201708272131470_AddNotificationsPropertiesFromUsersAndGroups.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -89,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708232028066_NotificationProperties.resx">
       <DependentUpon>201708232028066_NotificationProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708272131470_AddNotificationsPropertiesFromUsersAndGroups.resx">
+      <DependentUpon>201708272131470_AddNotificationsPropertiesFromUsersAndGroups.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
