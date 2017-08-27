@@ -15,8 +15,9 @@
             </div>
             <div>
               <h3>{{user | namePipe}}</h3>
-              <div class="mdl-layout-spacer">
-                <input class="mdl-textfield__input user-status-text" type="text"  [(ngModel)]="user.Status" placeholder="Describe your mood..." />
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input user-status-text" type="text" id="userStatus" value="{{user.Status}}" #userStatus (keyup)="onUserStatusKeyUp(userStatus.value)">
+                <label class="mdl-textfield__label" for="sample1">Describe your mood...</label>
               </div>
               <div [innerHtml]="user.State | statePipe"></div>
               <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                              
