@@ -133,7 +133,11 @@ export class UserEditingComponent extends MDL implements OnInit {
     this.datePickerValue = {  date: { year: +(receivedDate.getFullYear()).toString(), month: +(receivedDate.getMonth() + 1).toString(), day: +(receivedDate.getDate()).toString() } };
   }
 
-
+  onUserStatusKeyUp(status: string): void{
+    if(this.user){
+      this.user.Status = status;
+    }
+  }
 
 }
 
