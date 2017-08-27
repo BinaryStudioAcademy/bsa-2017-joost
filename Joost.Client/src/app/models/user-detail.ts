@@ -2,7 +2,6 @@
     Id: number;
     FirstName: string;
     LastName: string;
-    Email: string;
     City: string;
     Country: string;
     BirthDate: Date;

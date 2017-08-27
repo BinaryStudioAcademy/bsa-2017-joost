@@ -8,7 +8,6 @@ namespace Joost.Api.Models
 		public int Id { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
-		public string Email { get; set; }
 		public string City { get; set; }
 		public string Country { get; set; }
 		public DateTime BirthDate { get; set; }
@@ -28,7 +27,6 @@ namespace Joost.Api.Models
                     Id = model.Id,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Email = model.Email,
                     City = model.City,
                     Country = model.Country,
                     BirthDate = model.BirthDate,
