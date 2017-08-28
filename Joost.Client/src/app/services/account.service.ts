@@ -57,14 +57,14 @@ export class AccountService extends BaseApiService {
     return this.http.sendRequest(request);
   }
 
-  getNotificationFromUsers() {
+  getNotificationFromUsers(): Observable<boolean> {
       let req = new HttpRequest("GET", this.generateUrl() + '/notificationsfromusers');
-      return this.http.sendRequest<boolean>(req);
+      return this.http.sendRequest<Response>(req).map((res: Response) => { return res ? true : false; });
   }
 
-  getNotificationFromGroups() {
+  getNotificationFromGroups(): Observable<boolean> {
       let req = new HttpRequest("GET", this.generateUrl() + '/notificationsfromgroups');
-      return this.http.sendRequest<boolean>(req);
+      return this.http.sendRequest<Response>(req).map((res: Response) => { return res ? true : false; });
   }
 
   updateNotificationFromUsers(notification: boolean) {

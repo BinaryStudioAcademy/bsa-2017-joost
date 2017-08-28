@@ -16,8 +16,8 @@ export class SettingsComponent extends MDL implements OnInit {
   constructor(private router: Router, private authService: AuthenticationService, private accountService: AccountService) {
       super();
   }
-  notificationFromUsers: boolean = false;
-  notificationFromGroups: boolean = false;
+  notificationFromUsers: boolean;
+  notificationFromGroups: boolean;
 
   ngOnInit() {
       this.accountService.getNotificationFromUsers().subscribe(data => { this.notificationFromUsers = data; });
