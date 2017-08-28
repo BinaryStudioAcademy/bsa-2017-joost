@@ -39,7 +39,8 @@ namespace Joost.Api.Services
                         ReceiverId = m.Receiver.Id,
                         Text = m.Text,
                         CreatedAt = m.CreatedAt,
-                        EditedAt = m.EditedAt
+                        EditedAt = m.EditedAt,
+                        AttachedFile = m.AttachedFile
                     })
                     .ToListAsync();
             }
@@ -64,7 +65,8 @@ namespace Joost.Api.Services
                         ReceiverId = m.Receiver.Id,
                         Text = m.Text,
                         CreatedAt = m.CreatedAt,
-                        EditedAt = m.EditedAt
+                        EditedAt = m.EditedAt,
+                        AttachedFile = m.AttachedFile
                     })
                     .ToListAsync();
             }
@@ -88,7 +90,8 @@ namespace Joost.Api.Services
                                 Receiver = receiver,
                                 Text = message.Text,
                                 CreatedAt = message.CreatedAt,
-                                EditedAt = message.EditedAt
+                                EditedAt = message.EditedAt,
+                                AttachedFile = message.AttachedFile
                             };
                             _unitOfWork.Repository<Message>().Add(newMessage);
                             await _chatHubService.SendToUser(message);
@@ -115,7 +118,8 @@ namespace Joost.Api.Services
                             Receiver = receiver,
                             Text = groupMessage.Text,
                             CreatedAt = groupMessage.CreatedAt,
-                            EditedAt = groupMessage.EditedAt
+                            EditedAt = groupMessage.EditedAt,
+                            AttachedFile = groupMessage.AttachedFile
                         };
                         _unitOfWork.Repository<GroupMessage>().Add(newMessage);
                         await _chatHubService.SendToGroup(groupMessage);
@@ -136,16 +140,9 @@ namespace Joost.Api.Services
                     message.EditedAt = editedAt;
                     messageRepository.Attach(message);
                     await _unitOfWork.SaveAsync();
+                    return MessageDto.FromMessageModel(message);
                 }
-                return new MessageDto()
-                {
-                    Id = message.Id,
-                    SenderId = message.Sender.Id,
-                    ReceiverId = message.Receiver.Id,
-                    Text = message.Text,
-                    CreatedAt = message.CreatedAt,
-                    EditedAt = message.EditedAt
-                };
+                else return new MessageDto();
             }
         }
 
@@ -160,16 +157,9 @@ namespace Joost.Api.Services
                     groupMessage.EditedAt = editedAt;
                     groupMessageRepository.Attach(groupMessage);
                     await _unitOfWork.SaveAsync();
+                    return MessageDto.FromGroupMessageModel(groupMessage);
                 }
-                return new MessageDto()
-                {
-                    Id = groupMessage.Id,
-                    SenderId = groupMessage.Sender.Id,
-                    ReceiverId = groupMessage.Receiver.Id,
-                    Text = groupMessage.Text,
-                    CreatedAt = groupMessage.CreatedAt,
-                    EditedAt = groupMessage.EditedAt
-                };
+                else return new MessageDto();
             }
         }
 

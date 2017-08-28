@@ -16,7 +16,7 @@ export class ChatHubService {
 
   //public onConnectedEvent: EventEmitter<void>;
   //public onNewUserConnectedEvent: EventEmitter<void>;
-  public addMessageEvent: EventEmitter<void>;
+  public addMessageEvent: EventEmitter<Message>;
   //public onUserDisconnectedEvent: EventEmitter<void>;
 
   constructor() {
@@ -27,18 +27,21 @@ export class ChatHubService {
     this.ChatProxy = this.SignalrConnection.createHubProxy(this.hubName);
 
     this.registerEvents();
-    this.startConnection();
 
-    this.addMessageEvent = new EventEmitter<void>();
+    this.addMessageEvent = new EventEmitter<Message>();
   }
 
-  private startConnection(): void {
-    this.SignalrConnection.start().done((data: any) => {
+  private async startConnection(): Promise<any> {
+    await this.SignalrConnection.start().done((data: any) => {
       this.ConnectionId = this.SignalrConnection.id;
       console.log('Connection estabilished. Connection id: ' + this.ConnectionId);
     }).fail((error) => {
       console.log('Could not connect to hub. Error: ' + error);
     });
+  }
+
+  disconnect() {
+    this.SignalrConnection.stop();
   }
 
   private registerEvents(): void {
@@ -50,10 +53,8 @@ export class ChatHubService {
     this.ChatProxy.on('onNewUserConnected', function (connectionId: string, userId: number) {
     });
 
-    this.ChatProxy.on('addMessage', function () {
-      console.log("before");
-      self.addMessageEvent.emit();
-      console.log("after");      
+    this.ChatProxy.on('addMessage', function (message: Message) {
+      self.addMessageEvent.emit(message); 
     });
 
     this.ChatProxy.on('onUserDisconnected', function (connectionId: string, userId: number) {
@@ -61,11 +62,13 @@ export class ChatHubService {
   }
 
   //Server methods here:
-  connect(userId: number) {
-    this.ChatProxy.invoke('Connect', userId).done(function () {
-      console.log('Invocation of Connect on server succeeded.');
-    }).fail(function (error) {
-      console.log('Invocation of Connect on server failed. Error: ' + error);
+  async connect(userId: number) {
+    this.startConnection().then(() => {
+      this.ChatProxy.invoke('Connect', userId).done(function () {
+        console.log('Invocation of Connect on server succeeded.');
+      }).fail(function (error) {
+        console.log('Invocation of Connect on server failed. Error: ' + error);
+      });
     });
   }
 

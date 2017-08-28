@@ -96,17 +96,27 @@ namespace Joost.Api.Controllers
         // DELETE: api/Messages/5
         [HttpDelete]
         [Route("user-messages")]
-        public async Task DeleteUserMessage(int messageId)
+        public async Task<IHttpActionResult> DeleteUserMessage(int messageId)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             await _messageService.DeleteUserMessage(messageId);
+            return Ok();
         }
 
         // DELETE: api/Messages/5
         [HttpDelete]
         [Route("group-messages")]
-        public async Task DeleteGroupMessage(int groupMessageId)
+        public async Task<IHttpActionResult> DeleteGroupMessage(int groupMessageId)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             await _messageService.DeleteGroupMessage(groupMessageId);
+            return Ok();
         }
     }
 }

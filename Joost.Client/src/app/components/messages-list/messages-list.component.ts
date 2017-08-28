@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MessageService } from "../../services/message.service";
 import { Message } from "../../models/message";
@@ -16,7 +16,7 @@ import { Subscription } from "rxjs/Rx";
     templateUrl: "./messages-list.component.html",
     styleUrls: ["./messages-list.component.scss"] 
 })
-export class MessagesListComponent extends MDL implements OnInit, AfterViewInit {
+export class MessagesListComponent extends MDL implements OnInit, OnDestroy, AfterViewInit {
     private id: number;
     private isGroup: boolean;
     private skip = 0;
@@ -35,10 +35,6 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
                 private chatHubService: ChatHubService) {
 
         super();
-        this.subscription = this.chatHubService.addMessageEvent.subscribe(() => {
-            console.log("inSubscribeConstructor");
-            this.addToMessages(new Message());
-        });
     }
 
     private scrolEvent(event) {
@@ -75,6 +71,9 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
      }
 
     ngOnInit() {
+        this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
+            this.addToMessages(message);
+        });
      this.accountService.getUser().subscribe(u => {
      this.currnetUserId = u.Id;
      this.router.paramMap
@@ -112,6 +111,10 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
     });
     }
 
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
     send(text: string) {
         if (text != null && text != "")
         {
@@ -131,7 +134,5 @@ export class MessagesListComponent extends MDL implements OnInit, AfterViewInit 
     private addToMessages(message: Message) {
         this.messages.push(message);
         this.messageText = "";
-        console.log("inAddToMessagesFunction");
-        debugger;
     }
 }

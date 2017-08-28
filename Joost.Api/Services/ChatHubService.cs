@@ -10,12 +10,12 @@ namespace Joost.Api.Services
     public class ChatHubService : IChatHubService
     {
         private IUnitOfWork _unitOfWork;
-        private IHubContext _hubContext;
+        private IHubContext<IClient> _hubContext;
 
         public ChatHubService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            _hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub, IClient>();
         }
 
         public async Task SendToUser(MessageDto message)
@@ -25,7 +25,7 @@ namespace Joost.Api.Services
                 var receiver = await userRepository.GetAsync(message.ReceiverId);
                 if (receiver != null && !string.IsNullOrEmpty(receiver.ConnectionId))
                 {
-                    await _hubContext.Clients.Client(receiver.ConnectionId).addMessage();
+                    await _hubContext.Clients.Client(receiver.ConnectionId).addMessage(message);
                 }
             }
         }

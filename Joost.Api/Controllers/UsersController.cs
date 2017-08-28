@@ -10,8 +10,6 @@ using System.Web.Http;
 
 namespace Joost.Api.Controllers
 {
-	using System.Collections.Generic;
-
 	[RoutePrefix("api/users")]
 	public class UsersController : BaseApiController
 	{

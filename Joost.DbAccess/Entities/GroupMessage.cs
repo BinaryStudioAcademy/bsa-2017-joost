@@ -11,5 +11,6 @@ namespace Joost.DbAccess.Entities
         public string Text { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime EditedAt { get; set; }
+        public string AttachedFile { get; set; }
     }
 }

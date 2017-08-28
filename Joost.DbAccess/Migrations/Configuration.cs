@@ -56,13 +56,13 @@
             var messages = new List<Message>
             {
                 new Message { Sender = users[5], Receiver = users[3],
-                    CreatedAt = DateTime.Now, Text = "Привіт)" },
+                    CreatedAt = new DateTime(2017, 8, 28, 1, 1, 1), Text = "Привіт)" },
                 new Message { Sender = users[3], Receiver = users[5],
-                    CreatedAt = DateTime.Now, Text = "Привіт!" },
+                    CreatedAt = new DateTime(2017, 8, 28, 1, 1, 2), Text = "Привіт!" },
                 new Message { Sender = users[5], Receiver = users[3],
-                    CreatedAt = DateTime.Now, Text = "Як справи?" },
+                    CreatedAt = new DateTime(2017, 8, 28, 2, 2, 2), Text = "Як справи?" },
                 new Message { Sender = users[3], Receiver = users[5],
-                    CreatedAt = DateTime.Now, Text = "Норма, а в тебе?" }
+                    CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" }
             };
 
             messages.ForEach(c => context.Messages.Add(c));

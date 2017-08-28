@@ -15,13 +15,18 @@ namespace Joost.Api.Hubs
             _unitOfWork = unitOfWork; 
         }
 
+        public override Task OnConnected()
+        {
+            return base.OnConnected();
+        }
+
         public async Task Connect(int userId)
         {
             var connectionId = Context.ConnectionId;
             using (var userRepository = _unitOfWork.Repository<User>())
             {
                 var user = await userRepository.GetAsync(userId);
-                if (user != null && string.IsNullOrEmpty(user.ConnectionId))
+                if (user != null /*&& string.IsNullOrEmpty(user.ConnectionId)*/)
                 {
                     user.ConnectionId = connectionId;
                     foreach (var group in user.Groups)
@@ -49,13 +54,13 @@ namespace Joost.Api.Hubs
                     {
                         Groups.Remove(connectionId, group.Id.ToString());
                     }
+                    _unitOfWork.Save();
                 }
-                _unitOfWork.Save();
             }
             return base.OnDisconnected(stopCalled);
         }
 
-        public async Task SendToUser(MessageDto message)
+        private async Task SendToUser(MessageDto message)
         {
             using (var userRepository = _unitOfWork.Repository<User>())
             {
@@ -67,7 +72,7 @@ namespace Joost.Api.Hubs
             }
         }
 
-        public async Task SendToGroup(MessageDto message)
+        private async Task SendToGroup(MessageDto message)
         {
             await Clients.Group(message.ReceiverId.ToString()).addMessage(message);
         }
