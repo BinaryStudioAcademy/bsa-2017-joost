@@ -19,25 +19,25 @@ namespace Joost.Api.Controllers
 
         [HttpGet]
         [Route("user-messages")]
-        public async Task<IHttpActionResult> GetUserMessages(int userId, int count)
+        public async Task<IHttpActionResult> GetUserMessages(int userId, int skip, int take)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var messages = await _messageService.GetUserMessages(userId, count);
+            var messages = await _messageService.GetUserMessages(userId, skip, take);
             return Ok(messages);
         }
 
         [HttpGet]
         [Route("group-messages")]
-        public async Task<IHttpActionResult> GetGroupMessages(int groupId, int count)
+        public async Task<IHttpActionResult> GetGroupMessages(int groupId, int skip, int take)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var groupMessages = await _messageService.GetGroupMessages(groupId, count);
+            var groupMessages = await _messageService.GetGroupMessages(groupId, skip, take);
             return Ok(groupMessages);
         }
 

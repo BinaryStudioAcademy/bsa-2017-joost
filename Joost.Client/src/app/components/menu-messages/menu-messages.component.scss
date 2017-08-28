@@ -1,13 +1,34 @@
 @import '../../../vars.scss';
 
+.mdl-list__item-primary-content{
+ color: $color-text-primary;
+}
+.mdl-list__item-text-body{
+  max-width: 300px;
+  color: $color-text-secondary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .mdl-list__item:hover{
     background-color:$color-primary-dark;
 }
-
-.mdl-list__item-text-body{
-    color:$color-text-secondary;
+.add-contact{
+	color: rgb(0, 206, 55);
+	margin-left: 5px;
+}
+.new-user{
+	cursor:pointer;
+}
+.menu__search__not_found{
+	text-align: center;
+	padding: 0 15px;
+	margin: 10px 0;
+	font-size: 18px;
+}
+.wrapper__spiner {
+	text-align:center;
 }
 
-.mdl-list__item-primary-content{
-    color:$color-text-primary;
-}
+

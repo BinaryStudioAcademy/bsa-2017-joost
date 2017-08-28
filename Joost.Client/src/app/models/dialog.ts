@@ -1,5 +1,5 @@
 export class Dialog {
-  public Id: string;
+  public Id: number;
   public Name: string;
   public LastMessage: string;
   public Avatar: string;

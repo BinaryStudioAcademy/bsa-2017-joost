@@ -1,5 +1,4 @@
 ﻿using Joost.Api.Models;
-using Joost.DbAccess.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,8 +7,8 @@ namespace Joost.Api.Services
 {
     public interface IMessageService
     {
-        Task<IEnumerable<MessageDto>> GetUserMessages(int userId, int count);
-        Task<IEnumerable<MessageDto>> GetGroupMessages(int groupId, int count);
+        Task<IEnumerable<MessageDto>> GetUserMessages(int userId, int skip, int take);
+        Task<IEnumerable<MessageDto>> GetGroupMessages(int groupId, int skip, int take);
         Task AddUserMessage(MessageDto message);
         Task AddGroupMessage(MessageDto groupMessage);
         Task<MessageDto> EditUserMessage(int messageId, string newText, DateTime editedAt);
