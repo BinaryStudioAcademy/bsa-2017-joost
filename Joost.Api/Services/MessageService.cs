@@ -20,7 +20,7 @@ namespace Joost.Api.Services
             _chatHubService = chatHubService;
         }
 
-        public async Task<IEnumerable<MessageDto>> GetUserMessages(int userId, int count)
+        public async Task<IEnumerable<MessageDto>> GetUserMessages(int userId, int skip, int take)
         {
             using (var messageRepository = _unitOfWork.Repository<Message>())
             {
@@ -29,7 +29,9 @@ namespace Joost.Api.Services
                     .Include(m => m.Sender)
                     .Include(m => m.Receiver)
                     .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId)
-                    .Take(count)
+                    .OrderBy(m => m.CreatedAt)
+                    .Skip(skip)
+                    .Take(take)
                     .Select(m => new MessageDto
                     {
                         Id = m.Id,
@@ -43,7 +45,7 @@ namespace Joost.Api.Services
             }
         }
 
-        public async Task<IEnumerable<MessageDto>> GetGroupMessages(int groupId, int count)
+        public async Task<IEnumerable<MessageDto>> GetGroupMessages(int groupId, int skip, int take)
         {
             using (var groupMessageRepository = _unitOfWork.Repository<GroupMessage>())
             {
@@ -52,7 +54,9 @@ namespace Joost.Api.Services
                     .Include(m => m.Sender)
                     .Include(m => m.Receiver)
                     .Where(m => m.Receiver.Id == groupId)
-                    .Take(count)
+                    .OrderBy(m => m.CreatedAt)
+                    .Skip(skip)
+                    .Take(take)
                     .Select(m => new MessageDto
                     {
                         Id = m.Id,
@@ -87,7 +91,7 @@ namespace Joost.Api.Services
                                 EditedAt = message.EditedAt
                             };
                             _unitOfWork.Repository<Message>().Add(newMessage);
-                            await _chatHubService.SendToUser(message.SenderId, message.ReceiverId, message.Text);
+                            await _chatHubService.SendToUser(message);
                             await _unitOfWork.SaveAsync();
                         }
                     }
@@ -114,7 +118,7 @@ namespace Joost.Api.Services
                             EditedAt = groupMessage.EditedAt
                         };
                         _unitOfWork.Repository<GroupMessage>().Add(newMessage);
-                        await _chatHubService.SendToGroup(groupMessage.SenderId, groupMessage.ReceiverId, groupMessage.Text);
+                        await _chatHubService.SendToGroup(groupMessage);
                         await _unitOfWork.SaveAsync();
                     }
                 }

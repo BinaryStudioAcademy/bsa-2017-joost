@@ -16,7 +16,7 @@ export class SignalTestComponent implements OnInit {
   }
 
   invoke() {
-    this.chatHubService.sendToUser(1,1,"text");
+    //this.chatHubService.sendToUser(1,1, "text");
   }
 
 }

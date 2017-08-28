@@ -1,107 +1,117 @@
 @import '../../../vars.scss';
 
-  .jc-group-edit-title-container{
-      display: flex;
-      flex-direction: column;
-      padding-top: 0;
-      padding-bottom: 0;
-  }
-  .groups-list-container{
-      display: flex;
-      flex-direction: row;
-      align-items:stretch;
-      > div{
-          flex-direction: column;
-          display: flex;
-      }
-  }
-  .jc-list-user{
-      height: 300px;
-
-      li:hover{
-          background-color: #F5F5F5;
-          margin-left: 1px;
-      }
-  }
-  
-  .jc-list-added{
-      overflow :auto;
-      margin-top: 82px;
-  }
-  
-  .jg-buttons-bottom-cantainer{
-      margin-top: auto;
-      display: flex;
-      justify-content:flex-end;
-  }
-  .jg-button-bottom{
-      margin-left: 16px;
-  }
-  
-  .jg-full-width-container{
-      width: 100%;
-  }
-  
-  .jg-container{
-      width: calc(100% - 10px);
-      height: calc(100vh - 10px);
-      margin: 5px auto;
-  }
-
-  //////////
-
-  .message-container{
-      font-size: 0.8em;
-      display: flex;
-  }
-
-  .main-content{
-    width: 100%;
+.dialog-title {
     display: flex;
-    flex-direction: column;
-  }
-  .message-header{
-      display: flex;
-      flex-direction: row;
-      margin-bottom:5px;
-      > div{
-        &:nth-last-child(1){
-            padding-left: 7px;
-        } 
-      } 
-  }
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
 
-  .message-text{
-      padding: 5px;
-      background-color: #BBDEFB;
-      font-size: 1.2em;
-      border-radius: 5px;
-      display: -webkit-inline-box;
-      min-height: 25px;
-  }
-
-.main-message-content{
+.title-text {
+    align-self: center;
     margin-left: 10px;
 }
 
-.mainCl{
+.main {
     width: 100%;
     > ul{
         padding: 0;
     }
 }
 
-.self-message{
-    justify-content: flex-end;
-    
-    .message-text{
-        float: right;
+.jc-group-edit-title-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.groups-list-container {
+    display: flex;
+    flex-direction: row;
+    align-items:stretch;
+    > div{
+        flex-direction: column;
+        display: flex;
+    }
+}
+.jc-list-user {
+    height: 300px;
+
+    li:hover {
+        background-color: #F5F5F5;
+        margin-left: 1px;
     }
 }
 
-.message-input-container{
-    position: absolute;
-    bottom: 0;
+.jc-list-added {
+    overflow :auto;
+    margin-top: 82px;
+}
+
+.jg-buttons-bottom-cantainer {
+    margin-top: auto;
+    display: flex;
+    justify-content:flex-end;
+}
+.jg-button-bottom {
+    margin-left: 16px;
+}
+
+.jg-full-width-container {
+    width: 100%;
+}
+
+.jg-container{
+    width: calc(100% - 10px);
+    height: calc(100vh - 10px);
+    margin: 5px auto;
+}
+
+.message-container {
+    font-size: 0.8em;
+    display: flex;
+}
+
+.main-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.message-header {
+    display: flex;
+    flex-direction: row;
+    margin-bottom:5px;
+    > div{
+      &:nth-last-child(1) {
+          padding-left: 7px;
+      } 
+    } 
+}
+
+.message-text {
+    padding: 5px;
+    background-color: #BBDEFB;
+    font-size: 1.2em;
+    border-radius: 5px;
+    display: -webkit-inline-box;
+    min-height: 25px;
+}
+
+.main-message-content {
+  margin-left: 10px;
+}
+
+.self-message {
+  justify-content: flex-end;
+  
+  .message-text{
+      float: right;
+  }
+}
+
+.message-input-container {
+  position: absolute;
+  bottom: 0;
 }
 
 .send-message-container{
@@ -118,6 +128,5 @@
     align-self: center;
     margin-left: 14px;
 }
-
 
 

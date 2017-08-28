@@ -5,6 +5,7 @@ import { AccountService } from "../../services/account.service";
 
 import { MDL } from "../mdl-base.component";
 import { UserProfile } from "../../models/user-profile";
+import { ChatHubService } from "../../services/chat-hub.service";
 
 @Component({
   selector: 'app-main-menu',
@@ -20,7 +21,8 @@ export class MainMenuComponent extends MDL implements OnInit {
   constructor(
     private router: Router, 
     private route: ActivatedRoute,
-    private accountService: AccountService) {
+    private accountService: AccountService,
+    private chatHubService: ChatHubService) {
       super();
   }
 
@@ -40,11 +42,15 @@ export class MainMenuComponent extends MDL implements OnInit {
   ngOnInit() {
     this.accountService.getUser().subscribe(data => {
       this.curUser = data;
+      this.chatHubService.connect(data.Id);
     },
     async error => {
       await this.accountService.handleTokenErrorIfExist(error).then( ok => {
         if(ok) {
-          this.accountService.getUser().subscribe(data => this.curUser = data);
+          this.accountService.getUser().subscribe(data => {
+            this.curUser = data;
+            this.chatHubService.connect(data.Id);      
+          });
         }
       })
     });

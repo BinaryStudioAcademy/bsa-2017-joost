@@ -2,6 +2,7 @@
 using Joost.DbAccess.Interfaces;
 using Microsoft.AspNet.SignalR;
 using Joost.DbAccess.Entities;
+using Joost.Api.Models;
 
 namespace Joost.Api.Hubs
 {
@@ -33,6 +34,7 @@ namespace Joost.Api.Hubs
                 }
             }
         }
+
         public override Task OnDisconnected(bool stopCalled)
         {
             using (var userRepository = _unitOfWork.Repository<User>())
@@ -52,20 +54,22 @@ namespace Joost.Api.Hubs
             }
             return base.OnDisconnected(stopCalled);
         }
-        public async Task SendToUser(int senderId, int receiverId, string message)
+
+        public async Task SendToUser(MessageDto message)
         {
             using (var userRepository = _unitOfWork.Repository<User>())
             {
-                var receiver = await userRepository.GetAsync(receiverId);
+                var receiver = await userRepository.GetAsync(message.ReceiverId);
                 if (receiver != null && !string.IsNullOrEmpty(receiver.ConnectionId))
                 {
-                    await Clients.Client(receiver.ConnectionId).addMessage(senderId, message);
+                    await Clients.Client(receiver.ConnectionId).addMessage(message);
                 }
             }
         }
-        public async Task SendToGroup(int senderId, int groupId, string message)
+
+        public async Task SendToGroup(MessageDto message)
         {
-            await Clients.Group(groupId.ToString()).addMessage(senderId, message);
+            await Clients.Group(message.ReceiverId.ToString()).addMessage(message);
         }
     }
 }
