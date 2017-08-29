@@ -200,5 +200,49 @@ namespace Joost.Api.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        [Route("notificationsfromusers")]
+        public async Task<IHttpActionResult> GetNotificationsFromUsers()
+        {
+            var id = GetCurrentUserId();
+            var user = await _unitOfWork.Repository<User>().GetAsync(id);
+
+            return Ok(user.NotificationsFromUsers);
+        }
+
+        [HttpGet]
+        [Route("notificationsfromgroups")]
+        public async Task<IHttpActionResult> GetNotificationsFromGroups()
+        {
+            var id = GetCurrentUserId();
+            var user = await _unitOfWork.Repository<User>().GetAsync(id);
+
+            return Ok(user.NotificationsFromGroups);
+        }
+
+        [HttpPut]
+        [Route("notificationsfromusers")]
+        public async Task<IHttpActionResult> EditNotificationsFromUsers([FromBody]bool notification)
+        {
+            var id = GetCurrentUserId();
+            var user = await _unitOfWork.Repository<User>().GetAsync(id);
+            user.NotificationsFromUsers = notification;
+            await _unitOfWork.SaveAsync();
+            
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("notificationsfromgroups")]
+        public async Task<IHttpActionResult> EditNotificationsFromGroups([FromBody]bool notification)
+        {
+            var id = GetCurrentUserId();
+            var user = await _unitOfWork.Repository<User>().GetAsync(id);
+            user.NotificationsFromGroups = notification;
+            await _unitOfWork.SaveAsync();
+
+            return Ok();
+        }
     }
 }

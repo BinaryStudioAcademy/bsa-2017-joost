@@ -19,6 +19,8 @@ namespace Joost.DbAccess.Entities
         public string Avatar { get; set; }
         public UserState State { get; set; }
         public bool IsActived { get; set; }
+        public bool NotificationsFromUsers { get; set; }
+        public bool NotificationsFromGroups { get; set; }
         public bool Notifications { get; set; }
 
         public virtual ICollection<Group> MutedGroups { get; set; }

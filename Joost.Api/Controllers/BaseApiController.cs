@@ -13,6 +13,7 @@ namespace Joost.Api.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+
         protected int GetCurrentUserId()
         {
             var header = Request.Headers.GetValues("Authorization").FirstOrDefault();
@@ -23,6 +24,7 @@ namespace Joost.Api.Controllers
                 return token.AT_UserId;
             }
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

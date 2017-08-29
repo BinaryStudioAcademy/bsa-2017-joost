@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-//import { HttpClient,HttpParams } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
 import { Observable } from 'rxjs';
 
@@ -20,4 +19,5 @@ export class BaseApiService {
       return await this.http.handleTokenError();
     else false;
   }
+  
 }

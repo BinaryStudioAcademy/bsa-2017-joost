@@ -4,16 +4,16 @@
         <div class="user-editing-group mdl-card__actions mdl-card--border">
             <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--12-col">
-                    <div class="settings-item">
-                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-users">
-                            <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input" (ngModelChange)="onNotificationsForUsers()" checked>
-                            <span class="mdl-switch__label">Notifications from users</span>
+                   <div class="settings-item">
+                        <label #notifyFromUsers class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-users">
+                            <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input" name="notificationFromUsers" [(ngModel)]="notificationFromUsers" (ngModelChange)="onNotificationsFromUsers()">
+                            <span class="mdl-switch__label">Turn off notifications from users</span>
                         </label>
                     </div>
                     <div class="settings-item">
-                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-groups">
-                            <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input" (ngModelChange)="onNotificationsForGroups()" checked>
-                            <span class="mdl-switch__label">Notifications from groups</span>
+                        <label #notifyFromGroups class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-groups"> 
+                            <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input" [(ngModel)]="notificationFromGroups" (ngModelChange)="onNotificationsFromGroups()">
+                            <span class="mdl-switch__label">Turn off notifications from groups</span>
                         </label>
                     </div>
                     <div class="settings-item">

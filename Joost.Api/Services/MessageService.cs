@@ -20,7 +20,7 @@ namespace Joost.Api.Services
             _chatHubService = chatHubService;
         }
 
-        public async Task<IEnumerable<MessageDto>> GetUserMessages(int userId, int count)
+        public async Task<IEnumerable<MessageDto>> GetUserMessages(int userId, int skip, int take)
         {
             using (var messageRepository = _unitOfWork.Repository<Message>())
             {
@@ -29,7 +29,10 @@ namespace Joost.Api.Services
                     .Include(m => m.Sender)
                     .Include(m => m.Receiver)
                     .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId)
-                    .Take(count)
+                    .OrderByDescending(m => m.CreatedAt)
+                    .Skip(skip)
+                    .Take(take)
+                    .OrderBy(m => m.CreatedAt)
                     .Select(m => new MessageDto
                     {
                         Id = m.Id,
@@ -37,13 +40,14 @@ namespace Joost.Api.Services
                         ReceiverId = m.Receiver.Id,
                         Text = m.Text,
                         CreatedAt = m.CreatedAt,
-                        EditedAt = m.EditedAt
+                        EditedAt = m.EditedAt,
+                        AttachedFile = m.AttachedFile
                     })
                     .ToListAsync();
             }
         }
 
-        public async Task<IEnumerable<MessageDto>> GetGroupMessages(int groupId, int count)
+        public async Task<IEnumerable<MessageDto>> GetGroupMessages(int groupId, int skip, int take)
         {
             using (var groupMessageRepository = _unitOfWork.Repository<GroupMessage>())
             {
@@ -52,7 +56,10 @@ namespace Joost.Api.Services
                     .Include(m => m.Sender)
                     .Include(m => m.Receiver)
                     .Where(m => m.Receiver.Id == groupId)
-                    .Take(count)
+                    .OrderByDescending(m => m.CreatedAt)
+                    .Skip(skip)
+                    .Take(take)
+                    .OrderBy(m => m.CreatedAt)
                     .Select(m => new MessageDto
                     {
                         Id = m.Id,
@@ -60,7 +67,8 @@ namespace Joost.Api.Services
                         ReceiverId = m.Receiver.Id,
                         Text = m.Text,
                         CreatedAt = m.CreatedAt,
-                        EditedAt = m.EditedAt
+                        EditedAt = m.EditedAt,
+                        AttachedFile = m.AttachedFile
                     })
                     .ToListAsync();
             }
@@ -84,10 +92,11 @@ namespace Joost.Api.Services
                                 Receiver = receiver,
                                 Text = message.Text,
                                 CreatedAt = message.CreatedAt,
-                                EditedAt = message.EditedAt
+                                EditedAt = message.EditedAt,
+                                AttachedFile = message.AttachedFile
                             };
                             _unitOfWork.Repository<Message>().Add(newMessage);
-                            await _chatHubService.SendToUser(message.SenderId, message.ReceiverId, message.Text);
+                            await _chatHubService.SendToUser(message);
                             await _unitOfWork.SaveAsync();
                         }
                     }
@@ -111,10 +120,11 @@ namespace Joost.Api.Services
                             Receiver = receiver,
                             Text = groupMessage.Text,
                             CreatedAt = groupMessage.CreatedAt,
-                            EditedAt = groupMessage.EditedAt
+                            EditedAt = groupMessage.EditedAt,
+                            AttachedFile = groupMessage.AttachedFile
                         };
                         _unitOfWork.Repository<GroupMessage>().Add(newMessage);
-                        await _chatHubService.SendToGroup(groupMessage.SenderId, groupMessage.ReceiverId, groupMessage.Text);
+                        await _chatHubService.SendToGroup(groupMessage);
                         await _unitOfWork.SaveAsync();
                     }
                 }
@@ -132,16 +142,9 @@ namespace Joost.Api.Services
                     message.EditedAt = editedAt;
                     messageRepository.Attach(message);
                     await _unitOfWork.SaveAsync();
+                    return MessageDto.FromMessageModel(message);
                 }
-                return new MessageDto()
-                {
-                    Id = message.Id,
-                    SenderId = message.Sender.Id,
-                    ReceiverId = message.Receiver.Id,
-                    Text = message.Text,
-                    CreatedAt = message.CreatedAt,
-                    EditedAt = message.EditedAt
-                };
+                else return new MessageDto();
             }
         }
 
@@ -156,16 +159,9 @@ namespace Joost.Api.Services
                     groupMessage.EditedAt = editedAt;
                     groupMessageRepository.Attach(groupMessage);
                     await _unitOfWork.SaveAsync();
+                    return MessageDto.FromGroupMessageModel(groupMessage);
                 }
-                return new MessageDto()
-                {
-                    Id = groupMessage.Id,
-                    SenderId = groupMessage.Sender.Id,
-                    ReceiverId = groupMessage.Receiver.Id,
-                    Text = groupMessage.Text,
-                    CreatedAt = groupMessage.CreatedAt,
-                    EditedAt = groupMessage.EditedAt
-                };
+                else return new MessageDto();
             }
         }
 

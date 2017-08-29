@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpRequest, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
@@ -55,5 +55,25 @@ export class AccountService extends BaseApiService {
       { headers: httpHeaders }
     );
     return this.http.sendRequest(request);
+  }
+
+  getNotificationFromUsers(): Observable<boolean> {
+      let req = new HttpRequest("GET", this.generateUrl() + '/notificationsfromusers');
+      return this.http.sendRequest<Response>(req).map((res: Response) => { return res ? true : false; });
+  }
+
+  getNotificationFromGroups(): Observable<boolean> {
+      let req = new HttpRequest("GET", this.generateUrl() + '/notificationsfromgroups');
+      return this.http.sendRequest<Response>(req).map((res: Response) => { return res ? true : false; });
+  }
+
+  updateNotificationFromUsers(notification: boolean) {
+      let req = new HttpRequest("PUT", this.generateUrl() + '/notificationsfromusers', JSON.stringify(notification));
+      return this.http.sendRequest<boolean>(req).subscribe(data => { return true; });
+  }
+
+  updateNotificationFromGroups(notification: boolean) {
+      let req = new HttpRequest("PUT", this.generateUrl() + '/notificationsfromgroups', JSON.stringify(notification));
+      return this.http.sendRequest<boolean>(req).subscribe(data => { return true; });
   }
 }

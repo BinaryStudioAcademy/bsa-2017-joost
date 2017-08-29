@@ -11,10 +11,13 @@ import { DialogService } from "../../services/dialog.service";
 export class MenuMessagesComponent implements OnInit {
 
   private dialogs: Dialog[];
+  private filteredDialogs: Dialog[];
+  private searchString: string;
 
   constructor(private dialogService: DialogService, private router: Router) {
     dialogService.getDialogs().subscribe(d => {
       this.dialogs = d;
+      this.filteredDialogs = d;
       console.log(d);
     },
     async err => {
@@ -22,6 +25,7 @@ export class MenuMessagesComponent implements OnInit {
         if (ok) {
           dialogService.getDialogs().subscribe(d => {
             this.dialogs = d;
+            this.filteredDialogs = d;
           });
         }
       });
@@ -33,6 +37,11 @@ export class MenuMessagesComponent implements OnInit {
 
   private navigateToMessages(dialog: Dialog) {
     this.router.navigate(["/menu/messages", dialog.IsGroup ? "group": "user", dialog.Id]);
+  }
+
+  private search() {
+    let lowerStr  = this.searchString.toLocaleLowerCase();
+    this.filteredDialogs = this.dialogs.filter(d => d.Name.toLocaleLowerCase().includes(lowerStr));
   }
 
 }

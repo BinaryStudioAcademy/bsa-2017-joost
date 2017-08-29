@@ -1,4 +1,5 @@
 ﻿using Joost.Api.Hubs;
+using Joost.Api.Models;
 using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using Microsoft.AspNet.SignalR;
@@ -9,28 +10,29 @@ namespace Joost.Api.Services
     public class ChatHubService : IChatHubService
     {
         private IUnitOfWork _unitOfWork;
-        private IHubContext _hubContext;
+        private IHubContext<IClient> _hubContext;
 
         public ChatHubService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            _hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub, IClient>();
         }
 
-        public async Task SendToUser(int senderId, int receiverId, string message)
+        public async Task SendToUser(MessageDto message)
         {
             using (var userRepository = _unitOfWork.Repository<User>())
             {
-                var receiver = await userRepository.GetAsync(receiverId);
+                var receiver = await userRepository.GetAsync(message.ReceiverId);
                 if (receiver != null && !string.IsNullOrEmpty(receiver.ConnectionId))
                 {
-                    await _hubContext.Clients.Client(receiver.ConnectionId).addMessage(senderId, message);
+                    await _hubContext.Clients.Client(receiver.ConnectionId).addMessage(message);
                 }
             }
         }
-        public async Task SendToGroup(int senderId, int groupId, string message)
+
+        public async Task SendToGroup(MessageDto message)
         {
-            await _hubContext.Clients.Group(groupId.ToString()).addMessage(senderId, message);
+            await _hubContext.Clients.Group(message.ReceiverId.ToString()).addMessage(message);
         }
     }
 }

@@ -13,59 +13,60 @@ export class MessageService extends BaseApiService {
     this.parUrl = "messages";
   }
 
-  getUserMessages(userId: string, count: number): Observable<Message[]> {
+  getUserMessages(userId: number, skip: number, take: number): Observable<Message[]> {
     let req = new HttpRequest("GET", this.generateUrl() +  "/user-messages", { 
     	params: new HttpParams()
-    		.set("userId", userId)
-    		.append("count", count.toString())
+    		.set("userId", userId.toString())
+        .append("skip", skip.toString())
+    		.append("take", take.toString())        
     });
     return this.http.sendRequest<Message[]>(req);
   }
 
-  getGroupMessages(groupId: string, count: number): Observable<Message[]> {
+  getGroupMessages(groupId: number, skip: number, take: number): Observable<Message[]> {
     let req = new HttpRequest("GET", this.generateUrl() +  "/group-messages", { 
     	params: new HttpParams()
-    		.set("groupId", groupId)
-    		.append("count", count.toString())
+    		.set("groupId", groupId.toString())
+        .append("skip", skip.toString())
+    		.append("take", take.toString())        
     });
     return this.http.sendRequest<Message[]>(req);
   }
 
-  createMessage(senderId: number, receiverId: number, text: string): Message {
+  createMessage(senderId: number, receiverId: number, text: string, attachedFile: string): Message {
     let message = new Message();
     message.SenderId = senderId;
     message.ReceiverId = receiverId;
     message.Text = text;
     message.CreatedAt = new Date();
+    message.AttachedFile = attachedFile;
     return message;
   }
 
-  sendUserMessage(senderId: number, receiverId: number, text: string) {
-    let message =  this.createMessage(senderId, receiverId, text);
+  sendUserMessage(message: Message) {
     let req = new HttpRequest("POST", this.generateUrl() + "/user-messages", message);
     return this.http.sendRequest(req);
   }
 
-  sendGroupMessage(senderId: number, receiverId: number, text: string) {
-    let message =  this.createMessage(senderId, receiverId, text);    
+  sendGroupMessage(message: Message) {  
     let req = new HttpRequest("POST", this.generateUrl() + "/group-messages", message);    
     return this.http.sendRequest(req);
   }
 
-  editUserMessage(messageId: string, text: string): Observable<Message> {
+  editUserMessage(messageId: number, text: string): Observable<Message> {
     let req = new HttpRequest("PUT", this.generateUrl() +  "/user-messages", { 
     	params: new HttpParams()
-    		.set("messageId", messageId)
+    		.set("messageId", messageId.toString())
         .append("editedTime", new Date().toDateString()),
       body: text
     });
     return this.http.sendRequest<Message>(req);
   }
 
-  editGroupMessage(groupMessageId: string, text: string): Observable<Message> {
+  editGroupMessage(groupMessageId: number, text: string): Observable<Message> {
     let req = new HttpRequest("PUT", this.generateUrl() +  "/group-messages", { 
     	params: new HttpParams()
-    		.set("groupMessageId", groupMessageId)
+    		.set("groupMessageId", groupMessageId.toString())
         .append("editedTime", new Date().toDateString()),
       body: text
     });

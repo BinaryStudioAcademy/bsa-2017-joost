@@ -20,6 +20,10 @@ namespace Joost.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetDialogs()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var currentUserId = GetCurrentUserId();
             var userDialogs = await _dialogService.GetUserDialogsData(currentUserId);
             var groupDialogs = await _dialogService.GetGroupDialogsData(currentUserId);
