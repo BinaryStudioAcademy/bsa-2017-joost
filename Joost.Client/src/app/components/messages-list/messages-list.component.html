@@ -7,23 +7,25 @@
     <div class="main"> 
       <ul #scroll class="mdl-list scrollable messages-content" (scroll)="onScroll()" [scrollTop]="scroll.scrollHeight">
         <div *ngFor="let message of messages">
-            <li *ngIf="messageService.isOwnMessage(message, receiverId)" class="mdl-list__item mdl-list__item--three-line">
+            <li class="mdl-list__item mdl-list__item--three-line message-item" [class.self-message]="!messageService.isOwnMessage(message, receiverId)">
                 <div class="message-container">
-                  <div>
+                  <div *ngIf="messageService.isOwnMessage(message, receiverId)">
                       <img src="{{null | avatarPipe}}" class="material-icons mdl-list__item-avatar">
                   </div>
-                  <div class="main-message-content">
+                  <div class="main-message-content-container">
                     <div class="message-header">
                       <div>
-                          {{dialogName}}
+                          {{messageService.isOwnMessage(message, receiverId) ? dialogName + ', ': ''}}
                       </div>
                       <div>
-                          {{message.CreatedAt}}
+                          {{message.CreatedAt | date:'HH:mm:ss'}}
                       </div>   
                     </div>
-                    <div class="message-text">
-                        {{message.Text}}
-                        <div *ngIf="message.AttachedFile" class="message-attached-image">
+                    <div class="message-content">
+                        <div class="message-text" *ngIf="message.Text">
+                          {{message.Text}}
+                        </div>
+                        <div *ngIf="message.AttachedFile">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
                         </div>
                     </div>
@@ -33,7 +35,7 @@
                   </div>
                 </div>
             </li>
-            <li *ngIf="messageService.isOwnMessage(message, receiverId)==false" class="mdl-list__item mdl-list__item--three-line self-message">
+            <!-- <li *ngIf="messageService.isOwnMessage(message, receiverId)==false" class="mdl-list__item mdl-list__item--three-line self-message">
               <div class="message-container">
                 <div class="main-message-content">
                   <div class="message-header">
@@ -52,7 +54,7 @@
                   </div>
                 </div>
               </div>
-            </li>
+            </li> -->
         </div> 
       </ul>    
     </div>

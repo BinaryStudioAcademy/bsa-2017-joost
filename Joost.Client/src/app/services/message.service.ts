@@ -38,7 +38,7 @@ export class MessageService extends BaseApiService {
     message.SenderId = senderId;
     message.ReceiverId = receiverId;
     message.Text = text;
-    message.CreatedAt = new Date();
+    message.CreatedAt = new Date(); // wrong timezone!!!
     message.AttachedFile = attachedFile;
     return message;
   }

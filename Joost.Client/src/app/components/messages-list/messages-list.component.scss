@@ -89,23 +89,39 @@
 }
 
 .message-text {
-    padding: 5px;
-    background-color: #BBDEFB;
+    padding: 5px 10px 5px 10px;
     font-size: 1.2em;
-    border-radius: 5px;
-    display: -webkit-inline-box;
-    min-height: 25px;
 }
 
-.main-message-content {
+.main-message-content-container {
   margin-left: 10px;
+}
+
+.message-item{
+    height: auto;
+}
+
+.message-content{
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #BBDEFB;
+    display: -webkit-inline-box;
+
+    img{
+        margin: 10px;
+        max-height: 200px;
+        max-width:  200px;
+    }
 }
 
 .self-message {
   justify-content: flex-end;
   
-  .message-text{
-      float: right;
+ .main-message-content-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
   }
 }
 
