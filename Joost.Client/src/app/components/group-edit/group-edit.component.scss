@@ -35,7 +35,11 @@
     justify-content:flex-end;
 }
 .jg-button-bottom{
-    margin-left: 16px;
+    //margin-left: 10px;
+}
+#btnSaveCreate{
+    position:  relative;
+    right: 16px;
 }
 
 .jg-full-width-container{
@@ -45,7 +49,6 @@
 .jg-container{
     width: calc(100% - 10px);
     min-height: calc(100vh - 10px);
-    margin: 5px auto;
     > div{
         &:nth-last-child(2){
             flex: 1;
