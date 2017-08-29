@@ -33,12 +33,13 @@ export class MessageService extends BaseApiService {
     return this.http.sendRequest<Message[]>(req);
   }
 
-  createMessage(senderId: number, receiverId: number, text: string): Message {
+  createMessage(senderId: number, receiverId: number, text: string, attachedFile: string): Message {
     let message = new Message();
     message.SenderId = senderId;
     message.ReceiverId = receiverId;
     message.Text = text;
     message.CreatedAt = new Date();
+    message.AttachedFile = attachedFile;
     return message;
   }
 

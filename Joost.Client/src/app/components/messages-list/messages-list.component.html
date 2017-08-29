@@ -23,6 +23,9 @@
                     </div>
                     <div class="message-text">
                         {{message.Text}}
+                        <div *ngIf="message.AttachedFile" class="message-attached-image">
+                          <img src="{{message.AttachedFile | attachedImagePipe}}">
+                        </div>
                     </div>
                   </div>
                   <div>
@@ -43,6 +46,9 @@
                   </div>
                   <div class="message-text">
                       {{message.Text}}
+                      <div *ngIf="message.AttachedFile" class="message-attached-image">
+                        <img src="{{message.AttachedFile | attachedImagePipe}}">
+                      </div>
                   </div>
                 </div>
               </div>
@@ -51,11 +57,20 @@
       </ul>    
     </div>
   </div>
-    <div class ="mdl-card__actions mdl-card--border message-input-container send-message-container">     
+ <div class ="mdl-card__actions mdl-card--border message-input-container send-message-container">     
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" id="messageText" [(ngModel)]="messageText">
         <label class="mdl-textfield__label" for="messageText">Message text...</label>
       </div>
+
+      <label for="file-upload" *ngIf="!attachedImage" class="custom-image-attach" title="Click to attach an image">
+        <i class="material-icons">photo</i>
+      </label>
+      <label for="file-upload" *ngIf="attachedImage" class="custom-image-attach" title="File attached">
+        <i class="material-icons green">photo</i>
+      </label>
+      <input id="file-upload" type="file" accept="image/jpeg,image/png,image/gif" (change)="AttachImage($event)" name="file" />
+
       <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button" (click)="send(messageText)">Send</button>
     </div>
 </div>

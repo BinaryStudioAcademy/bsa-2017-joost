@@ -114,11 +114,33 @@
   bottom: 0;
 }
 
+
+.messages-content {
+    max-height: 560px;
+    overflow: auto;
+}
+
+
+
+input[type="file"] {
+    display: none;
+}
+
+
+.custom-image-attach {
+    cursor: pointer;
+
+    .material-icons {
+        padding: 10px;
+    }
+}
+
 .send-message-container{
     display: flex;
     flex-direction: row;
     justify-content: center;
     vertical-align: center;
+    align-items: center;
     > div{
         width: 80%;
     }
@@ -129,9 +151,13 @@
     margin-left: 14px;
 }
 
-.messages-content {
-    max-height: 560px;
-    overflow: auto;
+.message-attached-image {
+    padding: 10px;
+    width: 50px;
+    height: 50px;
 }
 
+.material-icons.green {
+    color: rgb(46,204,113);
+}
 
