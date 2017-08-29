@@ -2,6 +2,34 @@
     margin-top: 2em;
 }
 
-.settings-header{
-    margin-left: 24px;
+.jg-buttons-bottom-cantainer{
+    margin-top: auto;
+    display: flex;
+    justify-content:flex-end;
+    padding: 0;
+}
+
+.jg-button-bottom{
+    margin: 10px 10px 10px 0px;
+}
+
+.jg-full-width-container{
+    width: 100%;
+}
+
+.jg-container{
+    width: calc(100% - 10px);
+    min-height: calc(100vh - 10px);
+    margin: 5px auto;
+}
+
+.jg-header-container{
+    width:  100%;
+    display: flex;
+    h3 {
+        margin: 0;
+    }
+    > div{
+        padding: 8px;    
+    }
 }
