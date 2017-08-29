@@ -29,9 +29,10 @@ namespace Joost.Api.Services
                     .Include(m => m.Sender)
                     .Include(m => m.Receiver)
                     .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId)
-                    .OrderBy(m => m.CreatedAt)
+                    .OrderByDescending(m => m.CreatedAt)
                     .Skip(skip)
                     .Take(take)
+                    .OrderBy(m => m.CreatedAt)
                     .Select(m => new MessageDto
                     {
                         Id = m.Id,
@@ -55,9 +56,10 @@ namespace Joost.Api.Services
                     .Include(m => m.Sender)
                     .Include(m => m.Receiver)
                     .Where(m => m.Receiver.Id == groupId)
-                    .OrderBy(m => m.CreatedAt)
+                    .OrderByDescending(m => m.CreatedAt)
                     .Skip(skip)
                     .Take(take)
+                    .OrderBy(m => m.CreatedAt)
                     .Select(m => new MessageDto
                     {
                         Id = m.Id,

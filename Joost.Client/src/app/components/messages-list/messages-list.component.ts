@@ -1,76 +1,40 @@
-import {Component, Input, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { MessageService } from "../../services/message.service";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked } from '@angular/core';
+import { Subscription } from "rxjs/Rx";
+import { ActivatedRoute, ParamMap } from '@angular/router';
+
 import { Message } from "../../models/message";
+import { MessageService } from "../../services/message.service";
+import { ChatHubService } from "../../services/chat-hub.service";
+
 import { AccountService } from "../../services/account.service";
 import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
-import { MDL } from "../mdl-base.component";
-import { DialogService } from "../../services/dialog.service";
-import { ChatHubService } from "../../services/chat-hub.service";
-import { Subscription } from "rxjs/Rx";
-
 
 @Component({
     selector: "messages-list",
     templateUrl: "./messages-list.component.html",
     styleUrls: ["./messages-list.component.scss"] 
 })
-export class MessagesListComponent extends MDL implements OnInit, OnDestroy, AfterViewInit {
+export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecked {
     private id: number;
-    private isGroup: boolean;
-    private skip = 0;
-    private messages: Message[];
     private currnetUserId: number;
+    private isGroup: boolean;
+    private skip: number = 0;
+    private take: number = 8;    
+    private messages: Message[];
     private dialogName: string;
     private messageText: string;
     private subscription: Subscription;
 
     constructor(private router: ActivatedRoute,
                 private messagesService: MessageService,
+                private chatHubService: ChatHubService,
+
                 private userService: UserService,
                 private accountService: AccountService,
-                private groupService: GroupService,
-                private dialogService: DialogService,
-                private chatHubService: ChatHubService) {
+                private groupService: GroupService) { }
 
-        super();
-    }
-
-    private scrolEvent(event) {
-        if (event.target.scrollTop === event.target.scrollHeight - 640) {
-             if (this.isGroup) {
-                this.messagesService.getGroupMessages(this.id, 0, 20)
-                    .subscribe(m => {
-                        this.messages = this.messages.concat(m.map(me => {
-                            return me;
-                        }));
-                        this.skip += 20;
-                    });
-            } else {
-                this.messagesService.getUserMessages(this.id, 0, 20)
-                    .subscribe(m => {
-                        this.messages = this.messages.concat(m.map(me => {
-
-                            return me;
-                        }));
-                        this.skip += 20;
-                    });
-            }
-        }
-        return true;
-    }
-
-    // tslint:disable-next-line:member-ordering
-    @ViewChild('scroll')textarea: ElementRef;
-
-     ngAfterViewInit() {
-         console.log(this.textarea)
-         this.textarea.nativeElement.scrollTop = 1540;
-         console.log(this.textarea.nativeElement.scrollHeight)
-     }
-
-    ngOnInit() {
+    ngOnInit() {      
         this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
             this.addToMessages(message);
         });
@@ -84,7 +48,7 @@ export class MessagesListComponent extends MDL implements OnInit, OnDestroy, Aft
             if (this.isGroup) {
                 this.groupService.getGroup(+this.id).subscribe(g => {
                 this.dialogName = g.Name;
-                this.messagesService.getGroupMessages(this.id, 0, 20)
+                this.messagesService.getGroupMessages(this.id, this.skip, this.take)
                     .subscribe(m => {
                         this.messages = m.map(me => {
                             return me;
@@ -96,7 +60,7 @@ export class MessagesListComponent extends MDL implements OnInit, OnDestroy, Aft
             } else {
                 this.userService.getUserDetails(+this.id).subscribe(user => {
                 this.dialogName = user.FirstName + " " + user.LastName;
-                this.messagesService.getUserMessages(this.id, 0, 20)
+                this.messagesService.getUserMessages(this.id, 0, this.take)
                     .subscribe(m => {
                         this.messages = m.map(me => {
                             return me;
@@ -122,7 +86,7 @@ export class MessagesListComponent extends MDL implements OnInit, OnDestroy, Aft
             this.addToMessages(newMessage);
             this.messagesService.sendUserMessage(newMessage).subscribe(data => { },
             async err => {
-                await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
+                await this.messagesService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messagesService.sendUserMessage(newMessage).subscribe();
                     }
@@ -134,5 +98,72 @@ export class MessagesListComponent extends MDL implements OnInit, OnDestroy, Aft
     private addToMessages(message: Message) {
         this.messages.push(message);
         this.messageText = "";
+        this.scrollToBottom();
     }
+
+    //scroll logic
+    @ViewChild('scroll') private scrollContainer: ElementRef;
+    private getMessages: boolean = false;
+    private isAllMessagesReceived: boolean = false;
+
+    private addMessagesToList() {      
+        this.getMessages = false;
+        this.skip += this.take;
+        return this.messagesService.getUserMessages(this.currnetUserId, this.skip, this.take).subscribe((data: Message[]) => {
+            if (data.length > 0) {
+                this.messages = data.concat(this.messages);     
+            }
+            else {
+                this.skip -= this.take;
+                this.isAllMessagesReceived = true;
+            }
+        },
+        err => {
+            this.skip -= this.take;
+            this.isAllMessagesReceived = true;
+        });
+    }
+
+    private onScroll() {
+        let element = this.scrollContainer.nativeElement;
+        let inTop = element.scrollTop === 0;    
+        if (inTop && !this.getMessages && !this.isAllMessagesReceived) {
+            this.getMessages = true;
+        }
+    }
+
+    private onAddMessages(): void { 
+        if (!this.getMessages) {
+            return
+        }
+        try {
+            this.addMessagesToList();
+        } 
+        catch(err) { }
+    }
+
+    ngAfterViewChecked() {
+        this.onAddMessages();
+    }
+
+    private scrollToBottom() {
+        try {
+            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+        } 
+        catch(err) { }
+    }
+
+    private scrollToBottomOnOneStep() {
+        try {
+            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.clientHeight;
+        } 
+        catch(err) { }
+    }
+
+    show() {
+        console.log(this.scrollContainer.nativeElement.scrollHeight);
+        console.log(this.scrollContainer.nativeElement.clientHeight);        
+        console.log(this.scrollContainer.nativeElement.scrollTop);
+    }
+
 }

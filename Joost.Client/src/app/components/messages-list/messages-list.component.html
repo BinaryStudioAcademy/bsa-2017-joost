@@ -5,7 +5,7 @@
   </div>
   <div class="mdl-card__title jc-group-edit-title-container">
     <div class="main"> 
-      <ul #scroll class="mdl-list scrollable" (scroll)="scrolEvent($event)">
+      <ul #scroll class="mdl-list scrollable messages-content" (scroll)="onScroll()" [scrollTop]="scroll.scrollHeight">
         <div *ngFor="let message of messages">
             <li *ngIf="messagesService.isOwnMessage(message, id)" class="mdl-list__item mdl-list__item--three-line">
                 <div class="message-container">
