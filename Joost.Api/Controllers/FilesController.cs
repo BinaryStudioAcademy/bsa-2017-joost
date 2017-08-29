@@ -82,7 +82,11 @@ namespace Joost.Api.Controllers
                             }
                             else
                             {
-                                string relativeFilePath = "~/App_Data/AttachedFiles/" + fileName + extension;
+								string dir = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles");
+								if (!Directory.Exists(dir))
+									Directory.CreateDirectory(dir);
+
+								string relativeFilePath = "~/App_Data/AttachedFiles/" + fileName + extension;
                                 var filePath = HttpContext.Current.Server.MapPath(relativeFilePath);
                                 postedFile.SaveAs(filePath);
 
