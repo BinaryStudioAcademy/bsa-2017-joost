@@ -30,7 +30,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private subscription: Subscription;
 
     constructor(private router: ActivatedRoute,
-                private messagesService: MessageService,
+                private messageService: MessageService,
                 private chatHubService: ChatHubService,
                 private accountService: AccountService,
                 private userService: UserService,
@@ -41,32 +41,99 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             this.addToMessages(message);
         });
         this.accountService.getUser().subscribe(u => {
-        this.currentUser = u;
+            this.currentUser = u;
             this.router.paramMap.subscribe((params: ParamMap) => {
                 this.isGroup = params.get("type") === "group" ? true : false;
                 this.receiverId = +params.get("id");
-                if (this.isGroup) {
-                    this.groupService.getGroup(this.receiverId).subscribe(g => {
-                    this.dialogName = g.Name;
-                    this.messagesService.getGroupMessages(this.receiverId, this.skip, this.take)
-                        .subscribe(m => {
-                            this.messages = m.map(m => m);
+                this.GetReceiverData();
+            });
+        },
+        async err => {
+            await this.accountService.handleTokenErrorIfExist(err).then(ok => { 
+                if (ok) {
+                    this.accountService.getUser().subscribe(u => {
+                        this.currentUser = u;
+                        this.router.paramMap.subscribe((params: ParamMap) => {
+                            this.isGroup = params.get("type") === "group" ? true : false;
+                            this.receiverId = +params.get("id");
+                            this.GetReceiverData();
                         });
                     });
-                } 
-                else {
-                    this.userService.getUserDetails(this.receiverId).subscribe(user => {
-                        this.dialogName = user.FirstName + " " + user.LastName;
-                        this.dialogImage = user.Avatar;
-                        this.messagesService.getUserMessages(this.currentUser.Id, this.skip, this.take).subscribe(m => {
-                            this.messages = m.map(m => m);
-                        });
-                    })
                 }
             });
         });
     }
 
+    private GetReceiverData() {
+        if (this.isGroup) {
+            this.getGroupData();
+        } 
+        else {
+            this.getUserData();
+        }
+    }
+
+    private getGroupData() {
+        this.groupService.getGroup(this.receiverId).subscribe(group => {
+            this.dialogName = group.Name;                      
+            this.getGroupMessages();
+        },
+        async err => {
+            await this.groupService.handleTokenErrorIfExist(err).then(ok => { 
+                if (ok) {
+                    this.groupService.getGroup(this.receiverId).subscribe(group => {
+                        this.dialogName = group.Name;                      
+                        this.getGroupMessages();
+                    });
+                }
+            });
+        });
+    }
+
+    private getGroupMessages() {
+        this.messageService.getGroupMessages(this.receiverId, this.skip, this.take)
+            .subscribe(m => this.messages = m.map(m => m),
+            async err => {
+                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
+                    if (ok) {
+                        this.messageService.getGroupMessages(this.receiverId, this.skip, this.take)
+                        .subscribe(m => this.messages = m.map(m => m));
+                    }
+                });
+            });
+    }
+
+    private getUserData() {
+        this.userService.getUserDetails(this.receiverId).subscribe(user => {
+            this.dialogName = user.FirstName + " " + user.LastName;
+            this.dialogImage = user.Avatar;
+            this.getUserMessages();
+        },
+        async err => {
+            await this.userService.handleTokenErrorIfExist(err).then(ok => { 
+                if (ok) {
+                    this.userService.getUserDetails(this.receiverId).subscribe(user => {
+                        this.dialogName = user.FirstName + " " + user.LastName;
+                        this.dialogImage = user.Avatar;
+                        this.getUserMessages();
+                    });
+                }
+            });
+        });
+    }
+
+    private getUserMessages() {
+        this.messageService.getUserMessages(this.currentUser.Id, this.skip, this.take)
+            .subscribe(m => this.messages = m.map(m => m),
+            async err => {
+                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
+                    if (ok) {
+                        this.messageService.getUserMessages(this.currentUser.Id, this.skip, this.take)
+                        .subscribe(m => this.messages = m.map(m => m));
+                    }
+                });
+            });
+    }
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
@@ -75,13 +142,13 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     send(text: string) {
         if (text != null && text != "")
         {
-            let newMessage = this.messagesService.createMessage(this.currentUser.Id, this.receiverId, text);
+            let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text);
             this.addToMessages(newMessage);
-            this.messagesService.sendUserMessage(newMessage).subscribe(data => { },
+            this.messageService.sendUserMessage(newMessage).subscribe(data => { },
             async err => {
-                await this.messagesService.handleTokenErrorIfExist(err).then(ok => { 
+                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
-                        this.messagesService.sendUserMessage(newMessage).subscribe();
+                        this.messageService.sendUserMessage(newMessage).subscribe();
                     }
                 });
             });
@@ -102,7 +169,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private addMessagesToList() {      
         this.getMessages = false;
         this.skip += this.take;
-        return this.messagesService.getUserMessages(this.currentUser.Id, this.skip, this.take).subscribe((data: Message[]) => {
+        return this.messageService.getUserMessages(this.currentUser.Id, this.skip, this.take).subscribe((data: Message[]) => {
             if (data.length > 0) {
                 this.messages = data.concat(this.messages);     
             }

@@ -7,7 +7,7 @@
     <div class="main"> 
       <ul #scroll class="mdl-list scrollable messages-content" (scroll)="onScroll()" [scrollTop]="scroll.scrollHeight">
         <div *ngFor="let message of messages">
-            <li *ngIf="messagesService.isOwnMessage(message, receiverId)" class="mdl-list__item mdl-list__item--three-line">
+            <li *ngIf="messageService.isOwnMessage(message, receiverId)" class="mdl-list__item mdl-list__item--three-line">
                 <div class="message-container">
                   <div>
                       <img src="{{null | avatarPipe}}" class="material-icons mdl-list__item-avatar">
@@ -30,7 +30,7 @@
                   </div>
                 </div>
             </li>
-            <li *ngIf="messagesService.isOwnMessage(message, receiverId)==false" class="mdl-list__item mdl-list__item--three-line self-message">
+            <li *ngIf="messageService.isOwnMessage(message, receiverId)==false" class="mdl-list__item mdl-list__item--three-line self-message">
               <div class="message-container">
                 <div class="main-message-content">
                   <div class="message-header">
