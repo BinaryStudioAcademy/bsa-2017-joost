@@ -4,7 +4,9 @@
 
 @import 'vars.scss';
 
-
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px white inset;
+}
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
   background-color: #f5f5f5;

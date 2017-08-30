@@ -1,8 +1,8 @@
 ﻿button{
     float: right;
+    margin: 10px;
     margin-right: 0px;
-}
-
+  }
 .mdl-textfield.is-invalid .mdl-textfield__input {
     border-color: #9698ab;
 }
@@ -25,5 +25,8 @@
 }
 
 .validate{
-    color:red;
+    color:#d50000;
+    font-size:14px;
+    margin-top: -15px;
+    margin-bottom: 5px;
 }
