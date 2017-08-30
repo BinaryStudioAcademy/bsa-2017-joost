@@ -52,6 +52,8 @@ import { MyDatePickerModule } from 'mydatepicker';
 import { NamePipe } from "./pipes/name.pipe";
 import { SettingsComponent } from './components/settings/settings.component';
 
+import { FileService } from './services/file.service';
+import { AttachedImagePipe } from "./pipes/attached-image.pipe";
 
 @NgModule({
   declarations: [
@@ -78,6 +80,7 @@ import { SettingsComponent } from './components/settings/settings.component';
     GenderPipe,
     NamePipe,
     SettingsComponent,
+    AttachedImagePipe
   ],
   imports: [
     BrowserModule,
@@ -98,7 +101,8 @@ import { SettingsComponent } from './components/settings/settings.component';
     MessageService,
     ChatHubService,
     AccountService,
-    ContactService
+    ContactService,
+    FileService
     // {
     //   provide: ToastOptions,
     //   useClass: CustomOption

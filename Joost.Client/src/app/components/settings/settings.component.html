@@ -1,26 +1,25 @@
-﻿<div class="data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-    <div class="user-editing-main data-container mdl-color--white mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-        <div class="settings-header"><h3>Settings</h3></div><hr />
-        <div class="user-editing-group mdl-card__actions mdl-card--border">
-            <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--12-col">
-                   <div class="settings-item">
-                        <label #notifyFromUsers class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-users">
-                            <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input" name="notificationFromUsers" [(ngModel)]="notificationFromUsers" (ngModelChange)="onNotificationsFromUsers()">
-                            <span class="mdl-switch__label">Turn off notifications from users</span>
-                        </label>
-                    </div>
-                    <div class="settings-item">
-                        <label #notifyFromGroups class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-groups"> 
-                            <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input" [(ngModel)]="notificationFromGroups" (ngModelChange)="onNotificationsFromGroups()">
-                            <span class="mdl-switch__label">Turn off notifications from groups</span>
-                        </label>
-                    </div>
-                    <!-- <input type="checkbox" [(ngModel)]="notificationFromUsers" (ngModelChange)="onNotificationsFromUsers()" ><span class="mdl-switch__label">Turn off notifications from users</span>
-                    <br><input type="checkbox" [(ngModel)]="notificationFromGroups" (ngModelChange)="onNotificationsFromGroups()" ><span class="mdl-switch__label">Turn off notifications from groups</span>
-                    <div class="settings-item">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="logout()">Logout</button>
-                    </div> -->
+﻿
+<div class="jg-container mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Settings</h2>
+    </div>     
+    <div class="user-editing-group mdl-card__actions mdl-card--border">
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                <div class="settings-item">
+                    <label #notifyFromUsers class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-users">
+                        <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input" name="notificationFromUsers" [(ngModel)]="notificationFromUsers" (ngModelChange)="onNotificationsFromUsers()">
+                        <span class="mdl-switch__label">Turn off notifications from users</span>
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <label #notifyFromGroups class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-groups"> 
+                        <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input" [(ngModel)]="notificationFromGroups" (ngModelChange)="onNotificationsFromGroups()">
+                        <span class="mdl-switch__label">Turn off notifications from groups</span>
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="logout()">Logout</button>
                 </div>
             </div>
         </div>

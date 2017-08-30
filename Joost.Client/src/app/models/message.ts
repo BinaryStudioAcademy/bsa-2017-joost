@@ -4,5 +4,6 @@ export class Message {
   ReceiverId: number 
   Text: string
   CreatedAt: Date;
-  EditedAt: Date
+  EditedAt: Date;
+  AttachedFile: string
 }

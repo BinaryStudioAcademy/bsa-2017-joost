@@ -11,6 +11,8 @@ import { AccountService } from "../../services/account.service";
 import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
 
+import { FileService } from '../../services/file.service';
+
 @Component({
     selector: "messages-list",
     templateUrl: "./messages-list.component.html",
@@ -28,13 +30,15 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private dialogImage: string;
     private messageText: string;
     private subscription: Subscription;
+    private attachedImage: HTMLInputElement;
 
     constructor(private router: ActivatedRoute,
                 private messageService: MessageService,
                 private chatHubService: ChatHubService,
                 private accountService: AccountService,
                 private userService: UserService,
-                private groupService: GroupService) { }
+                private groupService: GroupService,
+                private fileService: FileService,) { }
 
     ngOnInit() {      
         this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
@@ -139,21 +143,45 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.subscription.unsubscribe();
     }
 
+
     send(text: string) {
-        if (text != null && text != "")
-        {
-            let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text);
-            this.addToMessages(newMessage);
-            this.messageService.sendUserMessage(newMessage).subscribe(data => { },
-            async err => {
-                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
-                    if (ok) {
-                        this.messageService.sendUserMessage(newMessage).subscribe();
+        console.log("sdf");
+        if ((text != null && text != "") || this.attachedImage != null) {
+           let fileName =  "";
+             if (this.attachedImage != null) {
+                 fileName = this.currentUser.Id + "_" +   this.receiverId + "_" + Date.now();
+                 
+                 this.fileService.UploadImage(this.attachedImage.files[0], fileName).subscribe(
+                     
+                    res => { // if successfully uploaded file to server, then we can seand a message
+                         let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName);
+                         this.addToMessages(newMessage);
+                         this.messageService.sendUserMessage(newMessage).subscribe(data => { },
+                            async err => {
+                                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
+                                    if (ok) {
+                                        this.messageService.sendUserMessage(newMessage).subscribe();
+                                    }
+                                });
+                            });
+                            this.attachedImage = null;
+                        },
+                    
+                     error => console.log("Fail when uploading file to server!"));
+                    } else {
+                         let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName);
+                         this.addToMessages(newMessage);
+                         this.messageService.sendUserMessage(newMessage).subscribe(data => { },
+                            async err => {
+                                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
+                                    if (ok) {
+                                        this.messageService.sendUserMessage(newMessage).subscribe();
+                                    }
+                                });
+                            });
                     }
-                });
-            });
-        }
-    }
+                }
+            }
 
     private addToMessages(message: Message) {
         this.messages.push(message);
@@ -226,4 +254,26 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         console.log(this.scrollContainer.nativeElement.scrollTop);
     }
 
+    AttachImage(e: Event) {
+        this.attachedImage = e.target as HTMLInputElement;
+    }
+
+    onShowModal(fileName: string): void{
+        document.getElementById("modal-img").setAttribute('src', this.fileService.getFullFileUrl(fileName));
+        document.getElementById("modal-ref").setAttribute('href', this.fileService.getFullFileUrl(fileName));
+        var dialog = document.querySelector('.wrapper-modal');
+        dialog.classList.add("show");
+    }
+
+    onCloseModal(){
+        var dialog = document.querySelector('.wrapper-modal');
+        dialog.classList.remove("show");
+    }
+    /*
+    var dialog = document.querySelector('.wrapper-modal');
+      document.querySelector('.close, .button-close').addEventListener('click', function() {
+        dialog.classList.remove("show");
+        self.router.navigate(['login']);
+        location.reload();
+      });*/
 }

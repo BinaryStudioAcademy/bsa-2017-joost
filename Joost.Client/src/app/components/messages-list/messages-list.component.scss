@@ -89,23 +89,39 @@
 }
 
 .message-text {
-    padding: 5px;
-    background-color: #BBDEFB;
+    padding: 5px 10px 5px 10px;
     font-size: 1.2em;
-    border-radius: 5px;
-    display: -webkit-inline-box;
-    min-height: 25px;
 }
 
-.main-message-content {
+.main-message-content-container {
   margin-left: 10px;
+}
+
+.message-item{
+    height: auto;
+}
+
+.message-content{
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: #BBDEFB;
+    display: -webkit-inline-box;
+
+    img{
+        margin: 10px;
+        max-height: 200px;
+        max-width:  200px;
+    }
 }
 
 .self-message {
   justify-content: flex-end;
   
-  .message-text{
-      float: right;
+ .main-message-content-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
   }
 }
 
@@ -114,11 +130,33 @@
   bottom: 0;
 }
 
+
+.messages-content {
+    max-height: 560px;
+    overflow: auto;
+}
+
+
+
+input[type="file"] {
+    display: none;
+}
+
+
+.custom-image-attach {
+    cursor: pointer;
+
+    .material-icons {
+        padding: 10px;
+    }
+}
+
 .send-message-container{
     display: flex;
     flex-direction: row;
     justify-content: center;
     vertical-align: center;
+    align-items: center;
     > div{
         width: 80%;
     }
@@ -127,11 +165,81 @@
 .send-button{
     align-self: center;
     margin-left: 14px;
+    >i {
+        transform-origin: center center;
+        // transform:  rotate(-10deg);
+    }
 }
 
-.messages-content {
-    max-height: 560px;
-    overflow: auto;
+.message-attached-image {
+    padding: 10px;
+    width: 50px;
+    height: 50px;
 }
 
+.material-icons.green {
+    color: rgb(46,204,113);
+}
 
+.modal-container{
+    display: flex;
+    align-items: center;
+    margin:0;
+}
+
+.wrapper-modal{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width:100%;
+    height: 100%;
+    margin:0;
+    z-index: 10;
+    align-items: center;
+    display:none;
+  }
+
+  .wrapper-modal.show{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.5);
+  }
+
+  .modal{
+    position: relative;
+    align-items:center;
+    flex-direction:column;
+    justify-content:center;
+    text-align: center;
+    padding: 25px 25px;
+    background-color:white;
+    z-index:11;
+  }
+
+  .mdl-progress{
+    margin:0;
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+    z-index:8;
+    height:3px;
+  }
+
+  #modal-img{
+      max-height: 400px;
+      max-width: 400px;
+  }
+
+  .modal-close-button{
+    position: absolute;
+    right: 0;
+    margin: 2px;
+    top: 0;
+    cursor: pointer;
+  }
+
+  .modal-close-button:hover{
+      color: #FF5722;
+  }
