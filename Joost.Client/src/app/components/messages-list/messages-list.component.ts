@@ -258,5 +258,22 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.attachedImage = e.target as HTMLInputElement;
     }
 
+    onShowModal(fileName: string): void{
+        document.getElementById("modal-img").setAttribute('src', this.fileService.getFullFileUrl(fileName));
+        document.getElementById("modal-ref").setAttribute('href', this.fileService.getFullFileUrl(fileName));
+        var dialog = document.querySelector('.wrapper-modal');
+        dialog.classList.add("show");
+    }
 
+    onCloseModal(){
+        var dialog = document.querySelector('.wrapper-modal');
+        dialog.classList.remove("show");
+    }
+    /*
+    var dialog = document.querySelector('.wrapper-modal');
+      document.querySelector('.close, .button-close').addEventListener('click', function() {
+        dialog.classList.remove("show");
+        self.router.navigate(['login']);
+        location.reload();
+      });*/
 }

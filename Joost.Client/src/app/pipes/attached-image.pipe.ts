@@ -1,11 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { FileService } from "../services/file.service";
+
 @Pipe({name: 'attachedImagePipe'})
 export class AttachedImagePipe implements PipeTransform {
 
-  transform(value: string): string {
-      if(value != null) {
-          return "http://localhost:51248/api/files/" + value;
+    constructor(private fileService: FileService) {  }
+
+    transform(value: string): string {
+        if(value != null) {
+            return this.fileService.getFullFileUrl(value);
         }
     }
 

@@ -25,36 +25,13 @@
                         <div class="message-text" *ngIf="message.Text">
                           {{message.Text}}
                         </div>
-                        <div *ngIf="message.AttachedFile">
+                        <div *ngIf="message.AttachedFile" (click)="onShowModal(message.AttachedFile)">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
                         </div>
                     </div>
                   </div>
-                  <div>
-                        
-                  </div>
                 </div>
             </li>
-            <!-- <li *ngIf="messageService.isOwnMessage(message, receiverId)==false" class="mdl-list__item mdl-list__item--three-line self-message">
-              <div class="message-container">
-                <div class="main-message-content">
-                  <div class="message-header">
-                    <div>
-                      {{currentUser.FirstName}}
-                    </div>
-                    <div>
-                        {{message.CreatedAt}}
-                    </div>   
-                  </div>
-                  <div class="message-text">
-                      {{message.Text}}
-                      <div *ngIf="message.AttachedFile" class="message-attached-image">
-                        <img src="{{message.AttachedFile | attachedImagePipe}}">
-                      </div>
-                  </div>
-                </div>
-              </div>
-            </li> -->
         </div> 
       </ul>    
     </div>
@@ -75,4 +52,16 @@
 
       <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button" (click)="send(messageText)">Send</button>
     </div>
+</div>
+
+<div class="modal-container">
+  <div class="wrapper-modal">
+    <div class="modal">
+      <i class="material-icons modal-close-button" (click)="onCloseModal()">close</i>
+      <div class="mdl-dialog__content">
+        <a target="_blank" href="" id="modal-ref">
+          <img src="" id="modal-img" />
+        </a>
+      </div>
+  </div>
 </div>
