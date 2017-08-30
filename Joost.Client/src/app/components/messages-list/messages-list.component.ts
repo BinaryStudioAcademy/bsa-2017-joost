@@ -123,12 +123,12 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private getUserMessages() {
-        this.messageService.getUserMessages(this.currentUser.Id, this.skip, this.take)
+        this.messageService.getUserMessages(this.receiverId, this.skip, this.take)
             .subscribe(m => this.messages = m.map(m => m),
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
-                        this.messageService.getUserMessages(this.currentUser.Id, this.skip, this.take)
+                        this.messageService.getUserMessages(this.receiverId, this.skip, this.take)
                         .subscribe(m => this.messages = m.map(m => m));
                     }
                 });
@@ -169,7 +169,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private addMessagesToList() {      
         this.getMessages = false;
         this.skip += this.take;
-        return this.messageService.getUserMessages(this.currentUser.Id, this.skip, this.take).subscribe((data: Message[]) => {
+        return this.messageService.getUserMessages(this.receiverId, this.skip, this.take).subscribe((data: Message[]) => {
             if (data.length > 0) {
                 this.messages = data.concat(this.messages);     
             }
