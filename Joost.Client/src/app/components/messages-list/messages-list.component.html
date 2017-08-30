@@ -48,9 +48,9 @@
       <label for="file-upload" *ngIf="attachedImage" class="custom-image-attach" title="File attached">
         <i class="material-icons green">photo</i>
       </label>
-      <input id="file-upload" type="file" accept="image/jpeg,image/png,image/gif" (change)="AttachImage($event)" name="file"/>
+      <input id="file-upload" type="file" accept="image/jpeg,image/png,image/gif" (click)="AttachImage($event)" name="file"/>
 
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--fab send-button" (click)="send(messageText)">
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button" (click)="send(messageText)">
         <i class="material-icons">send</i>
       </button>
     </div>
