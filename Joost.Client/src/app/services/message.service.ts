@@ -13,20 +13,20 @@ export class MessageService extends BaseApiService {
     this.parUrl = "messages";
   }
 
-  getUserMessages(userId: number, skip: number, take: number): Observable<Message[]> {
+  getUserMessages(receiverId: number, skip: number, take: number): Observable<Message[]> {
     let req = new HttpRequest("GET", this.generateUrl() +  "/user-messages", { 
     	params: new HttpParams()
-    		.set("userId", userId.toString())
+        .set("receiverId", receiverId.toString())       
         .append("skip", skip.toString())
     		.append("take", take.toString())        
     });
     return this.http.sendRequest<Message[]>(req);
   }
 
-  getGroupMessages(groupId: number, skip: number, take: number): Observable<Message[]> {
+  getGroupMessages(receiverId: number, skip: number, take: number): Observable<Message[]> {
     let req = new HttpRequest("GET", this.generateUrl() +  "/group-messages", { 
     	params: new HttpParams()
-    		.set("groupId", groupId.toString())
+        .set("receiverId", receiverId.toString())      
         .append("skip", skip.toString())
     		.append("take", take.toString())        
     });
@@ -38,7 +38,7 @@ export class MessageService extends BaseApiService {
     message.SenderId = senderId;
     message.ReceiverId = receiverId;
     message.Text = text;
-    message.CreatedAt = new Date();
+    message.CreatedAt = new Date(); // wrong timezone!!!
     message.AttachedFile = attachedFile;
     return message;
   }
@@ -53,23 +53,13 @@ export class MessageService extends BaseApiService {
     return this.http.sendRequest(req);
   }
 
-  editUserMessage(messageId: number, text: string): Observable<Message> {
-    let req = new HttpRequest("PUT", this.generateUrl() +  "/user-messages", { 
-    	params: new HttpParams()
-    		.set("messageId", messageId.toString())
-        .append("editedTime", new Date().toDateString()),
-      body: text
-    });
+  editUserMessage(message: Message): Observable<Message> {
+    let req = new HttpRequest("PUT", this.generateUrl() +  "/user-messages", message);
     return this.http.sendRequest<Message>(req);
   }
 
-  editGroupMessage(groupMessageId: number, text: string): Observable<Message> {
-    let req = new HttpRequest("PUT", this.generateUrl() +  "/group-messages", { 
-    	params: new HttpParams()
-    		.set("groupMessageId", groupMessageId.toString())
-        .append("editedTime", new Date().toDateString()),
-      body: text
-    });
+  editGroupMessage(message: Message): Observable<Message> {
+    let req = new HttpRequest("PUT", this.generateUrl() +  "/group-messages", message);
     return this.http.sendRequest<Message>(req);
   } 
 

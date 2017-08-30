@@ -49,15 +49,18 @@ namespace Joost.Api.Services
                 .Select(m => m.Receiver.Id == userId ? m.Sender : m.Receiver)
                 .Distinct()
                 .ToListAsync();
-            var dialogs = users.Select(
-                async u => new DialogDataDto
-                {
-                    Id = u.Id,
-                    Name = u.FirstName,
-                    LastMessage = (await GetLastMessageInUserDialog(u.Id)).Text,
-                    Avatar = u.Avatar,
-                    IsGroup = false
-                }
+			var dialogs = users.Select(
+				async u => {
+					var lastMessage = await GetLastMessageInUserDialog(u.Id);
+					return new DialogDataDto
+					{
+						Id = u.Id,
+						Name = u.FirstName,
+						LastMessage = (lastMessage == null ? null : lastMessage.Text),
+						Avatar = u.Avatar,
+						IsGroup = false
+					};
+				}
             );
             return await Task.WhenAll(dialogs);
         }
@@ -69,14 +72,17 @@ namespace Joost.Api.Services
                 .Where(g => g.Members.Any(i => i.Id == userId))
                 .ToListAsync();
             var dialogs = groups.Select(
-                async g => new DialogDataDto
-                {
-                    Id = g.Id,
-                    Name = g.Name,
-                    LastMessage = (await GetLastMessageInGroupDialog(g.Id)).Text,
-                    Avatar = string.Empty,
-                    IsGroup = true
-                }
+                async g => {
+					var lastMessage = await GetLastMessageInGroupDialog(g.Id);
+					return new DialogDataDto
+					{
+						Id = g.Id,
+						Name = g.Name,
+						LastMessage = lastMessage == null ? null : lastMessage.Text,
+						Avatar = string.Empty,
+						IsGroup = true
+					};
+				}
             );
             return await Task.WhenAll(dialogs);
         }

@@ -16,8 +16,17 @@ body {
 .login-container{
   display: flex;
   align-items: center;
+  justify-content:center;
   min-height:100vh;
   margin:0;
+  background-image: url(../../../assets/img/back-login.jpg);
+  background-size: cover;
+  background-position: center;
+  flex-direction:column;
+}
+.logo{
+  height:100px;
+  margin-bottom: 10px;
 }
 .container {
     padding: 200px auto;

@@ -7,51 +7,30 @@
     <div class="main"> 
       <ul #scroll class="mdl-list scrollable messages-content" (scroll)="onScroll()" [scrollTop]="scroll.scrollHeight">
         <div *ngFor="let message of messages">
-            <li *ngIf="messageService.isOwnMessage(message, receiverId)" class="mdl-list__item mdl-list__item--three-line">
+            <li class="mdl-list__item mdl-list__item--three-line message-item" [class.self-message]="!messageService.isOwnMessage(message, receiverId)">
                 <div class="message-container">
-                  <div>
+                  <div *ngIf="messageService.isOwnMessage(message, receiverId)">
                       <img src="{{null | avatarPipe}}" class="material-icons mdl-list__item-avatar">
                   </div>
-                  <div class="main-message-content">
+                  <div class="main-message-content-container">
                     <div class="message-header">
                       <div>
-                          {{dialogName}}
+                          {{messageService.isOwnMessage(message, receiverId) ? dialogName + ', ': ''}}
                       </div>
                       <div>
-                          {{message.CreatedAt}}
+                          {{message.CreatedAt | date:'HH:mm:ss'}}
                       </div>   
                     </div>
-                    <div class="message-text">
-                        {{message.Text}}
-                        <div *ngIf="message.AttachedFile" class="message-attached-image">
+                    <div class="message-content">
+                        <div class="message-text" *ngIf="message.Text">
+                          {{message.Text}}
+                        </div>
+                        <div *ngIf="message.AttachedFile" (click)="onShowModal(message.AttachedFile)">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
                         </div>
                     </div>
                   </div>
-                  <div>
-                        
-                  </div>
                 </div>
-            </li>
-            <li *ngIf="messageService.isOwnMessage(message, receiverId)==false" class="mdl-list__item mdl-list__item--three-line self-message">
-              <div class="message-container">
-                <div class="main-message-content">
-                  <div class="message-header">
-                    <div>
-                      {{currentUser.FirstName}}
-                    </div>
-                    <div>
-                        {{message.CreatedAt}}
-                    </div>   
-                  </div>
-                  <div class="message-text">
-                      {{message.Text}}
-                      <div *ngIf="message.AttachedFile" class="message-attached-image">
-                        <img src="{{message.AttachedFile | attachedImagePipe}}">
-                      </div>
-                  </div>
-                </div>
-              </div>
             </li>
         </div> 
       </ul>    
@@ -59,7 +38,7 @@
   </div>
  <div class ="mdl-card__actions mdl-card--border message-input-container send-message-container">     
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="messageText" [(ngModel)]="messageText">
+        <input class="mdl-textfield__input" type="text" id="messageText" (keyup.enter)="send(messageText)" [(ngModel)]="messageText">
         <label class="mdl-textfield__label" for="messageText">Message text...</label>
       </div>
 
@@ -69,8 +48,25 @@
       <label for="file-upload" *ngIf="attachedImage" class="custom-image-attach" title="File attached">
         <i class="material-icons green">photo</i>
       </label>
-      <input id="file-upload" type="file" accept="image/jpeg,image/png,image/gif" (change)="AttachImage($event)" name="file" />
+      <input id="file-upload" type="file" accept="image/jpeg,image/png,image/gif" (click)="AttachImage($event)" name="file"/>
 
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button" (click)="send(messageText)">Send</button>
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button" (click)="send(messageText)">
+        <i class="material-icons">send</i>
+      </button>
     </div>
+</div>
+
+<div class="modal-container">
+  <div class="wrapper-modal">
+    <div class="modal through mdl-shadow--8dp">
+      <i class="material-icons modal-close-button" (click)="onCloseModal()">close</i>
+      <div>
+        <a target="_blank" href="" id="modal-ref">
+          <img src="" id="modal-img"/>
+        </a>
+      </div>
+      <div class="image-tooltip">
+          Click to open in a new tab
+      </div>
+  </div>
 </div>

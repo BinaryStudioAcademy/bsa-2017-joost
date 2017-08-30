@@ -3,7 +3,7 @@ using Joost.DbAccess.Interfaces;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Joost.Api.Models;
-using System;
+using System.Net;
 
 namespace Joost.Api.Controllers
 {
@@ -19,25 +19,27 @@ namespace Joost.Api.Controllers
 
         [HttpGet]
         [Route("user-messages")]
-        public async Task<IHttpActionResult> GetUserMessages(int userId, int skip, int take)
+        public async Task<IHttpActionResult> GetUserMessages(int receiverId, int skip, int take)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var messages = await _messageService.GetUserMessages(userId, skip, take);
+			var currentUserId = GetCurrentUserId();
+			var messages = await _messageService.GetUserMessages(currentUserId, receiverId, skip, take);
             return Ok(messages);
         }
 
         [HttpGet]
         [Route("group-messages")]
-        public async Task<IHttpActionResult> GetGroupMessages(int groupId, int skip, int take)
+        public async Task<IHttpActionResult> GetGroupMessages(int receiverId, int skip, int take)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var groupMessages = await _messageService.GetGroupMessages(groupId, skip, take);
+			var currentUserId = GetCurrentUserId();
+			var groupMessages = await _messageService.GetGroupMessages(currentUserId, receiverId, skip, take);
             return Ok(groupMessages);
         }
 
@@ -50,9 +52,14 @@ namespace Joost.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _messageService.AddUserMessage(message);
-            return Ok();
-        }
+            var currentUserId = GetCurrentUserId();
+			if (currentUserId == message.SenderId)
+			{
+				await _messageService.AddUserMessage(message);
+				return Ok();
+			}
+			else return StatusCode(HttpStatusCode.MethodNotAllowed);
+		}
 
         // POST: api/Messages
         [HttpPost]
@@ -63,38 +70,54 @@ namespace Joost.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _messageService.AddGroupMessage(message);
-            return Ok();
+            var currentUserId = GetCurrentUserId();
+            if (currentUserId == message.SenderId)
+            {
+				await _messageService.AddGroupMessage(message);
+				return Ok();
+			}
+            else return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 
         // PUT: api/Messages/5
         [HttpPut]
         [Route("user-messages")]
-        public async Task<IHttpActionResult> EditUserMessage(int messageId, DateTime editedTime, [FromBody]string text)
+        public async Task<IHttpActionResult> EditUserMessage([FromBody]MessageDto message)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var message = await _messageService.EditGroupMessage(messageId, text, editedTime);
-            return Ok(message);
-        }
+			var currentUserId = GetCurrentUserId();
+			if (currentUserId == message.SenderId)
+			{
+				var ok = await _messageService.EditUserMessage(message);
+				if (ok) return Ok(message);
+				else return StatusCode(HttpStatusCode.MethodNotAllowed);
+			}
+			else return StatusCode(HttpStatusCode.MethodNotAllowed);
+		}
 
         // PUT: api/Messages/5
         [HttpPut]
         [Route("group-messages")]
-        public async Task<IHttpActionResult> EditGroupMessage(int groupMessageId, DateTime editedTime, [FromBody]string text)
+        public async Task<IHttpActionResult> EditGroupMessage([FromBody]MessageDto message)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var groupMessage = await _messageService.EditGroupMessage(groupMessageId, text, editedTime);
-            return Ok(groupMessage);
-        }
+			var currentUserId = GetCurrentUserId();
+			if (currentUserId == message.SenderId)
+			{
+				var ok = await _messageService.EditGroupMessage(message);
+				return Ok(message);
+			}
+			else return StatusCode(HttpStatusCode.MethodNotAllowed);
+		}
 
-        // DELETE: api/Messages/5
-        [HttpDelete]
+		// DELETE: api/Messages/5
+		[HttpDelete]
         [Route("user-messages")]
         public async Task<IHttpActionResult> DeleteUserMessage(int messageId)
         {
@@ -102,12 +125,14 @@ namespace Joost.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _messageService.DeleteUserMessage(messageId);
-            return Ok();
-        }
+			var currentUserId = GetCurrentUserId();
+			var ok = await _messageService.DeleteUserMessage(currentUserId, messageId);
+            if (ok) return Ok();
+			else return StatusCode(HttpStatusCode.MethodNotAllowed);
+		}
 
-        // DELETE: api/Messages/5
-        [HttpDelete]
+		// DELETE: api/Messages/5
+		[HttpDelete]
         [Route("group-messages")]
         public async Task<IHttpActionResult> DeleteGroupMessage(int groupMessageId)
         {
@@ -115,8 +140,10 @@ namespace Joost.Api.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _messageService.DeleteGroupMessage(groupMessageId);
-            return Ok();
+			var currentUserId = GetCurrentUserId();
+			var ok = await _messageService.DeleteGroupMessage(currentUserId, groupMessageId);
+			if (ok) return Ok();
+			else return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
     }
 }

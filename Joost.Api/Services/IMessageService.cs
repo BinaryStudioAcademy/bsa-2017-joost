@@ -7,13 +7,13 @@ namespace Joost.Api.Services
 {
     public interface IMessageService
     {
-        Task<IEnumerable<MessageDto>> GetUserMessages(int userId, int skip, int take);
-        Task<IEnumerable<MessageDto>> GetGroupMessages(int groupId, int skip, int take);
+        Task<IEnumerable<MessageDto>> GetUserMessages(int senderId, int receiverId, int skip, int take);
+        Task<IEnumerable<MessageDto>> GetGroupMessages(int senderId, int receiverId, int skip, int take);
         Task AddUserMessage(MessageDto message);
-        Task AddGroupMessage(MessageDto groupMessage);
-        Task<MessageDto> EditUserMessage(int messageId, string newText, DateTime editedAt);
-        Task<MessageDto> EditGroupMessage(int groupMessageId, string newText, DateTime editedAt);
-        Task DeleteUserMessage(int messageId);
-        Task DeleteGroupMessage(int groupMessageId);
+		Task AddGroupMessage(MessageDto groupMessage);
+		Task<bool> EditUserMessage(MessageDto message);
+        Task<bool> EditGroupMessage(MessageDto groupMessage);
+        Task<bool> DeleteUserMessage(int senderId, int messageId);
+        Task<bool> DeleteGroupMessage(int senderId, int groupMessageId);
     }
 }
