@@ -38,7 +38,7 @@
   </div>
  <div class ="mdl-card__actions mdl-card--border message-input-container send-message-container">     
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="messageText" [(ngModel)]="messageText">
+        <input class="mdl-textfield__input" type="text" id="messageText" (keyup.enter)="send(messageText)" [(ngModel)]="messageText">
         <label class="mdl-textfield__label" for="messageText">Message text...</label>
       </div>
 
@@ -48,9 +48,11 @@
       <label for="file-upload" *ngIf="attachedImage" class="custom-image-attach" title="File attached">
         <i class="material-icons green">photo</i>
       </label>
-      <input id="file-upload" type="file" accept="image/jpeg,image/png,image/gif" (change)="AttachImage($event)" name="file" />
+      <input id="file-upload" type="file" accept="image/jpeg,image/png,image/gif" (change)="AttachImage($event)" name="file"/>
 
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button" (click)="send(messageText)">Send</button>
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--fab send-button" (click)="send(messageText)">
+        <i class="material-icons">send</i>
+      </button>
     </div>
 </div>
 
@@ -58,9 +60,9 @@
   <div class="wrapper-modal">
     <div class="modal">
       <i class="material-icons modal-close-button" (click)="onCloseModal()">close</i>
-      <div class="mdl-dialog__content">
+      <div class="">
         <a target="_blank" href="" id="modal-ref">
-          <img src="" id="modal-img" />
+          <img src="" id="modal-img" title="Click to open in a new tab"/>
         </a>
       </div>
   </div>
