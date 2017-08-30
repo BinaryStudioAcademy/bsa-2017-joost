@@ -21,7 +21,7 @@
     <a class="mdl-list__item-secondary-action add-contact" *ngIf="checkInContact(user.Id)"><i class="material-icons">{{findContact(user.Id)}}</i></a>
   </li>
 </ul>
-	<div class="menu__search__not_found" *ngIf="isLoad && result!==undefiend && result.length === 0 && searchString!==''" >Unfortunately, nothing was found on your request(</div>
+	<div class="menu__search__not_found" *ngIf="isLoad && result!==undefiend && result.length === 0 && searchString!==''" >Unfortunately, nothing was found on your request :(</div>
 	<div class="wrapper__spiner">
 		<div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" [hidden]="(isLoad && searchString) || !searchString"></div>
 	</div>

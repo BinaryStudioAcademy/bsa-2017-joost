@@ -21,12 +21,13 @@
 .jg-container{
     width: calc(100% - 10px);
     min-height: calc(100vh - 10px);
-    margin: 5px auto;
+    margin: 0px;
 }
 
 .jg-header-container{
     width:  100%;
     display: flex;
+    flex-wrap: wrap;
     h3 {
         margin: 0;
     }
@@ -129,4 +130,7 @@ input[type="file"] {
     p {
         margin: 0;    
     }
+}
+.mdl-textfield{
+    max-width: 48%;
 }
