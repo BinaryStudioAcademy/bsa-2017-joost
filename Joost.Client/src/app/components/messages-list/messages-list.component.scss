@@ -165,6 +165,10 @@ input[type="file"] {
 .send-button{
     align-self: center;
     margin-left: 14px;
+    >i {
+        transform-origin: center center;
+        // transform:  rotate(-10deg);
+    }
 }
 
 .message-attached-image {
@@ -177,3 +181,88 @@ input[type="file"] {
     color: rgb(46,204,113);
 }
 
+.modal-container{
+    display: flex;
+    align-items: center;
+    margin:0;
+}
+
+.wrapper-modal{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width:100%;
+    height: 100%;
+    margin:0;
+    z-index: 10;
+    align-items: center;
+    display:none;
+  }
+
+  .wrapper-modal.show{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.5);
+  }
+
+  .modal{
+    position: relative;
+    align-items:center;
+    flex-direction:column;
+    justify-content:center;
+    text-align: center;
+    padding: 25px 25px;
+    background-color:white;
+    z-index:11;
+  }
+
+  .mdl-progress{
+    margin:0;
+    position: absolute;
+    left:0;
+    top:0;
+    width:100%;
+    z-index:8;
+    height:3px;
+  }
+
+  #modal-img{
+      max-height: 400px;
+      max-width: 400px;
+  }
+
+  .modal-close-button{
+    position: absolute;
+    right: 0;
+    margin: 2px;
+    top: 0;
+    cursor: pointer;
+  }
+
+  .modal-close-button:hover{
+      color: #FF5722;
+  }
+
+
+  .image-tooltip {
+    position: absolute;
+    transform:translateY(2em);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0);
+    height: 2em;
+    transition: all .3s;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:transparent;
+  }
+  
+  .modal:hover .image-tooltip  {
+    background-color: rgba(0,0,0,0.5);
+    transition: all .3s;
+    color:white;
+    transform:translateY(0%);
+  }

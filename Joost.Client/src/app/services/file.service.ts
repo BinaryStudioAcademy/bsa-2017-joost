@@ -35,6 +35,9 @@ export class FileService extends BaseApiService{
   }));
 }
 
+  getFullFileUrl(fileName: string): string{
+    return this.generateUrl() + '/' + fileName;
+  }
 
 }
     

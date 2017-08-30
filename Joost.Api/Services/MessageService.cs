@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Joost.DbAccess.Interfaces;
 using Joost.DbAccess.Entities;
@@ -20,7 +19,7 @@ namespace Joost.Api.Services
             _chatHubService = chatHubService;
         }
 
-        public async Task<IEnumerable<MessageDto>> GetUserMessages(int userId, int skip, int take)
+        public async Task<IEnumerable<MessageDto>> GetUserMessages(int senderId, int receiverId, int skip, int take)
         {
             using (var messageRepository = _unitOfWork.Repository<Message>())
             {
@@ -28,9 +27,10 @@ namespace Joost.Api.Services
                     .Query()
                     .Include(m => m.Sender)
                     .Include(m => m.Receiver)
-                    .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId)
+                    .Where(m => (m.Sender.Id == senderId && m.Receiver.Id == receiverId) ||
+                                (m.Sender.Id == receiverId && m.Receiver.Id == senderId))
                     .OrderByDescending(m => m.CreatedAt)
-                    .Skip(skip)
+				    .Skip(skip)
                     .Take(take)
                     .OrderBy(m => m.CreatedAt)
                     .Select(m => new MessageDto
@@ -47,15 +47,16 @@ namespace Joost.Api.Services
             }
         }
 
-        public async Task<IEnumerable<MessageDto>> GetGroupMessages(int groupId, int skip, int take)
+        public async Task<IEnumerable<MessageDto>> GetGroupMessages(int senderId, int receiverId, int skip, int take)
         {
             using (var groupMessageRepository = _unitOfWork.Repository<GroupMessage>())
             {
                 return await groupMessageRepository
                     .Query()
                     .Include(m => m.Receiver)
-                    .Where(m => m.Receiver.Id == groupId)
-                    .OrderByDescending(m => m.CreatedAt)
+                    .Where(m => (m.Sender.Id == senderId && m.Receiver.Id == receiverId) ||
+								(m.Sender.Id == receiverId && m.Receiver.Id == senderId))
+					.OrderByDescending(m => m.CreatedAt)
                     .Skip(skip)
                     .Take(take)
                     .OrderBy(m => m.CreatedAt)
@@ -73,16 +74,22 @@ namespace Joost.Api.Services
             }
         }
 
-        public async Task AddUserMessage(MessageDto message)
+		public async Task AddUserMessage(MessageDto message)
         {
             if (message != null)
             {
                 using (var userRepository = _unitOfWork.Repository<User>())
                 {
-                    var sender = await userRepository.FindAsync(s => s.Id == message.SenderId);
+                    var sender = await userRepository
+						.Query()
+						.Include(s => s.Contacts)
+						.FirstOrDefaultAsync(s => s.Id == message.SenderId);
                     if (sender != null)
                     {
-                        var receiver = await _unitOfWork.Repository<User>().FindAsync(s => s.Id == message.ReceiverId);
+						var receiver = sender.Contacts
+							.Select(c => c.ContactUser)
+							.Where(u => u.Id == message.ReceiverId)
+							.FirstOrDefault();
                         if (receiver != null)
                         {
                             var newMessage = new Message
@@ -107,86 +114,112 @@ namespace Joost.Api.Services
         {
             if (groupMessage != null)
             {
-                var sender = await _unitOfWork.Repository<User>().FindAsync(s => s.Id == groupMessage.SenderId);
-                if (sender != null)
-                {
-                    var receiver = await _unitOfWork.Repository<Group>().FindAsync(s => s.Id == groupMessage.ReceiverId);
-                    if (receiver != null)
-                    {
-                        var newMessage = new GroupMessage
-                        {
-                            Sender = sender,
-                            Receiver = receiver,
-                            Text = groupMessage.Text,
-                            CreatedAt = groupMessage.CreatedAt,
-                            EditedAt = groupMessage.EditedAt,
-                            AttachedFile = groupMessage.AttachedFile
-                        };
-                        _unitOfWork.Repository<GroupMessage>().Add(newMessage);
-                        await _chatHubService.SendToGroup(groupMessage);
-                        await _unitOfWork.SaveAsync();
-                    }
-                }
-            }
+				using (var groupRepository = _unitOfWork.Repository<Group>())
+				{
+					var group = await groupRepository
+						.Query()
+						.Include(g => g.Members)
+						.FirstOrDefaultAsync(g => g.Id == groupMessage.SenderId);
+					if (group != null)
+					{
+						var sender = group.Members
+							.Where(m => m.Id == groupMessage.SenderId)
+							.FirstOrDefault();
+						if (sender != null)
+						{
+							var newMessage = new GroupMessage
+							{
+								Sender = sender,
+								Receiver = group,
+								Text = groupMessage.Text,
+								CreatedAt = groupMessage.CreatedAt,
+								EditedAt = groupMessage.EditedAt,
+								AttachedFile = groupMessage.AttachedFile
+							};
+							_unitOfWork.Repository<GroupMessage>().Add(newMessage);
+							await _chatHubService.SendToGroup(groupMessage);
+							await _unitOfWork.SaveAsync();
+						}
+					}
+				}
+			}
         }
 
-        public async Task<MessageDto> EditUserMessage(int messageId, string newText, DateTime editedAt)
+        public async Task<bool> EditUserMessage(MessageDto message)
         {
             using (var messageRepository = _unitOfWork.Repository<Message>())
             {
-                var message = await messageRepository.FindAsync(m => m.Id == messageId);
-                if (message != null)
+                var mes = await messageRepository
+					.Query()
+					.Include(m => m.Sender)
+					.FirstOrDefaultAsync(m => m.Id == message.Id);
+                if (mes != null && mes.Sender.Id == message.SenderId)
                 {
-                    message.Text = newText;
-                    message.EditedAt = editedAt;
-                    messageRepository.Attach(message);
+                    mes.Text = message.Text;
+					mes.AttachedFile = message.AttachedFile;
+                    mes.EditedAt = message.EditedAt;
+                    messageRepository.Attach(mes);
                     await _unitOfWork.SaveAsync();
-                    return MessageDto.FromMessageModel(message);
+                    return true;
                 }
-                else return new MessageDto();
+                else return false;
             }
         }
 
-        public async Task<MessageDto> EditGroupMessage(int groupMessageId, string newText, DateTime editedAt)
+        public async Task<bool> EditGroupMessage(MessageDto groupMessage)
         {
             using (var groupMessageRepository = _unitOfWork.Repository<GroupMessage>())
             {
-                var groupMessage = await groupMessageRepository.FindAsync(m => m.Id == groupMessageId);
-                if (groupMessage != null)
+                var gMes = await groupMessageRepository
+					.Query()
+					.Include(m => m.Sender)
+					.FirstOrDefaultAsync(m => m.Id == groupMessage.Id);
+                if (gMes != null && gMes.Sender.Id == groupMessage.SenderId)
                 {
-                    groupMessage.Text = newText;
-                    groupMessage.EditedAt = editedAt;
-                    groupMessageRepository.Attach(groupMessage);
+                    gMes.Text = groupMessage.Text;
+					gMes.AttachedFile = groupMessage.AttachedFile;
+                    gMes.EditedAt = groupMessage.EditedAt;
+                    groupMessageRepository.Attach(gMes);
                     await _unitOfWork.SaveAsync();
-                    return MessageDto.FromGroupMessageModel(groupMessage);
+                    return true;
                 }
-                else return new MessageDto();
+                else return false;
             }
         }
 
-        public async Task DeleteUserMessage(int messageId)
+        public async Task<bool> DeleteUserMessage(int senderId, int messageId)
         {
             using (var messageRepository = _unitOfWork.Repository<Message>())
             {
-                var message = await messageRepository.FindAsync(item => item.Id == messageId);
-                if (message != null)
-                {
-                    messageRepository.Delete(message);
-                    await _unitOfWork.SaveAsync();
-                }
+                var message = await messageRepository
+					.Query()
+					.Include(m => m.Sender)
+					.FirstOrDefaultAsync(m => m.Id == messageId);
+				if (message != null && message.Sender.Id == senderId)
+				{
+					messageRepository.Delete(message);
+					await _unitOfWork.SaveAsync();
+					return true;
+				}
+				else return false;
             }
         }
 
-        public async Task DeleteGroupMessage(int groupMessageId)
+        public async Task<bool> DeleteGroupMessage(int senderId, int groupMessageId)
         {
             using (var groupMessageRepository = _unitOfWork.Repository<Message>())
             {
-                var groupMessage = await groupMessageRepository.FindAsync(item => item.Id == groupMessageId);
-                if (groupMessage != null)
-                {
-                    groupMessageRepository.Delete(groupMessage);
-                    await _unitOfWork.SaveAsync();
-                }
+                var groupMessage = await groupMessageRepository
+					.Query()
+					.Include(m => m.Sender)
+					.FirstOrDefaultAsync(m => m.Id == groupMessageId);
+				if (groupMessage != null && groupMessage.Sender.Id == senderId)
+				{
+					groupMessageRepository.Delete(groupMessage);
+					await _unitOfWork.SaveAsync();
+					return true;
+				}
+				else return false;
             }
         }
     }
