@@ -53,7 +53,6 @@ namespace Joost.Api.Services
             {
                 return await groupMessageRepository
                     .Query()
-                    .Include(m => m.Sender)
                     .Include(m => m.Receiver)
                     .Where(m => m.Receiver.Id == groupId)
                     .OrderByDescending(m => m.CreatedAt)

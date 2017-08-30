@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked } from '@angular/core';
 import { Subscription } from "rxjs/Rx";
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
@@ -164,11 +164,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                                     }
                                 });
                             });
-                            this.attachedImage = null;
+                         this.attachedImage = null;
                         },
                     
                      error => console.log("Fail when uploading file to server!"));
-                    } else {
+             } else {
                          let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName);
                          this.addToMessages(newMessage);
                          this.messageService.sendUserMessage(newMessage).subscribe(data => { },

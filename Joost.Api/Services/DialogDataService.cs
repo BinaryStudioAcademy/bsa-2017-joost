@@ -21,9 +21,8 @@ namespace Joost.Api.Services
         {
             return _unitOfWork.Repository<Message>()
                 .Query()
-                .Include(m => m.Sender)
                 .Include(m => m.Receiver)
-                .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId)
+                .Where(m => m.Receiver.Id == userId)
                 .OrderByDescending(m => m.CreatedAt)
                 .FirstOrDefaultAsync();
         }
@@ -49,36 +48,46 @@ namespace Joost.Api.Services
                 .Select(m => m.Receiver.Id == userId ? m.Sender : m.Receiver)
                 .Distinct()
                 .ToListAsync();
-            var dialogs = users.Select(
-                async u => new DialogDataDto
+
+            var dialogs = new List<DialogDataDto>();
+            foreach (var item in users)
+            {
+                var lastMessage = await GetLastMessageInUserDialog(item.Id);
+                dialogs.Add(new DialogDataDto
                 {
-                    Id = u.Id,
-                    Name = u.FirstName,
-                    LastMessage = (await GetLastMessageInUserDialog(u.Id)).Text,
-                    Avatar = u.Avatar,
+                    Id = item.Id,
+                    Name = item.FirstName,
+                    LastMessage = lastMessage.Text,
+                    DateLastMessage = lastMessage.CreatedAt,
+                    Avatar = item.Avatar,
                     IsGroup = false
-                }
-            );
-            return await Task.WhenAll(dialogs);
+                });
+            }
+            return dialogs;
         }
 
         public async Task<IEnumerable<DialogDataDto>> GetGroupDialogsData(int userId)
         {
             var groups = await _unitOfWork.Repository<Group>()
                 .Query()
-                .Where(g => g.Members.Any(i => i.Id == userId))
+                .Where(g => g.Members.Any(i => i.Id == userId) || g.GroupCreator.Id == userId)
                 .ToListAsync();
-            var dialogs = groups.Select(
-                async g => new DialogDataDto
+
+            var dialogs = new List<DialogDataDto>();
+            foreach (var item in groups)
+            {
+                var lastMessage = await GetLastMessageInGroupDialog(item.Id);
+                dialogs.Add(new DialogDataDto
                 {
-                    Id = g.Id,
-                    Name = g.Name,
-                    LastMessage = (await GetLastMessageInGroupDialog(g.Id)).Text,
+                    Id = item.Id,
+                    Name = item.Name,
+                    LastMessage = lastMessage == null ? "Group was created" : lastMessage.Text,
+                    DateLastMessage = lastMessage == null ? item.CreatedAt : lastMessage.CreatedAt,
                     Avatar = string.Empty,
                     IsGroup = true
-                }
-            );
-            return await Task.WhenAll(dialogs);
+                });
+            }
+            return dialogs;
         }
     }
 }
