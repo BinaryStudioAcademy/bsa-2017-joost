@@ -24,7 +24,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private receiverId: number;
     private isGroup: boolean;
     private skip: number = 0;
-    private take: number = 8;    
+    private take: number = 10;    
     private messages: Message[];
     private dialogName: string;
     private dialogImage: string;
@@ -65,7 +65,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                     });
                 }
             });
-        });
+        });    
     }
 
     private GetReceiverData() {
@@ -178,7 +178,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private addToMessages(message: Message) {
         this.messages.push(message);
         this.messageText = "";
-        this.scrollToBottom();
     }
 
     //scroll logic
@@ -190,8 +189,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.getMessages = false;
         this.skip += this.take;
         return this.messageService.getUserMessages(this.receiverId, this.skip, this.take).subscribe((data: Message[]) => {
-            if (data.length > 0) {
-                this.messages = data.concat(this.messages);     
+            if (data.length > 0) {          
+                this.messages = data.concat(this.messages); 
+                this.scrollToBottomOnOneStep(); 
             }
             else {
                 this.skip -= this.take;
@@ -228,14 +228,14 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     private scrollToBottom() {
         try {
-            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;         
         } 
         catch(err) { }
     }
 
     private scrollToBottomOnOneStep() {
         try {
-            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.clientHeight;
+            this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.clientHeight / 2;
         } 
         catch(err) { }
     }
