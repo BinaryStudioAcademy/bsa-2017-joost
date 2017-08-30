@@ -21,6 +21,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   constructor(private dialogService: DialogService, private router: Router, private chatHubService: ChatHubService) {
       dialogService.getDialogs().subscribe(d => {
           var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
+          debugger;
           this.dialogs = sortArray;
           this.filteredDialogs = sortArray;
         },
@@ -47,6 +48,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   }
 
   private updateLastMessage(message: Message) {
+      debugger;
       let filteredDialogs = this.dialogs.filter(d => d.Id == message.ReceiverId || d.Id == message.SenderId);
       if (filteredDialogs.length > 0) {
           filteredDialogs[0].LastMessage = message.Text;

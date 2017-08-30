@@ -54,6 +54,7 @@ export class ChatHubService {
     });
 
     this.ChatProxy.on('addMessage', function (message: Message) {
+        debugger;
       self.addMessageEvent.emit(message); 
     });
 

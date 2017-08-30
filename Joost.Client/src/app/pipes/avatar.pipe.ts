@@ -4,9 +4,9 @@
 export class AvatarPipe implements PipeTransform { // version just for friday meeting
 
     transform(value: string, isGroup: boolean): string {
-      if (value == "" && isGroup)
+        if ((value == "" || value == null) && isGroup)
           return "assets/img/Group-icon.png";
-      if (value == null) {
+        else if (value == null || value == "") {
           return "assets/img/man.png"
         }
         else {

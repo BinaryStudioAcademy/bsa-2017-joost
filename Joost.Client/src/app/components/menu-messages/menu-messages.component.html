@@ -30,7 +30,7 @@
     <ul class="demo-list-three mdl-list">
       <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let dialog of filteredDialogs" (click)="navigateToMessages(dialog)">
         <span class="mdl-list__item-primary-content">
-          <img src="{{dialog.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+          <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
           <span>{{dialog.Name}}</span>
           <span class="mdl-list__item-text-body">
             {{dialog.LastMessage}}
@@ -45,15 +45,17 @@
       <i></i>
       <h2>Direct messages</h2>
         <ul class="demo-list-three mdl-list">
-          <li class="mdl-list__item mdl-list__item--three-line"*ngFor="let dialog of filteredDialogs" (click)="navigateToMessages(dialog)">
-            <span *ngIf="dialog.IsGroup" class="mdl-list__item-primary-content">
-              <img src="{{dialog.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
-              <span>{{dialog.Name}}</span>
-              <span class="mdl-list__item-text-body">
-                {{dialog.LastMessage}}
-              </span>
-            </span>
-          </li>
+            <div *ngFor="let dialog of filteredDialogs">
+              <li class="mdl-list__item mdl-list__item--three-line" *ngIf="!dialog.IsGroup" (click)="navigateToMessages(dialog)">
+                <span  class="mdl-list__item-primary-content">
+                  <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
+                  <span>{{dialog.Name}}</span>
+                  <span class="mdl-list__item-text-body">
+                    {{dialog.LastMessage}}
+                  </span>
+                </span>
+              </li>
+            </div>
         </ul>
     </li>
   <li>
@@ -61,16 +63,18 @@
     <i></i>
     <h2>Groups</h2>
       <ul class="demo-list-three mdl-list">
-        <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let dialog of filteredDialogs" (click)="navigateToMessages(dialog)">
-          <span class="mdl-list__item-primary-content"  *ngIf="dialog.IsGroup">
-            <img src="{{dialog.Avatar | avatarPipe:true}}" class="material-icons mdl-list__item-avatar">
-            <span>{{dialog.Name}}</span>
-            <span class="mdl-list__item-text-body">
-              {{dialog.LastMessage}}
-            </span>
-          </span>
-        </li>
-      </ul>
+          <div *ngFor="let dialog of filteredDialogs">
+              <li class="mdl-list__item mdl-list__item--three-line" *ngIf="dialog.IsGroup" (click)="navigateToMessages(dialog)">
+                  <span class="mdl-list__item-primary-content">
+                      <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
+                      <span>{{dialog.Name}}</span>
+                      <span class="mdl-list__item-text-body">
+                          {{dialog.LastMessage}}
+                      </span>
+                  </span>
+              </li>
+            </div>
+        </ul>
     </li>
   </ul>
   <div class="menu__search__not_found" *ngIf="filteredDialogs!==undefiend && filteredDialogs.length === 0 && searchString!==''" >Unfortunately, nothing was found on your request(</div>
