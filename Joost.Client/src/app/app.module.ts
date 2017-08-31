@@ -54,6 +54,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 
 import { FileService } from './services/file.service';
 import { AttachedImagePipe } from "./pipes/attached-image.pipe";
+import { MenuMessagesService } from "./services/menu-messages.service";
 
 @NgModule({
   declarations: [
@@ -102,7 +103,8 @@ import { AttachedImagePipe } from "./pipes/attached-image.pipe";
     ChatHubService,
     AccountService,
     ContactService,
-    FileService
+    FileService,
+    MenuMessagesService
     // {
     //   provide: ToastOptions,
     //   useClass: CustomOption

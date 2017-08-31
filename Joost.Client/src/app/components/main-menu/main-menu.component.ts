@@ -6,6 +6,7 @@ import { AccountService } from "../../services/account.service";
 import { MDL } from "../mdl-base.component";
 import { UserProfile } from "../../models/user-profile";
 import { ChatHubService } from "../../services/chat-hub.service";
+import { Message } from "../../models/message";
 
 @Component({
   selector: 'app-main-menu',

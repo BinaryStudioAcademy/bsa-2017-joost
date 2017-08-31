@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked, Output, EventEmitter } from '@angular/core';
 import { Subscription } from "rxjs/Rx";
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
@@ -12,6 +12,7 @@ import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
 
 import { FileService } from '../../services/file.service';
+import { MenuMessagesService } from "../../services/menu-messages.service";
 
 @Component({
     selector: "messages-list",
@@ -34,6 +35,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     constructor(private router: ActivatedRoute,
                 private messageService: MessageService,
+                private menuMessagesService: MenuMessagesService,
                 private chatHubService: ChatHubService,
                 private accountService: AccountService,
                 private userService: UserService,
@@ -165,7 +167,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private _send(text: string, fileName: string) {
         let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName);
         this.addToMessages(newMessage);
-        this.messageService.sendUserMessage(newMessage).subscribe(data => { },
+        this.messageService.sendUserMessage(newMessage).subscribe(data => { this.menuMessagesService.addMessageEvent.emit(newMessage); },
            async err => {
                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                    if (ok) {

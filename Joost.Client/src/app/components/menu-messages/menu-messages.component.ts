@@ -5,6 +5,7 @@ import { DialogService } from "../../services/dialog.service";
 import { ChatHubService } from "../../services/chat-hub.service";
 import { Subscription } from "rxjs/Rx";
 import { Message } from "../../models/message";
+import { MenuMessagesService } from "../../services/menu-messages.service";
 
 @Component({
   selector: 'app-menu-messages',
@@ -16,12 +17,12 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private dialogs: Dialog[];
   private filteredDialogs: Dialog[];
   private subscription: Subscription;
+  private subscriptionMenu: Subscription;
   private searchString: string;
 
-  constructor(private dialogService: DialogService, private router: Router, private chatHubService: ChatHubService) {
+  constructor(private dialogService: DialogService, private router: Router, private chatHubService: ChatHubService, private menuMessagesService: MenuMessagesService) {
       dialogService.getDialogs().subscribe(d => {
           var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
-          debugger;
           this.dialogs = sortArray;
           this.filteredDialogs = sortArray;
         },
@@ -41,6 +42,9 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
           this.updateLastMessage(message);
       });
+      this.subscriptionMenu = this.menuMessagesService.addMessageEvent.subscribe(message => {
+          this.updateLastMessage(message);
+      });
   }
 
   ngOnDestroy() {
@@ -48,7 +52,6 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   }
 
   private updateLastMessage(message: Message) {
-      debugger;
       let filteredDialogs = this.dialogs.filter(d => d.Id == message.ReceiverId || d.Id == message.SenderId);
       if (filteredDialogs.length > 0) {
           filteredDialogs[0].LastMessage = message.Text;
