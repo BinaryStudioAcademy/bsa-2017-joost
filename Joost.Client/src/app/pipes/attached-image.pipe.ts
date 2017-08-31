@@ -9,7 +9,8 @@ export class AttachedImagePipe implements PipeTransform {
 
     transform(value: string): string {
         if(value != null) {
-            return this.fileService.getFullFileUrl(value);
+            // видаляю розширення, бо в url не може бути крапки
+            return this.fileService.getFullFileUrlWithOutEx(value);
         }
     }
 
