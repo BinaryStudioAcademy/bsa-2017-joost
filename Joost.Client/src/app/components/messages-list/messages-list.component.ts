@@ -10,6 +10,7 @@ import { UserProfile } from "../../models/user-profile";
 import { AccountService } from "../../services/account.service";
 import { UserService } from "../../services/user.service";
 import { GroupService } from "../../services/group.service";
+import { UserDetail } from "../../models/user-detail";
 
 import { FileService } from '../../services/file.service';
 
@@ -31,6 +32,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private messageText: string;
     private subscription: Subscription;
     private attachedImage: HTMLInputElement;
+    private groupMembers: UserDetail[];
 
     constructor(private router: ActivatedRoute,
                 private messageService: MessageService,
@@ -38,9 +40,28 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 private accountService: AccountService,
                 private userService: UserService,
                 private groupService: GroupService,
-                private fileService: FileService,) { }
+                private fileService: FileService) { }
 
-    ngOnInit() {      
+    private clearAllFields() {
+        this.currentUser = null;
+        this.receiverId = null;
+        this.isGroup = null;
+        this.messages = [];
+        this.dialogName = null;
+        this.dialogImage = null;
+        this.messageText = null;
+        this.attachedImage = null;
+        this.groupMembers = [];
+        this.getMessages = false;
+        this.isAllMessagesReceived = false;
+        this.toBottom = true;
+    }
+
+    ngOnInit() {
+        this.init();
+    }
+
+    private init() {      
         this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
             this.addToMessages(message);
         });
@@ -78,8 +99,10 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private getGroupData() {
+        console.log("getting group data");
         this.groupService.getGroup(this.receiverId).subscribe(group => {
-            this.dialogName = group.Name;                      
+            this.dialogName = group.Name;
+            this.getGroupMembers();                      
             this.getGroupMessages();
         },
         async err => {
@@ -95,6 +118,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private getGroupMessages() {
+        console.log("getting group messages");
         this.messageService.getGroupMessages(this.receiverId, this.skip, this.take)
             .subscribe(m => this.messages = m.map(m => m),
             async err => {
@@ -105,6 +129,23 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                     }
                 });
             });
+    }
+
+    private getGroupMembers() {
+        this.groupService.getGroupMembers(this.receiverId)
+            .subscribe(m => this.groupMembers = m.map(m => m),
+            async err => {
+                await this.groupService.handleTokenErrorIfExist(err).then(ok => { 
+                    if (ok) {
+                        this.groupService.getGroupMembers(this.receiverId)
+                        .subscribe(m => this.groupMembers = m.map(m => m));
+                    }
+                });
+            });
+    }
+
+    private getMember(id: number): UserDetail {
+        return this.groupMembers.find(m => m.Id == id);
     }
 
     private getUserData() {
@@ -133,7 +174,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.getUserMessages(this.receiverId, this.skip, this.take)
-                        .subscribe(m => this.messages = m.map(m => m));
+                        .subscribe(m => {
+                            this.messages = m.map(m => m); 
+                        })
                     }
                 });
             });
@@ -142,7 +185,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
-
 
     send(text: string) {
         if ((text != null && text != "") || this.attachedImage != null) {
@@ -157,6 +199,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 this.attachedImage = null;
             } 
             else {
+                console.log("before sending group message");
                 this._send(text, fileName);       
             }
         }
@@ -165,30 +208,72 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private _send(text: string, fileName: string) {
         let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName);
         this.addToMessages(newMessage);
-        this.messageService.sendUserMessage(newMessage).subscribe(data => { },
-           async err => {
-               await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
-                   if (ok) {
-                       this.messageService.sendUserMessage(newMessage).subscribe();
-                   }
-               });
-           });
+        if (this.isGroup) {
+            console.log("sending group message");
+            this.sendGroupMessage(newMessage);
+        }
+        else {
+            this.sendUserMessage(newMessage);
+        }
+    }
+
+    private sendUserMessage(message: Message) {
+        this.messageService.sendUserMessage(message).subscribe(data => { },
+            async err => {
+                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
+                    if (ok) {
+                        this.messageService.sendUserMessage(message).subscribe();
+                    }
+                });
+            });
+    }
+
+    private sendGroupMessage(message: Message) {
+        this.messageService.sendGroupMessage(message).subscribe(data => { },
+            async err => {
+                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
+                    if (ok) {
+                        this.messageService.sendGroupMessage(message).subscribe();
+                    }
+                });
+            });
     }
 
     private addToMessages(message: Message) {
         this.messages.push(message);
         this.messageText = "";
+        this.toBottom = true;
     }
 
     //scroll logic
     @ViewChild('scroll') private scrollContainer: ElementRef;
     private getMessages: boolean = false;
     private isAllMessagesReceived: boolean = false;
+    private toBottom: boolean = true;
 
-    private addMessagesToList() {      
+    private addUserMessagesToList() {      
         this.getMessages = false;
         this.skip += this.take;
         return this.messageService.getUserMessages(this.receiverId, this.skip, this.take).subscribe((data: Message[]) => {
+            if (data.length > 0) {          
+                this.messages = data.concat(this.messages); 
+                this.scrollToBottomOnOneStep(); 
+            }
+            else {
+                this.skip -= this.take;
+                this.isAllMessagesReceived = true;
+            }
+        },
+        err => {
+            this.skip -= this.take;
+            this.isAllMessagesReceived = true;
+        });
+    }
+
+    private addGroupMessagesToList() {      
+        this.getMessages = false;
+        this.skip += this.take;
+        return this.messageService.getGroupMessages(this.receiverId, this.skip, this.take).subscribe((data: Message[]) => {
             if (data.length > 0) {          
                 this.messages = data.concat(this.messages); 
                 this.scrollToBottomOnOneStep(); 
@@ -217,13 +302,14 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             return
         }
         try {
-            this.addMessagesToList();
+            if (this.isGroup) {
+                this.addGroupMessagesToList();
+            }
+            else {
+                this.addUserMessagesToList();
+            }
         } 
         catch(err) { }
-    }
-
-    ngAfterViewChecked() {
-        this.onAddMessages();
     }
 
     private scrollToBottom() {
@@ -240,10 +326,25 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         catch(err) { }
     }
 
+    private onScrollToBottom() {
+        if (!this.toBottom) {
+            return
+        }
+        this.scrollToBottom();
+        if (this.scrollContainer.nativeElement.scrollHeight > 0) {
+            this.toBottom = false;
+        }
+    }
+
     show() {
         console.log(this.scrollContainer.nativeElement.scrollHeight);
         console.log(this.scrollContainer.nativeElement.clientHeight);        
         console.log(this.scrollContainer.nativeElement.scrollTop);
+    }
+
+    ngAfterViewChecked() {
+        this.onScrollToBottom();
+        this.onAddMessages();
     }
 
     AttachImage(e: Event) {

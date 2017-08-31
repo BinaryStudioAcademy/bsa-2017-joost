@@ -7,15 +7,18 @@
     <div class="main"> 
       <ul #scroll class="mdl-list scrollable messages-content" (scroll)="onScroll()" [scrollTop]="scroll.scrollTop">
         <div *ngFor="let message of messages">
-            <li class="mdl-list__item mdl-list__item--three-line message-item" [class.self-message]="!messageService.isOwnMessage(message, receiverId)">
+            <li class="mdl-list__item mdl-list__item--three-line message-item" [class.self-message]="messageService.isOwnMessage(message, currentUser.Id)">
                 <div class="message-container">
-                  <div *ngIf="messageService.isOwnMessage(message, receiverId)">
+                  <div>
                       <img src="{{null | avatarPipe}}" class="material-icons mdl-list__item-avatar">
                   </div>
                   <div class="main-message-content-container">
                     <div class="message-header">
-                      <div>
-                          {{messageService.isOwnMessage(message, receiverId) ? dialogName + ', ': ''}}
+                      <div *ngIf="isGroup">
+                          {{messageService.isOwnMessage(message, currentUser.Id) ? '' : getMember(message.SenderId).FirstName + ', '}}
+                      </div>
+                      <div *ngIf="isGroup==false">
+                        {{messageService.isOwnMessage(message, currentUser.Id) ? '': dialogName + ', '}}
                       </div>
                       <div>
                           {{message.CreatedAt | date:'HH:mm:ss'}}

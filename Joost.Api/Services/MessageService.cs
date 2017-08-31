@@ -55,8 +55,7 @@ namespace Joost.Api.Services
                     .Query()
                     .Include(m => m.Sender)
                     .Include(m => m.Receiver)
-                    .Where(m => (m.Sender.Id == senderId && m.Receiver.Id == receiverId) ||
-								(m.Sender.Id == receiverId && m.Receiver.Id == senderId))
+                    .Where(m => m.Receiver.Id == receiverId)
 					.OrderByDescending(m => m.CreatedAt)
                     .Skip(skip)
                     .Take(take)
@@ -120,7 +119,7 @@ namespace Joost.Api.Services
 					var group = await groupRepository
 						.Query()
 						.Include(g => g.Members)
-						.FirstOrDefaultAsync(g => g.Id == groupMessage.SenderId);
+						.FirstOrDefaultAsync(g => g.Id == groupMessage.ReceiverId);
 					if (group != null)
 					{
 						var sender = group.Members
