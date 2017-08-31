@@ -35,3 +35,64 @@
     color: #ecf0f1;
 }
 
+// Tooltip styles
+
+[class^="tooltip"] {
+  position: relative;
+  &:after {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    content: attr(data-tooltip);
+    padding: 3px 5px;
+    top: 1.4em;
+    left: 50%;
+    transform: translateX(-50%) translateY(-2px);
+    background: rgba(97,97,97,0.5);
+	color: #ecf0f1;
+	font-weight: 300;
+	font-size: 12px;
+    white-space: nowrap;
+    z-index: 2;
+    border-radius: 1px;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  &:hover {
+    &:after {
+      display: block;
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+}
+
+.tooltip-left {
+  &:after {
+    top: -4px;
+    left: 0;
+    transform: translateX(-112%) translateY(0);
+  }
+  &:hover {
+    &:after {
+      transform: translateX(-110%) translateY(0);
+    }
+  }
+}
+
+.tooltip-right {
+  &:after {
+    top: -4px;
+    left: 100%;
+    transform: translateX(12%) translateY(0);
+  }
+  &:hover {
+    &:after {
+      transform: translateX(10%) translateY(0);
+    }
+  }
+}
+
+// End of Tooltip styles
+
+
