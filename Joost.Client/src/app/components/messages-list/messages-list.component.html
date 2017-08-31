@@ -10,7 +10,7 @@
             <li class="mdl-list__item mdl-list__item--three-line message-item" [class.self-message]="!messageService.isOwnMessage(message, receiverId)">
                 <div class="message-container">
                   <div *ngIf="messageService.isOwnMessage(message, receiverId)">
-                      <img src="{{null | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+                      <img src="{{null | avatarPipe}}" class="material-icons mdl-list__item-avatar" >
                   </div>
                   <div class="main-message-content-container">
                     <div class="message-header">
@@ -25,9 +25,12 @@
                         <div class="message-text" *ngIf="message.Text">
                           {{message.Text}}
                         </div>
-                        <div *ngIf="message.AttachedFile" (click)="onShowModal(message.AttachedFile)">
+                        <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
                         </div>
+                        <a *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" [attr.href]="getFullFileUrl(message.AttachedFile)" class="attached-file"download>
+                            <i class="material-icons" [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)">insert_drive_file</i>
+                        </a>
                     </div>
                   </div>
                 </div>
@@ -42,15 +45,15 @@
         <label class="mdl-textfield__label" for="messageText">Message text...</label>
       </div>
 
-      <label for="file-upload" *ngIf="!attachedImage" class="custom-image-attach" title="Click to attach an image">
-        <i class="material-icons">photo</i>
+      <label for="file-upload" class="custom-file-attach" id="file-upload-icon" title="Click to attach an image">
+        <i class="material-icons" [class.green]="attachedImage">attach_file</i>
       </label>
-      <label for="file-upload" *ngIf="attachedImage" class="custom-image-attach" title="File attached">
-        <i class="material-icons green">photo</i>
-      </label>
-      <input id="file-upload" type="file" accept="image/jpeg,image/png,image/gif" (click)="AttachImage($event)" name="file"/>
+      <!-- <div class="mdl-tooltip mdl-tooltip--top" for="file-upload-icon">
+          Click to attach an image
+      </div> -->
+      <input id="file-upload" type="file" (click)="AttachImage($event)" name="file"/>
 
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button" (click)="send(messageText)">
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--fab send-button" (click)="send(messageText)">
         <i class="material-icons">send</i>
       </button>
     </div>

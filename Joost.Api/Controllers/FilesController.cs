@@ -18,13 +18,15 @@ namespace Joost.Api.Controllers
         // GET api/files/
         [HttpGet]
         [Route("")]
-        [Route("{partialName}")]
-        public IHttpActionResult DownloadImage(string partialName)
+        [Route("{fileName}")]
+        public IHttpActionResult DownloadFile(string fileName)
         {
             string folderPath = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles/");
 
-            var filePath = Directory.EnumerateFiles(folderPath, partialName + ".*", SearchOption.AllDirectories)
-            .Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".gif")).FirstOrDefault();
+			List<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
+
+			var filePath = Directory.EnumerateFiles(folderPath, fileName + ".*", SearchOption.AllDirectories).FirstOrDefault();
+            //.Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".gif")).FirstOrDefault();
 
             try
             {
@@ -50,12 +52,12 @@ namespace Joost.Api.Controllers
         // POST api/files/
         [HttpPost, HttpPut]
         [Route("")]
-        public IHttpActionResult UploadImage()
+        public IHttpActionResult UploadFile()
         {
             var fileName = HttpContext.Current.Request.Form["fileName"];
 
-            List<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
-            int MaxContentLength = 1024 * 1024 * 4;
+            //List<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
+            int MaxContentLength = 1024 * 1024 * 3;
 
             var httpRequest = HttpContext.Current.Request;
 
@@ -67,15 +69,15 @@ namespace Joost.Api.Controllers
 
                     if (postedFile != null && postedFile.ContentLength > 0)
                     {
-                        var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
-                        var extension = ext.ToLower();
+                        //var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
+                        //var extension = ext.ToLower();
 
-                        if (!AllowedFileExtensions.Contains(extension))
-                        {
-                            return BadRequest(); // "Please Upload image of type .jpg,.gif,.png., ".bmp""
-                        }
-                        else
-                        {
+                        //if (!AllowedFileExtensions.Contains(extension))
+                        //{
+                        //    return BadRequest(); // "Please Upload image of type .jpg,.gif,.png., ".bmp""
+                        //}
+                        //else
+                        //{
                             if (postedFile.ContentLength > MaxContentLength)
                             {
                                 return BadRequest(); // "Please Upload a file upto 2 mb."
@@ -86,13 +88,13 @@ namespace Joost.Api.Controllers
 								if (!Directory.Exists(dir))
 									Directory.CreateDirectory(dir);
 
-								string relativeFilePath = "~/App_Data/AttachedFiles/" + fileName + extension;
+								string relativeFilePath = "~/App_Data/AttachedFiles/" + fileName;
                                 var filePath = HttpContext.Current.Server.MapPath(relativeFilePath);
                                 postedFile.SaveAs(filePath);
 
                                 return Ok();
                             }
-                        }
+                        //}
                     }
                     else
                     {

@@ -148,8 +148,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         if ((text != null && text != "") || this.attachedImage != null) {
             let fileName =  "";
             if (this.attachedImage != null) {
-                fileName = this.currentUser.Id + "_" +   this.receiverId + "_" + Date.now();               
-                this.fileService.UploadImage(this.attachedImage.files[0], fileName).subscribe(
+                fileName = this.currentUser.Id + "_" +  this.receiverId + "_" + Date.now() + '.' + this.fileService.getFileExtensions(this.attachedImage.files[0].name);               
+                this.fileService.UploadFile(this.attachedImage.files[0], fileName).subscribe(
                     res => { // if successfully uploaded file to server, then we can seand a message
                         this._send(text, fileName);
                     },
@@ -165,6 +165,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private _send(text: string, fileName: string) {
         let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName);
         this.addToMessages(newMessage);
+        console.log(newMessage);
         this.messageService.sendUserMessage(newMessage).subscribe(data => { },
            async err => {
                await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
@@ -251,8 +252,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     onShowModal(fileName: string): void{
-        document.getElementById("modal-img").setAttribute('src', this.fileService.getFullFileUrl(fileName));
-        document.getElementById("modal-ref").setAttribute('href', this.fileService.getFullFileUrl(fileName));
+        document.getElementById("modal-img").setAttribute('src', this.fileService.getFullFileUrlWithOutEx(fileName));
+        document.getElementById("modal-ref").setAttribute('href', this.fileService.getFullFileUrlWithOutEx(fileName));
         var dialog = document.querySelector('.wrapper-modal');
         dialog.classList.add("show");
     }
@@ -262,4 +263,19 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         dialog.classList.remove("show");
     }
 
+    isImage(fileName: string): boolean{
+        return this.fileService.isImage(fileName);
+    }
+
+    getFileName(fileName: string): string{
+        return this.fileService.getFileName(fileName);
+    }
+
+    getFileExtension(fileName: string): string {
+        return this.fileService.getFileExtensions(fileName);
+    }
+
+    getFullFileUrl(fileName: string): string{
+        return this.fileService.getFullFileUrlWithOutEx(fileName);
+    }
 }
