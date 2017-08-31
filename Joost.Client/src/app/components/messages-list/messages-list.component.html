@@ -28,8 +28,14 @@
                         <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
                         </div>
-                        <a *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" [attr.href]="getFullFileUrl(message.AttachedFile)" class="attached-file"download>
-                            <i class="material-icons" [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)">insert_drive_file</i>
+                        <a *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" [attr.href]="getFullFileUrl(message.AttachedFile)" class="attached-file">
+                         <div class="att-file-container" >  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
+                            <i class="material-icons">insert_drive_file</i>
+                            <div class="att-file-ex">
+                              <strong>{{getFileExtension(message.AttachedFile)}}</strong> 
+                            </div>
+                          </div>  
+                            
                         </a>
                     </div>
                   </div>
@@ -39,7 +45,7 @@
       </ul>    
     </div>
   </div>
- <div class ="mdl-card__actions mdl-card--border message-input-container send-message-container">     
+  <div class ="mdl-card__actions mdl-card--border message-input-container send-message-container">     
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" id="messageText" (keyup.enter)="send(messageText)" [(ngModel)]="messageText">
         <label class="mdl-textfield__label" for="messageText">Message text...</label>
@@ -53,7 +59,7 @@
       </div> -->
       <input id="file-upload" type="file" (click)="AttachImage($event)" name="file"/>
 
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--fab send-button" (click)="send(messageText)">
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button" (click)="send(messageText)">
         <i class="material-icons">send</i>
       </button>
     </div>

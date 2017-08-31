@@ -14,6 +14,8 @@
 
 .main {
     width: 100%;
+    display: flex;
+    flex-direction: column;
     > ul{
         padding: 0;
     }
@@ -65,6 +67,12 @@
     width: calc(100% - 10px);
     height: calc(100vh - 10px);
     margin: 5px auto;
+    
+    > div{
+        &:nth-last-child(2){
+            flex: 1;
+        }
+    }
 }
 
 .message-container {
@@ -127,13 +135,12 @@
 }
 
 .message-input-container {
-  position: absolute;
-  bottom: 0;
+    margin-top: auto;
 }
 
 
 .messages-content {
-    max-height: 560px;
+    max-height: 800px;
     overflow: auto;
 }
 
@@ -267,18 +274,30 @@ input[type="file"] {
 
   .attached-file{
     margin: 4px;
-    
-    >i{
-      font-size: 4em;
-      color:#B0BEC5;  
-    }
-    >i:hover{
-        color:#9E9E9E;
-    }
+    text-decoration: none;
+    color:#B0BEC5;
+   
+    i{
+        font-size: 4em;
+    }  
   }
 
+  .attached-file:hover{
+    color:#9E9E9E;
+  }
 
   .attched-in-self-msg{
     float: right;
-    padding-right: 0.1em;
   }
+
+  .att-file-container{
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      
+      >div{
+          font-size: 1.5em;
+          text-transform: uppercase;
+      }
+    }
+  
