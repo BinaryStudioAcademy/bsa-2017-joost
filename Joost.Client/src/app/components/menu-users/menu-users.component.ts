@@ -101,15 +101,11 @@ export class MenuUsersComponent implements OnInit {
 		if (state) {
 			switch (state.State) {
 				case ContactState.New:
-					return "fiber_new";
+					return "new_releases";
 				case ContactState.Sent:
-					return "trending_flat";
-				case ContactState.Decline:
-					return "not_interested";
-				case ContactState.Accept:
-					return "check_circle";
+					return "person_add";
 		    	default:
-		    		return "trending_flat";
+		    		return "";
 		    }
 		}
 	}
