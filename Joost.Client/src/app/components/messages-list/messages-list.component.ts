@@ -1,6 +1,6 @@
-﻿import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked, Output, EventEmitter } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from "rxjs/Rx";
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, NavigationEnd } from '@angular/router';
 
 import { Message } from "../../models/message";
 import { MessageService } from "../../services/message.service";
@@ -22,54 +22,69 @@ import { MenuMessagesService } from "../../services/menu-messages.service";
 })
 export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
+    private subscription: Subscription;;
     private currentUser: UserProfile;
     private receiverId: number;
     private isGroup: boolean;
     private skip: number = 0;
-    private take: number = 10;    
+    private readonly take: number = 20;    
     private messages: Message[];
     private dialogName: string;
     private dialogImage: string;
     private messageText: string;
-    private subscription: Subscription;
     private attachedImage: HTMLInputElement;
     private groupMembers: UserDetail[];
+    
+    @ViewChild('scroll') private scrollContainer: ElementRef;
+    private getMessages: boolean = false;
+    private isAllMessagesReceived: boolean = false;
+    private toBottom: boolean = true;
 
-    constructor(private router: ActivatedRoute,
+    constructor(private router: Router,
+                private activatedRoute: ActivatedRoute,
                 private messageService: MessageService,
                 private menuMessagesService: MenuMessagesService,
                 private chatHubService: ChatHubService,
                 private accountService: AccountService,
                 private userService: UserService,
                 private groupService: GroupService,
-                private fileService: FileService) { }
+                private fileService: FileService,
+                private cdRef: ChangeDetectorRef) { }
 
     private clearAllFields() {
         this.currentUser = null;
         this.receiverId = null;
         this.isGroup = null;
-        this.messages = [];
+        this.skip = 0;
+        this.messages = null;
         this.dialogName = null;
         this.dialogImage = null;
         this.messageText = null;
         this.attachedImage = null;
-        this.groupMembers = [];
+        this.groupMembers = null;
         this.getMessages = false;
         this.isAllMessagesReceived = false;
         this.toBottom = true;
     }
 
     ngOnInit() {
-        this.init();
-    }
-
-    private init() {      
         this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
             this.addToMessages(message);
         });
+        this.router.events
+        .filter((event) => event instanceof NavigationEnd)
+            .map(() => this.activatedRoute)
+            .subscribe((event) => {
+                this.init();
+            });
+        this.init();
+    }
+
+    private init() {  
+        this.clearAllFields();
         this.accountService.getUser().subscribe(u => {
             this.currentUser = u;
-            this.router.paramMap.subscribe((params: ParamMap) => {
+            this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
                 this.isGroup = params.get("type") === "group" ? true : false;
                 this.receiverId = +params.get("id");
                 this.GetReceiverData();
@@ -80,7 +95,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 if (ok) {
                     this.accountService.getUser().subscribe(u => {
                         this.currentUser = u;
-                        this.router.paramMap.subscribe((params: ParamMap) => {
+                        this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
                             this.isGroup = params.get("type") === "group" ? true : false;
                             this.receiverId = +params.get("id");
                             this.GetReceiverData();
@@ -122,7 +137,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private getGroupMessages() {
         console.log("getting group messages");
         this.messageService.getGroupMessages(this.receiverId, this.skip, this.take)
-            .subscribe(m => this.messages = m.map(m => m),
+            .subscribe(m => {
+                this.messages = m.map(m => m);
+            },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
@@ -209,7 +226,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     private _send(text: string, fileName: string) {
         let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName);
-        this.addToMessages(newMessage);
+        if (!this.isGroup) {
+            this.addToMessages(newMessage);
+        }
         if (this.isGroup) {
             console.log("sending group message");
             this.sendGroupMessage(newMessage);
@@ -235,11 +254,15 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private sendGroupMessage(message: Message) {
-        this.messageService.sendGroupMessage(message).subscribe(data => { },
+        this.messageService.sendGroupMessage(message).subscribe(data => { 
+            this.menuMessagesService.addMessageEvent.emit(message);             
+        },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
-                        this.messageService.sendGroupMessage(message).subscribe();
+                        this.messageService.sendGroupMessage(message).subscribe(data => {
+                            this.menuMessagesService.addMessageEvent.emit(message);             
+                        });
                     }
                 });
             });
@@ -252,12 +275,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     //scroll logic
-    @ViewChild('scroll') private scrollContainer: ElementRef;
-    private getMessages: boolean = false;
-    private isAllMessagesReceived: boolean = false;
-    private toBottom: boolean = true;
 
-    private addUserMessagesToList() {      
+    private addUserMessagesToList() {     
+        //debugger; 
         this.getMessages = false;
         this.skip += this.take;
         return this.messageService.getUserMessages(this.receiverId, this.skip, this.take).subscribe((data: Message[]) => {
@@ -276,7 +296,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         });
     }
 
-    private addGroupMessagesToList() {      
+    private addGroupMessagesToList() {    
+        //debugger; 
         this.getMessages = false;
         this.skip += this.take;
         return this.messageService.getGroupMessages(this.receiverId, this.skip, this.take).subscribe((data: Message[]) => {
@@ -296,8 +317,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private onScroll() {
+        //debugger;
         let element = this.scrollContainer.nativeElement;
-        let inTop = element.scrollTop === 0;    
+        let inTop = element.scrollTop === 0 && element.scrollHeight > 0;    
         if (inTop && !this.getMessages && !this.isAllMessagesReceived) {
             this.getMessages = true;
         }
@@ -312,7 +334,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 this.addGroupMessagesToList();
             }
             else {
-                this.addUserMessagesToList();
+                this.addUserMessagesToList();             
             }
         } 
         catch(err) { }
@@ -351,6 +373,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     ngAfterViewChecked() {
         this.onScrollToBottom();
         this.onAddMessages();
+        this.cdRef.detectChanges();
     }
 
     AttachImage(e: Event) {

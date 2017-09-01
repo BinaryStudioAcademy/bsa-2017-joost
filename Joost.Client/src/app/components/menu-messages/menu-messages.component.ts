@@ -32,7 +32,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
               dialogService.getDialogs().subscribe(d => {
                 this.dialogs = d;
                 this.filteredDialogs = d;
-              });
+              }); 
             }
         });
     });

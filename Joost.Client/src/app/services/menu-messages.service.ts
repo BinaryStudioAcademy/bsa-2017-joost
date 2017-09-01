@@ -7,6 +7,6 @@ export class MenuMessagesService {
     public addMessageEvent: EventEmitter<Message>;
 
     constructor() {
-        this.addMessageEvent = new EventEmitter<Message>();
+        this.addMessageEvent = new EventEmitter<Message>();      
     }
 }
