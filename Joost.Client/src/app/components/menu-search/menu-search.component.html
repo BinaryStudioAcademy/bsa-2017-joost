@@ -17,7 +17,11 @@
         {{user.City}}
       </span>
     </span>
-    <a class="mdl-list__item-secondary-action add-contact new-user" *ngIf="!checkInContact(user.Id)" (click)="addToContact(user.Id)"><i class="material-icons light">add</i></a>
+   <a class="mdl-list__item-secondary-action add-contact new-user" *ngIf="!checkInContact(user.Id)" (click)="addToContact(user.Id)">
+    <div class="tooltip-left" data-tooltip="Add user to contacts">
+      <i class="material-icons light">add</i>
+    </div>
+  </a>
     <a class="mdl-list__item-secondary-action add-contact" *ngIf="checkInContact(user.Id)"><i class="material-icons light">{{findContact(user.Id)}}</i></a>
   </li>
 </ul>
