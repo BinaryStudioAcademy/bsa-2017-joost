@@ -11,7 +11,9 @@
     align-self: center;
     margin-left: 10px;
 }
-
+div .mdl-list__item:hover{
+  background-color:transparent;
+}
 .main {
     width: 100%;
     display: flex;
@@ -64,10 +66,8 @@
 }
 
 .jg-container{
-    width: calc(100% - 10px);
+    width:100%;
     height: calc(100vh - 10px);
-    margin: 5px auto;
-    
     > div{
         &:nth-last-child(2){
             flex: 1;
@@ -100,6 +100,12 @@
 .message-text {
     padding: 5px 10px 5px 10px;
     font-size: 1.2em;
+}
+
+.message-text .emojioneemoji{
+    height:1.2em;
+    width:1.2em;
+    margin:0;
 }
 
 .main-message-content-container {
@@ -137,7 +143,6 @@
 .message-input-container {
     margin-top: auto;
 }
-
 
 .messages-content {
     max-height: 800px;
@@ -300,4 +305,91 @@ input[type="file"] {
           text-transform: uppercase;
       }
     }
-  
+.mdl-list__item-avatar{
+  align-self: start;
+}
+.group-members{
+  margin-left: 10px;
+  padding:0;
+  h3{
+    padding-left:20px;
+    position:relative;
+    margin-top:5px;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    display: block;
+    color:#9698ab;
+    margin: 0;
+    line-height: 1;
+  }
+}
+  //Accordion style
+
+.transition, ul li i:before, ul li i:after {
+  transition: all 0.25s ease-in-out;
+}
+.accordion.group-members ul{
+  margin: 5px 0;
+  li{
+    margin: 0 10px;
+  }
+}
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.accordion.group-members i {
+  position:absolute;
+  margin-top:11px;
+  left: 10px;
+  transition:all .3s;
+  transform:rotate(180deg);
+  border-right: 2px;
+}
+ .accordion.group-members i:before,  .accordion.group-members i:after {
+  content: "";
+  position: absolute;
+  background-color: #9698ab;
+  width: 2px;
+  border-radius:2px;
+  height: 8px;
+}
+.accordion.group-members i:before {
+  transform: translate(-2px, 0) rotate(45deg);
+}
+.accordion.group-members i:after {
+  transform: translate(2px, 0) rotate(-45deg);
+}
+ .accordion input[type=checkbox] {
+  position: absolute;
+  cursor: pointer;
+  width: 105px;
+  height: 14px;
+  z-index: 1;
+  opacity: 0;
+}
+ .accordion.group-members input[type=checkbox] ~ ul {
+  margin:0;
+  margin-top:5px;
+  transition:all 0.3s;
+  display: flex;
+  margin-left:-10px;
+  height:auto;
+  opacity: 1;
+  overflow:hidden;
+  transition:all .3s;
+}
+.accordion.group-members input[type=checkbox]:checked ~ ul {
+  margin-top: 0;
+  max-height: 0;
+  height:0;
+  transition:all .3s;
+  transform: translate(0, 50%);
+}
+.accordion.group-members input[type=checkbox]:checked ~ h3 i {
+  transition:all .3s;
+  transform:rotate(90deg);
+  margin-top: 5px;
+}

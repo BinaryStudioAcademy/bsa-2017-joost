@@ -17,27 +17,27 @@ export class FileService extends BaseApiService{
     "jpg", "gif", "png", "bmp"
   ]
 
-  // UploadImage(img: File, fileName: string) {
-  //   return Observable.fromPromise(new Promise((resolve, reject) => {
-  //     let formData: any = new FormData();
-  //     let xhr = new XMLHttpRequest();
-  //     formData.append("image", img, img.name);
-  //     formData.append("fileName", fileName);
+  UploadImage(img: File, fileName: string) {
+    return Observable.fromPromise(new Promise((resolve, reject) => {
+      let formData: any = new FormData();
+      let xhr = new XMLHttpRequest();
+      formData.append("image", img, img.name);
+      formData.append("fileName", fileName);
       
-  //     xhr.onreadystatechange = function () {
-  //       if (xhr.readyState === 4) {
-  //         if (xhr.status === 200) {
-  //           resolve()
-  //         } else {
-  //           reject()
-  //         }
-  //       }
-  //     }
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            resolve()
+          } else {
+            reject()
+          }
+        }
+      }
       
-  //     xhr.open("PUT", this.generateUrl(), true);
-  //     xhr.send(formData);
-  //   }));
-  // }
+      xhr.open("PUT", this.generateUrl(), true);
+      xhr.send(formData);
+    }));
+  }
 
   UploadFile(file: File, fileName: string) {
     return Observable.fromPromise(new Promise((resolve, reject) => {
@@ -61,9 +61,9 @@ export class FileService extends BaseApiService{
     }));
   }
 
-  // getFullFileUrl(fileName: string): string{
-  //   return this.generateUrl() + '/' + fileName;
-  // }
+  getFullFileUrl(fileName: string): string{
+    return this.generateUrl() + '/' + fileName;
+  }
 
   getFullFileUrlWithOutEx(fileName: string): string{
     return this.generateUrl() + '/' + this.getFileName(fileName);
