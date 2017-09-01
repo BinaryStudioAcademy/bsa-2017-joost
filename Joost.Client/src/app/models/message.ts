@@ -5,5 +5,6 @@ export class Message {
   Text: string
   CreatedAt: Date;
   EditedAt: Date;
-  AttachedFile: string
+  AttachedFile: string;
+  IsGroup: boolean;
 }

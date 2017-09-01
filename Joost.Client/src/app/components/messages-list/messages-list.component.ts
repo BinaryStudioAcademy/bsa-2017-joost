@@ -225,20 +225,18 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private _send(text: string, fileName: string) {
-        let newMessage = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName);
-        if (!this.isGroup) {
-            this.addToMessages(newMessage);
-        }
         if (this.isGroup) {
             console.log("sending group message");
-            this.sendGroupMessage(newMessage);
+            this.sendGroupMessage(text, fileName);
         }
         else {
-            this.sendUserMessage(newMessage);
+            this.sendUserMessage(text, fileName);
         }
     }
 
-    private sendUserMessage(message: Message) {
+    private sendUserMessage(text: string, fileName: string) {
+        let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, false);
+        this.addToMessages(message);
         this.messageService.sendUserMessage(message).subscribe(data => { 
             this.menuMessagesService.addMessageEvent.emit(message); 
         },
@@ -253,7 +251,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             });
     }
 
-    private sendGroupMessage(message: Message) {
+    private sendGroupMessage(text: string, fileName: string) {
+        let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, true);        
         this.messageService.sendGroupMessage(message).subscribe(data => { 
             this.menuMessagesService.addMessageEvent.emit(message);             
         },

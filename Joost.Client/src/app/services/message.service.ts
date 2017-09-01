@@ -33,7 +33,7 @@ export class MessageService extends BaseApiService {
     return this.http.sendRequest<Message[]>(req);
   }
 
-  createMessage(senderId: number, receiverId: number, text: string, attachedFile: string): Message {
+  createMessage(senderId: number, receiverId: number, text: string, attachedFile: string, isGroup: boolean): Message {
     let message = new Message();
     message.SenderId = senderId;
     message.ReceiverId = receiverId;
@@ -41,6 +41,7 @@ export class MessageService extends BaseApiService {
     message.CreatedAt = new Date(); // wrong timezone!!!
     message.EditedAt = message.CreatedAt;
     message.AttachedFile = attachedFile;
+    message.IsGroup = isGroup;
     return message;
   }
 
