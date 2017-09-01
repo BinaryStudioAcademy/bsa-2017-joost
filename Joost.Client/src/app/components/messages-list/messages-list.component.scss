@@ -40,7 +40,6 @@ div .mdl-list__item:hover{
 }
 .jc-list-user {
     height: 300px;
-
     li:hover {
         background-color: #F5F5F5;
         margin-left: 1px;
@@ -65,7 +64,7 @@ div .mdl-list__item:hover{
     width: 100%;
 }
 
-.jg-container{
+.message-list .jg-container{
     width:100%;
     height: calc(100vh - 10px);
     > div{
@@ -362,7 +361,7 @@ ul {
 .accordion.group-members i:after {
   transform: translate(2px, 0) rotate(-45deg);
 }
- .accordion input[type=checkbox] {
+ .accordion.group-members input[type=checkbox] {
   position: absolute;
   cursor: pointer;
   width: 105px;

@@ -120,6 +120,12 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
           hidePickerOnBlur: true,
           placeholder:"Message text..."
         }); 
+        let self = this;
+        this.messageEmoji[0].emojioneArea.on("keyup", function(btn, event) {
+            if (event.originalEvent.key=="Enter") {
+                self.send();
+            }
+      });
     }
 
     private GetReceiverData() {
@@ -220,13 +226,13 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.subscription.unsubscribe();
     }
 
-    send(text: string) {
+    send(text?: string) {
         //use primary emoji
         // text = this.messageEmoji[0].emojioneArea.getText();
 
         //user image emoji
         text = $(".emojionearea-editor").html();
-
+        this.messageEmoji[0].emojioneArea.setText("");
         console.log(this.groupMembers);
         if ((text != null && text != "") || this.attachedImage != null) {
             let fileName =  "";
