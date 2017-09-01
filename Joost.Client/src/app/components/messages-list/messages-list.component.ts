@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked, Output, EventEmitter } from '@angular/core';
 import { Subscription } from "rxjs/Rx";
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 
 import { Message } from "../../models/message";
 import { MessageService } from "../../services/message.service";
@@ -26,6 +26,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private isGroup: boolean;
     private skip: number = 0;
     private take: number = 10;    
+    private userId: number;
     private messages: Message[];
     private dialogName: string;
     private dialogImage: string;
@@ -40,7 +41,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 private accountService: AccountService,
                 private userService: UserService,
                 private groupService: GroupService,
-                private fileService: FileService,) { }
+                private fileService: FileService,
+                private route: Router) { }
 
     ngOnInit() {      
         this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
@@ -113,6 +115,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.userService.getUserDetails(this.receiverId).subscribe(user => {
             this.dialogName = user.FirstName + " " + user.LastName;
             this.dialogImage = user.Avatar;
+            this.userId = user.Id;
             this.getUserMessages();
         },
         async err => {
@@ -121,6 +124,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                     this.userService.getUserDetails(this.receiverId).subscribe(user => {
                         this.dialogName = user.FirstName + " " + user.LastName;
                         this.dialogImage = user.Avatar;
+                        this.userId = user.Id;
                         this.getUserMessages();
                     });
                 }
@@ -278,5 +282,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     getFullFileUrl(fileName: string): string{
         return this.fileService.getFullFileUrlWithOutEx(fileName);
+    }
+
+    goToUserDetail(userId: number): void{
+        this.route.navigate(['menu/user-details', userId], { skipLocationChange: true });
     }
 }

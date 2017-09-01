@@ -43,7 +43,7 @@
     <li>
       <input type="checkbox">
       <i></i>
-      <h2>Direct messages</h2>
+      <h2>Direct Messages</h2>
         <ul class="demo-list-three mdl-list">
             <div *ngFor="let dialog of filteredDialogs">
               <li class="mdl-list__item mdl-list__item--three-line" *ngIf="!dialog.IsGroup" (click)="navigateToMessages(dialog)">

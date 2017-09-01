@@ -1,4 +1,4 @@
-@import '../../../vars.scss';
+﻿@import '../../../vars.scss';
 
 .dialog-title {
     display: flex;
@@ -300,4 +300,7 @@ input[type="file"] {
           text-transform: uppercase;
       }
     }
-  
+
+.cursor-user-detail:hover {
+    cursor: pointer;
+}

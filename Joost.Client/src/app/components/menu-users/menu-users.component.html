@@ -1,21 +1,67 @@
-<form>
+﻿<form>
   <div class="text-input-container">
     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label menu-input">
       <input class="mdl-textfield__input" type="text" id="search-users">
       <label class="mdl-textfield__label" for="search-users">Find...</label>
     </div>
   </div>
-
-  <ul class="demo-list-three mdl-list">
-  <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let user of result" (click)="goToConfirm(user.Id)">
-    <span class="mdl-list__item-primary-content">
-      <img src="{{user.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
-      <span>{{user.Name}}</span>
-      <span class="mdl-list__item-text-body">
-       {{user.City}}
-      </span>
-    </span>
-    <a class="mdl-list__item-secondary-action add_contact {{ContactStatus(user.Id)}}"><i class="material-icons light">{{ContactStatus(user.Id)}}</i></a>
-  </li>
-</ul>
+    <ul class="accordion">
+        <li>
+            <input type="checkbox" [checked]="newContactsIsEmpty">
+            <i></i>
+            <h2>New Contacts</h2>
+            <ul class="demo-list-three mdl-list">
+                <div *ngFor="let user of result">
+                    <li class="mdl-list__item mdl-list__item--three-line" *ngIf="isNewContact(user.Id)" (click)="goToConfirm(user.Id)">
+                        <span class="mdl-list__item-primary-content">
+                            <img src="{{user.Avatar | avatarPipe:false}}" class="material-icons mdl-list__item-avatar">
+                            <span>{{user.Name}}</span>
+                            <span class="mdl-list__item-text-body">
+                                {{user.City}}
+                            </span>
+                        </span>
+                        <a class="mdl-list__item-secondary-action add_contact {{ContactStatus(user.Id)}}"><i class="material-icons light">{{ContactStatus(user.Id)}}</i></a>
+                    </li>
+                </div>
+            </ul>
+        </li>
+        <li>
+            <input type="checkbox" checked>
+            <i></i>
+            <h2>Sent Invitation</h2>
+            <ul class="demo-list-three mdl-list">
+                <div *ngFor="let user of result">
+                    <li class="mdl-list__item mdl-list__item--three-line" *ngIf="isSentContact(user.Id)" (click)="goToUserDetail(user.Id)">
+                        <span class="mdl-list__item-primary-content">
+                            <img src="{{user.Avatar | avatarPipe:false}}" class="material-icons mdl-list__item-avatar">
+                            <span>{{user.Name}}</span>
+                            <span class="mdl-list__item-text-body">
+                                {{user.City}}
+                            </span>
+                        </span>
+                        <a class="mdl-list__item-secondary-action add_contact {{ContactStatus(user.Id)}}"><i class="material-icons light">{{ContactStatus(user.Id)}}</i></a>
+                    </li>
+                </div>
+            </ul>
+        </li>
+        <li>
+            <input type="checkbox">
+            <i></i>
+            <h2>Contacts</h2>
+            <ul class="demo-list-three mdl-list">
+                <div *ngFor="let user of result">
+                    <li class="mdl-list__item mdl-list__item--three-line" *ngIf="isAcceptContact(user.Id)" (click)="navigateToMessages(user.Id)">
+                        <span class="mdl-list__item-primary-content">
+                            <img src="{{user.Avatar | avatarPipe:false}}" class="material-icons mdl-list__item-avatar">
+                            <span>{{user.Name}}</span>
+                            <span class="mdl-list__item-text-body">
+                                {{user.City}}
+                            </span>
+                        </span>
+                        <a class="mdl-list__item-secondary-action add_contact {{ContactStatus(user.Id)}}"><i class="material-icons light">{{ContactStatus(user.Id)}}</i></a>
+                    </li>
+                </div>
+            </ul>
+        </li>
+    </ul>
 </form>

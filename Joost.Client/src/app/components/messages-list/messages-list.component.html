@@ -1,8 +1,8 @@
-<div class="jg-container mdl-card mdl-shadow--2dp">
-  <div class="mdl-card__title mdl-shadow--2dp dialog-title">
-      <img src="{{dialogImage | avatarPipe}}" class="material-icons mdl-list__item-avatar">
-      <h2 class="mdl-card__title-text title-text">{{dialogName}}</h2>
-  </div>
+﻿<div class="jg-container mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title mdl-shadow--2dp dialog-title cursor-user-detail" (click)="goToUserDetail(userId)">
+        <img src="{{dialogImage | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+        <h2 class="mdl-card__title-text title-text">{{dialogName}}</h2>
+    </div>
   <div class="mdl-card__title jc-group-edit-title-container">
     <div class="main"> 
       <ul #scroll class="mdl-list scrollable messages-content" (scroll)="onScroll()" [scrollTop]="scroll.scrollTop">

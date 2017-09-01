@@ -1,11 +1,11 @@
-import { Component, OnInit} from '@angular/core';
+﻿import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ContactService } from "../../services/contact.service";
 
 import { UserSearch } from "../../models/user-search";
-import { Contact,ContactState} from "../../models/contact";
-import { UserContact} from "../../models/user-contact";
+import { Contact,ContactState } from "../../models/contact";
+import { UserContact } from "../../models/user-contact";
 
 @Component({
   selector: 'app-menu-users',
@@ -14,14 +14,23 @@ import { UserContact} from "../../models/user-contact";
 })
 export class MenuUsersComponent implements OnInit {
 
-	private result:UserContact[];
+    private result: UserContact[];
+    private newContactsIsEmpty: boolean = true;
 	constructor(
 		private router: Router,
-		private contactService: ContactService
+        private contactService: ContactService
 		) { }
 
 	ngOnInit() {
-		this.contactService.getAllContacts().subscribe(data=> this.result = data,
+        this.contactService.getAllContacts().subscribe(data => {
+            this.result = data;
+            for (let item of this.result) {
+                if (item.State == ContactState.New) {
+                    this.newContactsIsEmpty = false;
+                }
+            }
+        }
+            ,
 			async err => {
 				await this.contactService.handleTokenErrorIfExist(err).then(ok => {
 					if (ok) { 
@@ -92,7 +101,13 @@ export class MenuUsersComponent implements OnInit {
 	}
 	isNewContact(id:number):boolean{
 		return this.result.filter(t=>t.Id==id)[0].State===ContactState.New;
-	}
+    }
+    isSentContact(id: number): boolean {
+        return this.result.filter(t => t.Id == id)[0].State === ContactState.Sent;
+    }
+    isAcceptContact(id: number): boolean {
+        return this.result.filter(t => t.Id == id)[0].State === ContactState.Accept;
+    }
 	isDeclineContact(id:number):boolean{
 		return this.result.filter(t=>t.Id==id)[0].State===ContactState.Decline;
 	}
@@ -108,7 +123,14 @@ export class MenuUsersComponent implements OnInit {
 		    		return "";
 		    }
 		}
-	}
+    }
 
+    private navigateToMessages(userId: number) {
+        this.router.navigate(["/menu/messages", "user", userId]);
+    }
+
+    private goToUserDetail(userId: number): void {
+        this.router.navigate(['menu/user-details', userId], { skipLocationChange: true });
+    }
 
 }
