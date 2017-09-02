@@ -62,8 +62,12 @@
                 new Message { Sender = users[5], Receiver = users[3],
                     CreatedAt = new DateTime(2017, 8, 28, 2, 2, 2), Text = "Як справи?" },
                 new Message { Sender = users[3], Receiver = users[5],
-                    CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" }
-            };
+                    CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" },
+				new Message { Sender = users[5], Receiver = users[6],
+					CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" },
+				new Message { Sender = users[5], Receiver = users[0],
+					CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" }
+			};
 
             messages.ForEach(c => context.Messages.Add(c));
 

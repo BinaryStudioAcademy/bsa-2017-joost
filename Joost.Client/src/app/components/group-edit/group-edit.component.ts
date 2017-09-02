@@ -117,7 +117,6 @@ export class GroupEditComponent extends MDL implements OnInit {
     onSubmit(): void {
         if(!this.isCanSaveOrCreate())
             return;
-        debugger;
         if (!this.editMode) {
             // route: /groups/new
             this.groupService.addGroup(this.group).subscribe(response => {                

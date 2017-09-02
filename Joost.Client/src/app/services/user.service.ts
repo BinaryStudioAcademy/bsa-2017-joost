@@ -27,7 +27,6 @@ export class UserService extends BaseApiService{
   }
 
   checkUserForUniqueness(email: string) {
-    debugger;
     let req = new HttpRequest("GET", this.generateUrl() + '/check', { params: new HttpParams().set("login", email) });
     return this.http.sendRequest(req);
   }

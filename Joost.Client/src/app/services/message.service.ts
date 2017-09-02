@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseApiService } from './base-api.service';
 import { HttpService } from '../services/http.service';
@@ -33,13 +33,15 @@ export class MessageService extends BaseApiService {
     return this.http.sendRequest<Message[]>(req);
   }
 
-  createMessage(senderId: number, receiverId: number, text: string, attachedFile: string): Message {
+  createMessage(senderId: number, receiverId: number, text: string, attachedFile: string, isGroup: boolean): Message {
     let message = new Message();
     message.SenderId = senderId;
     message.ReceiverId = receiverId;
     message.Text = text;
     message.CreatedAt = new Date(); // wrong timezone!!!
+    message.EditedAt = message.CreatedAt;
     message.AttachedFile = attachedFile;
+    message.IsGroup = isGroup;
     return message;
   }
 

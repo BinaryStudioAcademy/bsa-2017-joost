@@ -45,7 +45,6 @@ export class LoginSignUpComponent implements OnInit {
   }
 
   checkEmailIsEmpty(email: string): void {
-      debugger;
       let userIsEmpty = this.userService.checkUserForUniqueness(email).subscribe(response => {
           if (response) {
               this.userIsEmpty = true;

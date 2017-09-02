@@ -5,6 +5,7 @@ import { HttpService } from '../services/http.service';
 
 import { BaseApiService } from "./base-api.service";
 import { Group } from "../models/group";
+import { UserDetail } from "../models/user-detail";
 
 @Injectable()
 export class GroupService extends BaseApiService {
@@ -21,6 +22,10 @@ export class GroupService extends BaseApiService {
     getGroup(id: number) {
         let req = new HttpRequest("GET", `${this.generateUrl()}/${id}`);
         return this.http.sendRequest<Group>(req);
+    }
+    getGroupMembers(id: number) {
+        let req = new HttpRequest("GET", `${this.generateUrl()}/${id}` + "/getMembers");
+        return this.http.sendRequest<UserDetail[]>(req);
     }
     putGroup(id: number, newGroup: Group) {
         let req = new HttpRequest("PUT", `${this.generateUrl()}/${id}`, newGroup);

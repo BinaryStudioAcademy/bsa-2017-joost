@@ -23,25 +23,26 @@ namespace Joost.Api.Services
         {
             using (var messageRepository = _unitOfWork.Repository<Message>())
             {
-                return await messageRepository
-                    .Query()
-                    .Include(m => m.Sender)
-                    .Include(m => m.Receiver)
-                    .Where(m => (m.Sender.Id == senderId && m.Receiver.Id == receiverId) ||
-                                (m.Sender.Id == receiverId && m.Receiver.Id == senderId))
-                    .OrderByDescending(m => m.CreatedAt)
-				    .Skip(skip)
-                    .Take(take)
-                    .OrderBy(m => m.CreatedAt)
-                    .Select(m => new MessageDto
-                    {
-                        Id = m.Id,
-                        SenderId = m.Sender.Id,
-                        ReceiverId = m.Receiver.Id,
-                        Text = m.Text,
-                        CreatedAt = m.CreatedAt,
-                        EditedAt = m.EditedAt,
-                        AttachedFile = m.AttachedFile
+				return await messageRepository
+					.Query()
+					.Include(m => m.Sender)
+					.Include(m => m.Receiver)
+					.Where(m => (m.Sender.Id == senderId && m.Receiver.Id == receiverId) ||
+								(m.Sender.Id == receiverId && m.Receiver.Id == senderId))
+					.OrderByDescending(m => m.CreatedAt)
+					.Skip(skip)
+					.Take(take)
+					.OrderBy(m => m.CreatedAt)
+					.Select(m => new MessageDto
+					{
+						Id = m.Id,
+						SenderId = m.Sender.Id,
+						ReceiverId = m.Receiver.Id,
+						Text = m.Text,
+						CreatedAt = m.CreatedAt,
+						EditedAt = m.EditedAt,
+						AttachedFile = m.AttachedFile,
+						IsGroup = false
                     })
                     .ToListAsync();
             }
@@ -51,25 +52,24 @@ namespace Joost.Api.Services
         {
             using (var groupMessageRepository = _unitOfWork.Repository<GroupMessage>())
             {
-                return await groupMessageRepository
-                    .Query()
-                    .Include(m => m.Sender)
-                    .Include(m => m.Receiver)
-                    .Where(m => (m.Sender.Id == senderId && m.Receiver.Id == receiverId) ||
-								(m.Sender.Id == receiverId && m.Receiver.Id == senderId))
+				return await groupMessageRepository
+					.Query()
+					.Include(m => m.Receiver)
+					.Where(m => m.Receiver.Id == receiverId)
 					.OrderByDescending(m => m.CreatedAt)
-                    .Skip(skip)
-                    .Take(take)
-                    .OrderBy(m => m.CreatedAt)
-                    .Select(m => new MessageDto
-                    {
-                        Id = m.Id,
-                        SenderId = m.Sender.Id,
-                        ReceiverId = m.Receiver.Id,
-                        Text = m.Text,
-                        CreatedAt = m.CreatedAt,
-                        EditedAt = m.EditedAt,
-                        AttachedFile = m.AttachedFile
+					.Skip(skip)
+					.Take(take)
+					.OrderBy(m => m.CreatedAt)
+					.Select(m => new MessageDto
+					{
+						Id = m.Id,
+						SenderId = m.Sender.Id,
+						ReceiverId = m.Receiver.Id,
+						Text = m.Text,
+						CreatedAt = m.CreatedAt,
+						EditedAt = m.EditedAt,
+						AttachedFile = m.AttachedFile,
+						IsGroup = true
                     })
                     .ToListAsync();
             }
@@ -120,7 +120,7 @@ namespace Joost.Api.Services
 					var group = await groupRepository
 						.Query()
 						.Include(g => g.Members)
-						.FirstOrDefaultAsync(g => g.Id == groupMessage.SenderId);
+						.FirstOrDefaultAsync(g => g.Id == groupMessage.ReceiverId);
 					if (group != null)
 					{
 						var sender = group.Members

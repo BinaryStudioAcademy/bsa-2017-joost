@@ -14,6 +14,8 @@
 
 .main {
     width: 100%;
+    display: flex;
+    flex-direction: column;
     > ul{
         padding: 0;
     }
@@ -65,9 +67,16 @@
     width: calc(100% - 10px);
     height: calc(100vh - 10px);
     margin: 5px auto;
+    
+    > div{
+        &:nth-last-child(2){
+            flex: 1;
+        }
+    }
 }
 
 .message-container {
+    max-width: 50%;
     font-size: 0.8em;
     display: flex;
 }
@@ -126,13 +135,12 @@
 }
 
 .message-input-container {
-  position: absolute;
-  bottom: 0;
+    margin-top: auto;
 }
 
 
 .messages-content {
-    max-height: 560px;
+    max-height: 800px;
     overflow: auto;
 }
 
@@ -143,7 +151,7 @@ input[type="file"] {
 }
 
 
-.custom-image-attach {
+.custom-file-attach {
     cursor: pointer;
 
     .material-icons {
@@ -151,6 +159,13 @@ input[type="file"] {
     }
 }
 
+.custom-file-attach:hover{
+    color: #FF5722;
+}
+
+.custom-file-attach::selection{
+    background-color: none;
+}
 .send-message-container{
     display: flex;
     flex-direction: row;
@@ -212,19 +227,9 @@ input[type="file"] {
     flex-direction:column;
     justify-content:center;
     text-align: center;
-    padding: 25px 25px;
+    padding: 2em;
     background-color:white;
     z-index:11;
-  }
-
-  .mdl-progress{
-    margin:0;
-    position: absolute;
-    left:0;
-    top:0;
-    width:100%;
-    z-index:8;
-    height:3px;
   }
 
   #modal-img{
@@ -266,3 +271,33 @@ input[type="file"] {
     color:white;
     transform:translateY(0%);
   }
+
+  .attached-file{
+    margin: 4px;
+    text-decoration: none;
+    color:#B0BEC5;
+   
+    i{
+        font-size: 4em;
+    }  
+  }
+
+  .attached-file:hover{
+    color:#9E9E9E;
+  }
+
+  .attched-in-self-msg{
+    float: right;
+  }
+
+  .att-file-container{
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      
+      >div{
+          font-size: 1.5em;
+          text-transform: uppercase;
+      }
+    }
+  
