@@ -2,14 +2,22 @@ import {Component, ViewContainerRef} from '@angular/core';
 import {ToastsManager, Toast} from 'ng2-toastr';
 
 export class NotificationService {
+
+  private audio;
+
   constructor(private toastr: ToastsManager, vRef: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vRef);
+    this.audio = new Audio();
   }
-  audio = new Audio();
-  showAddUser(notificationTitle:string) {
-    this.audio.src="assets/notifications/1.mp3";
+
+  private playNotificationSound() {
+    this.audio.src="assets/notifications/notification.mp3";
     this.audio.load();
     this.audio.play();
+  }
+
+  showAddUser(notificationTitle:string) {
+    this.playNotificationSound();
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/add_user.png\""+
@@ -25,9 +33,7 @@ export class NotificationService {
   }
 
   showAddChat(notificationTitle:string, notificationMessage:string) {
-    this.audio.src="assets/notifications/1.mp3";
-    this.audio.load();
-    this.audio.play();
+    this.playNotificationSound();
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/new_chat.png\""+
@@ -43,9 +49,7 @@ export class NotificationService {
   }
 
   showNewMessage(notificationTitle:string, notificationMessage:string) {
-    this.audio.src="assets/notifications/1.mp3";
-    this.audio.load();
-    this.audio.play();
+    this.playNotificationSound();    
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/message.png\""+
@@ -61,9 +65,7 @@ export class NotificationService {
   }
 
   showNewMessageInChat(notificationTitle:string, notificationMessage:string) {
-    this.audio.src="assets/notifications/1.mp3";
-    this.audio.load();
-    this.audio.play();
+    this.playNotificationSound();    
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/message_in_chat.png\""+
