@@ -47,7 +47,9 @@
 }
 
 .jg-container{
-    width: calc(100% - 10px);
+    width: 74%;
+    position: absolute;
+    left: 26%;
     min-height: calc(100vh - 10px);
     > div{
         &:nth-last-child(2){

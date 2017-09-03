@@ -4,24 +4,26 @@
     margin-top: auto;
     display: flex;
     justify-content:flex-end;
-    padding: 0;
 }
 .jg-button-bottom{
     margin: 10px 10px 10px 0px;
 }
 
 .jg-full-width-container{
-    width: 100%;
+    width: 47%;
 }
 
 .jg-half-width-container{
-    width: 50%;
+    width: 47%;
 }
-
+.date-picker-style{
+    width: 40% !important;
+}
 .jg-container{
-    width: calc(100% - 10px);
-    //min-height: calc(100vh - 10px);
-    margin: 0px;
+    width: 74%;
+    position: absolute;
+    min-height: 100%;
+    left: 26%;
 }
 
 .jg-header-container{
@@ -32,7 +34,7 @@
         margin: 0;
     }
     > div{
-        margin: 8px;    
+        margin: 0px 8px;    
     }
 }
 
@@ -131,6 +133,6 @@ input[type="file"] {
         margin: 0;    
     }
 }
-.mdl-textfield{
+.ng -textfield{
     max-width: 48%;
 }
