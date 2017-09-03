@@ -3,12 +3,13 @@ using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System;
 using System.Linq;
+using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Joost.Api.Controllers
 {
-    public class GroupsController : BaseApiController
+	public class GroupsController : BaseApiController
     {
         public GroupsController(IUnitOfWork unitOfWork) : base(unitOfWork)
         { }
@@ -45,7 +46,7 @@ namespace Joost.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetGroup(int id)
         {
-            // if group doesn't exist
+			/*// if group doesn't exist
             var group = await _unitOfWork.Repository<Group>().GetAsync(id);
             if (group != null)
             {
@@ -75,11 +76,59 @@ namespace Joost.Api.Controllers
                 Description = group.Description,
                 SelectedMembersId = group.Members.Select(m => m.Id).ToList(),
             };
-            return Ok(groupDto);
-        }
+            return Ok(groupDto);*/
+			// if group doesn't exist
+			var currentUserId = GetCurrentUserId();
+            var group = await _unitOfWork.Repository<Group>()
+				.Query()
+				.Include(g => g.Members)
+				.SingleAsync(g => g.Id == id);
+			var selectedMembersId = group.Members.Select(m => m.Id);
+			if (group != null)
+            {
+				var ok = selectedMembersId.Contains(currentUserId);
+				if (ok)
+				{
+					var groupDto = new GroupDto
+					{
+						Id = group.Id,
+						Name = group.Name,
+						Description = group.Description,
+						SelectedMembersId = selectedMembersId.ToList(),
+					};
+					return Ok(groupDto);
+				}
+				else return NotFound();
+			}
+            else
+                return NotFound();                      
+		}
 
-        // POST: api/Groups
-        [HttpPost]
+		// GET: api/Groups/5/getMembers
+		[HttpGet]
+		[Route("api/groups/{id}/getMembers")]
+		public async Task<IHttpActionResult> GetGroupMembers(int id)
+		{
+			var currentUserId = GetCurrentUserId();
+			var group = await _unitOfWork.Repository<Group>()
+				.Query()
+				.Include(g => g.Members)
+				.SingleAsync(g => g.Id == id);
+			if (group != null)
+			{
+				var selectedMembersId = group.Members.Select(m => m.Id);
+				var ok = selectedMembersId.Contains(currentUserId);
+				if (ok)
+				{
+					return Ok(group.Members.Select(m => UserDetailsDto.FromModel(m)));
+				}
+				else return NotFound();
+			}
+			else return NotFound();
+		}
+
+		// POST: api/Groups
+		[HttpPost]
         public async Task<IHttpActionResult> AddGroup([FromBody]GroupDto group)
         {
             if (!ModelState.IsValid)
@@ -95,6 +144,7 @@ namespace Joost.Api.Controllers
 
             foreach (var memberId in group.SelectedMembersId)
                 newGroup.Members.Add(await _unitOfWork.Repository<User>().GetAsync(memberId));
+			newGroup.Members.Add(newGroup.GroupCreator);
 
             _unitOfWork.Repository<Group>().Add(newGroup);
             await _unitOfWork.SaveAsync();
