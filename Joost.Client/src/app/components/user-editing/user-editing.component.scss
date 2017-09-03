@@ -17,15 +17,32 @@
     width: 47%;
 }
 .date-picker-style{
-    width: 40% !important;
+    width: 200px;
 }
+$card-padding: 15px;
 .jg-container{
-    width: 74%;
+    max-width: calc(100% - #{$card-padding} - #{$card-padding});
+    width: 100%;
     position: absolute;
-    min-height: 100%;
-    left: 26%;
+    min-height: calc(100% - 2 * #{$card-padding});
 }
 
+.jg-card{
+    padding: $card-padding;
+    max-width: calc(74% - 2 * #{$card-padding});
+    width: 100%;
+    position: absolute;
+    min-height: calc(100% - 2 * #{$card-padding});
+    margin-left: 26%;
+}
+@media (max-width: 1024px){
+    .jg-card{
+        margin: 0  26%;
+        right: -13%;
+    }
+
+}
+  
 .jg-header-container{
     width:  100%;
     display: flex;
