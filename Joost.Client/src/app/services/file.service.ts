@@ -40,23 +40,36 @@ export class FileService extends BaseApiService{
   // }
 
   UploadFile(file: File, fileName: string) {
+    let extThis = this; // "this" in UploadFile scope
+
     return Observable.fromPromise(new Promise((resolve, reject) => {
       let formData: any = new FormData();
       let xhr = new XMLHttpRequest();
       formData.append("file", file, file.name);
       formData.append("fileName", fileName);
       
-      xhr.onreadystatechange = function () {
+      xhr.onreadystatechange = async function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             resolve()
+          } else if (xhr.status === 426) { // expired token response
+            let refreshToken = localStorage.getItem('joostUserRefreshToken');
+            if (refreshToken !== null) {
+              await extThis.http.refreshTokens(refreshToken);
+                let newAccessToken = localStorage.getItem("joostUserAccessToken");
+                xhr.open("PUT", extThis.generateUrl(), true);
+                xhr.setRequestHeader("Authorization", newAccessToken)
+                xhr.send(formData);
+            }
           } else {
-            reject()
+            reject();
           }
         }
       }
       
+      let accessToken = localStorage.getItem("joostUserAccessToken");
       xhr.open("PUT", this.generateUrl(), true);
+      xhr.setRequestHeader("Authorization", accessToken)
       xhr.send(formData);
     }));
   }
