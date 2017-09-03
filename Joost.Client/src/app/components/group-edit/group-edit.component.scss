@@ -18,7 +18,7 @@
 .jc-list-user{
     max-height: 300px;
     overflow :auto;
-    flex: 1;
+    flex: 0.9;
     li:hover{
         background-color: #F5F5F5;
         margin-left: 1px;
@@ -31,11 +31,12 @@
 
 .jg-buttons-bottom-cantainer{
     margin-top: auto;
+    padding: 10px;
     display: flex;
     justify-content:flex-end;
 }
 .jg-button-bottom{
-    //margin-left: 10px;
+    margin-right: 5px;
 }
 #btnSaveCreate{
     position:  relative;
@@ -45,17 +46,27 @@
 .jg-full-width-container{
     width: 100%;
 }
-
+$margin-value: 15px;
 .jg-container{
-    width: calc(100% - 10px);
-    min-height: calc(100vh - 10px);
+    margin: $margin-value;
+    width: calc(74% - 2 * #{$margin-value});
+    min-height: calc(100% - 2 * #{$margin-value});
+    max-height: 100%;
+    position: absolute;
+    margin-left: calc(26% + #{$margin-value});
     > div{
         &:nth-last-child(2){
             flex: 1;
         }
     }
 }
-
+@media (max-width: 1024px){
+    .jg-container{
+        margin: $margin-value 26%;
+        right: calc(-13% + #{$margin-value});
+        max-height: unset;
+    }
+}
 .mdl-textfield.is-invalid .mdl-textfield__input{
 	border-color: rgba(0,0,0,.12); 
 }

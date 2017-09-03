@@ -16,13 +16,20 @@
 .jg-full-width-container{
     width: 100%;
 }
-
+$margin-value: 15px;
 .jg-container{
-    width: calc(100% - 10px);
+    margin: $margin-value;
+    width: calc(74% - 2 * #{$margin-value});
     //min-height: calc(100vh - 10px);
-    //margin: 5px auto;
+   position: absolute;
+   margin-left: calc(26% + #{$margin-value});
 }
-
+@media (max-width: 1024px){
+    .jg-container{
+        margin: $margin-value 26%;
+        right: calc(-13% + #{$margin-value});
+    }
+}
 .jg-header-container{
     width:  100%;
     display: flex;
