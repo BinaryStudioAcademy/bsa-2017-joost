@@ -25,6 +25,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private subscription: Subscription;;
     private currentUser: UserProfile;
     private receiverId: number;
+    private userId: number;
     private isGroup: boolean;
     private skip: number = 0;
     private readonly take: number = 20;    
@@ -48,7 +49,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 private accountService: AccountService,
                 private userService: UserService,
                 private groupService: GroupService,
-                private cdRef: ChangeDetectorRef) { }
+                private cdRef: ChangeDetectorRef,
                 private fileService: FileService,
                 private route: Router) { }
 
