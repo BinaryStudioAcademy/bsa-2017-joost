@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;
     using System;
+    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<JoostDbContext>
     {
@@ -26,8 +27,11 @@
                 new User { Email="straber@ukr.net", Password="password", FirstName="Oleksandr", LastName = "Truba" , State = UserState.Online, Avatar = "7_avatar.jpg", IsActived = true },
                 new User { Email="daria@gmail.com", Password="password", FirstName="Darina", LastName = "Korotkih" , State = UserState.Online, Avatar = "8_avatar.jpg", IsActived = true },
             };
-            users.ForEach(c => context.Users.Add(c));
-            context.SaveChanges();
+
+            if (!context.Users.Any()) // if table is empty
+            {
+                users.ForEach(c => context.Users.Add(c));
+            }
 
             var vitaliy = new User { Email = "vitaly@gmail.com", Password = "admin", FirstName = "Віталій", LastName = "Ільченко", State = UserState.Online, IsActived = true };
             var vasyl = new User { Email = "rrational@gmail.com", Password = "password", FirstName = "Vasyl", LastName = "Barna", State = UserState.Online, IsActived = true };
@@ -49,9 +53,12 @@
             user.Contacts.Add(new Contact { State = ContactState.Accept, User = user, ContactUser = vitaliy });
             user.Contacts.Add(new Contact { State = ContactState.Accept, User = user, ContactUser = vasyl });
 
-            context.Users.Add(vitaliy);
-            context.Users.Add(vasyl);
-            context.Users.Add(user);
+            if (!context.Users.Any())  // if table is empty
+            {
+                context.Users.Add(vitaliy);
+                context.Users.Add(vasyl);
+                context.Users.Add(user);
+            }
 
             var messages = new List<Message>
             {
@@ -63,13 +70,16 @@
                     CreatedAt = new DateTime(2017, 8, 28, 2, 2, 2), Text = "Як справи?" },
                 new Message { Sender = users[3], Receiver = users[5],
                     CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" },
-				new Message { Sender = users[5], Receiver = users[6],
-					CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" },
-				new Message { Sender = users[5], Receiver = users[0],
-					CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" }
-			};
+                new Message { Sender = users[5], Receiver = users[6],
+                    CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" },
+                new Message { Sender = users[5], Receiver = users[0],
+                    CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" }
+            };
 
-            messages.ForEach(c => context.Messages.Add(c));
+            if (!context.Messages.Any())  // if table is empty
+            {
+                messages.ForEach(c => context.Messages.Add(c));
+            }
 
             context.SaveChanges();
         }
