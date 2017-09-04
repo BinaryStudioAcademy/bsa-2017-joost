@@ -124,8 +124,11 @@ export class UserEditingComponent extends MDL implements OnInit {
   
   SendAvatar(e: Event) {
     var target: HTMLInputElement = e.target as HTMLInputElement;
-    this.avatarService.SetAvatar(target.files[0]);
-    location.reload();
+    this.avatarService.SetAvatar(target.files[0]).subscribe(
+      res => {
+        location.reload();
+      }, 
+      error => console.log("Fail when setting avatar"));
   }
 
   getUserBirthDate() { // convertung date from server to date for datePicker

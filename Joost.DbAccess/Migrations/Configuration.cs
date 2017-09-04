@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Data.Entity.Migrations;
     using System;
+    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<JoostDbContext>
     {
@@ -26,8 +27,6 @@
                 new User { Email="straber@ukr.net", Password="password", FirstName="Oleksandr", LastName = "Truba" , State = UserState.Online, Avatar = "7_avatar.jpg", IsActived = true },
                 new User { Email="daria@gmail.com", Password="password", FirstName="Darina", LastName = "Korotkih" , State = UserState.Online, Avatar = "8_avatar.jpg", IsActived = true },
             };
-            users.ForEach(c => context.Users.Add(c));
-            context.SaveChanges();
 
             var vitaliy = new User { Email = "vitaly@gmail.com", Password = "admin", FirstName = "Віталій", LastName = "Ільченко", State = UserState.Online, IsActived = true };
             var vasyl = new User { Email = "rrational@gmail.com", Password = "password", FirstName = "Vasyl", LastName = "Barna", State = UserState.Online, IsActived = true };
@@ -46,12 +45,31 @@
                 State = UserState.Online,
                 Status = "I'm a robot"
             };
-            user.Contacts.Add(new Contact { State = ContactState.Accept, User = user, ContactUser = vitaliy });
-            user.Contacts.Add(new Contact { State = ContactState.Accept, User = user, ContactUser = vasyl });
 
-            context.Users.Add(vitaliy);
-            context.Users.Add(vasyl);
-            context.Users.Add(user);
+            if (!context.Users.Any())  // if table is empty
+            {
+                users.ForEach(c => context.Users.Add(c));
+                context.Users.Add(vitaliy);
+                context.Users.Add(vasyl);
+                context.Users.Add(user);
+
+                context.SaveChanges();
+
+                user.Contacts.Add(new Contact { State = ContactState.Accept, User = user, ContactUser = vitaliy });
+                vitaliy.Contacts.Add(new Contact { State = ContactState.Accept, User = vitaliy, ContactUser = user });
+                user.Contacts.Add(new Contact { State = ContactState.Accept, User = user, ContactUser = vasyl });
+                vasyl.Contacts.Add(new Contact { State = ContactState.Accept, User = vasyl, ContactUser = user });
+
+                users[5].Contacts.Add(new Contact { State = ContactState.Accept, User = users[5], ContactUser = users[3] });
+                users[3].Contacts.Add(new Contact { State = ContactState.Accept, User = users[3], ContactUser = users[5] });
+                users[5].Contacts.Add(new Contact { State = ContactState.Accept, User = users[5], ContactUser = users[6] });
+                users[6].Contacts.Add(new Contact { State = ContactState.Accept, User = users[6], ContactUser = users[5] });
+                users[5].Contacts.Add(new Contact { State = ContactState.Accept, User = users[5], ContactUser = users[0] });
+                users[0].Contacts.Add(new Contact { State = ContactState.Accept, User = users[0], ContactUser = users[5] });
+
+                context.SaveChanges();
+            }
+
 
             var messages = new List<Message>
             {
@@ -63,13 +81,16 @@
                     CreatedAt = new DateTime(2017, 8, 28, 2, 2, 2), Text = "Як справи?" },
                 new Message { Sender = users[3], Receiver = users[5],
                     CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" },
-				new Message { Sender = users[5], Receiver = users[6],
-					CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" },
-				new Message { Sender = users[5], Receiver = users[0],
-					CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Норма, а в тебе?" }
-			};
+                new Message { Sender = users[5], Receiver = users[6],
+                    CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Хей!" },
+                new Message { Sender = users[5], Receiver = users[0],
+                    CreatedAt = new DateTime(2017, 8, 28, 3, 3, 4), Text = "Йо!" }
+            };
 
-            messages.ForEach(c => context.Messages.Add(c));
+            if (!context.Messages.Any())  // if table is empty
+            {
+                messages.ForEach(c => context.Messages.Add(c));
+            }
 
             context.SaveChanges();
         }
