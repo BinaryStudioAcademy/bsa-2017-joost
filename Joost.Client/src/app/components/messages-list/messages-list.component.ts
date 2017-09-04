@@ -211,7 +211,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             if (this.attachedImage != null) {
                 fileName = this.currentUser.Id + "_" +  this.receiverId + "_" + Date.now() + '.' + this.fileService.getFileExtensions(this.attachedImage.files[0].name);               
                 this.fileService.UploadFile(this.attachedImage.files[0], fileName).subscribe(
-                    res => { // if successfully uploaded file to server, then we can seand a message
+                    res => { // if successfully uploaded file to server, then we can send a message
                         this._send(text, fileName);
                     },
                     error => console.log("Fail when uploading file to server!"));
