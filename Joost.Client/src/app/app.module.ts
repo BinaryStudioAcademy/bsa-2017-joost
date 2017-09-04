@@ -55,6 +55,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { FileService } from './services/file.service';
 import { AttachedImagePipe } from "./pipes/attached-image.pipe";
 import { MenuMessagesService } from "./services/menu-messages.service";
+import { NotificationService } from "./services/notification.service";
 
 @NgModule({
   declarations: [
@@ -104,7 +105,8 @@ import { MenuMessagesService } from "./services/menu-messages.service";
     AccountService,
     ContactService,
     FileService,
-    MenuMessagesService
+    MenuMessagesService,
+    NotificationService
     // {
     //   provide: ToastOptions,
     //   useClass: CustomOption

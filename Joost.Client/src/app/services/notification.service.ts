@@ -1,13 +1,19 @@
-import {Component, ViewContainerRef} from '@angular/core';
+import {Component, Injectable, ViewContainerRef} from '@angular/core';
 import {ToastsManager, Toast} from 'ng2-toastr';
 
+@Injectable()
 export class NotificationService {
 
   private audio;
+  private vRef: ViewContainerRef;
 
-  constructor(private toastr: ToastsManager, vRef: ViewContainerRef) {
-    this.toastr.setRootViewContainerRef(vRef);
+  constructor(private toastr: ToastsManager) {
     this.audio = new Audio();
+  }
+
+  public setViewContainerRef(vRef: ViewContainerRef) {
+    this.vRef = vRef;
+    this.toastr.setRootViewContainerRef(this.vRef);
   }
 
   private playNotificationSound() {
