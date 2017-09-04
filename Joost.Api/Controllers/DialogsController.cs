@@ -3,9 +3,11 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using Joost.DbAccess.Interfaces;
 using Joost.Api.Services;
+using Joost.Api.Filters;
 
 namespace Joost.Api.Controllers
 {
+    [AccessTokenAuthorization]
     [RoutePrefix("api/dialogs")]
     public class DialogsController : BaseApiController
     {

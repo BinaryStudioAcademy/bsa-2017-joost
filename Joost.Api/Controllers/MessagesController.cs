@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Joost.Api.Models;
 using System.Net;
+using Joost.Api.Filters;
 
 namespace Joost.Api.Controllers
 {
+    [AccessTokenAuthorization]
     [RoutePrefix("api/messages")]
     public class MessagesController : BaseApiController
     {

@@ -1,4 +1,5 @@
-﻿using Joost.Api.Infrastructure;
+﻿using Joost.Api.Filters;
+using Joost.Api.Infrastructure;
 using Joost.DbAccess.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -53,7 +54,8 @@ namespace Joost.Api.Controllers
         }
 
 		[HttpPost]
-		[Route("download")]
+        [AccessTokenAuthorization]
+        [Route("download")]
 		public IHttpActionResult DownloadFile()
 		{
 			var fileName = HttpContext.Current.Request.Form["fileName"];
@@ -83,7 +85,6 @@ namespace Joost.Api.Controllers
         {
             var fileName = HttpContext.Current.Request.Form["fileName"];
 
-            //List<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
             int MaxContentLength = 1024 * 1024 * 3;
 
             var httpRequest = HttpContext.Current.Request;
@@ -96,15 +97,6 @@ namespace Joost.Api.Controllers
 
                     if (postedFile != null && postedFile.ContentLength > 0)
                     {
-                        //var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
-                        //var extension = ext.ToLower();
-
-                        //if (!AllowedFileExtensions.Contains(extension))
-                        //{
-                        //    return BadRequest(); // "Please Upload image of type .jpg,.gif,.png., ".bmp""
-                        //}
-                        //else
-                        //{
                             if (postedFile.ContentLength > MaxContentLength)
                             {
                                 return BadRequest(); // "Please Upload a file upto 2 mb."

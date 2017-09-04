@@ -1,4 +1,5 @@
-﻿using Joost.Api.Infrastructure;
+﻿using Joost.Api.Filters;
+using Joost.Api.Infrastructure;
 using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
 using System;
@@ -58,7 +59,6 @@ namespace Joost.Api.Controllers
         }
 
         // POST api/avatars/5
-        [HttpPost, HttpPut] // AND PUT?
         public async Task<IHttpActionResult> SetAvatar()
         {
             int id = GetCurrentUserId();

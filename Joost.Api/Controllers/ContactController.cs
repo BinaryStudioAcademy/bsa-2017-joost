@@ -4,9 +4,11 @@ using Joost.DbAccess.Interfaces;
 using System.Threading.Tasks;
 using Joost.Api.Models;
 using Joost.DbAccess.Entities;
+using Joost.Api.Filters;
 
 namespace Joost.Api.Controllers
 {
+    [AccessTokenAuthorization]
     [RoutePrefix("api/contact")]
     public class ContactController : BaseApiController
     {

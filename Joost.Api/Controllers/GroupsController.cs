@@ -6,10 +6,12 @@ using System.Linq;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Joost.Api.Filters;
 
 namespace Joost.Api.Controllers
 {
-	public class GroupsController : BaseApiController
+    [AccessTokenAuthorization]
+    public class GroupsController : BaseApiController
     {
         public GroupsController(IUnitOfWork unitOfWork) : base(unitOfWork)
         { }
@@ -46,38 +48,6 @@ namespace Joost.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetGroup(int id)
         {
-			/*// if group doesn't exist
-            var group = await _unitOfWork.Repository<Group>().GetAsync(id);
-            if (group != null)
-            {
-                // if user isn't creator of the group
-                var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
-                if (group.GroupCreator.Id != currentUser.Id)
-                    return BadRequest();
-            }
-            else
-                return NotFound();                       
-
-            // select all friends of the current user
-            var groupCreatorContacts = group.GroupCreator.Contacts
-                .Where(c => c.State == DbAccess.Entities.ContactState.Accept)
-                .Select(c => new UserContactDto
-                    {
-                        Id = c.ContactUser.Id,
-                        City = c.ContactUser.City,
-                        Name = $"{c.ContactUser.FirstName} {c.ContactUser.LastName}",
-                        Avatar = c.ContactUser.Avatar
-                    }).ToList();
-
-            var groupDto = new GroupDto
-            {
-                Id = group.Id,
-                Name = group.Name,
-                Description = group.Description,
-                SelectedMembersId = group.Members.Select(m => m.Id).ToList(),
-            };
-            return Ok(groupDto);*/
-			// if group doesn't exist
 			var currentUserId = GetCurrentUserId();
             var group = await _unitOfWork.Repository<Group>()
 				.Query()
@@ -159,9 +129,8 @@ namespace Joost.Api.Controllers
                 return BadRequest();
 
             var editGroup = await _unitOfWork.Repository<Group>().GetAsync(id);
-            var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
 
-            if (editGroup.GroupCreator.Id != currentUser.Id)
+            if (editGroup.GroupCreator.Id != GetCurrentUserId())
                 return BadRequest();
 
             editGroup.Name = group.Name;
@@ -182,10 +151,9 @@ namespace Joost.Api.Controllers
         public async Task<IHttpActionResult> DeleteGroup(int id)
         {
             var group = await _unitOfWork.Repository<Group>().GetAsync(id);
-            var currentUser = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId());
             if (group != null)
             {
-                if (group.GroupCreator.Id == currentUser.Id)
+                if (group.GroupCreator.Id == GetCurrentUserId())
                 {
                     _unitOfWork.Repository<Group>().Delete(group);
                     await _unitOfWork.SaveAsync();

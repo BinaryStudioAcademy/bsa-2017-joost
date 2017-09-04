@@ -44,9 +44,10 @@ namespace Joost.Api.Controllers
 			return Ok(users);
 		}
 
-		// GET: api/users/5
-		[HttpGet]
-		public async Task<IHttpActionResult> GetUser(int id)
+        // GET: api/users/5
+        [HttpGet]
+        [AccessTokenAuthorization]
+        public async Task<IHttpActionResult> GetUser(int id)
 		{
 			var user = await _unitOfWork.Repository<User>().GetAsync(id);
 			if (user == null)
@@ -55,125 +56,6 @@ namespace Joost.Api.Controllers
 			}
 
 			return Ok(UserDetailsDto.FromModel(user));
-		}
-
-		// GET: api/users/contact
-		[HttpPost]
-		[Route("contact")]
-		public async Task<IHttpActionResult> AddContact([FromBody]ContactDto contact)
-		{
-			var userId = GetCurrentUserId();
-			if (userId ==contact.ContactId)
-			{
-				return InternalServerError();
-			}
-			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
-			if (user == null)
-			{
-				return NotFound();
-			}
-			var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
-			if (contactUser == null)
-			{
-				return NotFound();
-			}
-			// first send 
-			if (user.Contacts.FirstOrDefault(t=>t.ContactUser.Id==contactUser.Id)==null)
-			{
-				user.Contacts.Add(new Contact()
-				{
-					User = user,
-					ContactUser = contactUser,
-					State = DbAccess.Entities.ContactState.Sent,
-				});
-			}
-			// retry when user decline offer
-			else
-			{
-				user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Sent;
-			}
-			contactUser.Contacts.Add(new Contact()
-			{
-				User = contactUser,
-				ContactUser = user,
-				State = DbAccess.Entities.ContactState.New,
-			});
-			await _unitOfWork.SaveAsync();
-
-			return Ok();
-		}
-		[HttpPost]
-		[Route("confirm-contact")]
-		public async Task<IHttpActionResult> ConfirmContact([FromBody]ContactDto contact)
-		{
-			var userId = GetCurrentUserId();
-			if (userId == contact.ContactId)
-			{
-				return InternalServerError();
-			}
-			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
-			if (user == null)
-			{
-				return NotFound();
-			}
-			var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
-			if (contactUser == null)
-			{
-				return NotFound();
-			}
-			user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Accept;
-			contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Accept;
-		   
-			await _unitOfWork.SaveAsync();
-
-			return Ok();
-		}
-		[HttpPost]
-		[Route("decline-contact")]
-		public async Task<IHttpActionResult> DeclineContact([FromBody]ContactDto contact)
-		{
-			var userId = GetCurrentUserId();
-			if (userId == contact.ContactId)
-			{
-				return InternalServerError();
-			}
-			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
-			if (user == null)
-			{
-				return NotFound();
-			}
-			var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
-			if (contactUser == null)
-			{
-				return NotFound();
-			}
-			user.Contacts.Remove(user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id));
-			contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
-			await _unitOfWork.SaveAsync();
-
-			return Ok();
-		}
-
-		[HttpDelete]
-		[Route("contact")]
-		public async Task<IHttpActionResult> DeleteContact(int id )
-		{
-			var userId = GetCurrentUserId();
-			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
-			if (user == null)
-			{
-				return NotFound();
-			}
-
-			var contact = user.Contacts.FirstOrDefault(u => u.Id == id);
-			if (contact == null)
-			{
-				return NotFound();
-			}
-			user.Contacts.Remove(contact);
-
-			await _unitOfWork.SaveAsync();
-			return Ok();
 		}
 
 		[HttpGet]
@@ -310,7 +192,8 @@ namespace Joost.Api.Controllers
 
 		// PUT: api/users/5
 		[HttpPut]
-		public async Task<IHttpActionResult> EditUser(int id, [FromBody]User user)
+        [AccessTokenAuthorization]
+        public async Task<IHttpActionResult> EditUser(int id, [FromBody]User user)
 		{
 			_unitOfWork.Repository<User>().Attach(user);
 			await _unitOfWork.SaveAsync();
@@ -320,7 +203,8 @@ namespace Joost.Api.Controllers
 
 		// PUT: api/users/state/5
 		[HttpPut]
-		public async Task<IHttpActionResult> EditState(int id, UserState state)
+        [AccessTokenAuthorization]
+        public async Task<IHttpActionResult> EditState(int id, UserState state)
 		{
 			var user = await _unitOfWork.Repository<User>().GetAsync(id);
 			user.State = state;
@@ -333,7 +217,8 @@ namespace Joost.Api.Controllers
 
 		// DELETE: api/users/5
 		[HttpDelete]
-		public async Task DeleteUser(int id)
+        [AccessTokenAuthorization]
+        public async Task DeleteUser(int id)
 		{
 			var user = await _unitOfWork.Repository<User>().FindAsync(item => item.Id == id);
 			if (user != null)
@@ -343,23 +228,10 @@ namespace Joost.Api.Controllers
 			}
 		}
 
-		// GET: api/users/myprofile
-		[HttpGet]
-		[Route("myprofile")]
-		public async Task<IHttpActionResult> GetProfile()
-		{
-			var userId = GetCurrentUserId();
-			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
-			if (user == null)
-			{
-				return NotFound();
-			}
-			return Ok(UserProfileDto.FromModel(user));
-		}
-
 		// GET: api/users/notifications
 		[HttpGet]
-		[Route("notifications")]
+        [AccessTokenAuthorization]
+        [Route("notifications")]
 		public async Task<IHttpActionResult> GetGlobalNotifications()
 		{
 			var userId = GetCurrentUserId();
@@ -370,9 +242,11 @@ namespace Joost.Api.Controllers
 			}
 			return Ok(UserDetailsDto.FromModel(user).Notifications);
 		}
+
 		//PUT: api/users/notificatations/1
 		[HttpPut]
-		public async Task<IHttpActionResult> EditGlobalNotifications(int id, bool notifications)
+        [AccessTokenAuthorization]
+        public async Task<IHttpActionResult> EditGlobalNotifications(int id, bool notifications)
 		{
 			var user = await _unitOfWork.Repository<User>().FindAsync(n => n.Id == id);
 			user.Notifications = notifications;
