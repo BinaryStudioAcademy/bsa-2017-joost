@@ -20,22 +20,22 @@ namespace Joost.Api.Controllers
 
         // GET api/files/
         [HttpGet]
-        [Route("")]
         [Route("{fileName}")]
-        public IHttpActionResult DownloadFile(string fileName)
+        public IHttpActionResult DownloadImage(string fileName)
         {
             string folderPath = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles/");
 
 			List<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
 
-			var filePath = Directory.EnumerateFiles(folderPath, fileName + ".*", SearchOption.AllDirectories).FirstOrDefault();
-            //.Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".gif")).FirstOrDefault();
+			var filePath = Directory.EnumerateFiles(folderPath, fileName + ".*", SearchOption.AllDirectories)
+				.Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".gif")).FirstOrDefault();
 
             try
             {
                 if (!String.IsNullOrWhiteSpace(filePath))
                 {
                     string fileType = filePath.Substring(filePath.LastIndexOf('.') + 1);
+					
                     string mediaType = String.Format("image/{0}", fileType);
 
                     return new FileResult(filePath, mediaType);
@@ -51,22 +51,14 @@ namespace Joost.Api.Controllers
             }
 
         }
-		public class MyFile
-		{
-			public string Name { get; set; }
-		}
 
 		[HttpPost]
 		[Route("download")]
-		public IHttpActionResult Download()
+		public IHttpActionResult DownloadFile()
 		{
 			var fileName = HttpContext.Current.Request.Form["fileName"];
 			string folderPath = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles/");
-			//List<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
-
-			//var filePath = Directory.EnumerateFiles(folderPath, file.Name, SearchOption.AllDirectories).FirstOrDefault();
-			//.Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".gif")).FirstOrDefault();
-
+	
 			var filePath = folderPath + fileName;
 
 			if (!File.Exists(filePath))
@@ -82,27 +74,6 @@ namespace Joost.Api.Controllers
 			};
 
 			return ResponseMessage(response);
-
-			//try
-			//{
-			//	if (!String.IsNullOrWhiteSpace(filePath))
-			//	{
-			//		string fileType = filePath.Substring(filePath.LastIndexOf('.') + 1);
-			//		//string mediaType = String.Format("application/{0}", fileType);
-			//		string mediaType = "application/octet-stream";
-
-			//		return new FileResult(filePath, mediaType);
-			//	}
-			//	else
-			//	{
-			//		return NotFound();
-			//	}
-			//}
-			//catch (Exception ex)
-			//{
-			//	return InternalServerError();
-			//}
-
 		}
 
 		// POST api/files/
