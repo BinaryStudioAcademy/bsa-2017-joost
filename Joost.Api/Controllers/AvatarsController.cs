@@ -59,6 +59,8 @@ namespace Joost.Api.Controllers
         }
 
         // POST api/avatars/5
+        [HttpPost, HttpPut]
+        [AccessTokenAuthorization]
         public async Task<IHttpActionResult> SetAvatar()
         {
             int id = GetCurrentUserId();
