@@ -8,6 +8,7 @@ import { Group } from "../../models/group";
 import { GroupService } from "../../services/group.service";
 import { UserContact } from "../../models/user-contact";
 import { MDL } from "../mdl-base.component";
+import { FileService } from "../../services/file.service";
 
 @Component({
     selector: 'app-group-edit',

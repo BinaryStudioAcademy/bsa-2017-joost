@@ -406,4 +406,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     getFullFileUrl(fileName: string): string{
         return this.fileService.getFullFileUrlWithOutEx(fileName);
     }
+
+    onDownloadFile(fileName : string){
+        this.fileService.download(fileName);
+    }
 }

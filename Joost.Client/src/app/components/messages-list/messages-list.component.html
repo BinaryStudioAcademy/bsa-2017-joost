@@ -31,7 +31,7 @@
                         <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
                         </div>
-                        <a *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" [attr.href]="getFullFileUrl(message.AttachedFile)" class="attached-file">
+                        <div *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" class="attached-file" (click)="onDownloadFile(message.AttachedFile)">
                          <div class="att-file-container" >  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
                             <i class="material-icons">insert_drive_file</i>
                             <div class="att-file-ex">
@@ -39,7 +39,7 @@
                             </div>
                           </div>  
                             
-                        </a>
+                        </div>
                     </div>
                   </div>
                 </div>
