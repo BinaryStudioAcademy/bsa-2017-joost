@@ -1,4 +1,5 @@
 ﻿<div *ngIf="isLoadFinished">
+  <div class="jg-card mdl-grid">
   <div class="jg-container mdl-card mdl-shadow--2dp">
 
       <div class="jg-header-container mdl-grid mdl-shadow--2dp">
@@ -61,54 +62,52 @@
         </div>
 
       <div class="jg-header-container mdl-grid">
-        <div class="mdl-cell mdl-cell--6-col">
-          <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-            <h5>First name:</h5>
-            <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.FirstName" id="userFirstName" />
-            <label class="mdl-textfield__label" for="userFirstName"></label>
-          </div>
-          <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-            <h5>City:</h5>
-            <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.City" id="userCity" />
-            <label class="mdl-textfield__label" for="userCity"></label>
-          </div>                
-          <div class="mdl-textfield mdl-js-textfield jg-half-width-container padding-right-20">
-            <h5>Birthday:</h5>
-            <my-date-picker [(ngModel)]="datePickerValue" [options]="datePickerOptions" ></my-date-picker> 
-          </div>
-        </div>
-          <div class="mdl-cell mdl-cell--6-col">
-            <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-              <h5>Last name:</h5>
-              <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.LastName" id="userLastName" />
-              <label class="mdl-textfield__label" for="userLastName"></label>
-            </div>
-            <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-              <h5>Country:</h5>
-              <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.Country" id="userCountry" />
-              <label class="mdl-textfield__label" for="userCountry"></label>
-            </div>
-            <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-              <h5>Gender:</h5>
-              <div class="jg-radiobutton-item">
-                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGenderMale">
-                  <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="0" [checked]="user.Gender==0">
-                  <span class="mdl-radio__label">Male</span>
-                </label>
-              </div>
-              <div class="jg-radiobutton-item">
-                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGendeFemale">
-                  <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="1" [checked]="user.Gender==1">
-                  <span class="mdl-radio__label">Female</span>
-                </label>
-              </div>
-            </div>
-        </div>
+         <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+           <h5>First name:</h5>
+           <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.FirstName" id="userFirstName" />
+           <label class="mdl-textfield__label" for="userFirstName"></label>
+         </div>
+         <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+             <h5>Last name:</h5>
+             <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.LastName" id="userLastName" />
+             <label class="mdl-textfield__label" for="userLastName"></label>
+         </div>
+         <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+           <h5>City:</h5>
+           <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.City" id="userCity" />
+           <label class="mdl-textfield__label" for="userCity"></label>
+         </div>      
+         <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+             <h5>Country:</h5>
+             <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.Country" id="userCountry" />
+             <label class="mdl-textfield__label" for="userCountry"></label>
+         </div>          
+         <div class="mdl-textfield mdl-js-textfield jg-half-width-container padding-right-20">
+           <h5>Birthday:</h5>
+           <div class="date-picker-style">
+           <my-date-picker [(ngModel)]="datePickerValue" [options]="datePickerOptions" ></my-date-picker> 
+           </div>
+         </div>
+         <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+           <h5>Gender:</h5>
+           <div class="jg-radiobutton-item">
+             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGenderMale">
+               <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="0" [checked]="user.Gender==0">
+               <span class="mdl-radio__label">Male</span>
+             </label>
+           </div>
+           <div class="jg-radiobutton-item">
+             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGendeFemale">
+               <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="1" [checked]="user.Gender==1">
+               <span class="mdl-radio__label">Female</span>
+             </label>
+           </div>
+         </div>
       </div>
       <div class ="jg-buttons-bottom-cantainer mdl-card__actions mdl-card--border">
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="SaveUser()"> Save</button>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="Cancel()">Cancel</button>  
       </div>
-
+    </div>
   </div>
 </div>

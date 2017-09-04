@@ -1,4 +1,5 @@
-﻿<div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="user">
+﻿<div class="content-holder">
+<div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="user">
     <div class="jg-header-container mdl-shadow--2dp">
         <img src="{{user.Avatar | avatarPipe}}" class="jc-user-avatar-container">
         <div class="ud-main-info-container">
@@ -45,4 +46,5 @@
         {{isFriend ? 'Delete' : 'Add'}}
       </button>
     </div>
+</div>
 </div>
