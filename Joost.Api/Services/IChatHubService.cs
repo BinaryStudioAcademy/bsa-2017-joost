@@ -7,5 +7,7 @@ namespace Joost.Api.Services
     {
         Task SendToUser(MessageDto message);
         Task SendToGroup(MessageDto message);
+		Task AddContact(int currentUserId, int contactUserId);
+		Task AddGroup(int currentUserId);
     }
 }

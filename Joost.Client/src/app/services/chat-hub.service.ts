@@ -2,6 +2,8 @@
 import { Observable } from "rxjs/Observable";
 import 'signalr';
 import { Message } from "../models/message";
+import { Group } from "../models/group";
+import { UserContact } from "../models/user-contact";
 declare var jquery: any;
 declare var $: any;
 
@@ -18,6 +20,8 @@ export class ChatHubService {
   //public onNewUserConnectedEvent: EventEmitter<void>;
   public addMessageEvent: EventEmitter<Message>;
   //public onUserDisconnectedEvent: EventEmitter<void>;
+  public onNewUserInContactsEvent: EventEmitter<UserContact>;
+  public onNewGroupCreatedEvent: EventEmitter<Group>;  
 
   constructor() {
     this.SignalrConnection = $.hubConnection(this.url, {
@@ -29,6 +33,8 @@ export class ChatHubService {
     this.registerEvents();
 
     this.addMessageEvent = new EventEmitter<Message>();
+    this.onNewUserInContactsEvent = new EventEmitter<UserContact>();
+    this.onNewGroupCreatedEvent = new EventEmitter<Group>();    
   }
 
   private async startConnection(): Promise<any> {
@@ -58,6 +64,18 @@ export class ChatHubService {
     });
 
     this.ChatProxy.on('onUserDisconnected', function (connectionId: string, userId: number) {
+    });
+
+    this.ChatProxy.on('onNewUserInContacts', function (user: UserContact) {
+      console.log("onNewUserInContacts");
+      console.log(user);
+      self.onNewUserInContactsEvent.emit(user);
+    });
+
+    this.ChatProxy.on('onNewGroupCreated', function (group: Group) {
+      console.log("onNewGroupCreated");      
+      console.log(group);      
+      self.onNewGroupCreatedEvent.emit(group);    
     });
   }
 

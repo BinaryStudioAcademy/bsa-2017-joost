@@ -7,14 +7,19 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Joost.Api.Filters;
+using Joost.Api.Services;
 
 namespace Joost.Api.Controllers
 {
     [AccessTokenAuthorization]
     public class GroupsController : BaseApiController
     {
-        public GroupsController(IUnitOfWork unitOfWork) : base(unitOfWork)
-        { }
+		private IChatHubService _chatHubService;
+
+        public GroupsController(IUnitOfWork unitOfWork, IChatHubService chatHubService) : base(unitOfWork)
+        {
+			_chatHubService = chatHubService;
+		}
 
         // GET: api/Groups/5
         [HttpGet]
@@ -118,7 +123,11 @@ namespace Joost.Api.Controllers
 
             _unitOfWork.Repository<Group>().Add(newGroup);
             await _unitOfWork.SaveAsync();
-            return Ok();
+
+			var currentUserId = GetCurrentUserId();
+			await _chatHubService.AddGroup(currentUserId);
+
+			return Ok();
         }
 
         // PUT: api/Groups/5
