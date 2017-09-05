@@ -6,6 +6,7 @@ import { ChatHubService } from "../../services/chat-hub.service";
 import { Subscription } from "rxjs/Rx";
 import { Message } from "../../models/message";
 import { MenuMessagesService } from "../../services/menu-messages.service";
+import { GroupService } from "../../services/group.service";
 
 @Component({
   selector: 'app-menu-messages',
@@ -18,24 +19,16 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private filteredDialogs: Dialog[];
   private senderSubscription: Subscription;
   private receiverSubscription: Subscription;
+  private addingGroupsSubscription: Subscription;
   private searchString: string;
 
-  constructor(private dialogService: DialogService, private router: Router, private chatHubService: ChatHubService, private menuMessagesService: MenuMessagesService) {
-      dialogService.getDialogs().subscribe(d => {
-          var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
-          this.dialogs = sortArray;
-          this.filteredDialogs = sortArray;
-        },
-        async err => {
-          await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
-            if (ok) {
-              dialogService.getDialogs().subscribe(d => {
-                this.dialogs = d;
-                this.filteredDialogs = d;
-              }); 
-            }
-        });
-    });
+  constructor(
+    private dialogService: DialogService, 
+    private router: Router,
+    private chatHubService: ChatHubService, 
+    private menuMessagesService: MenuMessagesService,
+    private groupServive: GroupService) {
+      this.updateDialogs();
   }
 
   ngOnInit() {
@@ -55,13 +48,37 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
             this.updateLastUserMessage(message);
           }
       });
+
+      this.addingGroupsSubscription = this.groupServive.addGroupEvent.subscribe(group => {
+        this.updateDialogs();
+      });
+
   }
 
   ngOnDestroy() {
       this.senderSubscription.unsubscribe();
       this.receiverSubscription.unsubscribe();
+      this.addingGroupsSubscription.unsubscribe();
   }
 
+  private updateDialogs() {
+    this.dialogService.getDialogs().subscribe(d => {
+      var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
+      this.dialogs = sortArray;
+      this.filteredDialogs = sortArray;
+    },
+    async err => {
+      await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
+        if (ok) {
+          this.dialogService.getDialogs().subscribe(d => {
+            this.dialogs = d;
+            this.filteredDialogs = d;
+          }); 
+        }
+      });
+    });
+  }
+  
   private updateLastUserMessage(message: Message) {
     let filteredDialogs = this.dialogs.filter(d => (d.Id == message.SenderId || d.Id == message.ReceiverId) && !d.IsGroup);
     if (filteredDialogs.length > 0) {

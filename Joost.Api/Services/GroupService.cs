@@ -76,10 +76,10 @@ namespace Joost.Api.Services
 				return null;
 		}
 
-		public async Task AddGroup(int userId, GroupDto group)
+		public async Task<GroupDto> AddGroup(int userId, GroupDto group)
 		{
 			if (group == null)
-				return;
+				return null; 
 			var newGroup = new Group()
 			{
 				Name = group.Name,
@@ -122,6 +122,7 @@ namespace Joost.Api.Services
 				}
 			}
 			await _unitOfWork.SaveAsync();
+			return GroupDto.FromModel(newGr);
 		}
 
 		public async Task<GroupDto> EditGroup(int userId, int groupId, GroupDto group)

@@ -118,7 +118,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private getGroupData() {
         console.log("getting group data");
         this.groupService.getGroup(this.receiverId).subscribe(group => {
-            debugger;
             this.dialogName = group.Name;
             this.dialogImage = group.Avatar;
             this.getGroupMembers();                      

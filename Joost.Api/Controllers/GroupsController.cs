@@ -62,7 +62,7 @@ namespace Joost.Api.Controllers
 		{
 			var currentUserId = GetCurrentUserId();
 
-			var members = _groupService.GetGroupMembers(currentUserId, id);
+			var members = await _groupService.GetGroupMembers(currentUserId, id);
 			if (members == null)
 				return NotFound();
 			else
@@ -75,8 +75,8 @@ namespace Joost.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-			await _groupService.AddGroup(GetCurrentUserId(), group);
-            return Ok();
+			var newGroup = await _groupService.AddGroup(GetCurrentUserId(), group);
+            return Ok(newGroup);
         }
 
         // PUT: api/Groups/5
@@ -86,7 +86,7 @@ namespace Joost.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-			var editGroup = _groupService.EditGroup(GetCurrentUserId(), id, group);
+			var editGroup = await _groupService.EditGroup(GetCurrentUserId(), id, group);
 			if (editGroup != null)
 				return Ok(editGroup);
 			else

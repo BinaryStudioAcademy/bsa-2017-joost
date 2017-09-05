@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute, Params } from "@angular/router";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 
 import { UserService } from "../../services/user.service";
 import { ContactService } from "../../services/contact.service";
@@ -30,6 +30,7 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private groupService: GroupService,
         private location: Location,
+        private router: Router,
         private contactService: ContactService,
         private avatarService: AvatarService,
         private fileService: FileService
@@ -136,12 +137,18 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
             this.groupService.addGroup(this.group).subscribe(response => {                
                 console.log("Inserted");
                 this.saved = true;
+                this.groupService.addGroupEvent.emit(response);
+                this.groupService.addGroupEvent.emit(response);
+                this.router.navigate(["/menu/messages", "group", response.Id]);
             },
             async err => {
                 await this.groupService.handleTokenErrorIfExist(err).then(ok => {
                     if (ok) { 
                         this.groupService.addGroup(this.group).subscribe(response => {                
                             console.log("Inserted");
+                            this.saved = true;
+                            this.groupService.addGroupEvent.emit(response);
+                            this.router.navigate(["/menu/messages", "group", response.Id]);
                         });
                     }
                 });

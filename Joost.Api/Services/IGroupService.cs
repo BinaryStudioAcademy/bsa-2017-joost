@@ -10,7 +10,7 @@ namespace Joost.Api.Services
 		Task<IEnumerable<GroupDto>> GetUserGroups(string name);
 		Task<GroupDto> GetUserGroupsById(int userId, int groupId);
 		Task<IEnumerable<UserDetailsDto>> GetGroupMembers(int userId, int groupId);
-		Task AddGroup(int userId, GroupDto group);
+		Task<GroupDto> AddGroup(int userId, GroupDto group);
 		Task<GroupDto> EditGroup(int userId, int groupId, GroupDto group);
 		Task<bool> DeleteGroup(int userId, int groupId);
 	}
