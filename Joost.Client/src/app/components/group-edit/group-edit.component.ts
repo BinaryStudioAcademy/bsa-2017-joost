@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Params } from "@angular/router";
 
@@ -17,7 +17,7 @@ import { AvatarService } from "../../services/avatar.service";
     styleUrls: ['./group-edit.component.scss']
 })
 // поки зроблю працююча лише для сценарію  сторення новрї групи
-export class GroupEditComponent extends MDL implements OnInit {
+export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
     group: Group;
     unselectedMembers: Array<UserContact> = [];
     selectedMembers: Array<UserContact> = [];
@@ -25,6 +25,7 @@ export class GroupEditComponent extends MDL implements OnInit {
     filterStr: string;
     editMode: boolean = false;
     imgSrc: string;
+    saved: boolean = false;
     constructor(
         private route: ActivatedRoute,
         private groupService: GroupService,
@@ -91,6 +92,13 @@ export class GroupEditComponent extends MDL implements OnInit {
         }            
     }
 
+    ngOnDestroy(): void {
+        if(!this.editMode && !this.saved && this.group.Avatar) {
+            console.log("ngOnDestroy");
+            this.fileService.deleteFile(this.group.Avatar)
+        }
+    }
+
     onSearch(substr: string): void{
         this.filterStr = substr.toLocaleLowerCase();
         this.filteredMembers = this.unselectedMembers.filter(member => member.Name.toLocaleLowerCase().includes(this.filterStr));
@@ -127,6 +135,7 @@ export class GroupEditComponent extends MDL implements OnInit {
             // route: /groups/new
             this.groupService.addGroup(this.group).subscribe(response => {                
                 console.log("Inserted");
+                this.saved = true;
             },
             async err => {
                 await this.groupService.handleTokenErrorIfExist(err).then(ok => {
@@ -169,6 +178,9 @@ export class GroupEditComponent extends MDL implements OnInit {
         }
         else {
             console.log("upload group avatar in newmode");
+            if(this.group.Avatar)
+                this.fileService.deleteFile(this.group.Avatar).subscribe();
+
             let filename = Date.now().toString() + "_" + target.files[0].name;
             this.fileService.UploadFile(target.files[0], filename).subscribe(
                 res => {

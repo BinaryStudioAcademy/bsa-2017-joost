@@ -97,6 +97,11 @@ export class FileService extends BaseApiService{
     }));
   }
 
+  deleteFile(fileName: string) {
+    console.log(this.getFileName(fileName));
+    let req = new HttpRequest("DELETE", this.generateUrl() + '/' +this.getFileName(fileName));
+    return this.http.sendRequest(req);
+  }
   // getFullFileUrl(fileName: string): string{
   //   return this.generateUrl() + '/' + fileName;
   // }
