@@ -9,8 +9,9 @@ namespace Joost.Api.Models
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+		public string Avatar { get; set; }
 
-        // the property need in order to fill Group.Members which User class (not UserDetailsDto!!!) in Post and/or Put methods 
-        public List<int> SelectedMembersId { get; set; }
+		// the property need in order to fill Group.Members which User class (not UserDetailsDto!!!) in Post and/or Put methods 
+		public List<int> SelectedMembersId { get; set; }
     }
 }

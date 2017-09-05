@@ -12,40 +12,19 @@ export class AvatarService extends BaseApiService{
       super(http);
       this.parUrl = "avatars";
   }
-    
-  // SetAvatar(img: File) {
-  //   let extThis = this; // "this" in SetAvatar scope
 
-  //   var formData: FormData = new FormData();
-  //   formData.append("image", img, img.name);
-  //   var xhr = new XMLHttpRequest();
-    
-  //   xhr.onreadystatechange = async function () {
-  //     if (xhr.readyState === 4) {
-  //       if (xhr.status === 426) { // expired token response
-  //         let refreshToken = localStorage.getItem('joostUserRefreshToken');
-  //         if (refreshToken !== null) {
-  //           await extThis.http.refreshTokens(refreshToken);
-  //           let newAccessToken = localStorage.getItem("joostUserAccessToken");
-  //           xhr.open("PUT", extThis.generateUrl(), true);
-  //           xhr.setRequestHeader("Authorization", newAccessToken)
-  //           xhr.send(formData);
-  //         }
-  //       } 
-  //     }
-  //   }
-    
-  //   let accessToken = localStorage.getItem("joostUserAccessToken");
-  //   xhr.open("PUT", this.generateUrl(), true);
-  //   xhr.setRequestHeader("Authorization", accessToken)
-  //   xhr.send(formData);
-  // }
+  SetGroupAvatar(img: File, id: number){
+    console.log("upload avatar - 1")
+    return this.SetAvatar(img, this.generateUrl() + '/groups', id);
+  }
 
+  SetUserAvatar(img: File) {
+    return this.SetAvatar(img, this.generateUrl(), -1);
+  }
 
-
-  SetAvatar(img: File) {
+  private SetAvatar(img: File, url: string, groupId: number){
     let extThis = this; // "this" in SetAvatar scope
-
+    
     return Observable.fromPromise(new Promise((resolve, reject) => {
     var formData: FormData = new FormData();
     formData.append("image", img, img.name);
@@ -60,8 +39,10 @@ export class AvatarService extends BaseApiService{
             if (refreshToken !== null) {
               await extThis.http.refreshTokens(refreshToken);
                 let newAccessToken = localStorage.getItem("joostUserAccessToken");
-                xhr.open("PUT", extThis.generateUrl(), true);
-                xhr.setRequestHeader("Authorization", newAccessToken)
+                xhr.open("PUT", url, true);
+                xhr.setRequestHeader("Authorization", newAccessToken);
+                if(groupId >= 0) // if group
+                  xhr.setRequestHeader("GroupId", groupId.toString());
                 xhr.send(formData);
             }
           } else {
@@ -69,12 +50,21 @@ export class AvatarService extends BaseApiService{
           }
         }
       }
-      
+      console.log("upload avatar - 2")
       let accessToken = localStorage.getItem("joostUserAccessToken");
-      xhr.open("PUT", this.generateUrl(), true);
+      xhr.open("PUT", url, true);
       xhr.setRequestHeader("Authorization", accessToken)
+      if(groupId >= 0) // if group
+        xhr.setRequestHeader("GroupId", groupId.toString());
       xhr.send(formData);
     }));
   }
 
+  getFullUrl(id: number, isGroup: boolean) {
+    let url = this.generateUrl() + '/';
+    if(isGroup)
+      url += 'groups/';
+    url += id.toString();
+    return url; 
+  }
 }

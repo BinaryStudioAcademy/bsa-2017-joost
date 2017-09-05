@@ -7,6 +7,8 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Joost.Api.Filters;
+using System.Web;
+using System.IO;
 
 namespace Joost.Api.Controllers
 {
@@ -65,6 +67,7 @@ namespace Joost.Api.Controllers
 						Name = group.Name,
 						Description = group.Description,
 						SelectedMembersId = selectedMembersId.ToList(),
+						Avatar = group.Avatar
 					};
 					return Ok(groupDto);
 				}
@@ -104,12 +107,13 @@ namespace Joost.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var newGroup = new Group()
-            {
-                Name = group.Name,
-                CreatedAt = DateTime.Now,
-                Description = group.Description,
-                GroupCreator = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId())
+			var newGroup = new Group()
+			{
+				Name = group.Name,
+				CreatedAt = DateTime.Now,
+				Description = group.Description,
+				GroupCreator = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId()),
+				Avatar = group.Avatar
             };
 
             foreach (var memberId in group.SelectedMembersId)
@@ -117,7 +121,34 @@ namespace Joost.Api.Controllers
 			newGroup.Members.Add(newGroup.GroupCreator);
 
             _unitOfWork.Repository<Group>().Add(newGroup);
-            await _unitOfWork.SaveAsync();
+			await _unitOfWork.SaveAsync();
+
+			var newGr = _unitOfWork.Repository<Group>().All().LastOrDefault();
+			if (newGr.Avatar != "")
+			{
+				string folderPath = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles/");
+
+				var filePath = Directory.EnumerateFiles(folderPath, newGr.Avatar + ".*", SearchOption.AllDirectories)
+				.Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".gif")).FirstOrDefault();
+
+				if (filePath != null)
+				{
+					string fileType = filePath.Substring(filePath.LastIndexOf('.') + 1);
+					string destPath = HttpContext.Current.Server.MapPath("~/App_Data/Avatars/") + newGr.Id +"_g_avatar." + fileType;
+					try
+					{
+						File.Delete(destPath);
+						File.Move(filePath, destPath);
+						newGr.Avatar = destPath.Substring(destPath.LastIndexOf('\\') + 1);
+					}
+					catch (Exception ex)
+					{
+						return InternalServerError();
+					}
+					_unitOfWork.Repository<Group>().Attach(newGr);
+				}
+			}
+			await _unitOfWork.SaveAsync();
             return Ok();
         }
 

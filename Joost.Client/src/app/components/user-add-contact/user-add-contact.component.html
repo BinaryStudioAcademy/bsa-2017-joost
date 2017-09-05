@@ -1,40 +1,57 @@
-<div class="loading-container" *ngIf="isError">
-  <div><i class="material-icons error-icon">error_outline</i></div>
-  <div>An error occured, please try again later</div>
-</div>
+﻿    <div class="jg-container mdl-card mdl-shadow--2dp">
 
-<div class="loading-container" *ngIf="isError===null && !isLoad">
-  <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active">
-  </div>
-  <div>Please wait, data is loading...</div>
-</div>
+        <div class="loading-container" *ngIf="isError">
+            <div><i class="material-icons error-icon">error_outline</i></div>
+            <div>An error occured, please try again later</div>
+        </div>
 
-<div *ngIf="isLoad">
-  <div class="user-details-header mdl-layout__header-row mdl-shadow--2dp">
-    <button class="mdl-button mdl-js-button" (click)="goBack()"><i class="material-icons">arrow_back</i>Back</button>
-  </div>
+        <div class="loading-container" *ngIf="isError===null && !isLoad">
+            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active">
+            </div>
+            <div>Please wait, data is loading...</div>
+        </div>
 
-  <div *ngIf="contact.State==0" class="data-container mdl-grid mdl-shadow--2dp mdl-layout__content">
-  	<div class="mdl-cell mdl-cell--12-col invite-text">
-  	User {{contact.Name}} <span *ngIf="contact.City!==undefined">({{contact.City}})</span> want to add you in friend list. <br> What are you think about this?
-  	</div>
-  	<div class="group-button mdl-cell mdl-cell--12-col">
-		<button class="mdl-button mdl-js-button mdl-button--primary" (click)="accept(contact.Id)">
-		  Accept
-		</button>
-		<button class="mdl-button mdl-js-button mdl-button--accent" (click)="decline(contact.Id)"> 
-		  Decline
-		</button>
-	</div>
-  </div>
-  <div *ngIf="contact.State==3" class="data-container mdl-grid mdl-grid--no-spacing mdl-shadow--2dp mdl-layout__content">
-    <div class="mdl-cell mdl-cell--12-col invite-text">
-    User {{contact.Name}} <span *ngIf="contact.City!=null">({{contact.City}})</span> did not want to add you to his contact list. <br> You can re-send a request to add to your contact list!
+        <div *ngIf="isLoad">
+            <!-- header -->
+            <div class="mdl-card__title" style="width: 100%; overflow: hidden; display: block!important">
+                <h2 class="mdl-card__title-text" style="display: block!important">
+                    <span style="padding: 8px 16px; float: left; width: auto; border: none; outline: none; display: block;">New invite to friends</span>
+                    <span style="float: right!important; font-weight: bold; font-size: 40px; cursor: pointer" (click)="goBack()">&times;</span>
+                </h2>
+            </div>
+
+            <!-- content -->
+            <div class="invite-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); margin-left: 200px">
+                <div *ngIf="contact.State==0">
+                    <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> wants to add you in friend list.</h3>
+                    <h3 style="text-align:center">What do you think about that?</h3>
+                </div>
+                <div *ngIf="contact.State==3">
+                    <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> did not want to add you to contact list.</h3>
+                    <h3 style="text-align:center">You can try send the request to add to your contact list again.</h3>
+                </div>
+            </div>
+
+            <!-- bottom buttons-->
+            <div style="border-top: 1px solid rgba(0,0,0,.1); position: absolute; bottom: 0; width:100%">
+                <div style="float:right; padding: 16px; ">
+                    <span *ngIf="contact.State==0">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
+                                (click)="accept(contact.Id)">
+                            Accept
+                        </button>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
+                                (click)="decline(contact.Id)">
+                            Decline
+                        </button>
+                    </span>
+                    <span *ngIf="contact.State==3">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
+                                (click)="retry(contact.Id)">
+                            Send
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="group-button mdl-cell mdl-cell--12-col">
-    <button class="mdl-button mdl-js-button mdl-button--primary" (click)="retry(contact.Id)">
-      Send
-    </button>
-  </div>
-  </div>
-</div>
