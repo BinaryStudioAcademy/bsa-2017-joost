@@ -55,7 +55,7 @@ export class NotificationService {
   }
 
   showNewMessage(notificationTitle:string, notificationMessage:string) {
-    this.playNotificationSound();    
+    this.playNotificationSound();
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/message.png\""+
@@ -63,7 +63,7 @@ export class NotificationService {
       "<span style=\"font-weight:bold; font-size:14pt; margin-left: 10px;\">"+notificationTitle+"</span>"+
     "</div>"+
     "<div>"+notificationMessage +"</div>";
-
+    console.log("sending toast");
     this.toastr.custom(htmlmessage, null,
                        {
                          enableHTML: true
@@ -79,12 +79,10 @@ export class NotificationService {
       "<span style=\"font-weight:bold; font-size:14pt; margin-left: 10px;\">"+notificationTitle+"</span>"+
     "</div>"+
     "<div>"+notificationMessage +"</div>";
-
+   console.log("sending toast");
     this.toastr.custom(htmlmessage, null,
                        {
                          enableHTML: true
                         });
   }
-
-  
-}
+} 

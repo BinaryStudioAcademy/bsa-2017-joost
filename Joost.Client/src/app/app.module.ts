@@ -41,8 +41,9 @@ import { DialogService } from "./services/dialog.service";
 import { MessageService } from "./services/message.service";
 import { ChatHubService } from "./services/chat-hub.service";
 
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
-import {CustomOption} from './notification-options/custom-option'
+import {CustomOption} from './notification-options/custom-option';
 
 import { AvatarService } from './services/avatar.service';
 import { AvatarPipe } from "./pipes/avatar.pipe";
@@ -86,6 +87,7 @@ import { NotificationService } from "./services/notification.service";
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     MyDatePickerModule,
