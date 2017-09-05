@@ -119,6 +119,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         console.log("getting group data");
         this.groupService.getGroup(this.receiverId).subscribe(group => {
             this.dialogName = group.Name;
+            this.dialogImage = group.Avatar;
             this.getGroupMembers();                      
             this.getGroupMessages();
         },
@@ -126,7 +127,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             await this.groupService.handleTokenErrorIfExist(err).then(ok => { 
                 if (ok) {
                     this.groupService.getGroup(this.receiverId).subscribe(group => {
-                        this.dialogName = group.Name;                      
+                        this.dialogName = group.Name;       
+                        this.dialogImage = group.Avatar;               
                         this.getGroupMessages();
                     });
                 }

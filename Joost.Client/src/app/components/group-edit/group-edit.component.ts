@@ -9,6 +9,7 @@ import { GroupService } from "../../services/group.service";
 import { UserContact } from "../../models/user-contact";
 import { MDL } from "../mdl-base.component";
 import { FileService } from "../../services/file.service";
+import { AvatarService } from "../../services/avatar.service";
 
 @Component({
     selector: 'app-group-edit',
@@ -23,12 +24,14 @@ export class GroupEditComponent extends MDL implements OnInit {
     filteredMembers: Array<UserContact> = [];
     filterStr: string;
     editMode: boolean = false;
-    
+    imgSrc: string;
     constructor(
         private route: ActivatedRoute,
         private groupService: GroupService,
         private location: Location,
-        private contactService: ContactService
+        private contactService: ContactService,
+        private avatarService: AvatarService,
+        private fileService: FileService
     ) {
             super();
     }
@@ -66,6 +69,7 @@ export class GroupEditComponent extends MDL implements OnInit {
         if (!this.editMode) {
             // route: /groups/new
             this.group = new Group();
+            this.imgSrc = "assets/img/Group-icon.png";
         } else {
             // route: /groups/edit/:id
             this.groupService.getGroup(this.group.Id)
@@ -78,6 +82,7 @@ export class GroupEditComponent extends MDL implements OnInit {
                         if (ok) {
                             this.groupService.getGroup(this.group.Id).subscribe(response => {                
                                 this.group = response;
+                                this.imgSrc = this.avatarService.getFullUrl(this.group.Id, true);
                                 this.initArrays();
                             });
                         }
@@ -146,6 +151,32 @@ export class GroupEditComponent extends MDL implements OnInit {
                     }
                 });
             });
+        }
+    }
+    
+    SendAvatar(e: Event) {
+        console.log("upload group avatar");
+        var target: HTMLInputElement = e.target as HTMLInputElement;
+        if(this.editMode) {
+            console.log("upload group avatar in editmode");
+            this.avatarService.SetGroupAvatar(target.files[0], this.group.Id).subscribe(
+                res => {
+                    this.group.Avatar = this.group.Id + "g_avatar." + this.fileService.getFileExtensions(target.files[0].name);
+                    this.imgSrc = this.avatarService.getFullUrl(this.group.Id, true) + '?random+\=' + Math.random();
+                }, 
+                error => console.log("Fail when setting new group avatar")
+            );
+        }
+        else {
+            console.log("upload group avatar in newmode");
+            let filename = Date.now().toString() + "_" + target.files[0].name;
+            this.fileService.UploadFile(target.files[0], filename).subscribe(
+                res => {
+                   this.group.Avatar = filename;
+                   this.imgSrc = this.fileService.getFullFileUrlWithOutEx(filename) + '?random+\=' + Math.random();
+                }, 
+                error => console.log("Fail when setting group avatar")
+            )
         }
     }
 

@@ -83,7 +83,7 @@ namespace Joost.Api.Services
                     Name = item.Name,
                     LastMessage = lastMessage == null ? "Group was created" : lastMessage.Text,
                     DateLastMessage = lastMessage == null ? item.CreatedAt : lastMessage.CreatedAt,
-                    Avatar = string.Empty,
+                    Avatar = item.Avatar,
                     IsGroup = true
                 });
             }
