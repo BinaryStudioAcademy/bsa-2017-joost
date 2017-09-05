@@ -63,8 +63,8 @@ export class UserEditingComponent extends MDL implements OnInit {
   }
 
   GetUser() {
-    this.accountService.getUser().subscribe( d => {
-      this.user = d;
+    this.accountService.getUser().subscribe(async d => {
+      this.user = await d;
       this.getUserBirthDate();
       this.isLoadFinished = true;
     },

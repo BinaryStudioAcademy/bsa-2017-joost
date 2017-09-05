@@ -5,13 +5,17 @@
         <div>
           <h2 class="mdl-card__title-text title-text">{{dialogName}}</h2>
           <div class="group-members accordion" *ngIf="isGroup && groupMembers!=null">
-           <input type="checkbox" checked="">
-            <h3><i></i>Members: {{groupMembers.length}}</h3>
-            <ul>
-              <li *ngFor="let member of groupMembers">
-                <span class="member__name">{{member.FirstName}} {{member.LastName}}</span>
-              </li>
-            </ul>
+            <h3 (click)="toggleListMember($event)"><i></i>Members: {{groupMembers.length}}</h3>
+            <div class="members-toggle">
+              <ul class="members-list">
+                <li *ngFor="let member of groupMembers">
+                  <span [outerHTML]="member.State | userState">
+                   
+                  </span>
+                  <span class="member__name">{{member.FirstName}} {{member.LastName}}</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
     </div>

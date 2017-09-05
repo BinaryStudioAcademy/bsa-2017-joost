@@ -14,7 +14,7 @@ import { UserDetail } from "../../models/user-detail";
 
 import { FileService } from '../../services/file.service';
 import { MenuMessagesService } from "../../services/menu-messages.service";
-
+import { UserStatePipe} from "../../pipes/user-state.pipe";
 import {ViewEncapsulation} from '@angular/core';
 declare var jquery: any;
 declare var $: any;
@@ -110,9 +110,10 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 }
             });
         }); 
+        
         this.messageEmoji = $("#messageText").emojioneArea({
           pickerPosition: "top",
-          filtersPosition: "bottom",
+          filtersPosition: "top",
           tones: false,
           autocomplete: true,
           inline: true,
@@ -120,14 +121,21 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
           hidePickerOnBlur: true,
           placeholder:"Message text..."
         }); 
-        let self = this;
-        this.messageEmoji[0].emojioneArea.on("keyup", function(btn, event) {
-            if (event.originalEvent.key=="Enter") {
-                self.send();
-            }
-      });
-    }
 
+        if (this.messageEmoji[0]!==undefined) {
+           let self = this;
+           this.messageEmoji[0].emojioneArea.on("keyup", function(btn, event) {
+               if (event.originalEvent.key=="Enter") {
+                   self.send();
+               }
+            });
+        }
+        
+    }
+    private toggleListMember(event){
+        $(".members-toggle").slideToggle(300);
+        $(".group-members h3").toggleClass("open");
+    }
     private GetReceiverData() {
         if (this.isGroup) {
             this.getGroupData();
@@ -229,11 +237,12 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     send(text?: string) {
         //use primary emoji
         // text = this.messageEmoji[0].emojioneArea.getText();
-
         //user image emoji
-        text = $(".emojionearea-editor").html();
-        this.messageEmoji[0].emojioneArea.setText("");
-        console.log(this.groupMembers);
+        if (this.messageEmoji[0]!==undefined) {
+            text = $(".emojionearea-editor").html();
+            this.messageEmoji[0].emojioneArea.setText("");
+        }
+        
         if ((text != null && text != "") || this.attachedImage != null) {
             let fileName =  "";
             if (this.attachedImage != null) {

@@ -55,6 +55,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { FileService } from './services/file.service';
 import { AttachedImagePipe } from "./pipes/attached-image.pipe";
 import { MenuMessagesService } from "./services/menu-messages.service";
+import { UserStatePipe } from './pipes/user-state.pipe';
 
 @NgModule({
   declarations: [
@@ -81,7 +82,8 @@ import { MenuMessagesService } from "./services/menu-messages.service";
     GenderPipe,
     NamePipe,
     SettingsComponent,
-    AttachedImagePipe
+    AttachedImagePipe,
+    UserStatePipe
   ],
   imports: [
     BrowserModule,

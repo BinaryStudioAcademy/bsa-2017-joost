@@ -1,114 +1,116 @@
-﻿<div *ngIf="isLoadFinished">
-  <div class="jg-container mdl-card mdl-shadow--2dp">
+﻿<div class="work-space-container">
+  <div *ngIf="isLoadFinished">
+    <div class="jg-container mdl-card mdl-shadow--2dp">
 
-      <div class="jg-header-container mdl-grid mdl-shadow--2dp">
-            <div class="avatar-upload-container">
-              <label for="file-upload" class="custom-file-upload">
-              <div class="wrapper-avatar">
-	              <div class="avatar-upload-overlay">
-	                <i class="material-icons">create</i>
-	              </div>
+        <div class="jg-header-container mdl-grid mdl-shadow--2dp">
+              <div class="avatar-upload-container">
+                <label for="file-upload" class="custom-file-upload">
+                <div class="wrapper-avatar">
+  	              <div class="avatar-upload-overlay">
+  	                <i class="material-icons">create</i>
+  	              </div>
+                </div>
+                <img src="{{user.Avatar | avatarPipe}}" class="avatar-upload-image"></label>
+                <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
+                
               </div>
-              <img src="{{user.Avatar | avatarPipe}}" class="avatar-upload-image"></label>
-              <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
-              
-            </div>
-            <div>
-              <h3>{{user | namePipe}}</h3>
-              <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input user-status-text" type="text" id="userStatus" value="{{user.Status}}" #userStatus (keyup)="onUserStatusKeyUp(userStatus.value)">
-                <label class="mdl-textfield__label" for="sample1">Describe your mood...</label>
+              <div>
+                <h3>{{user | namePipe}}</h3>
+                <div class="mdl-textfield mdl-js-textfield">
+                  <input class="mdl-textfield__input user-status-text" type="text" id="userStatus" value="{{user.Status}}" #userStatus (keyup)="onUserStatusKeyUp(userStatus.value)">
+                  <label class="mdl-textfield__label" for="sample1">Describe your mood...</label>
+                </div>
+                <div [innerHtml]="user.State | statePipe"></div>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                              
               </div>
-              <div [innerHtml]="user.State | statePipe"></div>
-              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                              
-            </div>
-      </div>
+        </div>
 
-       <div [hidden]="!passwordDiv">
-         <div class="jg-header-container mdl-grid">
-           <div class="mdl-cell mdl-cell--6-col">
-             <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-               <h5>Old password:</h5>
-               <input class="mdl-textfield__input" type="password"  [(ngModel)]="passwordOld" id="userOldPassword" />
-               <label class="mdl-textfield__label" for="userOldPassword"></label>
+         <div [hidden]="!passwordDiv">
+           <div class="jg-header-container mdl-grid">
+             <div class="mdl-cell mdl-cell--6-col">
+               <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                 <h5>Old password:</h5>
+                 <input class="mdl-textfield__input" type="password"  [(ngModel)]="passwordOld" id="userOldPassword" />
+                 <label class="mdl-textfield__label" for="userOldPassword"></label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                  <h5>New password:</h5>
+                  <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordFirst" id="userNewPassword" />
+                  <label class="mdl-textfield__label" for="userNewPassword"></label>
+                  <span class="mdl-textfield__error">This is incorrect one!</span>
+                </div>  
+                <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                  <h5>Confirm new password:</h5>
+                  <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordSecond" id="userNewPassword" />
+                  <label class="mdl-textfield__label" for="userNewPassword"></label>
+                  <span class="mdl-textfield__error">This is incorrect one!</span>
+                </div>  
               </div>
-              <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-                <h5>New password:</h5>
-                <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordFirst" id="userNewPassword" />
-                <label class="mdl-textfield__label" for="userNewPassword"></label>
-                <span class="mdl-textfield__error">This is incorrect one!</span>
-              </div>  
-              <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-                <h5>Confirm new password:</h5>
-                <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordSecond" id="userNewPassword" />
-                <label class="mdl-textfield__label" for="userNewPassword"></label>
-                <span class="mdl-textfield__error">This is incorrect one!</span>
-              </div>  
-            </div>
-            <div class="mdl-cell mdl-cell--6-col">
-              <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-                <div class="password-notification">
-                  <h5>Please remember!</h5>
-                  <p>Password lenght should be longer then five  characters and contain at least one letter and one number.</p>
+              <div class="mdl-cell mdl-cell--6-col">
+                <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                  <div class="password-notification">
+                    <h5>Please remember!</h5>
+                    <p>Password lenght should be longer then five  characters and contain at least one letter and one number.</p>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class ="jg-buttons-bottom-cantainer mdl-card__actions mdl-card--border">
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="ChangePassword()"> Change</button>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="CancelPassword()">Cancel</button>
+            </div>
           </div>
-          <div class ="jg-buttons-bottom-cantainer mdl-card__actions mdl-card--border">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="ChangePassword()"> Change</button>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="CancelPassword()">Cancel</button>
-          </div>
-        </div>
 
-      <div class="jg-header-container mdl-grid">
-        <div class="mdl-cell mdl-cell--6-col">
-          <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-            <h5>First name:</h5>
-            <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.FirstName" id="userFirstName" />
-            <label class="mdl-textfield__label" for="userFirstName"></label>
-          </div>
-          <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-            <h5>City:</h5>
-            <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.City" id="userCity" />
-            <label class="mdl-textfield__label" for="userCity"></label>
-          </div>                
-          <div class="mdl-textfield mdl-js-textfield jg-half-width-container padding-right-20">
-            <h5>Birthday:</h5>
-            <my-date-picker [(ngModel)]="datePickerValue" [options]="datePickerOptions" ></my-date-picker> 
-          </div>
-        </div>
+        <div class="jg-header-container mdl-grid">
           <div class="mdl-cell mdl-cell--6-col">
             <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-              <h5>Last name:</h5>
-              <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.LastName" id="userLastName" />
-              <label class="mdl-textfield__label" for="userLastName"></label>
+              <h5>First name:</h5>
+              <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.FirstName" id="userFirstName" />
+              <label class="mdl-textfield__label" for="userFirstName"></label>
             </div>
             <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-              <h5>Country:</h5>
-              <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.Country" id="userCountry" />
-              <label class="mdl-textfield__label" for="userCountry"></label>
+              <h5>City:</h5>
+              <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.City" id="userCity" />
+              <label class="mdl-textfield__label" for="userCity"></label>
+            </div>                
+            <div class="mdl-textfield mdl-js-textfield jg-half-width-container padding-right-20">
+              <h5>Birthday:</h5>
+              <my-date-picker [(ngModel)]="datePickerValue" [options]="datePickerOptions" ></my-date-picker> 
             </div>
-            <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-              <h5>Gender:</h5>
-              <div class="jg-radiobutton-item">
-                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGenderMale">
-                  <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="0" [checked]="user.Gender==0">
-                  <span class="mdl-radio__label">Male</span>
-                </label>
+          </div>
+            <div class="mdl-cell mdl-cell--6-col">
+              <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                <h5>Last name:</h5>
+                <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.LastName" id="userLastName" />
+                <label class="mdl-textfield__label" for="userLastName"></label>
               </div>
-              <div class="jg-radiobutton-item">
-                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGendeFemale">
-                  <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="1" [checked]="user.Gender==1">
-                  <span class="mdl-radio__label">Female</span>
-                </label>
+              <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                <h5>Country:</h5>
+                <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.Country" id="userCountry" />
+                <label class="mdl-textfield__label" for="userCountry"></label>
               </div>
-            </div>
+              <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                <h5>Gender:</h5>
+                <div class="jg-radiobutton-item">
+                  <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGenderMale">
+                    <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="0" [checked]="user.Gender==0">
+                    <span class="mdl-radio__label">Male</span>
+                  </label>
+                </div>
+                <div class="jg-radiobutton-item">
+                  <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGendeFemale">
+                    <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="1" [checked]="user.Gender==1">
+                    <span class="mdl-radio__label">Female</span>
+                  </label>
+                </div>
+              </div>
+          </div>
         </div>
-      </div>
-      <div class ="jg-buttons-bottom-cantainer mdl-card__actions mdl-card--border">
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="SaveUser()"> Save</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="Cancel()">Cancel</button>  
-      </div>
+        <div class ="jg-buttons-bottom-cantainer mdl-card__actions mdl-card--border">
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="SaveUser()"> Save</button>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="Cancel()">Cancel</button>  
+        </div>
 
+    </div>
   </div>
 </div>

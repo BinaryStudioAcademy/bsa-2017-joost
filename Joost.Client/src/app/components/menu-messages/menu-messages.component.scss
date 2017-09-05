@@ -48,7 +48,7 @@
 }
 
 //Accordion style
-.transition, ul li i:before, ul li i:after {
+.transition, ul li i.arrow:before, ul li i.arrow:after {
   transition: all 0.25s ease-in-out;
 }
 
@@ -93,23 +93,23 @@
 .accordion li:last-of-type {
   padding-bottom: 0;
 }
-.accordion li i {
+.accordion li i.arrow {
   position: absolute;
   transform: translate(-6px, 0);
   margin-top: 8px;
   right: 4px;
 }
-.accordion li i:before, .accordion li i:after {
+.accordion li i.arrow:before, .accordion li i.arrow:after {
   content: "";
   position: absolute;
   background-color: white;
   width: 3px;
   height: 9px;
 }
-.accordion li i:before {
+.accordion li i.arrow:before {
   transform: translate(-2px, 0) rotate(45deg);
 }
-.accordion  li i:after {
+.accordion  li i.arrow:after {
   transform: translate(2px, 0) rotate(-45deg);
 }
 .accordion li input[type=checkbox] {
@@ -135,10 +135,10 @@
 	display:none;
 	transform: translate(0, 50%);
 }
-.accordion  li input[type=checkbox]:checked ~ i:before {
+.accordion  li input[type=checkbox]:checked ~ i.arrow:before {
   transform: translate(2px, 0) rotate(45deg);
 }
-.accordion  li input[type=checkbox]:checked ~ i:after {
+.accordion  li input[type=checkbox]:checked ~ i.arrow:after {
   transform: translate(-2px, 0) rotate(-45deg);
 }
 
