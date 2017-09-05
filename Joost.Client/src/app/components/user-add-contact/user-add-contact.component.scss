@@ -1,26 +1,49 @@
-.invite-text{
-	font-size: 20px;
-	text-align: center;
-	padding:10px 20px;
+﻿.invite-text {
+    font-size: 20px;
+    text-align: center;
+    padding: 10px 20px;
 }
-.group-button{
-	text-align:center;
+
+.group-button {
+    text-align: center;
 }
-.test{
+
+.test {
     font-size: 100px;
 }
 
-.loading-container{
+.loading-container {
     width: 100%;
     height: calc(100% - 50px);
     display: flex;
-    justify-content:center;
+    justify-content: center;
     flex-direction: column;
     align-items: center;
-    color:#757575;
+    color: #757575;
 }
 
-.error-icon{
+.error-icon {
     font-size: 2em;
-    color:#ef5350;
+    color: #ef5350;
+}
+
+.jg-container {
+    width: calc(100% - 10px);
+    min-height: calc(100vh - 10px);
+    margin: 5px auto;
+}
+
+.jg-buttons-bottom-container {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.jg-button-bottom {
+    margin-left: 16px;
+}
+.content-holder {
+    height: 100%;
+    width: 100%;
+    margin-left: 400px;
 }
