@@ -42,7 +42,7 @@ import { MessageService } from "./services/message.service";
 import { ChatHubService } from "./services/chat-hub.service";
 
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
-// import {CustomOption} from './notification-options/custom-option'
+import {CustomOption} from './notification-options/custom-option'
 
 import { AvatarService } from './services/avatar.service';
 import { AvatarPipe } from "./pipes/avatar.pipe";
@@ -106,11 +106,11 @@ import { NotificationService } from "./services/notification.service";
     ContactService,
     FileService,
     MenuMessagesService,
-    NotificationService
-    // {
-    //   provide: ToastOptions,
-    //   useClass: CustomOption
-    // }
+    NotificationService,
+    {
+      provide: ToastOptions,
+      useClass: CustomOption
+    }
   ],
   bootstrap: [AppComponent]
 })
