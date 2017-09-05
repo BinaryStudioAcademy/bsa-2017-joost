@@ -262,8 +262,10 @@
     <Compile Include="Services\ChatHubService.cs" />
     <Compile Include="Services\DialogDataService.cs" />
     <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\IChatHubService.cs" />
     <Compile Include="Services\IDialogDataService.cs" />
+    <Compile Include="Services\IGroupService.cs" />
     <Compile Include="Services\IMessageService.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="Startup.cs" />
