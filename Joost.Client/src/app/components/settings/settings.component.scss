@@ -1,4 +1,6 @@
-﻿.settings-item {
+﻿@import '../../../vars.scss';
+
+.settings-item {
     margin-top: 2em;
 }
 
@@ -16,18 +18,18 @@
 .jg-full-width-container{
     width: 100%;
 }
-$margin-value: 15px;
+
 .jg-container{
-    margin: $margin-value;
-    width: calc(74% - 2 * #{$margin-value});
+    margin: $card-padding;
+    width: calc(74% - 2 * #{$card-padding});
     //min-height: calc(100vh - 10px);
    position: absolute;
-   margin-left: calc(26% + #{$margin-value});
+   margin-left: calc(26% + #{$card-padding});
 }
 @media (max-width: 1024px){
     .jg-container{
-        margin: $margin-value 26%;
-        right: calc(-13% + #{$margin-value});
+        margin: $card-padding 26%;
+        right: calc(-13% + #{$card-padding});
     }
 }
 .jg-header-container{
