@@ -30,7 +30,7 @@ export class AuthenticationService extends BaseApiService {
 
   login(email: string, password: string) {
     let obj = this.loginObservable(email, password);
-    obj.subscribe(
+    return obj.subscribe(
       data => {
         console.log(data);
         this.token = data.accessToken;
@@ -40,10 +40,10 @@ export class AuthenticationService extends BaseApiService {
       },
       err=> this.isError = true
     );
-    return obj;
   }
 
   private loginObservable(email: string, password: string) {
+    console.log("0) " + localStorage.getItem("joostUserAccessToken"));        
     let req = new HttpRequest("POST", this.generateUrl() + "/auth", {"Email": email, "Password" : password});
     return this.http.sendRequest<Tokens>(req);
     //return this.http.post<Tokens>(this.generateUrl() + "/auth", {"Email": email, "Password" : password});

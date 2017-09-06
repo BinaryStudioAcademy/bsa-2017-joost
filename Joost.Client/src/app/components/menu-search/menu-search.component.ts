@@ -108,7 +108,63 @@ export class MenuSearchComponent implements OnInit{
 					    });
 				    }
                 });
-            });
+			});
+			
+			if(!this.ContainsCyrillicChar(this.searchString)) { // input in EN
+				this.accountService // check in UA layout
+				.searchResult(this.ChangeLayout(this.searchString,this.ENtoUAReplacePattern))
+				.subscribe(data =>{
+					this.result = this.deleteDuplicatedResults(this.result.concat(data));
+					this.isLoad = true;					
+				},
+				async err => {
+					await this.accountService.handleTokenErrorIfExist(err).then(ok => { 
+						if (ok) {
+							this.accountService
+							.searchResult(this.ChangeLayout(this.searchString,this.ENtoUAReplacePattern)).subscribe(data => {
+								this.result = this.deleteDuplicatedResults(this.result.concat(data));
+								this.isLoad = true;
+							});
+						}
+					});
+				});
+				this.accountService // check in RU layout
+				.searchResult(this.ChangeLayout(this.searchString,this.ENtoRUReplacePattern))
+				.subscribe(data =>{
+					this.result = this.deleteDuplicatedResults(this.result.concat(data));	
+					this.isLoad = true;
+				},
+				async err => {
+					await this.accountService.handleTokenErrorIfExist(err).then(ok => { 
+						if (ok) {
+							this.accountService
+							.searchResult(this.ChangeLayout(this.searchString,this.ENtoRUReplacePattern)).subscribe(data => {                
+								this.result = this.deleteDuplicatedResults(this.result.concat(data));
+								this.isLoad = true;								
+							});
+						}
+					});
+				});
+
+			} else { // input in UA or RU
+				this.accountService // check in EN layout
+				.searchResult(this.ChangeLayout(this.searchString,this.UAorRUtoENReplacePattern))
+				.subscribe(data =>{
+					this.result = this.deleteDuplicatedResults(this.result.concat(data));
+					this.isLoad = true;													
+				},
+				async err => {
+					await this.accountService.handleTokenErrorIfExist(err).then(ok => { 
+						if (ok) {
+							this.accountService
+							.searchResult(this.ChangeLayout(this.searchString,this.UAorRUtoENReplacePattern)).subscribe(data => {                
+								this.result = this.deleteDuplicatedResults(this.result.concat(data));
+								this.isLoad = true;		
+							});
+						}
+					});
+				});			
+			}
 		}
 		this.result = null;
 		
@@ -157,4 +213,54 @@ export class MenuSearchComponent implements OnInit{
 		    }
 		}
 	}
+
+	ContainsCyrillicChar(str) {
+		return /[\u0400-\u04FF]/.test(str);
+	}
+
+	ChangeLayout(str: string, replacePattern: any): string {
+		let replaceTo: string;
+				for(let i=0; i < str.length; i++){
+					if( replacePattern[ str[i].toLowerCase() ] != undefined){
+						if(str[i] == str[i].toLowerCase()){
+							replaceTo = replacePattern[ str[i].toLowerCase() ];   
+						} else if(str[i] == str[i].toUpperCase()){
+							replaceTo = replacePattern[ str[i].toLowerCase() ].toUpperCase();
+						}
+						str = str.replace(str[i], replaceTo);
+					}
+				}
+			return str;
+	}
+
+	deleteDuplicatedResults(array) {
+		let a = array.concat();
+		for(let i=0; i<a.length; ++i) {
+			for(let j=i+1; j<a.length; ++j) {
+				if(a[i].Id === a[j].Id)
+					a.splice(j--, 1);
+			}
+		}
+		return a;
+	}
+
+	private UAorRUtoENReplacePattern = {
+		"й":"q", "ц":"w", "у":"e", "к":"r", "е":"t", "н":"y", "г":"u", "ш":"i", "щ":"o", "з":"p", "х":"[", "ъ":"]", "ї":"]",
+		"ф":"a", "ы":"s", "і":"s", "в":"d", "а":"f", "п":"g", "р":"h", "о":"j", "л":"k", "д":"l", "ж":";", "э":"'", "є":"'",
+		"я":"z", "ч":"x", "с":"c", "м":"v", "и":"b", "т":"n", "ь":"m", "б":",", "ю":".", ".":"/",
+		" ":" "
+	}; 
+	private ENtoUAReplacePattern = {
+		"q":"й", "w":"ц"  , "e":"у" , "r":"к" , "t":"е", "y":"н", "u":"г", "i":"ш", "o":"щ", "p":"з" , "[":"х" , "]":"ї",
+		"a":"ф", "s":"і", "d":"в" , "f":"а"  , "g":"п" , "h":"р" , "j":"о", "k":"л", "l":"д", ";":"ж" , "'":"є",
+		"z":"я", "x":"ч", "c":"с", "v":"м", "b":"и", "n":"т", "m":"ь", ",":"б", ".":"ю", "/":".",
+		" ":" "
+	};   
+	private ENtoRUReplacePattern = {
+		"q":"й", "w":"ц", "e":"у", "r":"к", "t":"е", "y":"н", "u":"г", "i":"ш", "o":"щ", "p":"з", "[":"х", "]":"ъ",
+		"a":"ф", "s":"ы", "d":"в", "f":"а", "g":"п", "h":"р", "j":"о", "k":"л", "l":"д", ";":"ж", "'":"э",
+		"z":"я", "x":"ч", "c":"с", "v":"м", "b":"и", "n":"т", "m":"ь", ",":"б", ".":"ю", "/":".",
+		" ":" "
+	};
+	
 }

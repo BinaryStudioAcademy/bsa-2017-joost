@@ -6,12 +6,14 @@ import { ChatHubService } from "../../services/chat-hub.service";
 import { Subscription } from "rxjs/Rx";
 import { Message } from "../../models/message";
 import { MenuMessagesService } from "../../services/menu-messages.service";
+import {ViewEncapsulation} from '@angular/core';
 import { GroupService } from "../../services/group.service";
 
 @Component({
   selector: 'app-menu-messages',
   templateUrl: './menu-messages.component.html',
-  styleUrls: ['./menu-messages.component.scss']
+  styleUrls: ['./menu-messages.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class MenuMessagesComponent implements OnInit, OnDestroy {
 
@@ -21,6 +23,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private receiverSubscription: Subscription;
   private addingGroupsSubscription: Subscription;
   private searchString: string;
+  private newGroupSubscription: Subscription;
 
   constructor(
     private dialogService: DialogService, 
@@ -53,6 +56,9 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
         this.updateDialogs();
       });
 
+      this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => {
+        this.dialogs.push(groupDialog);
+      });
   }
 
   ngOnDestroy() {

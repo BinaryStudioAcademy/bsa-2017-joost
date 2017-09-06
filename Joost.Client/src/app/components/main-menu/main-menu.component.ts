@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewContainerRef } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AccountService } from "../../services/account.service";
@@ -8,16 +8,22 @@ import { UserProfile } from "../../models/user-profile";
 import { ChatHubService } from "../../services/chat-hub.service";
 import { Message } from "../../models/message";
 import { NotificationService } from "../../services/notification.service";
+import { Subscription } from "rxjs/Rx";
+import { Dialog } from "../../models/dialog";
+import { UserContact } from "../../models/user-contact";
 
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss']
 })
-export class MainMenuComponent extends MDL implements OnInit {
+export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
 
   private editMode: boolean = false;
   private previousStatus: string;
+  private messageNotifSubscription: Subscription;
+  private contactNotifSubscription: Subscription;
+  private groupNotifSubscription: Subscription;  
 
   private curUser: UserProfile; 
   constructor(
@@ -45,38 +51,71 @@ export class MainMenuComponent extends MDL implements OnInit {
   }
 
   ngOnInit() {
-    this.accountService.getUser().subscribe(data => {
+    this.accountService.getUser().subscribe(async data => {
       this.curUser = data;
-      this.chatHubService.connect(data.Id);
-      this.chatHubService.addMessageEvent.subscribe((message: Message) => {
-        this.showNotifications(message);
-      });
+      await this.chatHubService.connect(data.Id);
+      this.runNotifications();
     },
     async error => {
       await this.accountService.handleTokenErrorIfExist(error).then( ok => {
         if(ok) {
-          this.accountService.getUser().subscribe(data => {
+          this.accountService.getUser().subscribe(async data => {
             this.curUser = data;
-            this.chatHubService.connect(data.Id);   
-            this.chatHubService.addMessageEvent.subscribe(message => {
-              this.showNotifications(message);             
-            });   
+            await this.chatHubService.connect(data.Id);
+            this.runNotifications();
           });
         }
       })
     });
   }
 
+  ngOnDestroy() {
+    this.stopRuningNotifications();
+  }
+
   onCreateGroup(){
     this.router.navigate(["groups/new"], { relativeTo: this.route });
   }
 
-  private showNotifications(message: Message) {
+  private runNotifications() {
+    this.messageNotifSubscription = this.chatHubService.addMessageEvent.subscribe((message: Message) => {
+      this.showMessageNotification(message);
+    });
+    this.contactNotifSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((user: UserContact) => {
+      this.notificationService.showAddUser(user.Name);
+    });
+    this.groupNotifSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => { 
+      this.notificationService.showAddChat(groupDialog.Name, "");      
+    });
+  }
+
+  private stopRuningNotifications() {
+    this.messageNotifSubscription.unsubscribe();
+    this.contactNotifSubscription.unsubscribe();
+    this.groupNotifSubscription.unsubscribe();
+  }
+
+  private showMessageNotification(message: Message) {
     if (message.IsGroup) {
-      this.notificationService.showNewMessageInChat("Title", message.Text);
+      if (message.SenderId != this.curUser.Id && !this.isOnGroupMessages(message.ReceiverId))
+        this.notificationService.showNewMessageInChat(message.Title, message.Text);
     }
     else {
-      this.notificationService.showNewMessage("Title", message.Text);
+      if (!this.isOnUserMessages(message.SenderId))
+      {
+        this.notificationService.showNewMessage(message.Title, message.Text);
+      }
     }
   }
+
+  private isOnUserMessages(dialogId: number) {
+    console.log("menu/messages/user/" + dialogId);
+    return window.location.pathname.search("menu/messages/user/" + dialogId) != -1;
+  }
+
+  private isOnGroupMessages(dialogId: number) {
+    console.log("menu/messages/group/" + dialogId);    
+    return window.location.pathname.search("menu/messages/group/" + dialogId) != -1;
+  }
+
 }

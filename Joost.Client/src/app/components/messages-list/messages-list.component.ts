@@ -14,15 +14,21 @@ import { UserDetail } from "../../models/user-detail";
 
 import { FileService } from '../../services/file.service';
 import { MenuMessagesService } from "../../services/menu-messages.service";
+import { UserStatePipe} from "../../pipes/user-state.pipe";
+import {ViewEncapsulation} from '@angular/core';
+declare var jquery: any;
+declare var $: any;
 
 @Component({
     selector: "messages-list",
     templateUrl: "./messages-list.component.html",
-    styleUrls: ["./messages-list.component.scss"] 
+    styleUrls: ["./messages-list.component.scss"],
+    encapsulation: ViewEncapsulation.None,
 })
 export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
-    private subscription: Subscription;;
+    private subscription: Subscription;
+    private messageEmoji:any;
     private currentUser: UserProfile;
     private receiverId: number;
     private isGroup: boolean;
@@ -103,9 +109,33 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                     });
                 }
             });
-        });    
-    }
+        }); 
+        
+        this.messageEmoji = $("#messageText").emojioneArea({
+          pickerPosition: "top",
+          filtersPosition: "top",
+          tones: false,
+          autocomplete: true,
+          inline: true,
+          autoHideFilters: true,
+          hidePickerOnBlur: true,
+          placeholder:"Message text..."
+        }); 
 
+        if (this.messageEmoji[0]!==undefined) {
+           let self = this;
+           this.messageEmoji[0].emojioneArea.on("keyup", function(btn, event) {
+               if (event.originalEvent.key=="Enter") {
+                   self.send();
+               }
+            });
+        }
+        
+    }
+    private toggleListMember(event){
+        $(".members-toggle").slideToggle(300);
+        $(".group-members h3").toggleClass("open");
+    }
     private GetReceiverData() {
         if (this.isGroup) {
             this.getGroupData();
@@ -116,7 +146,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private getGroupData() {
-        console.log("getting group data");
         this.groupService.getGroup(this.receiverId).subscribe(group => {
             this.dialogName = group.Name;
             this.dialogImage = group.Avatar;
@@ -207,7 +236,15 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.subscription.unsubscribe();
     }
 
-    send(text: string) {
+    send(text?: string) {
+        //use primary emoji
+        // text = this.messageEmoji[0].emojioneArea.getText();
+        //user image emoji
+        if (this.messageEmoji[0]!==undefined) {
+            text = $(".emojionearea-editor").html();
+            this.messageEmoji[0].emojioneArea.setText("");
+        }
+        
         if ((text != null && text != "") || this.attachedImage != null) {
             let fileName =  "";
             if (this.attachedImage != null) {

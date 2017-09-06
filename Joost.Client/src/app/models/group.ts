@@ -1,6 +1,4 @@
-﻿import { UserContact } from "./user-contact";
-
-export class Group {
+﻿export class Group {
     Id: number = 0;
     Name: string = "";
     Description: string = "";
