@@ -17,6 +17,8 @@ import { Subscription } from "rxjs/Rx";
 export class MenuUsersComponent implements OnInit, OnDestroy {
 
 	private result:UserContact[];
+	private searchContact:UserContact[];
+	private searchString:string;
 	private newContactSubscription: Subscription;
 	constructor(
 		private router: Router,
@@ -25,19 +27,25 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 		) { }
 
 	ngOnInit() {
-		this.contactService.getAllContacts().subscribe(data=> this.result = data,
+		this.contactService.getAllContacts().subscribe(
+			data=> {
+				this.result = data;
+				this.searchContact = this.result;
+			},
 			async err => {
 				await this.contactService.handleTokenErrorIfExist(err).then(ok => {
 					if (ok) { 
 					    this.contactService.getAllContacts().subscribe(data => {
-						    this.result = data
+						    this.result = data;
+						    this.searchContact = this.result;
 					    });
 				    }
 				});
 			}
 		);
-
-		this.contactService.changeContact.subscribe(user=>{
+		
+		this.contactService.changeContact.subscribe(
+		user => {
 			if (user) {
 				let contact = this.result.filter(t=>t.Id==user.Id)[0];
 				if (contact!==undefined) {
@@ -86,7 +94,11 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 	ngOnDestroy() {
 		this.newContactSubscription.unsubscribe();
 	}
-
+	search(){
+		if (this.searchString!=="") {
+			this.searchContact = this.result.filter(t=>t.Name.toLowerCase().includes(this.searchString.toLowerCase()));
+		}
+	}
 	goToConfirm(id:number){
 		if (this.isNewContact(id) || this.isDeclineContact(id)) {
 			this.contactService.changeContactIdNotify(id);

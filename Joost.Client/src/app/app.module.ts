@@ -56,6 +56,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { FileService } from './services/file.service';
 import { AttachedImagePipe } from "./pipes/attached-image.pipe";
 import { MenuMessagesService } from "./services/menu-messages.service";
+import { UserStatePipe } from './pipes/user-state.pipe';
 import { NotificationService } from "./services/notification.service";
 
 @NgModule({
@@ -83,7 +84,8 @@ import { NotificationService } from "./services/notification.service";
     GenderPipe,
     NamePipe,
     SettingsComponent,
-    AttachedImagePipe
+    AttachedImagePipe,
+    UserStatePipe
   ],
   imports: [
     BrowserModule,

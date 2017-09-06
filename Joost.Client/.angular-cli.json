@@ -22,11 +22,13 @@
         "styles.scss",
         "../node_modules/material-design-lite/material.min.css",
         "../node_modules/material-design-icons/iconfont/material-icons.css",
+        "../node_modules/emojionearea/dist/emojionearea.min.css"
         "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
         "../node_modules/material-design-lite/material.min.js",
+        "../node_modules/emojionearea/dist/emojionearea.min.js"
         "../node_modules/ng2-toastr/bundles/ng2-toastr.min.js"
       ],
       "environmentSource": "environments/environment.ts",

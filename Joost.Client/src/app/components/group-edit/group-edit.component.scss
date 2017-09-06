@@ -1,5 +1,7 @@
 @import '../../../vars.scss';
-
+.group-edit .mdl-list__item-primary-content{
+    color:rgba(0,0,0,.87);
+}
 .jc-group-edit-title-container{
     display: flex;
     padding-top: 0;
@@ -25,7 +27,6 @@
     flex: 0.9;
     li:hover{
         background-color: #F5F5F5;
-        margin-left: 1px;
     }
 }
 

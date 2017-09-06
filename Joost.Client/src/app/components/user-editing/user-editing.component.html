@@ -1,66 +1,64 @@
-﻿<div *ngIf="isLoadFinished">
+<div *ngIf="isLoadFinished">
   <div class="jg-card mdl-grid">
   <div class="jg-container mdl-card mdl-shadow--2dp">
+        <div class="jg-header-container mdl-grid mdl-shadow--2dp">
+              <div class="avatar-upload-container">
+                <label for="file-upload" class="custom-file-upload">
+                <div class="wrapper-avatar">
+  	              <div class="avatar-upload-overlay">
+  	                <i class="material-icons">create</i>
+  	              </div>
+                </div>
+                <img src="{{user.Avatar | avatarPipe}}" class="avatar-upload-image"></label>
+                <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
+                
+              </div>
+              <div>
+                <h3>{{user | namePipe}}</h3>
+                <div class="mdl-textfield mdl-js-textfield">
+                  <input class="mdl-textfield__input user-status-text" type="text" id="userStatus" value="{{user.Status}}" #userStatus (keyup)="onUserStatusKeyUp(userStatus.value)">
+                  <label class="mdl-textfield__label" for="sample1">Describe your mood...</label>
+                </div>
+                <div [innerHtml]="user.State | statePipe"></div>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                              
+              </div>
+        </div>
 
-      <div class="jg-header-container mdl-grid mdl-shadow--2dp">
-            <div class="avatar-upload-container">
-              <label for="file-upload" class="custom-file-upload">
-              <div class="wrapper-avatar">
-	              <div class="avatar-upload-overlay">
-	                <i class="material-icons">create</i>
-	              </div>
+         <div [hidden]="!passwordDiv">
+           <div class="jg-header-container mdl-grid">
+             <div class="mdl-cell mdl-cell--6-col">
+               <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                 <h5>Old password:</h5>
+                 <input class="mdl-textfield__input" type="password"  [(ngModel)]="passwordOld" id="userOldPassword" />
+                 <label class="mdl-textfield__label" for="userOldPassword"></label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                  <h5>New password:</h5>
+                  <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordFirst" id="userNewPassword" />
+                  <label class="mdl-textfield__label" for="userNewPassword"></label>
+                  <span class="mdl-textfield__error">This is incorrect one!</span>
+                </div>  
+                <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                  <h5>Confirm new password:</h5>
+                  <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordSecond" id="userNewPassword" />
+                  <label class="mdl-textfield__label" for="userNewPassword"></label>
+                  <span class="mdl-textfield__error">This is incorrect one!</span>
+                </div>  
               </div>
-              <img src="{{user.Avatar | avatarPipe}}" class="avatar-upload-image"></label>
-              <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
-              
-            </div>
-            <div>
-              <h3>{{user | namePipe}}</h3>
-              <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input user-status-text" type="text" id="userStatus" value="{{user.Status}}" #userStatus (keyup)="onUserStatusKeyUp(userStatus.value)">
-                <label class="mdl-textfield__label" for="sample1">Describe your mood...</label>
-              </div>
-              <div [innerHtml]="user.State | statePipe"></div>
-              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                              
-            </div>
-      </div>
-
-       <div [hidden]="!passwordDiv">
-         <div class="jg-header-container mdl-grid">
-           <div class="mdl-cell mdl-cell--6-col">
-             <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-               <h5>Old password:</h5>
-               <input class="mdl-textfield__input" type="password"  [(ngModel)]="passwordOld" id="userOldPassword" />
-               <label class="mdl-textfield__label" for="userOldPassword"></label>
-              </div>
-              <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-                <h5>New password:</h5>
-                <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordFirst" id="userNewPassword" />
-                <label class="mdl-textfield__label" for="userNewPassword"></label>
-                <span class="mdl-textfield__error">This is incorrect one!</span>
-              </div>  
-              <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-                <h5>Confirm new password:</h5>
-                <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordSecond" id="userNewPassword" />
-                <label class="mdl-textfield__label" for="userNewPassword"></label>
-                <span class="mdl-textfield__error">This is incorrect one!</span>
-              </div>  
-            </div>
-            <div class="mdl-cell mdl-cell--6-col">
-              <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
-                <div class="password-notification">
-                  <h5>Please remember!</h5>
-                  <p>Password lenght should be longer then five  characters and contain at least one letter and one number.</p>
+              <div class="mdl-cell mdl-cell--6-col">
+                <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
+                  <div class="password-notification">
+                    <h5>Please remember!</h5>
+                    <p>Password lenght should be longer then five  characters and contain at least one letter and one number.</p>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class ="jg-buttons-bottom-cantainer mdl-card__actions mdl-card--border">
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="ChangePassword()"> Change</button>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="CancelPassword()">Cancel</button>
+            </div>
           </div>
-          <div class ="jg-buttons-bottom-cantainer mdl-card__actions mdl-card--border">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="ChangePassword()"> Change</button>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="CancelPassword()">Cancel</button>
-          </div>
-        </div>
-
       <div class="jg-header-container mdl-grid">
          <div class="mdl-textfield mdl-js-textfield jg-full-width-container padding-right-20">
            <h5>First name:</h5>
@@ -110,4 +108,3 @@
       </div>
     </div>
   </div>
-</div>
