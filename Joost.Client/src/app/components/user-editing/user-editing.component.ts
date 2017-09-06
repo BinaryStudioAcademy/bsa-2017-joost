@@ -63,6 +63,7 @@ export class UserEditingComponent extends MDL implements OnInit {
   }
 
   GetUser() {
+    console.log("2) " + localStorage.getItem("joostUserAccessToken"));    
     this.accountService.getUser().subscribe(async d => {
       this.user = await d;
       this.getUserBirthDate();

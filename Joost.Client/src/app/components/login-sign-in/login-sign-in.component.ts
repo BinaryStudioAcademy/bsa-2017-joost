@@ -32,16 +32,17 @@ export class LoginSignInComponent implements OnInit {
     //   this.isError = "Password length shold be at least 6 symbols!";
     //   return;
     // }
-    this.loadEvent.emit(false);
-      this.authService.login(this.email, this.password).subscribe(
+    //this.loadEvent.emit(false);
+      this.authService.login(this.email, this.password).add(
           data => {
+          console.log("1) " + localStorage.getItem("joostUserAccessToken"));
           this.router.navigate(['menu/user-editing']/*, {skipLocationChange: true}*/);
           this.loadEvent.emit(true);
-        },
-        error =>{
+        });
+        /*error =>{
            console.log(error);
            this.isError = "User with this login and password not found!";
            this.loadEvent.emit(true);
-         })
+         })*/
       };
   }
