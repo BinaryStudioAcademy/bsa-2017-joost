@@ -412,4 +412,12 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     onDownloadFile(fileName : string){
         this.fileService.download(fileName);
     }
+
+    onNavigateTo():void {
+        console.log("onNavigateTo");
+        if(this.isGroup)
+            this.router.navigate(["menu/groups/details", this.receiverId]);
+        else
+            this.router.navigate(["menu/user-details", this.receiverId]);  
+    }
 }

@@ -40,11 +40,12 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
     
     ngOnInit(): void {
         // get group id (if it exist)
+        let id: number;
         this.route.params
             .subscribe(
             (params: Params) => {
                 if (params['id']) {                
-                    this.group.Id = +params['id'];
+                    id = +params['id'];
                     this.editMode = true;
                 }
             });
@@ -74,7 +75,7 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
             this.imgSrc = "assets/img/Group-icon.png";
         } else {
             // route: /groups/edit/:id
-            this.groupService.getGroup(this.group.Id)
+            this.groupService.getGroup(id)
                 .subscribe(response => {
                     this.group = response;
                     this.initArrays();
@@ -82,7 +83,7 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
                 async err => {
                     await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
                         if (ok) {
-                            this.groupService.getGroup(this.group.Id).subscribe(response => {                
+                            this.groupService.getGroup(id).subscribe(response => {                
                                 this.group = response;
                                 this.imgSrc = this.avatarService.getFullUrl(this.group.Id, true);
                                 this.initArrays();

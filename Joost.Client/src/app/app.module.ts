@@ -30,21 +30,21 @@ import { ConfirmRegistrationComponent } from './components/confirm-registration/
 
 import { StatePipe } from "./pipes/state.pipe";
 
-import { LoginService } from "./services/login.service";
 import { GroupEditComponent } from "./components/group-edit/group-edit.component";
-import { GroupService } from "./services/group.service";
+import { GroupDetailsComponent } from './components/group-details/group-details.component';
 import { UserEditingComponent } from './components/user-editing/user-editing.component';
-
-import { DialogsListComponent } from "./components/dialogs-list/dialogs-list.component";
 import { MessagesListComponent } from "./components/messages-list/messages-list.component";
-import { DialogService } from "./services/dialog.service";
-import { MessageService } from "./services/message.service";
-import { ChatHubService } from "./services/chat-hub.service";
+import { DialogsListComponent } from "./components/dialogs-list/dialogs-list.component";
 
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 import {CustomOption} from './notification-options/custom-option';
 
+import { MessageService } from "./services/message.service";
+import { DialogService } from "./services/dialog.service";
+import { ChatHubService } from "./services/chat-hub.service";
+import { GroupService } from "./services/group.service";
+import { LoginService } from "./services/login.service";
 import { AvatarService } from './services/avatar.service';
 import { AvatarPipe } from "./pipes/avatar.pipe";
 import { GenderPipe } from "./pipes/gender.pipe";
@@ -83,7 +83,8 @@ import { NotificationService } from "./services/notification.service";
     GenderPipe,
     NamePipe,
     SettingsComponent,
-    AttachedImagePipe
+    AttachedImagePipe,
+    GroupDetailsComponent
   ],
   imports: [
     BrowserModule,
