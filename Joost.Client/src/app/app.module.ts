@@ -85,7 +85,7 @@ import { NotificationService } from "./services/notification.service";
     NamePipe,
     SettingsComponent,
     AttachedImagePipe,
-    UserStatePipe
+    UserStatePipe,
     GroupDetailsComponent
   ],
   imports: [

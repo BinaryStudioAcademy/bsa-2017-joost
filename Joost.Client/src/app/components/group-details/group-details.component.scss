@@ -12,6 +12,9 @@
     flex: 1;
     padding: 1em;
 
+} 
+.mdl-list__item-primary-content{
+    color:rgba(0,0,0,.87);
 }
 .groups-list-container{
     display: flex;
@@ -113,11 +116,11 @@ $margin-value: 15px;
 }
 
 .group-name {
-    font-size: 3em;
+    font-size: 2em;
 }
 
 .group-descriptio {
-    font-size: 2em;
+    font-size: 1em;
 }
 
 .group-info{
