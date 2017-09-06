@@ -29,6 +29,7 @@ namespace Joost.Api.Controllers
 
         // GET: api/account/myprofile
         [HttpGet]
+        [AccessTokenAuthorization]
         [Route("myprofile")]
         public async Task<IHttpActionResult> GetProfile()
         {
@@ -43,6 +44,7 @@ namespace Joost.Api.Controllers
 
         // PUT: api/account/myprofile
         [HttpPut]
+        [AccessTokenAuthorization]
         [Route("myprofile")]
         public async Task<IHttpActionResult> SetProfile([FromBody]UserProfileDto profile)
         {
@@ -94,6 +96,7 @@ namespace Joost.Api.Controllers
 
         // PUT: api/account/5
         [HttpPut]
+        [AccessTokenAuthorization]
         public async Task<IHttpActionResult> EditUser([FromBody]User user)
         {
             var id = GetCurrentUserId();
@@ -189,6 +192,7 @@ namespace Joost.Api.Controllers
         }
 
         [HttpPost]
+        [AccessTokenAuthorization]
         [Route("updatestatus")]
         public async Task<IHttpActionResult> UpdateStatus([FromBody] string newStatus)
         {
@@ -202,6 +206,7 @@ namespace Joost.Api.Controllers
         }
 
         [HttpGet]
+        [AccessTokenAuthorization]
         [Route("notificationsfromusers")]
         public async Task<IHttpActionResult> GetNotificationsFromUsers()
         {
@@ -212,6 +217,7 @@ namespace Joost.Api.Controllers
         }
 
         [HttpGet]
+        [AccessTokenAuthorization]
         [Route("notificationsfromgroups")]
         public async Task<IHttpActionResult> GetNotificationsFromGroups()
         {
@@ -222,6 +228,7 @@ namespace Joost.Api.Controllers
         }
 
         [HttpPut]
+        [AccessTokenAuthorization]
         [Route("notificationsfromusers")]
         public async Task<IHttpActionResult> EditNotificationsFromUsers([FromBody]bool notification)
         {
@@ -234,6 +241,7 @@ namespace Joost.Api.Controllers
         }
 
         [HttpPut]
+        [AccessTokenAuthorization]
         [Route("notificationsfromgroups")]
         public async Task<IHttpActionResult> EditNotificationsFromGroups([FromBody]bool notification)
         {

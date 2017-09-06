@@ -55,7 +55,7 @@ export class HttpService  {
     });
   }
 
-  private async refreshTokens(refreshToken: string) {
+  async refreshTokens(refreshToken: string) {
     await this.http.get<Tokens>(HttpService.refreshUrl, { headers: new HttpHeaders().set('Authorization', refreshToken) })
       .toPromise().then(data => {
         localStorage.setItem('joostUserAccessToken', data.accessToken);

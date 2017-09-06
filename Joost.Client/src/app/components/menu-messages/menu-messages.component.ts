@@ -7,6 +7,7 @@ import { Subscription } from "rxjs/Rx";
 import { Message } from "../../models/message";
 import { MenuMessagesService } from "../../services/menu-messages.service";
 import {ViewEncapsulation} from '@angular/core';
+import { GroupService } from "../../services/group.service";
 
 @Component({
   selector: 'app-menu-messages',
@@ -18,50 +19,88 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
 
   private dialogs: Dialog[];
   private filteredDialogs: Dialog[];
-  private subscription: Subscription;
-  private subscriptionMenu: Subscription;
+  private senderSubscription: Subscription;
+  private receiverSubscription: Subscription;
+  private addingGroupsSubscription: Subscription;
   private searchString: string;
+  private newGroupSubscription: Subscription;
 
-  constructor(private dialogService: DialogService, private router: Router, private chatHubService: ChatHubService, private menuMessagesService: MenuMessagesService) {
-      dialogService.getDialogs().subscribe(d => {
-          var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
-          this.dialogs = sortArray;
-          this.filteredDialogs = sortArray;
-        },
-        async err => {
-          await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
-            if (ok) {
-              dialogService.getDialogs().subscribe(d => {
-                this.dialogs = d;
-                this.filteredDialogs = d;
-              }); 
-            }
-        });
-    });
+  constructor(
+    private dialogService: DialogService, 
+    private router: Router,
+    private chatHubService: ChatHubService, 
+    private menuMessagesService: MenuMessagesService,
+    private groupServive: GroupService) {
+      this.updateDialogs();
   }
 
   ngOnInit() {
-      this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
-          this.updateLastMessage(message);
+      this.receiverSubscription = this.chatHubService.addMessageEvent.subscribe(message => {
+          if (message.IsGroup) {
+            this.updateLastGroupMessage(message);
+          }
+          else {
+            this.updateLastUserMessage(message);
+          }
       });
-      this.subscriptionMenu = this.menuMessagesService.addMessageEvent.subscribe(message => {
-          this.updateLastMessage(message);
+      this.senderSubscription = this.menuMessagesService.addMessageEvent.subscribe(message => {
+        if (message.IsGroup) {
+            this.updateLastGroupMessage(message);
+          }
+          else {
+            this.updateLastUserMessage(message);
+          }
+      });
+
+      this.addingGroupsSubscription = this.groupServive.addGroupEvent.subscribe(group => {
+        this.updateDialogs();
+      });
+
+      this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => {
+        this.dialogs.push(groupDialog);
       });
   }
 
   ngOnDestroy() {
-      this.subscription.unsubscribe();
+      this.senderSubscription.unsubscribe();
+      this.receiverSubscription.unsubscribe();
+      this.addingGroupsSubscription.unsubscribe();
   }
 
-  private updateLastMessage(message: Message) {
-      let filteredDialogs = this.dialogs.filter(d => d.Id == message.ReceiverId || d.Id == message.SenderId);
-      if (filteredDialogs.length > 0) {
-          filteredDialogs[0].LastMessage = message.Text;
-          filteredDialogs[0].DateLastMessage = message.CreatedAt;
-          let data = this.filteredDialogs.filter(d => d.Id != filteredDialogs[0].Id);
-          data.push(filteredDialogs[0]);
-          this.filteredDialogs = this.OrderByArray(data, "DateLastMessage").map(item => item);;
-      }
+  private updateDialogs() {
+    this.dialogService.getDialogs().subscribe(d => {
+      var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
+      this.dialogs = sortArray;
+      this.filteredDialogs = sortArray;
+    },
+    async err => {
+      await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
+        if (ok) {
+          this.dialogService.getDialogs().subscribe(d => {
+            this.dialogs = d;
+            this.filteredDialogs = d;
+          }); 
+        }
+      });
+    });
+  }
+  
+  private updateLastUserMessage(message: Message) {
+    let filteredDialogs = this.dialogs.filter(d => (d.Id == message.SenderId || d.Id == message.ReceiverId) && !d.IsGroup);
+    if (filteredDialogs.length > 0) {
+        filteredDialogs[0].LastMessage = message.Text;
+        filteredDialogs[0].DateLastMessage = message.CreatedAt;
+        this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
+    }
+  }
+
+  private updateLastGroupMessage(message: Message) {
+    let filteredDialogs = this.dialogs.filter(d => d.Id == message.ReceiverId && d.IsGroup);
+    if (filteredDialogs.length > 0) {
+        filteredDialogs[0].LastMessage = message.Text;
+        filteredDialogs[0].DateLastMessage = message.CreatedAt;
+        this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
+    }
   }
 
   private navigateToMessages(dialog: Dialog) {

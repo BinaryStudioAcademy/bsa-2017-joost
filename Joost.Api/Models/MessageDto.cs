@@ -8,42 +8,46 @@ namespace Joost.Api.Models
         public int Id { get; set; }
         public int SenderId { get; set; }
         public int ReceiverId { get; set; }
+		public string Title { get; set; } 
         public string Text { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime EditedAt { get; set; }
         public string AttachedFile { get; set; }
+		public bool IsGroup { get; set; }
 
-        public static MessageDto FromMessageModel(Message model)
+		public static MessageDto FromMessageModel(Message model)
         {
-            if (model == null)
-                return null;
-            else
-                return new MessageDto
-                {
-                    Id = model.Id,
-                    SenderId = model.Sender.Id,
-                    ReceiverId = model.Receiver.Id,
-                    Text = model.Text,
-                    CreatedAt = model.CreatedAt,
-                    EditedAt = model.EditedAt,
-                    AttachedFile = model.AttachedFile
+			if (model == null)
+				return null;
+			else
+				return new MessageDto
+				{
+					Id = model.Id,
+					SenderId = model.Sender.Id,
+					ReceiverId = model.Receiver.Id,
+					Text = model.Text,
+					CreatedAt = model.CreatedAt,
+					EditedAt = model.EditedAt,
+					AttachedFile = model.AttachedFile,
+					IsGroup = false
                 };
         }
 
         public static MessageDto FromGroupMessageModel(GroupMessage model)
         {
-            if (model == null)
-                return null;
-            else
-                return new MessageDto
-                {
-                    Id = model.Id,
-                    SenderId = model.Sender.Id,
-                    ReceiverId = model.Receiver.Id,
-                    Text = model.Text,
-                    CreatedAt = model.CreatedAt,
-                    EditedAt = model.EditedAt,
-                    AttachedFile = model.AttachedFile
+			if (model == null)
+				return null;
+			else
+				return new MessageDto
+				{
+					Id = model.Id,
+					SenderId = model.Sender.Id,
+					ReceiverId = model.Receiver.Id,
+					Text = model.Text,
+					CreatedAt = model.CreatedAt,
+					EditedAt = model.EditedAt,
+					AttachedFile = model.AttachedFile,
+					IsGroup = true
                 };
         }
     }

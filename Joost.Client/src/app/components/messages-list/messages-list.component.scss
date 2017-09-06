@@ -65,9 +65,10 @@ div .mdl-list__item:hover{
     width: 100%;
 }
 
-.message-list .jg-container{
-    width:100%;
-    height: calc(100vh - 10px);
+.jg-container{
+    width: 74%;
+    height: 100vh;
+    margin: 0 26%;
     > div{
         &:nth-last-child(2){
             flex: 1;

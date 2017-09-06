@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Joost.Api.Models;
 using System.Net;
+using Joost.Api.Filters;
 
 namespace Joost.Api.Controllers
 {
+    [AccessTokenAuthorization]
     [RoutePrefix("api/messages")]
     public class MessagesController : BaseApiController
     {
@@ -53,7 +55,7 @@ namespace Joost.Api.Controllers
                 return BadRequest(ModelState);
             }
             var currentUserId = GetCurrentUserId();
-			if (currentUserId == message.SenderId)
+			if (currentUserId == message.SenderId && !message.IsGroup)
 			{
 				await _messageService.AddUserMessage(message);
 				return Ok();
@@ -71,7 +73,7 @@ namespace Joost.Api.Controllers
                 return BadRequest(ModelState);
             }
             var currentUserId = GetCurrentUserId();
-            if (currentUserId == message.SenderId)
+            if (currentUserId == message.SenderId && message.IsGroup)
             {
 				await _messageService.AddGroupMessage(message);
 				return Ok();
@@ -89,7 +91,7 @@ namespace Joost.Api.Controllers
                 return BadRequest(ModelState);
             }
 			var currentUserId = GetCurrentUserId();
-			if (currentUserId == message.SenderId)
+			if (currentUserId == message.SenderId && !message.IsGroup)
 			{
 				var ok = await _messageService.EditUserMessage(message);
 				if (ok) return Ok(message);
@@ -108,7 +110,7 @@ namespace Joost.Api.Controllers
                 return BadRequest(ModelState);
             }
 			var currentUserId = GetCurrentUserId();
-			if (currentUserId == message.SenderId)
+			if (currentUserId == message.SenderId && message.IsGroup)
 			{
 				var ok = await _messageService.EditGroupMessage(message);
 				return Ok(message);
