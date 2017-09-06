@@ -7,6 +7,7 @@ import { UserProfile } from "../../models/user-profile";
 import { UserService } from "../../services/user.service";
 import { AccountService } from "../../services/account.service";
 import { AvatarService } from "../../services/avatar.service";
+import { FileService } from "../../services/file.service";
 import { AvatarPipe} from "../../pipes/avatar.pipe";
 import { NamePipe } from "../../pipes/name.pipe";
 import { MDL } from "../mdl-base.component";
@@ -40,10 +41,13 @@ export class UserEditingComponent extends MDL implements OnInit {
     editableDateField: true
   };
 
+  private imgSrc: string;
+
   constructor(
     private userService: UserService,
     private accountService: AccountService,
     private avatarService: AvatarService,
+    private fileService: FileService,
     public router: Router,
     private location: Location
   ) {
@@ -59,14 +63,14 @@ export class UserEditingComponent extends MDL implements OnInit {
     this.accountService.updateUser(this.user);
     
     this.router.navigate(['menu']);
-    //location.reload();
+    // add refresh component (menu and user-editing) command here when SignalR notificator will be ready
   }
 
   GetUser() {
-    console.log("2) " + localStorage.getItem("joostUserAccessToken"));    
-    this.accountService.getUser().subscribe(async d => {
-      this.user = await d;
+    this.accountService.getUser().subscribe( d => {
+      this.user = d;
       this.getUserBirthDate();
+      this.imgSrc = this.avatarService.getFullUrl(this.user.Id, false);
       this.isLoadFinished = true;
     },
     async err=> {
@@ -127,7 +131,9 @@ export class UserEditingComponent extends MDL implements OnInit {
     var target: HTMLInputElement = e.target as HTMLInputElement;
     this.avatarService.SetUserAvatar(target.files[0]).subscribe(
       res => {
-        location.reload();
+        this.user.Avatar = this.user.Id + "_avatar." + this.fileService.getFileExtensions(target.files[0].name);
+        this.imgSrc = this.avatarService.getFullUrl(this.user.Id, false) + '?random+\=' + Math.random();
+        location.reload(); // temporary, delete when SignalR notificator will be ready
       }, 
       error => console.log("Fail when setting avatar"));
   }
@@ -144,10 +150,4 @@ export class UserEditingComponent extends MDL implements OnInit {
   }
 
 }
-
-
-
-
-
-
 
