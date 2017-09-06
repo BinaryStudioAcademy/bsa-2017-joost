@@ -78,6 +78,23 @@ namespace Joost.Api.Controllers
 			return ResponseMessage(response);
 		}
 
+		[HttpDelete]
+		[Route("{fileName}")]
+		public IHttpActionResult DeleteFile(string fileName)
+		{
+			string folderPath = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles/");
+
+			//var filePath = folderPath + fileName;
+			var filePath = Directory.EnumerateFiles(folderPath, fileName + ".*", SearchOption.AllDirectories).FirstOrDefault();
+			if (filePath == null || !File.Exists(filePath))
+				return NotFound();
+			else
+			{
+				File.Delete(filePath);
+				return Ok();
+			}
+		}
+
 		// POST api/files/
 		[HttpPost, HttpPut]
         [Route("")]

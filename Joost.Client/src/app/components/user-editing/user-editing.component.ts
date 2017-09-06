@@ -124,7 +124,7 @@ export class UserEditingComponent extends MDL implements OnInit {
   
   SendAvatar(e: Event) {
     var target: HTMLInputElement = e.target as HTMLInputElement;
-    this.avatarService.SetAvatar(target.files[0]).subscribe(
+    this.avatarService.SetUserAvatar(target.files[0]).subscribe(
       res => {
         location.reload();
       }, 

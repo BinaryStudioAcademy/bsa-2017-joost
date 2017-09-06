@@ -13,8 +13,9 @@ namespace Joost.DbAccess.Entities
         public virtual ICollection<User> Members { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastMessageAt { get; set; }
+		public string Avatar { get; set; }
 
-        public Group()
+		public Group()
         {
             Members = new List<User>();
         }

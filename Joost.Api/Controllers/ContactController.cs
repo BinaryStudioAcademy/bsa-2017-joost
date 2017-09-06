@@ -159,26 +159,42 @@ namespace Joost.Api.Controllers
         [Route("decline-contact")]
         public async Task<IHttpActionResult> DeclineContact([FromBody]ContactDto contact)
         {
-            var userId = GetCurrentUserId();
-            if (userId == contact.ContactId)
-            {
+            //var userId = GetCurrentUserId();
+            //if (userId == contact.ContactId)
+            //{
+            //    return InternalServerError();
+            //}
+            //var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+            //if (user == null)
+            //{
+            //    return NotFound();
+            //}
+            //var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
+            //if (contactUser == null)
+            //{
+            //    return NotFound();
+            //}
+            //user.Contacts.Remove(user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id));
+            //contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
+            //await _unitOfWork.SaveAsync();
+
+            //return Ok();
+
+            if (GetCurrentUserId() == contact.ContactId)
                 return InternalServerError();
-            }
-            var user = await _unitOfWork.Repository<User>().GetAsync(userId);
-            if (user == null)
-            {
+
+            var contactEntry = await _unitOfWork.Repository<Contact>().FindAsync(
+                c => c.User.Id == GetCurrentUserId() &&
+                c.ContactUser.Id == contact.ContactId);
+
+            if (contactEntry == null)
                 return NotFound();
-            }
-            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
-            if (contactUser == null)
-            {
-                return NotFound();
-            }
-            user.Contacts.Remove(user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id));
-            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
+
+            contactEntry.State = DbAccess.Entities.ContactState.Decline;
+            _unitOfWork.Repository<Contact>().Attach(contactEntry);
             await _unitOfWork.SaveAsync();
 
             return Ok();
-        }
+        }                          
     }
 }

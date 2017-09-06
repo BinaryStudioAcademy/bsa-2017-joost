@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 /Joost.Api/App_Data/AttachedFiles
+/Joost.Api/App_Data/Avatars

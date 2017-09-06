@@ -9,7 +9,7 @@ import { ChatHubService } from "../../services/chat-hub.service";
 import { Message } from "../../models/message";
 import { NotificationService } from "../../services/notification.service";
 import { Subscription } from "rxjs/Rx";
-import { Group } from "../../models/group";
+import { Dialog } from "../../models/dialog";
 import { UserContact } from "../../models/user-contact";
 
 @Component({
@@ -84,8 +84,8 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
     this.contactNotifSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((user: UserContact) => {
       this.notificationService.showAddUser(user.Name);
     });
-    this.groupNotifSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((group: Group) => { 
-      this.notificationService.showAddChat(group.Name, group.Description);      
+    this.groupNotifSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => { 
+      this.notificationService.showAddChat(groupDialog.Name, "");      
     });
   }
 
@@ -97,12 +97,25 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
 
   private showMessageNotification(message: Message) {
     if (message.IsGroup) {
-      if (message.SenderId != this.curUser.Id)
+      if (message.SenderId != this.curUser.Id && !this.isOnGroupMessages(message.ReceiverId))
         this.notificationService.showNewMessageInChat(message.Title, message.Text);
     }
     else {
-      this.notificationService.showNewMessage(message.Title, message.Text);
+      if (!this.isOnUserMessages(message.SenderId))
+      {
+        this.notificationService.showNewMessage(message.Title, message.Text);
+      }
     }
+  }
+
+  private isOnUserMessages(dialogId: number) {
+    console.log("menu/messages/user/" + dialogId);
+    return window.location.pathname.search("menu/messages/user/" + dialogId) != -1;
+  }
+
+  private isOnGroupMessages(dialogId: number) {
+    console.log("menu/messages/group/" + dialogId);    
+    return window.location.pathname.search("menu/messages/group/" + dialogId) != -1;
   }
 
 }

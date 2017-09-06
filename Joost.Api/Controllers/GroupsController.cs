@@ -1,9 +1,5 @@
 ﻿using Joost.Api.Models;
-using Joost.DbAccess.Entities;
 using Joost.DbAccess.Interfaces;
-using System;
-using System.Linq;
-using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Joost.Api.Filters;
@@ -14,35 +10,33 @@ namespace Joost.Api.Controllers
     [AccessTokenAuthorization]
     public class GroupsController : BaseApiController
     {
-		private IChatHubService _chatHubService;
+		private IGroupService _groupService;
 
-        public GroupsController(IUnitOfWork unitOfWork, IChatHubService chatHubService) : base(unitOfWork)
+		public GroupsController(IUnitOfWork unitOfWork, IGroupService groupService) : base(unitOfWork)
         {
-			_chatHubService = chatHubService;
+			_groupService = groupService;
 		}
 
-        // GET: api/Groups/5
-        [HttpGet]
-        public async Task<IHttpActionResult> GetGroups()
-        {
-            int userId = GetCurrentUserId();
-            var groups = (await _unitOfWork.Repository<Group>().AllAsync()).Where(item => item.Members.Any(i => i.Id == userId));
-            if (groups == null)
-            {
-                return NotFound();
-            }
-            return Ok(groups);
-        }
+        //// GET: api/Groups/5
+        //[HttpGet]
+        //public async Task<IHttpActionResult> GetGroups()
+        //{
+        //    int userId = GetCurrentUserId();
+        //    var groups = (await _unitOfWork.Repository<Group>().AllAsync()).Where(item => item.Members.Any(i => i.Id == userId));
+        //    if (groups == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(groups);
+        //}
 
         // GET: api/Groups/5
         [HttpGet]
-        public IHttpActionResult GetGroups(string name)
+        public async Task<IHttpActionResult> GetGroups(string name)
         {
-            var groups = _unitOfWork.Repository<Group>()
-                .Query()
-                .Where(item => item.Name.Contains(name))
-                .ToList();
-            if (groups == null)
+			var groups = await _groupService.GetUserGroups(name);
+
+			if (groups == null)
             {
                 return NotFound();
             }
@@ -54,29 +48,11 @@ namespace Joost.Api.Controllers
         public async Task<IHttpActionResult> GetGroup(int id)
         {
 			var currentUserId = GetCurrentUserId();
-            var group = await _unitOfWork.Repository<Group>()
-				.Query()
-				.Include(g => g.Members)
-				.SingleAsync(g => g.Id == id);
-			var selectedMembersId = group.Members.Select(m => m.Id);
+			var group = await _groupService.GetUserGroupsById(currentUserId, id);
 			if (group != null)
-            {
-				var ok = selectedMembersId.Contains(currentUserId);
-				if (ok)
-				{
-					var groupDto = new GroupDto
-					{
-						Id = group.Id,
-						Name = group.Name,
-						Description = group.Description,
-						SelectedMembersId = selectedMembersId.ToList(),
-					};
-					return Ok(groupDto);
-				}
-				else return NotFound();
-			}
-            else
-                return NotFound();                      
+				return Ok(group);
+			else
+				return NotFound();
 		}
 
 		// GET: api/Groups/5/getMembers
@@ -85,21 +61,12 @@ namespace Joost.Api.Controllers
 		public async Task<IHttpActionResult> GetGroupMembers(int id)
 		{
 			var currentUserId = GetCurrentUserId();
-			var group = await _unitOfWork.Repository<Group>()
-				.Query()
-				.Include(g => g.Members)
-				.SingleAsync(g => g.Id == id);
-			if (group != null)
-			{
-				var selectedMembersId = group.Members.Select(m => m.Id);
-				var ok = selectedMembersId.Contains(currentUserId);
-				if (ok)
-				{
-					return Ok(group.Members.Select(m => UserDetailsDto.FromModel(m)));
-				}
-				else return NotFound();
-			}
-			else return NotFound();
+
+			var members = await _groupService.GetGroupMembers(currentUserId, id);
+			if (members == null)
+				return NotFound();
+			else
+				return Ok(members);
 		}
 
 		// POST: api/Groups
@@ -108,26 +75,8 @@ namespace Joost.Api.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-
-            var newGroup = new Group()
-            {
-                Name = group.Name,
-                CreatedAt = DateTime.Now,
-                Description = group.Description,
-                GroupCreator = await _unitOfWork.Repository<User>().GetAsync(GetCurrentUserId())
-            };
-
-            foreach (var memberId in group.SelectedMembersId)
-                newGroup.Members.Add(await _unitOfWork.Repository<User>().GetAsync(memberId));
-			newGroup.Members.Add(newGroup.GroupCreator);
-
-            _unitOfWork.Repository<Group>().Add(newGroup);
-            await _unitOfWork.SaveAsync();
-
-			var currentUserId = GetCurrentUserId();
-			await _chatHubService.AddGroup(currentUserId);
-
-			return Ok();
+			var newGroup = await _groupService.AddGroup(GetCurrentUserId(), group);
+            return Ok(newGroup);
         }
 
         // PUT: api/Groups/5
@@ -137,43 +86,23 @@ namespace Joost.Api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var editGroup = await _unitOfWork.Repository<Group>().GetAsync(id);
-
-            if (editGroup.GroupCreator.Id != GetCurrentUserId())
-                return BadRequest();
-
-            editGroup.Name = group.Name;
-            editGroup.Description = group.Description;
-            editGroup.Members.Clear();
-
-            foreach (var memberId in group.SelectedMembersId)
-                editGroup.Members.Add(await _unitOfWork.Repository<User>().GetAsync(memberId));
-
-            _unitOfWork.Repository<Group>().Attach(editGroup);
-            await _unitOfWork.SaveAsync();
-
-            return Ok(group);
+			var editGroup = await _groupService.EditGroup(GetCurrentUserId(), id, group);
+			if (editGroup != null)
+				return Ok(editGroup);
+			else
+				return NotFound();
         }
 
         // DELETE: api/Groups/5
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteGroup(int id)
         {
-            var group = await _unitOfWork.Repository<Group>().GetAsync(id);
-            if (group != null)
-            {
-                if (group.GroupCreator.Id == GetCurrentUserId())
-                {
-                    _unitOfWork.Repository<Group>().Delete(group);
-                    await _unitOfWork.SaveAsync();
-                    return Ok();
-                }
-                else
-                    return BadRequest();
-            }
-            else
-                return NotFound();
-        }
+			var rez = await _groupService.DeleteGroup(GetCurrentUserId(), id);
+			if (rez)
+				return Ok();
+			else
+				return NotFound();
+		}
 
         protected override void Dispose(bool disposing)
         {

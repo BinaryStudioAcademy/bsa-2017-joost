@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ContactService } from "../../services/contact.service";
@@ -6,18 +6,22 @@ import { ContactService } from "../../services/contact.service";
 import { UserSearch } from "../../models/user-search";
 import { Contact,ContactState} from "../../models/contact";
 import { UserContact} from "../../models/user-contact";
+import { ChatHubService } from "../../services/chat-hub.service";
+import { Subscription } from "rxjs/Rx";
 
 @Component({
   selector: 'app-menu-users',
   templateUrl: './menu-users.component.html',
   styleUrls: ['./menu-users.component.scss']
 })
-export class MenuUsersComponent implements OnInit {
+export class MenuUsersComponent implements OnInit, OnDestroy {
 
 	private result:UserContact[];
+	private newContactSubscription: Subscription;
 	constructor(
 		private router: Router,
-		private contactService: ContactService
+		private contactService: ContactService,
+		private chatHubService: ChatHubService
 		) { }
 
 	ngOnInit() {
@@ -73,6 +77,14 @@ export class MenuUsersComponent implements OnInit {
 			    }
 			});
 		});
+
+		this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
+			this.result.push(userContact);
+		});
+	}
+
+	ngOnDestroy() {
+		this.newContactSubscription.unsubscribe();
 	}
 
 	goToConfirm(id:number){
