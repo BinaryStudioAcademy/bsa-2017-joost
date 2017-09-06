@@ -131,7 +131,6 @@ input[type="file"] {
     font-style: italic;
 }
 
-
 .jg-radiobutton-item {
     margin: 6px 12px 6px 0px;
     display: inline-block;
@@ -142,12 +141,9 @@ input[type="file"] {
 }
 
 .password-notification{
-    h5 {
-        margin-bottom: 4px;
-    }
-    p {
-        margin: 0;    
-    }
+    width: 94%;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 .ng -textfield{
     max-width: 48%;

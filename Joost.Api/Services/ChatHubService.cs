@@ -50,11 +50,12 @@ namespace Joost.Api.Services
 				{
 					var contactUserDto = new UserContactDto
 					{
-						Id = contact.ContactUser.Id,
-						State = (Models.ContactState)contact.State,
-						Avatar = contact.ContactUser.Avatar,
-						Name = contact.ContactUser.FirstName + " " + contact.ContactUser.LastName,
-						City = contact.ContactUser.City
+						Id = contact.Id,
+						//State = (Models.ContactState)contact.State,
+						State = Models.ContactState.New,
+						Avatar = contact.User.Avatar,
+						Name = contact.User.FirstName + " " + contact.User.LastName,
+						City = contact.User.City
 					};
 
 					using (var userRepository = _unitOfWork.Repository<User>())
@@ -65,8 +66,6 @@ namespace Joost.Api.Services
 						if (contactUser != null && !string.IsNullOrEmpty(contactUser.ConnectionId))
 						{
 							await _hubContext.Clients.Client(contactUser.ConnectionId).onNewUserInContacts(contactUserDto);
-							await _hubContext.Clients.Client(contactUser.ConnectionId).onNewUserInContacts(contactUserDto);
-
 						}
 					}
 				}
