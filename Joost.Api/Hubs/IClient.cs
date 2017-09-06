@@ -9,5 +9,7 @@ namespace Joost.Api.Hubs
         Task onNewUserConnected(string connectionId, int userId);
         Task onUserDisconnected(string connectionId, int userId);
         Task addMessage(MessageDto message);
+		Task onNewUserInContacts(UserContactDto user);
+		Task onNewGroupCreated(DialogDataDto group);
     }
 }

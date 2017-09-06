@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Joost.Api.Models;
 using Joost.DbAccess.Entities;
 using Joost.Api.Filters;
+using Joost.Api.Services;
 
 namespace Joost.Api.Controllers
 {
@@ -12,8 +13,12 @@ namespace Joost.Api.Controllers
     [RoutePrefix("api/contact")]
     public class ContactController : BaseApiController
     {
-        public ContactController(IUnitOfWork unitOfWork) : base(unitOfWork)
-        {}
+		private IChatHubService _chatHubService;
+
+        public ContactController(IUnitOfWork unitOfWork, IChatHubService chatHubService) : base(unitOfWork)
+        {
+			_chatHubService = chatHubService;
+		}
 
         // Get: api/contacts
         [HttpGet]
@@ -69,9 +74,11 @@ namespace Joost.Api.Controllers
                 ContactUser = user,
                 State = DbAccess.Entities.ContactState.New,
             });
-            await _unitOfWork.SaveAsync();
 
-            return Ok();
+			await _unitOfWork.SaveAsync();
+			await _chatHubService.AddContact(userId, contact.ContactId);
+
+			return Ok();
         }
 
         // Delete: api/contacts

@@ -103,6 +103,7 @@ namespace Joost.Api.Services
                                 AttachedFile = message.AttachedFile
                             };
                             _unitOfWork.Repository<Message>().Add(newMessage);
+							message.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
                             await _chatHubService.SendToUser(message);
                             await _unitOfWork.SaveAsync();
                         }
@@ -138,6 +139,7 @@ namespace Joost.Api.Services
 								AttachedFile = groupMessage.AttachedFile
 							};
 							_unitOfWork.Repository<GroupMessage>().Add(newMessage);
+							groupMessage.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
 							await _chatHubService.SendToGroup(groupMessage);
 							await _unitOfWork.SaveAsync();
 						}

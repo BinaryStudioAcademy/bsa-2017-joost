@@ -21,6 +21,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private receiverSubscription: Subscription;
   private addingGroupsSubscription: Subscription;
   private searchString: string;
+  private newGroupSubscription: Subscription;
 
   constructor(
     private dialogService: DialogService, 
@@ -53,6 +54,9 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
         this.updateDialogs();
       });
 
+      this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => {
+        this.dialogs.push(groupDialog);
+      });
   }
 
   ngOnDestroy() {

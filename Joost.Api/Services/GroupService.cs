@@ -14,10 +14,12 @@ namespace Joost.Api.Services
 	public class GroupService : IGroupService
 	{
 		private IUnitOfWork _unitOfWork;
+		private IChatHubService _chatHubService;
 
-		public GroupService(IUnitOfWork unitOfWork)
+		public GroupService(IUnitOfWork unitOfWork, IChatHubService chatHubService)
 		{
 			_unitOfWork = unitOfWork;
+			_chatHubService = chatHubService;
 		}
 
 		public async Task<IEnumerable<GroupDto>> GetUserGroups(int userId)
@@ -122,6 +124,9 @@ namespace Joost.Api.Services
 				}
 			}
 			await _unitOfWork.SaveAsync();
+
+			await _chatHubService.AddGroup(userId);
+
 			return GroupDto.FromModel(newGr);
 		}
 
