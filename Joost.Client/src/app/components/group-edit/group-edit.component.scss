@@ -50,14 +50,13 @@
 .jg-full-width-container{
     width: 100%;
 }
-$margin-value: 15px;
 .jg-container{
-    margin: $margin-value;
-    width: calc(74% - 2 * #{$margin-value});
-    min-height: calc(100% - 2 * #{$margin-value});
+    margin: $card-padding;
+    width: calc(74% - 2 * #{$card-padding});
+    min-height: calc(100% - 2 * #{$card-padding});
     max-height: 100%;
     position: absolute;
-    margin-left: calc(26% + #{$margin-value});
+    margin-left: calc(26% + #{$card-padding});
     > div{
         &:nth-last-child(2){
             flex: 1;
@@ -66,8 +65,8 @@ $margin-value: 15px;
 }
 @media (max-width: 1024px){
     .jg-container{
-        margin: $margin-value 26%;
-        right: calc(-13% + #{$margin-value});
+        margin: $card-padding 26%;
+        right: calc(-13% + #{$card-padding});
         max-height: unset;
     }
 }
