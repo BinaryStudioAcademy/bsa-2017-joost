@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpRequest, HttpParams } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
@@ -44,7 +44,13 @@ export class ContactService extends BaseApiService {
 		return this.http.sendRequest<Contact[]>(req);
 		//return this.http
 		//.get<Contact[]>(this.generateUrl()+ "/contact");
-	}
+    }
+    getUserIdByContactId(contactId: number) {
+        let req = new HttpRequest("GET", this.generateUrl() + "/user/", {
+            params: new HttpParams().set('contactId', contactId.toString())
+        });
+        return this.http.sendRequest<number>(req);
+    }
 	addContact(contactId:number){
 		let req = new HttpRequest("POST", this.generateUrl(),
 		  { "ContactId": contactId, "State": ContactState.New });

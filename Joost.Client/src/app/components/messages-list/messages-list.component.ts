@@ -319,7 +319,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     //scroll logic
 
     private addUserMessagesToList() {     
-        //debugger; 
         this.getMessages = false;
         this.skip += this.take;
         return this.messageService.getUserMessages(this.receiverId, this.skip, this.take).subscribe((data: Message[]) => {
@@ -339,7 +338,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private addGroupMessagesToList() {    
-        //debugger; 
         this.getMessages = false;
         this.skip += this.take;
         return this.messageService.getGroupMessages(this.receiverId, this.skip, this.take).subscribe((data: Message[]) => {
@@ -359,7 +357,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private onScroll() {
-        //debugger;
         let element = this.scrollContainer.nativeElement;
         let inTop = element.scrollTop === 0 && element.scrollHeight > 0;    
         if (inTop && !this.getMessages && !this.isAllMessagesReceived) {

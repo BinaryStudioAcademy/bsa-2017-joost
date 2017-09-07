@@ -8,6 +8,9 @@ import { DialogService } from "../../services/dialog.service";
 import { ChatHubService } from "../../services/chat-hub.service";
 import { GroupService } from "../../services/group.service";
 import { EventEmitterService } from "../../services/event-emitter.service";
+import { UserContact } from "../../models/user-contact";
+import { ContactState } from "../../models/contact";
+import { ContactService } from "../../services/contact.service";
 
 @Component({
   selector: 'app-menu-messages',
@@ -27,6 +30,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private addingGroupsSubscription: Subscription;
   private newGroupSubscription: Subscription;
   private newContactSubscription: Subscription;
+  private removeNewContactSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -55,8 +59,15 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       });
 
       this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
-          if (userContact.State == ContactState.New) {
-              this.contacts.push(userContact);
+            if (userContact.State == ContactState.New) {
+                this.contacts.push(userContact);
+            }
+      });
+      this.removeNewContactSubscription = this.eventEmitterService.removeNewContact.subscribe((userContact: UserContact) => {
+          for (let i = 0; i < this.contacts.length; i++) {
+              if (this.contacts[i].Id == userContact.Id) {
+                  this.contacts.splice(i, 1);
+              }
           }
       });
   }
@@ -67,6 +78,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       this.addingGroupsSubscription.unsubscribe();
       this.newContactSubscription.unsubscribe();
       this.newGroupSubscription.unsubscribe();
+      this.removeNewContactSubscription.unsubscribe();
   }
 
   private updateDialogs() {
