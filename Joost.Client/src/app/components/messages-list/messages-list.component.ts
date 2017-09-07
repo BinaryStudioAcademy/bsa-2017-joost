@@ -15,15 +15,13 @@ import { UserDetail } from "../../models/user-detail";
 import { FileService } from '../../services/file.service';
 import { EventEmitterService } from "../../services/event-emitter.service";
 import { UserStatePipe} from "../../pipes/user-state.pipe";
-import {ViewEncapsulation} from '@angular/core';
 declare var jquery: any;
 declare var $: any;
 
 @Component({
     selector: "messages-list",
     templateUrl: "./messages-list.component.html",
-    styleUrls: ["./messages-list.component.scss"],
-    encapsulation: ViewEncapsulation.None,
+    styleUrls: ["./messages-list.component.scss"]
 })
 export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecked {
 

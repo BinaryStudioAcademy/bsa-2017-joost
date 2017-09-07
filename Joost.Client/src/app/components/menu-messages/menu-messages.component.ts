@@ -12,8 +12,7 @@ import { EventEmitterService } from "../../services/event-emitter.service";
 @Component({
   selector: 'app-menu-messages',
   templateUrl: './menu-messages.component.html',
-  styleUrls: ['./menu-messages.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ['./menu-messages.component.scss']
 })
 export class MenuMessagesComponent implements OnInit, OnDestroy {
 
