@@ -20,8 +20,6 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 	private searchContact:UserContact[];
 	private searchString:string;
 	private newContactSubscription: Subscription;
-    private result: UserContact[];
-    private newContactsIsEmpty: boolean = true;
 	constructor(
 		private router: Router,
 		private contactService: ContactService,
@@ -31,11 +29,6 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 	ngOnInit() {
         this.contactService.getAllContacts().subscribe(data => {
             this.result = data;
-            for (let item of this.result) {
-                if (item.State == ContactState.New) {
-                    this.newContactsIsEmpty = false;
-                }
-            }
         },
 			async err => {
 				await this.contactService.handleTokenErrorIfExist(err).then(ok => {

@@ -28,12 +28,14 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private addingGroupsSubscription: Subscription;
   private searchString: string;
   private newGroupSubscription: Subscription;
+  private newContactSubscription: Subscription;
 
   constructor(
     private dialogService: DialogService, 
     private router: Router,
     private chatHubService: ChatHubService, 
     private menuMessagesService: MenuMessagesService,
+    private contactService: ContactService,
     private groupServive: GroupService) {
       this.updateDialogs();
   }
@@ -63,12 +65,19 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => {
         this.dialogs.push(groupDialog);
       });
+
+      this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
+          if (userContact.State == ContactState.New) {
+              this.contacts.push(userContact);
+          }
+      });
   }
 
   ngOnDestroy() {
       this.senderSubscription.unsubscribe();
       this.receiverSubscription.unsubscribe();
       this.addingGroupsSubscription.unsubscribe();
+      this.newContactSubscription.unsubscribe();
   }
 
   private updateDialogs() {
@@ -134,10 +143,6 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
           }
           return 0
       });
-  }
-
-  private goToUserDetail(userId: number): void {
-      this.router.navigate(['menu/user-details', userId], { skipLocationChange: true });
   }
 
   private goToConfirm(id: number) {
