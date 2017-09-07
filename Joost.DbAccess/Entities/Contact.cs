@@ -15,6 +15,7 @@ namespace Joost.DbAccess.Entities
         New,
         Sent,
         Accept,
-        Decline
+        Decline,
+        Canceled
     }
 }

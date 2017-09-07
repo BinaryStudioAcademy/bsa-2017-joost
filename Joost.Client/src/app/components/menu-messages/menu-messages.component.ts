@@ -1,55 +1,45 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from "@angular/router";
+import { Subscription } from "rxjs/Rx";
+import { ViewEncapsulation } from '@angular/core';
 import { Dialog } from "../../models/dialog";
+import { Message } from "../../models/message";
 import { DialogService } from "../../services/dialog.service";
 import { ChatHubService } from "../../services/chat-hub.service";
-import { Subscription } from "rxjs/Rx";
-import { Message } from "../../models/message";
-import { MenuMessagesService } from "../../services/menu-messages.service";
-import {ViewEncapsulation} from '@angular/core';
 import { GroupService } from "../../services/group.service";
+import { EventEmitterService } from "../../services/event-emitter.service";
 
 @Component({
   selector: 'app-menu-messages',
   templateUrl: './menu-messages.component.html',
-  styleUrls: ['./menu-messages.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ['./menu-messages.component.scss']
 })
 export class MenuMessagesComponent implements OnInit, OnDestroy {
 
   private dialogs: Dialog[];
   private filteredDialogs: Dialog[];
+  private searchString: string;
+
   private senderSubscription: Subscription;
   private receiverSubscription: Subscription;
   private addingGroupsSubscription: Subscription;
-  private searchString: string;
   private newGroupSubscription: Subscription;
 
   constructor(
-    private dialogService: DialogService, 
     private router: Router,
+    private dialogService: DialogService, 
     private chatHubService: ChatHubService, 
-    private menuMessagesService: MenuMessagesService,
-    private groupServive: GroupService) {
+    private groupServive: GroupService,
+    private eventEmitterService: EventEmitterService) {
       this.updateDialogs();
   }
 
   ngOnInit() {
       this.receiverSubscription = this.chatHubService.addMessageEvent.subscribe(message => {
-          if (message.IsGroup) {
-            this.updateLastGroupMessage(message);
-          }
-          else {
-            this.updateLastUserMessage(message);
-          }
+          this.updateLastMessage(message);
       });
-      this.senderSubscription = this.menuMessagesService.addMessageEvent.subscribe(message => {
-        if (message.IsGroup) {
-            this.updateLastGroupMessage(message);
-          }
-          else {
-            this.updateLastUserMessage(message);
-          }
+      this.senderSubscription = this.eventEmitterService.addMessageEvent.subscribe(message => {
+        this.updateLastMessage(message);        
       });
 
       this.addingGroupsSubscription = this.groupServive.addGroupEvent.subscribe(group => {
@@ -65,6 +55,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       this.senderSubscription.unsubscribe();
       this.receiverSubscription.unsubscribe();
       this.addingGroupsSubscription.unsubscribe();
+      this.newGroupSubscription.unsubscribe();
   }
 
   private updateDialogs() {
@@ -103,6 +94,15 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
     }
   }
 
+  private updateLastMessage(message: Message) {
+    if (message.IsGroup) {
+      this.updateLastGroupMessage(message);
+    }
+    else {
+      this.updateLastUserMessage(message);
+    }
+  }
+
   private navigateToMessages(dialog: Dialog) {
     this.router.navigate(["/menu/messages", dialog.IsGroup ? "group": "user", dialog.Id]);
   }
@@ -124,4 +124,5 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
           return 0
       });
   }
+
 }

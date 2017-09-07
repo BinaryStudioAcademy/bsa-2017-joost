@@ -1,0 +1,133 @@
+@import '../../../vars.scss';
+
+.jc-group-edit-title-container{
+    display: flex;
+    padding-top: 0;
+    padding-bottom: 0;
+    flex-direction: row;
+    width: 100%;
+}
+
+.jc-ge-title-input-container{
+    flex: 1;
+    padding: 1em;
+
+} 
+.mdl-list__item-primary-content{
+    color:rgba(0,0,0,.87);
+}
+.groups-list-container{
+    display: flex;
+    flex-direction: row;
+    align-items:stretch;
+    > div{
+        flex-direction: column;
+        display: flex;
+    }
+}
+
+.gd-container{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.gd-list-container{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.jc-list-user{
+    max-height: 300px;
+    overflow :auto;
+    flex: 0.9;
+    li:hover{
+        background-color: #F5F5F5;
+        margin-left: 1px;
+    }
+}
+
+.jc-list-added{
+    margin-top: 82px;
+}
+
+.jg-buttons-bottom-cantainer{
+    margin-top: auto;
+    padding: 10px;
+    display: flex;
+    justify-content:flex-start;
+}
+.jg-button-bottom{
+    margin-right: 5px;
+}
+#btnSaveCreate{
+    position:  relative;
+    right: 16px;
+}
+
+.jg-full-width-container{
+    width: 100%;
+}
+$margin-value: 15px;
+.jg-container{
+    margin: $margin-value;
+    width: calc(74% - 2 * #{$margin-value});
+    min-height: calc(100% - 2 * #{$margin-value});
+    max-height: 100%;
+    position: absolute;
+    margin-left: calc(26% + #{$margin-value});
+    > div{
+        &:nth-last-child(2){
+            flex: 1;
+        }
+    }
+}
+@media (max-width: 1024px){
+    .jg-container{
+        margin: $margin-value 26%;
+        right: calc(-13% + #{$margin-value});
+        max-height: unset;
+    }
+}
+.mdl-textfield.is-invalid .mdl-textfield__input{
+	border-color: rgba(0,0,0,.12); 
+}
+.mdl-textfield.is-invalid.is-focused .mdl-textfield__input,
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__input{
+	border-color: #d50000; 
+	box-shadow: none;
+}
+.mdl-textfield.is-invalid .mdl-textfield__label{
+    color: rgb(189,189,189); 
+	font-size: 16px;
+}
+.mdl-textfield.is-invalid.is-focused .mdl-textfield__label,
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__label{
+	color: #d50000; 
+	font-size:12px;
+}
+
+.jc-user-avatar-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+    margin: 16px;
+}
+
+.group-name {
+    font-size: 2em;
+}
+
+.group-descriptio {
+    font-size: 1em;
+}
+
+.group-info{
+    width: 100%;
+    overflow: hidden;
+    word-wrap: break-word;
+    text-overflow: ellipsis;
+    font-family: 'Roboto', 'Helvetica', sans-serif;
+    color: #616161;
+}

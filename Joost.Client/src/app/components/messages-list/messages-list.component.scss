@@ -103,7 +103,7 @@ div .mdl-list__item:hover{
     font-size: 1.2em;
 }
 
-.message-text .emojioneemoji{
+.message-text ::ng-deep .emojioneemoji{
     height:1.2em;
     width:1.2em;
     margin:0;
@@ -123,7 +123,6 @@ div .mdl-list__item:hover{
     flex-direction: column;
     background-color: #BBDEFB;
     display: -webkit-inline-box;
-
     img{
         margin: 10px;
         max-height: 200px;
@@ -156,19 +155,31 @@ input[type="file"] {
     display: none;
 }
 
-
+.js-button-effect{
+  background: transparent;
+  box-shadow: none;
+  color: rgba(158,158,158,.5);
+  transition:all 0.3s;
+  &:hover{
+    transition:all 0.3s;
+    color:#000;
+    background-color: transparent;
+  }
+  &:active{
+    color:#000;
+    transition:all 0.3s;
+    background-color: rgba(158,158,158,.2);
+  }
+}
 .custom-file-attach {
     cursor: pointer;
-
+    margin-left:10px;
+    min-width: auto;
+    padding:0;
     .material-icons {
-        padding: 10px;
+        padding: 5px 10px;
     }
 }
-
-.custom-file-attach:hover{
-    color: #FF5722;
-}
-
 .custom-file-attach::selection{
     background-color: none;
 }
@@ -401,3 +412,9 @@ ul {
   border-radius: 10px;
   margin-right: 2px;
 }
+
+.wrap-textarea-input ::ng-deep .emojionearea-editor{
+    min-height: 1em;
+    max-height: 4em;
+    margin-right: 0;
+  }

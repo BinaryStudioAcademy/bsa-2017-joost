@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ContactService } from "../../services/contact.service";
@@ -100,7 +100,7 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 		}
 	}
 	goToConfirm(id:number){
-		if (this.isNewContact(id) || this.isDeclineContact(id)) {
+		if (this.isNewContact(id) || this.isDeclineContact(id) || this.isCanceledContact(id)) {
 			this.contactService.changeContactIdNotify(id);
 			this.router.navigate(['menu/add-contact']);
 		}
@@ -119,7 +119,10 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 	}
 	isDeclineContact(id:number):boolean{
 		return this.result.filter(t=>t.Id==id)[0].State===ContactState.Decline;
-	}
+    }
+    isCanceledContact(id: number): boolean {
+        return this.result.filter(t => t.Id == id)[0].State === ContactState.Canceled;
+    }
 	ContactStatus(id:number):string{
 		let state =  this.result.filter(t=>t.Id==id)[0];
 		if (state) {
@@ -127,7 +130,11 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 				case ContactState.New:
 					return "new_releases";
 				case ContactState.Sent:
-					return "person_add";
+                    return "person_add";
+                case ContactState.Decline:
+                    return "cancel";
+                case ContactState.Canceled:
+                    return "clear";
 		    	default:
 		    		return "";
 		    }

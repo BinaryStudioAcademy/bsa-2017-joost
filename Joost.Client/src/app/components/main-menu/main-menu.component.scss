@@ -1,5 +1,8 @@
 @import '../../../vars.scss';
-
+.user-status > img{
+  height:1.2em;
+  width:1.2em;
+}
 .main-avatar {
   width: $avatar-size;
   height: $avatar-size;
@@ -124,6 +127,7 @@
 }
 
 .status i{
+    flex:1;
     cursor: pointer;
     font-size: 15px;
     color: darkgray;
@@ -164,13 +168,21 @@ a.setting-icon {
   font-size:14px;
   border-color: #9698ab;
   outline:none;
+  margin-right:3px;
 }
 .status .status-text {
   cursor:pointer;
-  display:inline-block;
+  display:flex;
   vertical-align:middle;
   padding: 2px 0;
   border-bottom: 1px solid transparent;
+  width:100%;
+}
+.status .status-text span{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width:150px;
+  white-space: nowrap;
 }
 .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after{
   display:none;

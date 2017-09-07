@@ -56,8 +56,20 @@ html, body {
     align-items:center;
     padding: 10px 0;
 }
+.user-state{
+    .online-state {
+     background-color: $color-online-indecator;
+    }
 
+    .busy-state{
+     background-color: $color-offline-indecator;
+    }
+    .offline-state{
+        background-color: $color-offline-indecator;
+    }
+}
 .online-state {
+<<<<<<< HEAD
  color: $color-online-indicator;
 }
 
@@ -71,6 +83,16 @@ html, body {
 }
 .offline-state{
     background-color: $color-offline-indicator;
+=======
+    color: $color-online-indecator;
+}
+
+.busy-state{
+    color: $color-offline-indecator;
+}
+.offline-state{
+    color: $color-offline-indecator;
+>>>>>>> ddce052599973702fb1b6c053eb3a3df79ac7204
 }
 // style for inputs on menu tabs
 

@@ -13,17 +13,15 @@ import { GroupService } from "../../services/group.service";
 import { UserDetail } from "../../models/user-detail";
 
 import { FileService } from '../../services/file.service';
-import { MenuMessagesService } from "../../services/menu-messages.service";
+import { EventEmitterService } from "../../services/event-emitter.service";
 import { UserStatePipe} from "../../pipes/user-state.pipe";
-import {ViewEncapsulation} from '@angular/core';
 declare var jquery: any;
 declare var $: any;
 
 @Component({
     selector: "messages-list",
     templateUrl: "./messages-list.component.html",
-    styleUrls: ["./messages-list.component.scss"],
-    encapsulation: ViewEncapsulation.None,
+    styleUrls: ["./messages-list.component.scss"]
 })
 export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
@@ -49,7 +47,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     constructor(private router: Router,
                 private activatedRoute: ActivatedRoute,
                 private messageService: MessageService,
-                private menuMessagesService: MenuMessagesService,
+                private eventEmitterService: EventEmitterService,
                 private chatHubService: ChatHubService,
                 private accountService: AccountService,
                 private userService: UserService,
@@ -116,21 +114,19 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
           filtersPosition: "top",
           tones: false,
           autocomplete: true,
-          inline: true,
           autoHideFilters: true,
           hidePickerOnBlur: true,
+          tonesStyle: "bullet",
           placeholder:"Message text..."
         }); 
-
         if (this.messageEmoji[0]!==undefined) {
            let self = this;
            this.messageEmoji[0].emojioneArea.on("keyup", function(btn, event) {
-               if (event.originalEvent.key=="Enter") {
+               if (event.originalEvent.key=="Enter" && event.originalEvent.ctrlKey) {
                    self.send();
                }
             });
-        }
-        
+        }        
     }
     private toggleListMember(event){
         $(".members-toggle").slideToggle(300);
@@ -277,13 +273,13 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, false);
         this.addToMessages(message);
         this.messageService.sendUserMessage(message).subscribe(data => { 
-            this.menuMessagesService.addMessageEvent.emit(message); 
+            this.eventEmitterService.addMessageEvent.emit(message); 
         },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.sendUserMessage(message).subscribe(data => {
-                            this.menuMessagesService.addMessageEvent.emit(message);
+                            this.eventEmitterService.addMessageEvent.emit(message);
                         });
                     }
                 });
@@ -293,13 +289,13 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private sendGroupMessage(text: string, fileName: string) {
         let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, true);        
         this.messageService.sendGroupMessage(message).subscribe(data => { 
-            this.menuMessagesService.addMessageEvent.emit(message);             
+            this.eventEmitterService.addMessageEvent.emit(message);             
         },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.sendGroupMessage(message).subscribe(data => {
-                            this.menuMessagesService.addMessageEvent.emit(message);             
+                            this.eventEmitterService.addMessageEvent.emit(message);             
                         });
                     }
                 });
@@ -448,5 +444,13 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     onDownloadFile(fileName : string){
         this.fileService.download(fileName);
+    }
+
+    onNavigateTo():void {
+        console.log("onNavigateTo");
+        if(this.isGroup)
+            this.router.navigate(["menu/groups/details", this.receiverId]);
+        else
+            this.router.navigate(["menu/user-details", this.receiverId]);  
     }
 }
