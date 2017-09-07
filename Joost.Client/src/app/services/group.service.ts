@@ -1,8 +1,6 @@
 ﻿import { Injectable, EventEmitter } from '@angular/core';
-//import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpRequest } from '@angular/common/http';
 import { HttpService } from '../services/http.service';
-
 import { BaseApiService } from "./base-api.service";
 import { Group } from "../models/group";
 import { UserDetail } from "../models/user-detail";

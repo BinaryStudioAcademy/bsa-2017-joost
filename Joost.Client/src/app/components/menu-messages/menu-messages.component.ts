@@ -1,16 +1,13 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from "@angular/router";
+import { Subscription } from "rxjs/Rx";
+import { ViewEncapsulation } from '@angular/core';
 import { Dialog } from "../../models/dialog";
+import { Message } from "../../models/message";
 import { DialogService } from "../../services/dialog.service";
 import { ChatHubService } from "../../services/chat-hub.service";
-import { Subscription } from "rxjs/Rx";
-import { Message } from "../../models/message";
-import { MenuMessagesService } from "../../services/menu-messages.service";
-import { ContactService } from "../../services/contact.service";
-import { ContactState } from "../../models/contact";
-import { UserContact } from "../../models/user-contact";
-import {ViewEncapsulation} from '@angular/core';
 import { GroupService } from "../../services/group.service";
+import { EventEmitterService } from "../../services/event-emitter.service";
 
 @Component({
   selector: 'app-menu-messages',
@@ -23,39 +20,30 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private dialogs: Dialog[];
   private contacts: UserContact[] = [];
   private filteredDialogs: Dialog[];
+  private searchString: string;
+
   private senderSubscription: Subscription;
   private receiverSubscription: Subscription;
   private addingGroupsSubscription: Subscription;
-  private searchString: string;
   private newGroupSubscription: Subscription;
   private newContactSubscription: Subscription;
 
   constructor(
-    private dialogService: DialogService, 
     private router: Router,
+    private dialogService: DialogService, 
     private chatHubService: ChatHubService, 
-    private menuMessagesService: MenuMessagesService,
     private contactService: ContactService,
-    private groupServive: GroupService) {
+    private groupServive: GroupService,
+    private eventEmitterService: EventEmitterService) {
       this.updateDialogs();
   }
 
   ngOnInit() {
       this.receiverSubscription = this.chatHubService.addMessageEvent.subscribe(message => {
-          if (message.IsGroup) {
-            this.updateLastGroupMessage(message);
-          }
-          else {
-            this.updateLastUserMessage(message);
-          }
+          this.updateLastMessage(message);
       });
-      this.senderSubscription = this.menuMessagesService.addMessageEvent.subscribe(message => {
-        if (message.IsGroup) {
-            this.updateLastGroupMessage(message);
-          }
-          else {
-            this.updateLastUserMessage(message);
-          }
+      this.senderSubscription = this.eventEmitterService.addMessageEvent.subscribe(message => {
+        this.updateLastMessage(message);        
       });
 
       this.addingGroupsSubscription = this.groupServive.addGroupEvent.subscribe(group => {
@@ -78,6 +66,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       this.receiverSubscription.unsubscribe();
       this.addingGroupsSubscription.unsubscribe();
       this.newContactSubscription.unsubscribe();
+      this.newGroupSubscription.unsubscribe();
   }
 
   private updateDialogs() {
@@ -120,6 +109,15 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
         filteredDialogs[0].LastMessage = message.Text;
         filteredDialogs[0].DateLastMessage = message.CreatedAt;
         this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
+    }
+  }
+
+  private updateLastMessage(message: Message) {
+    if (message.IsGroup) {
+      this.updateLastGroupMessage(message);
+    }
+    else {
+      this.updateLastUserMessage(message);
     }
   }
 

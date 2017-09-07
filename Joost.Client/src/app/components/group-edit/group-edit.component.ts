@@ -139,7 +139,7 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
                 console.log("Inserted");
                 this.saved = true;
                 this.groupService.addGroupEvent.emit(response);
-                this.groupService.addGroupEvent.emit(response);
+                //this.groupService.addGroupEvent.emit(response);
                 this.router.navigate(["/menu/messages", "group", response.Id]);
             },
             async err => {

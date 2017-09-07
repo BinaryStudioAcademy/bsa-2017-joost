@@ -55,7 +55,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 
 import { FileService } from './services/file.service';
 import { AttachedImagePipe } from "./pipes/attached-image.pipe";
-import { MenuMessagesService } from "./services/menu-messages.service";
+import { EventEmitterService } from "./services/event-emitter.service";
 import { UserStatePipe } from './pipes/user-state.pipe';
 import { NotificationService } from "./services/notification.service";
 
@@ -110,7 +110,7 @@ import { NotificationService } from "./services/notification.service";
     AccountService,
     ContactService,
     FileService,
-    MenuMessagesService,
+    EventEmitterService,
     NotificationService,
     {
       provide: ToastOptions,
