@@ -13,7 +13,7 @@
 
         <div *ngIf="isLoad">
             <!-- header -->
-            <div class="mdl-card__title" style="width: 100%; overflow: hidden; display: block!important">
+            <div class="mdl-card__title" style="width: 100%; overflow: hidden; display: block!important; border-bottom: 1px solid rgba(0,0,0,.1);">
                 <h2 class="mdl-card__title-text" style="display: block!important">
                     <span style="padding: 8px 16px; float: left; width: auto; border: none; outline: none; display: block;">New invite to friends</span>
                     <span style="float: right!important; font-weight: bold; font-size: 40px; cursor: pointer" (click)="goBack()">&times;</span>
@@ -29,6 +29,10 @@
                 <div *ngIf="contact.State==3">
                     <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> did not want to add you to contact list.</h3>
                     <h3 style="text-align:center">You can try send the request to add to your contact list again.</h3>
+                </div>
+                <div *ngIf="contact.State==4">
+                    <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> doesn't present in your contact list</h3>
+                    <h3 style="text-align:center">You can return user back</h3>
                 </div>
             </div>
 
@@ -49,6 +53,12 @@
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
                                 (click)="retry(contact.Id)">
                             Send
+                        </button>
+                    </span>
+                    <span *ngIf="contact.State==4">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
+                                (click)="accept(contact.Id)">
+                            Return to contacts
                         </button>
                     </span>
                 </div>
