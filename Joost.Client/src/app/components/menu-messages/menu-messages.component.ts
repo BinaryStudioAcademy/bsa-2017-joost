@@ -6,6 +6,9 @@ import { ChatHubService } from "../../services/chat-hub.service";
 import { Subscription } from "rxjs/Rx";
 import { Message } from "../../models/message";
 import { MenuMessagesService } from "../../services/menu-messages.service";
+import { ContactService } from "../../services/contact.service";
+import { ContactState } from "../../models/contact";
+import { UserContact } from "../../models/user-contact";
 
 @Component({
   selector: 'app-menu-messages',
@@ -15,12 +18,13 @@ import { MenuMessagesService } from "../../services/menu-messages.service";
 export class MenuMessagesComponent implements OnInit, OnDestroy {
 
   private dialogs: Dialog[];
+  private contacts: UserContact[] = [];
   private filteredDialogs: Dialog[];
   private senderSubscription: Subscription;
   private receiverSubscription: Subscription;
   private searchString: string;
 
-  constructor(private dialogService: DialogService, private router: Router, private chatHubService: ChatHubService, private menuMessagesService: MenuMessagesService) {
+  constructor(private dialogService: DialogService, private contactService: ContactService, private router: Router, private chatHubService: ChatHubService, private menuMessagesService: MenuMessagesService) {
       dialogService.getDialogs().subscribe(d => {
           var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
           this.dialogs = sortArray;
@@ -35,7 +39,14 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
               }); 
             }
         });
-    });
+      });
+      this.contactService.getAllContacts().subscribe(data => {
+          for (let item of data) {
+              if (item.State == ContactState.New) {
+                  this.contacts.push(item);
+              }
+          }
+      });
   }
 
   ngOnInit() {
@@ -100,5 +111,24 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
           }
           return 0
       });
+  }
+
+  private goToUserDetail(userId: number): void {
+      this.router.navigate(['menu/user-details', userId], { skipLocationChange: true });
+  }
+
+  private goToConfirm(id: number) {
+      if (this.isNewContact(id) || this.isDeclineContact(id)) {
+          this.contactService.changeContactIdNotify(id);
+          this.router.navigate(['menu/add-contact']);
+      }
+  }
+
+  isNewContact(id: number): boolean {
+      return this.contacts.filter(t => t.Id == id)[0].State === ContactState.New;
+  }
+
+  isDeclineContact(id: number): boolean {
+      return this.contacts.filter(t => t.Id == id)[0].State === ContactState.Decline;
   }
 }

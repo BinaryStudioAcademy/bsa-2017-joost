@@ -111,7 +111,7 @@ export class MenuUsersComponent implements OnInit {
 	isDeclineContact(id:number):boolean{
 		return this.result.filter(t=>t.Id==id)[0].State===ContactState.Decline;
 	}
-	ContactStatus(id:number):string{
+	private ContactStatus(id:number):string{
 		let state =  this.result.filter(t=>t.Id==id)[0];
 		if (state) {
 			switch (state.State) {
