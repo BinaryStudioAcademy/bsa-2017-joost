@@ -62,18 +62,19 @@ namespace Joost.Api.Controllers
                     ContactUser = contactUser,
                     State = DbAccess.Entities.ContactState.Sent,
                 });
+                contactUser.Contacts.Add(new Contact()
+                {
+                    User = contactUser,
+                    ContactUser = user,
+                    State = DbAccess.Entities.ContactState.New,
+                });
             }
             // retry when user decline offer
             else
             {
                 user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Sent;
+                contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == userId).State = DbAccess.Entities.ContactState.New;
             }
-            contactUser.Contacts.Add(new Contact()
-            {
-                User = contactUser,
-                ContactUser = user,
-                State = DbAccess.Entities.ContactState.New,
-            });
 
 			await _unitOfWork.SaveAsync();
 			await _chatHubService.AddContact(userId, contact.ContactId);
@@ -159,39 +160,23 @@ namespace Joost.Api.Controllers
         [Route("decline-contact")]
         public async Task<IHttpActionResult> DeclineContact([FromBody]ContactDto contact)
         {
-            //var userId = GetCurrentUserId();
-            //if (userId == contact.ContactId)
-            //{
-            //    return InternalServerError();
-            //}
-            //var user = await _unitOfWork.Repository<User>().GetAsync(userId);
-            //if (user == null)
-            //{
-            //    return NotFound();
-            //}
-            //var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
-            //if (contactUser == null)
-            //{
-            //    return NotFound();
-            //}
-            //user.Contacts.Remove(user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id));
-            //contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
-            //await _unitOfWork.SaveAsync();
-
-            //return Ok();
-
-            if (GetCurrentUserId() == contact.ContactId)
+            var userId = GetCurrentUserId();
+            if (userId == contact.ContactId)
+            {
                 return InternalServerError();
-
-            var contactEntry = await _unitOfWork.Repository<Contact>().FindAsync(
-                c => c.User.Id == GetCurrentUserId() &&
-                c.ContactUser.Id == contact.ContactId);
-
-            if (contactEntry == null)
+            }
+            var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+            if (user == null)
+            {
                 return NotFound();
-
-            contactEntry.State = DbAccess.Entities.ContactState.Decline;
-            _unitOfWork.Repository<Contact>().Attach(contactEntry);
+            }
+            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
+            if (contactUser == null)
+            {
+                return NotFound();
+            }
+            user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Canceled;
+            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
             await _unitOfWork.SaveAsync();
 
             return Ok();

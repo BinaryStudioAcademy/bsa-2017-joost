@@ -1,4 +1,4 @@
-export class Contact{
+﻿export class Contact{
     constructor(id:number, state:ContactState){
         this.ContactId = id;
         this.State = state;
@@ -12,5 +12,6 @@ export enum ContactState
     New ,
     Sent,
     Accept,
-    Decline
+    Decline,
+    Canceled
 }
