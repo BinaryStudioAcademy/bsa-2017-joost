@@ -114,21 +114,19 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
           filtersPosition: "top",
           tones: false,
           autocomplete: true,
-          inline: true,
           autoHideFilters: true,
           hidePickerOnBlur: true,
+          tonesStyle: "bullet",
           placeholder:"Message text..."
         }); 
-
         if (this.messageEmoji[0]!==undefined) {
            let self = this;
            this.messageEmoji[0].emojioneArea.on("keyup", function(btn, event) {
-               if (event.originalEvent.key=="Enter") {
+               if (event.originalEvent.key=="Enter" && event.originalEvent.ctrlKey) {
                    self.send();
                }
             });
-        }
-        
+        }        
     }
     private toggleListMember(event){
         $(".members-toggle").slideToggle(300);

@@ -412,3 +412,9 @@ ul {
   border-radius: 10px;
   margin-right: 2px;
 }
+
+.wrap-textarea-input ::ng-deep .emojionearea-editor{
+    min-height: 1em;
+    max-height: 4em;
+    margin-right: 0;
+  }
