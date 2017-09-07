@@ -58,22 +58,19 @@ html, body {
 }
 
 .online-state {
-<<<<<<< HEAD
  color: $color-online-indicator;
 }
 
 .busy-state{
  color: $color-inacceptable-indicator;
-=======
- background-color: $color-online-indecator;
+ background-color: $color-online-indicator;
 }
 
 .busy-state{
- background-color: $color-offline-indecator;
+ background-color: $color-offline-indicator;
 }
 .offline-state{
-    background-color: $color-offline-indecator;
->>>>>>> e6f40f23d321fe2b2281b570b43197d917c3438d
+    background-color: $color-offline-indicator;
 }
 // style for inputs on menu tabs
 

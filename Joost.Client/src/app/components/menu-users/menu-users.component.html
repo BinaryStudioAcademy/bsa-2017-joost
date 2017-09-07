@@ -9,7 +9,9 @@
   <ul class="demo-list-three mdl-list">
   <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let user of searchContact" (click)="goToConfirm(user.Id)">
     <span class="mdl-list__item-primary-content">
-      <img src="{{user.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+      <div class="img-container">
+        <img src="{{user.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+      </div>
       <span>{{user.Name}}</span>
       <span class="mdl-list__item-text-body">
        {{user.City}}

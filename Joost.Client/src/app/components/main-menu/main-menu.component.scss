@@ -1,9 +1,12 @@
 @import '../../../vars.scss';
 
 .main-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 32px;
+  width: $avatar-size;
+  height: $avatar-size;
+  border-radius: calc(#{$avatar-size} / 2);
+  position: relative;
+  top: calc(#{$online-indicator-size} / 2);
+  left: calc(#{$online-indicator-size} / 2);
 }
 
 .mdl-layout__container{
@@ -92,6 +95,11 @@
 
 .avatar-container{
     position: relative;
+    background: red;
+    width: calc(#{$avatar-size} + #{$online-indicator-size} * 2);
+    height: calc(#{$avatar-size} + #{$online-indicator-size} * 2);
+    border-radius: calc((#{$avatar-size} + #{$online-indicator-size} * 2) / 2);
+    padding: $online-indicator-size 0 0 $online-indicator-size;
 }
 
 .header-user-name{
