@@ -14,11 +14,28 @@
 .jg-full-width-container{
     width: 100%;
 }
-
+$card-padding: 15px;
 .jg-container{
-    width: calc(100% - 10px);
-    min-height: calc(100vh - 10px);
-    margin: 5px auto;
+    max-width: calc(100% - #{$card-padding} - #{$card-padding});
+    width: 100%;
+    position: absolute;
+    min-height: calc(100% - 2 * #{$card-padding});
+}
+
+.jg-card{
+    padding: $card-padding;
+    max-width: calc(74% - 2 * #{$card-padding});
+    width: 100%;
+    position: absolute;
+    min-height: calc(100% - 2 * #{$card-padding});
+    margin-left: 26%;
+}
+@media (max-width: 1024px){
+    .jg-card{
+        margin: 0  26%;
+        right: -13%;
+    }
+
 }
 
 .jg-header-container{
@@ -59,6 +76,10 @@
     margin-top: auto;
     margin-bottom: auto;
 }
-
+// .content-holder{
+//     height: 100%;
+//     width:100%;
+//     margin-left: 400px;
+// }
 
 

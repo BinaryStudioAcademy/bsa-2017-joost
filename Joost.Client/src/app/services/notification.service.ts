@@ -1,13 +1,19 @@
-import {Component, ViewContainerRef} from '@angular/core';
+import {Component, Injectable, ViewContainerRef} from '@angular/core';
 import {ToastsManager, Toast} from 'ng2-toastr';
 
+@Injectable()
 export class NotificationService {
 
   private audio;
+  private vRef: ViewContainerRef;
 
-  constructor(private toastr: ToastsManager, vRef: ViewContainerRef) {
-    this.toastr.setRootViewContainerRef(vRef);
+  constructor(private toastr: ToastsManager) {
     this.audio = new Audio();
+  }
+
+  public setViewContainerRef(vRef: ViewContainerRef) {
+    this.vRef = vRef;
+    this.toastr.setRootViewContainerRef(this.vRef);
   }
 
   private playNotificationSound() {
@@ -49,7 +55,7 @@ export class NotificationService {
   }
 
   showNewMessage(notificationTitle:string, notificationMessage:string) {
-    this.playNotificationSound();    
+    this.playNotificationSound();
     let htmlmessage: string = 
     "<div>"+
       "<img src=\"assets/notifications/message.png\""+
@@ -57,7 +63,7 @@ export class NotificationService {
       "<span style=\"font-weight:bold; font-size:14pt; margin-left: 10px;\">"+notificationTitle+"</span>"+
     "</div>"+
     "<div>"+notificationMessage +"</div>";
-
+    console.log("sending toast");
     this.toastr.custom(htmlmessage, null,
                        {
                          enableHTML: true
@@ -73,12 +79,10 @@ export class NotificationService {
       "<span style=\"font-weight:bold; font-size:14pt; margin-left: 10px;\">"+notificationTitle+"</span>"+
     "</div>"+
     "<div>"+notificationMessage +"</div>";
-
+   console.log("sending toast");
     this.toastr.custom(htmlmessage, null,
                        {
                          enableHTML: true
                         });
   }
-
-  
-}
+} 

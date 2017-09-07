@@ -3,14 +3,17 @@
 .mdl-list__item-primary-content{
  color: $color-text-primary;
 }
-.mdl-list__item-text-body{
+.mdl-list__item--three-line .mdl-list__item-text-body {
   max-width: 300px;
   color: $color-text-secondary;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+.mdl-list__item-text-body .emojioneemoji{
+  height:1.2em;
+  width:1.2em;
+}
 .mdl-list__item:hover{
     background-color:$color-primary-dark;
 }
@@ -37,7 +40,7 @@
 	margin:0;
 }
 .accordion .mdl-list__item{
-	padding: 0;
+	padding: 8px 0;
 	height: auto;
 }
 .accordion .mdl-list__item--three-line .mdl-list__item-primary-content{

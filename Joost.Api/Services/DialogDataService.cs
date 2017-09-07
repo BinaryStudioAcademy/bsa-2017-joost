@@ -21,8 +21,9 @@ namespace Joost.Api.Services
         {
             return _unitOfWork.Repository<Message>()
                 .Query()
+                .Include(m => m.Sender)
                 .Include(m => m.Receiver)
-                .Where(m => m.Receiver.Id == userId)
+                .Where(m => m.Sender.Id == userId || m.Receiver.Id == userId)
                 .OrderByDescending(m => m.CreatedAt)
                 .FirstOrDefaultAsync();
         }
@@ -31,7 +32,6 @@ namespace Joost.Api.Services
         {
             return _unitOfWork.Repository<GroupMessage>()
                 .Query()
-                .Include(m => m.Sender)
                 .Include(m => m.Receiver)
                 .Where(m => m.Receiver.Id == groupId)
                 .OrderByDescending(m => m.CreatedAt)
@@ -83,7 +83,7 @@ namespace Joost.Api.Services
                     Name = item.Name,
                     LastMessage = lastMessage == null ? "Group was created" : lastMessage.Text,
                     DateLastMessage = lastMessage == null ? item.CreatedAt : lastMessage.CreatedAt,
-                    Avatar = string.Empty,
+                    Avatar = item.Avatar,
                     IsGroup = true
                 });
             }

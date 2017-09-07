@@ -4,14 +4,21 @@ using Joost.DbAccess.Interfaces;
 using System.Threading.Tasks;
 using Joost.Api.Models;
 using Joost.DbAccess.Entities;
+using Joost.Api.Filters;
+using Joost.Api.Services;
 
 namespace Joost.Api.Controllers
 {
+    [AccessTokenAuthorization]
     [RoutePrefix("api/contact")]
     public class ContactController : BaseApiController
     {
-        public ContactController(IUnitOfWork unitOfWork) : base(unitOfWork)
-        {}
+		private IChatHubService _chatHubService;
+
+        public ContactController(IUnitOfWork unitOfWork, IChatHubService chatHubService) : base(unitOfWork)
+        {
+			_chatHubService = chatHubService;
+		}
 
         // Get: api/contacts
         [HttpGet]
@@ -67,9 +74,11 @@ namespace Joost.Api.Controllers
                 ContactUser = user,
                 State = DbAccess.Entities.ContactState.New,
             });
-            await _unitOfWork.SaveAsync();
 
-            return Ok();
+			await _unitOfWork.SaveAsync();
+			await _chatHubService.AddContact(userId, contact.ContactId);
+
+			return Ok();
         }
 
         // Delete: api/contacts
@@ -150,26 +159,42 @@ namespace Joost.Api.Controllers
         [Route("decline-contact")]
         public async Task<IHttpActionResult> DeclineContact([FromBody]ContactDto contact)
         {
-            var userId = GetCurrentUserId();
-            if (userId == contact.ContactId)
-            {
+            //var userId = GetCurrentUserId();
+            //if (userId == contact.ContactId)
+            //{
+            //    return InternalServerError();
+            //}
+            //var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+            //if (user == null)
+            //{
+            //    return NotFound();
+            //}
+            //var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
+            //if (contactUser == null)
+            //{
+            //    return NotFound();
+            //}
+            //user.Contacts.Remove(user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id));
+            //contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
+            //await _unitOfWork.SaveAsync();
+
+            //return Ok();
+
+            if (GetCurrentUserId() == contact.ContactId)
                 return InternalServerError();
-            }
-            var user = await _unitOfWork.Repository<User>().GetAsync(userId);
-            if (user == null)
-            {
+
+            var contactEntry = await _unitOfWork.Repository<Contact>().FindAsync(
+                c => c.User.Id == GetCurrentUserId() &&
+                c.ContactUser.Id == contact.ContactId);
+
+            if (contactEntry == null)
                 return NotFound();
-            }
-            var contactUser = await _unitOfWork.Repository<User>().GetAsync(contact.ContactId);
-            if (contactUser == null)
-            {
-                return NotFound();
-            }
-            user.Contacts.Remove(user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id));
-            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
+
+            contactEntry.State = DbAccess.Entities.ContactState.Decline;
+            _unitOfWork.Repository<Contact>().Attach(contactEntry);
             await _unitOfWork.SaveAsync();
 
             return Ok();
-        }
+        }                          
     }
 }

@@ -1,9 +1,13 @@
-﻿using Joost.Api.Infrastructure;
+﻿using Joost.Api.Filters;
+using Joost.Api.Infrastructure;
 using Joost.DbAccess.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
 
@@ -17,22 +21,22 @@ namespace Joost.Api.Controllers
 
         // GET api/files/
         [HttpGet]
-        [Route("")]
         [Route("{fileName}")]
-        public IHttpActionResult DownloadFile(string fileName)
+        public IHttpActionResult DownloadImage(string fileName)
         {
             string folderPath = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles/");
 
 			List<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
 
-			var filePath = Directory.EnumerateFiles(folderPath, fileName + ".*", SearchOption.AllDirectories).FirstOrDefault();
-            //.Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".gif")).FirstOrDefault();
+			var filePath = Directory.EnumerateFiles(folderPath, fileName + ".*", SearchOption.AllDirectories)
+				.Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".gif")).FirstOrDefault();
 
             try
             {
                 if (!String.IsNullOrWhiteSpace(filePath))
                 {
                     string fileType = filePath.Substring(filePath.LastIndexOf('.') + 1);
+					
                     string mediaType = String.Format("image/{0}", fileType);
 
                     return new FileResult(filePath, mediaType);
@@ -49,14 +53,55 @@ namespace Joost.Api.Controllers
 
         }
 
-        // POST api/files/
-        [HttpPost, HttpPut]
+		[HttpPost]
+        [AccessTokenAuthorization]
+        [Route("download")]
+		public IHttpActionResult DownloadFile()
+		{
+			var fileName = HttpContext.Current.Request.Form["fileName"];
+			string folderPath = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles/");
+	
+			var filePath = folderPath + fileName;
+
+			if (!File.Exists(filePath))
+				return NotFound();
+
+			var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+			var response = new HttpResponseMessage(HttpStatusCode.OK);
+			response.Content = new StreamContent(stream);
+			response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+			response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+			{
+				FileName = fileName
+			};
+
+			return ResponseMessage(response);
+		}
+
+		[HttpDelete]
+		[Route("{fileName}")]
+		public IHttpActionResult DeleteFile(string fileName)
+		{
+			string folderPath = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles/");
+
+			//var filePath = folderPath + fileName;
+			var filePath = Directory.EnumerateFiles(folderPath, fileName + ".*", SearchOption.AllDirectories).FirstOrDefault();
+			if (filePath == null || !File.Exists(filePath))
+				return NotFound();
+			else
+			{
+				File.Delete(filePath);
+				return Ok();
+			}
+		}
+
+		// POST api/files/
+		[HttpPost, HttpPut]
         [Route("")]
         public IHttpActionResult UploadFile()
         {
             var fileName = HttpContext.Current.Request.Form["fileName"];
 
-            //List<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png", ".bmp" };
             int MaxContentLength = 1024 * 1024 * 3;
 
             var httpRequest = HttpContext.Current.Request;
@@ -69,15 +114,6 @@ namespace Joost.Api.Controllers
 
                     if (postedFile != null && postedFile.ContentLength > 0)
                     {
-                        //var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
-                        //var extension = ext.ToLower();
-
-                        //if (!AllowedFileExtensions.Contains(extension))
-                        //{
-                        //    return BadRequest(); // "Please Upload image of type .jpg,.gif,.png., ".bmp""
-                        //}
-                        //else
-                        //{
                             if (postedFile.ContentLength > MaxContentLength)
                             {
                                 return BadRequest(); // "Please Upload a file upto 2 mb."

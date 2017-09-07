@@ -9,11 +9,14 @@ import { MenuMessagesService } from "../../services/menu-messages.service";
 import { ContactService } from "../../services/contact.service";
 import { ContactState } from "../../models/contact";
 import { UserContact } from "../../models/user-contact";
+import {ViewEncapsulation} from '@angular/core';
+import { GroupService } from "../../services/group.service";
 
 @Component({
   selector: 'app-menu-messages',
   templateUrl: './menu-messages.component.html',
-  styleUrls: ['./menu-messages.component.scss']
+  styleUrls: ['./menu-messages.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class MenuMessagesComponent implements OnInit, OnDestroy {
 
@@ -22,31 +25,17 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private filteredDialogs: Dialog[];
   private senderSubscription: Subscription;
   private receiverSubscription: Subscription;
+  private addingGroupsSubscription: Subscription;
   private searchString: string;
+  private newGroupSubscription: Subscription;
 
-  constructor(private dialogService: DialogService, private contactService: ContactService, private router: Router, private chatHubService: ChatHubService, private menuMessagesService: MenuMessagesService) {
-      dialogService.getDialogs().subscribe(d => {
-          var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
-          this.dialogs = sortArray;
-          this.filteredDialogs = sortArray;
-        },
-        async err => {
-          await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
-            if (ok) {
-              dialogService.getDialogs().subscribe(d => {
-                this.dialogs = d;
-                this.filteredDialogs = d;
-              }); 
-            }
-        });
-      });
-      this.contactService.getAllContacts().subscribe(data => {
-          for (let item of data) {
-              if (item.State == ContactState.New) {
-                  this.contacts.push(item);
-              }
-          }
-      });
+  constructor(
+    private dialogService: DialogService, 
+    private router: Router,
+    private chatHubService: ChatHubService, 
+    private menuMessagesService: MenuMessagesService,
+    private groupServive: GroupService) {
+      this.updateDialogs();
   }
 
   ngOnInit() {
@@ -66,13 +55,47 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
             this.updateLastUserMessage(message);
           }
       });
+
+      this.addingGroupsSubscription = this.groupServive.addGroupEvent.subscribe(group => {
+        this.updateDialogs();
+      });
+
+      this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => {
+        this.dialogs.push(groupDialog);
+      });
   }
 
   ngOnDestroy() {
       this.senderSubscription.unsubscribe();
       this.receiverSubscription.unsubscribe();
+      this.addingGroupsSubscription.unsubscribe();
   }
 
+  private updateDialogs() {
+    this.dialogService.getDialogs().subscribe(d => {
+      var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
+      this.dialogs = sortArray;
+      this.filteredDialogs = sortArray;
+    },
+    async err => {
+      await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
+        if (ok) {
+          this.dialogService.getDialogs().subscribe(d => {
+            this.dialogs = d;
+            this.filteredDialogs = d;
+          }); 
+        }
+      });
+    });
+    this.contactService.getAllContacts().subscribe(data => {
+        for (let item of data) {
+            if (item.State == ContactState.New) {
+                this.contacts.push(item);
+            }
+        }
+    });
+  }
+  
   private updateLastUserMessage(message: Message) {
     let filteredDialogs = this.dialogs.filter(d => (d.Id == message.SenderId || d.Id == message.ReceiverId) && !d.IsGroup);
     if (filteredDialogs.length > 0) {

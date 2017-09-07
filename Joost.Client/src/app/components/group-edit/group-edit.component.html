@@ -1,27 +1,40 @@
-﻿
+
+<div class="group-edit">
 <div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="group">
     <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">{{ editMode ? 'Edit group' : 'Create new group'}} </h2>
     </div>
     <div class="mdl-card__title jc-group-edit-title-container">
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
-            <input class="mdl-textfield__input"
-             type="text"
-             id="groupName"
-             #groupName
-             required minlength="4"
-             value="{{group.Name}}"
-             (keyup)="onGroupNameKeyUp(groupName.value)">
-            <label class="mdl-textfield__label" for="groupName">Group name</label>
+        <div class="avatar-upload-container">
+            <label for="file-upload" class="custom-file-upload">
+            <div class="wrapper-avatar">
+                <div class="avatar-upload-overlay">
+                <i class="material-icons">create</i>
+                </div>
+            </div>
+            <img [src]="imgSrc" class="avatar-upload-image"></label>
+            <input id="file-upload" type="file" (change)="SendAvatar($event)"  name="file" accept="image/jpeg,image/png,image/gif"/>    
         </div>
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
-            <input class="mdl-textfield__input"
-             type="text"
-             id="groupDescription"
-             #groupDescription
-             value="{{group.Description}}"
-             (keyup)="onGroupDescriptionKeyUp(groupDescription.value)">
-            <label class="mdl-textfield__label" for="groupDescription">Description</label>
+        <div class="jc-ge-title-input-container">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
+                    <input class="mdl-textfield__input"
+                        type="text"
+                        id="groupName"
+                        #groupName
+                        required minlength="4"
+                        value="{{group.Name}}"
+                        (keyup)="onGroupNameKeyUp(groupName.value)">
+                    <label class="mdl-textfield__label" for="groupName">Group name</label>
+                </div>
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
+                    <input class="mdl-textfield__input"
+                        type="text"
+                        id="groupDescription"
+                        #groupDescription
+                        value="{{group.Description}}"
+                        (keyup)="onGroupDescriptionKeyUp(groupDescription.value)">
+                    <label class="mdl-textfield__label" for="groupDescription">Description</label>
+                </div>   
         </div>
     </div>
     <div class="mdl-card__supporting-text mdl-grid groups-list-container">
@@ -75,4 +88,5 @@
             Group name cannot be empty or less than 4 symbols
         </div>      
     </div>
+</div>
 </div>

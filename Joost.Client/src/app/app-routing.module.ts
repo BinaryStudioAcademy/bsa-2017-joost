@@ -4,6 +4,7 @@ import { UserDetailsComponent } from "./components/user-details/user-details.com
 import { ConfirmRegistrationComponent } from "./components/confirm-registration/confirm-registration.component";
 
 import { GroupEditComponent } from "./components/group-edit/group-edit.component";
+import { GroupDetailsComponent } from "./components/group-details/group-details.component";
 import { UserEditingComponent } from "./components/user-editing/user-editing.component";
 import { LoginComponent } from './components/login/login.component';
 import { LoginSignInComponent } from "./components/login-sign-in/login-sign-in.component";
@@ -52,6 +53,10 @@ const routes: Routes = [
         {
           path: 'edit/:id',
           component: GroupEditComponent
+        },
+        {
+          path: 'details/:id',
+          component: GroupDetailsComponent
         }
       ]
     },

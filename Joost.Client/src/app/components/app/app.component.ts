@@ -1,6 +1,7 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { AuthenticationService } from "../../services/authentication.service";
 import { Router } from "@angular/router";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-root',
@@ -11,8 +12,9 @@ export class AppComponent implements OnInit {
   
   constructor(
     private router: Router,
-    private authService: AuthenticationService
-  ){}
+    private authService: AuthenticationService,
+    public toastr: ToastsManager, vRef: ViewContainerRef
+  ){ this.toastr.setRootViewContainerRef(vRef);}
   ngOnInit(): void {
     if(this.authService.isUserLogined()) {
           this.router.navigate(['menu'], { skipLocationChange: true });

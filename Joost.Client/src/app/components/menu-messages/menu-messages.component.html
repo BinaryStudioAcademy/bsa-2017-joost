@@ -69,8 +69,8 @@
                 <span  class="mdl-list__item-primary-content">
                   <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
                   <span>{{dialog.Name}}</span>
-                  <span class="mdl-list__item-text-body">
-                    {{dialog.LastMessage}}
+                  <span class="mdl-list__item-text-body" [innerHTML]="dialog.LastMessage">
+                  <!-- {{dialog.LastMessage}} -->
                   </span>
                 </span>
               </li>
@@ -87,8 +87,8 @@
                   <span class="mdl-list__item-primary-content">
                       <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
                       <span>{{dialog.Name}}</span>
-                      <span class="mdl-list__item-text-body">
-                          {{dialog.LastMessage}}
+                      <span class="mdl-list__item-text-body" [innerHTML]="dialog.LastMessage">
+                          <!-- {{dialog.LastMessage}} -->
                       </span>
                   </span>
               </li>

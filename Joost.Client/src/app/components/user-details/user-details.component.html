@@ -1,11 +1,11 @@
-﻿<div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="user">
+﻿<div class="jg-card mdl-grid">
+<div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="user">
     <div class="jg-header-container mdl-shadow--2dp">
         <img src="{{user.Avatar | avatarPipe}}" class="jc-user-avatar-container">
         <div class="ud-main-info-container">
             <h3>{{user.FirstName}} {{user.LastName}}</h3>
             <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
             <div [innerHtml]="user.State | statePipe"></div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"> Send Message</button>
         </div>
     </div>
     <div class="jc-user-details-container">
@@ -33,7 +33,6 @@
       <div class="user-details-group mdl-card__actions mdl-card--border">
         <!-- <h5>Actions</h5> -->
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Clear History</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Delete Conversation</button>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Block User</button>
       </div>
     </div>
@@ -45,4 +44,5 @@
         {{isFriend ? 'Delete' : 'Add'}}
       </button>
     </div>
+</div>
 </div>
