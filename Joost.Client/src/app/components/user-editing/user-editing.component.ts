@@ -13,6 +13,8 @@ import { NamePipe } from "../../pipes/name.pipe";
 import { MDL } from "../mdl-base.component";
 
 import {IMyDpOptions} from 'mydatepicker';
+import { EventEmitterService } from "../../services/event-emitter.service";
+import { Subscription } from "rxjs/Rx";
 
 @Component({
   selector: 'app-user-editing',
@@ -43,25 +45,31 @@ export class UserEditingComponent extends MDL implements OnInit {
 
   private imgSrc: string;
 
+  private changeStatusSubscription: Subscription;
+
   constructor(
     private userService: UserService,
     private accountService: AccountService,
     private avatarService: AvatarService,
     private fileService: FileService,
     public router: Router,
-    private location: Location
+    private location: Location,
+    private eventEmitterService: EventEmitterService
   ) {
     super();
   }
 
   ngOnInit() {
     this.GetUser();
+    this.changeStatusSubscription = this.eventEmitterService.changeStatusEvent.subscribe(data => {
+      this.user.Status = data;
+    }); 
   }
 
   SaveUser() {
     this.user.BirthDate = new Date(this.datePickerValue.date.year, this.datePickerValue.date.month-1, this.datePickerValue.date.day+1);
     this.accountService.updateUser(this.user);
-    
+    this.eventEmitterService.changeProfileDataEvent.emit(this.user);
     this.router.navigate(['menu']);
     // add refresh component (menu and user-editing) command here when SignalR notificator will be ready
   }

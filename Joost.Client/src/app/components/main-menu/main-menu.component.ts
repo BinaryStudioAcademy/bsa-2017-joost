@@ -1,16 +1,15 @@
 ﻿import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-
-import { AccountService } from "../../services/account.service";
-
-import { MDL } from "../mdl-base.component";
-import { UserProfile } from "../../models/user-profile";
-import { ChatHubService } from "../../services/chat-hub.service";
-import { Message } from "../../models/message";
-import { NotificationService } from "../../services/notification.service";
 import { Subscription } from "rxjs/Rx";
+import { MDL } from "../mdl-base.component";
+import { AccountService } from "../../services/account.service";
+import { UserProfile } from "../../models/user-profile";
+import { Message } from "../../models/message";
+import { ChatHubService } from "../../services/chat-hub.service";
 import { Dialog } from "../../models/dialog";
 import { UserContact } from "../../models/user-contact";
+import { NotificationService } from "../../services/notification.service";
+import { EventEmitterService } from "../../services/event-emitter.service";
 
 @Component({
   selector: 'app-main-menu',
@@ -19,20 +18,23 @@ import { UserContact } from "../../models/user-contact";
 })
 export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
 
+  private curUser: UserProfile;
   private editMode: boolean = false;
   private previousStatus: string;
+  
   private messageNotifSubscription: Subscription;
   private contactNotifSubscription: Subscription;
   private groupNotifSubscription: Subscription;  
-
-  private curUser: UserProfile; 
+  private changeProfileDataSubscription: Subscription;
+ 
   constructor(
     private router: Router, 
     private route: ActivatedRoute,
     private accountService: AccountService,
     private chatHubService: ChatHubService,
     private notificationService: NotificationService,
-    private vRef: ViewContainerRef) {
+    private vRef: ViewContainerRef,
+    private eventEmitterService: EventEmitterService) {
       super();
       notificationService.setViewContainerRef(vRef);
   }
@@ -44,6 +46,7 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
   onSaveStatus(){
     this.accountService.updateStatus(this.curUser.Status)
       .subscribe(response => this.editMode = false);
+    this.eventEmitterService.changeStatusEvent.emit(this.curUser.Status);
   }
   onCancelEdit(){
     this.editMode = false;
@@ -67,10 +70,15 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
         }
       })
     });
+
+    this.changeProfileDataSubscription = this.eventEmitterService.changeProfileDataEvent.subscribe(data => {
+      this.curUser = data;
+    })
   }
 
   ngOnDestroy() {
     this.stopRuningNotifications();
+    this.changeProfileDataSubscription.unsubscribe();
   }
 
   onCreateGroup(){
@@ -109,12 +117,10 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
   }
 
   private isOnUserMessages(dialogId: number) {
-    console.log("menu/messages/user/" + dialogId);
     return window.location.pathname.search("menu/messages/user/" + dialogId) != -1;
   }
 
-  private isOnGroupMessages(dialogId: number) {
-    console.log("menu/messages/group/" + dialogId);    
+  private isOnGroupMessages(dialogId: number) {   
     return window.location.pathname.search("menu/messages/group/" + dialogId) != -1;
   }
 
