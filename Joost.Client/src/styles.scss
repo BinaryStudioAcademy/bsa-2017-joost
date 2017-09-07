@@ -56,16 +56,27 @@ html, body {
     align-items:center;
     padding: 10px 0;
 }
+.user-state{
+    .online-state {
+     background-color: $color-online-indecator;
+    }
 
+    .busy-state{
+     background-color: $color-offline-indecator;
+    }
+    .offline-state{
+        background-color: $color-offline-indecator;
+    }
+}
 .online-state {
- background-color: $color-online-indecator;
+    color: $color-online-indecator;
 }
 
 .busy-state{
- background-color: $color-offline-indecator;
+    color: $color-offline-indecator;
 }
 .offline-state{
-    background-color: $color-offline-indecator;
+    color: $color-offline-indecator;
 }
 // style for inputs on menu tabs
 

@@ -23,7 +23,7 @@ export class MenuSearchComponent implements OnInit{
 	constructor(
 		private accountService: AccountService,
 		private authService: AuthenticationService,
-		private contactService: ContactService,
+		private contactService: ContactService
 	) { }
 
 	ngOnInit() {

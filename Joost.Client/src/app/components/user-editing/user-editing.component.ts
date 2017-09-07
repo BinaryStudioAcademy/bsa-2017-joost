@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, AfterViewInit,AfterViewChecked } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
@@ -13,23 +13,27 @@ import { NamePipe } from "../../pipes/name.pipe";
 import { MDL } from "../mdl-base.component";
 
 import {IMyDpOptions} from 'mydatepicker';
+
 import { EventEmitterService } from "../../services/event-emitter.service";
 import { Subscription } from "rxjs/Rx";
+declare var jquery: any;
+declare var $: any;
 
 @Component({
   selector: 'app-user-editing',
   templateUrl: './user-editing.component.html',
-  styleUrls: ['./user-editing.component.scss']
+  styleUrls: ['./user-editing.component.scss'],
 })
 
-export class UserEditingComponent extends MDL implements OnInit {
+export class UserEditingComponent extends MDL implements OnInit, AfterViewChecked {
 
   user: UserProfile;
+  private messageEmoji:any;
   private isLoadFinished:boolean = false;
   private passwordDiv: boolean = false;
   private errorPasswordDiv: boolean = false;
   private errorPasswordDivMessage: string;
-
+  private isEmojiLoad:boolean = false;
   private passwordOld: string = "";
   private passwordFirst: string = "";
   private passwordSecond: string = "";
@@ -65,9 +69,34 @@ export class UserEditingComponent extends MDL implements OnInit {
       this.user.Status = data;
     }); 
   }
+  //Потрібно для заміни звичайного інпута на інпут з емодзі після заванатаження даних
+  ngAfterViewChecked(){
+    this.addEmoji();
+  }
 
+  addEmoji(){
+    this.messageEmoji = $("#userStatus").emojioneArea({
+      pickerPosition: "bottom",
+      filtersPosition: "top",
+      tones: false,
+      autocomplete: true,
+      inline: true,
+      autoHideFilters: true,
+      hidePickerOnBlur: true,
+      placeholder: "Describe your mood..."
+    }); 
+    if (this.isLoadFinished && this.messageEmoji[0]!==undefined && !this.isEmojiLoad) {
+      this.messageEmoji[0].emojioneArea.setText(this.user.Status);
+      this.isEmojiLoad = true;
+    }
+  }
+  
   SaveUser() {
     this.user.BirthDate = new Date(this.datePickerValue.date.year, this.datePickerValue.date.month-1, this.datePickerValue.date.day+1);
+    if (this.messageEmoji[0]!==undefined) {
+       let text = this.messageEmoji[0].emojioneArea.getText();
+       this.user.Status = text;
+    }
     this.accountService.updateUser(this.user);
     this.eventEmitterService.changeProfileDataEvent.emit(this.user);
     this.router.navigate(['menu']);
@@ -150,12 +179,5 @@ export class UserEditingComponent extends MDL implements OnInit {
     let receivedDate = new Date(this.user.BirthDate);
     this.datePickerValue = {  date: { year: +(receivedDate.getFullYear()).toString(), month: +(receivedDate.getMonth() + 1).toString(), day: +(receivedDate.getDate()).toString() } };
   }
-
-  onUserStatusKeyUp(status: string): void{
-    if(this.user){
-      this.user.Status = status;
-    }
-  }
-
 }
 

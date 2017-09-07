@@ -65,18 +65,18 @@
   <div class ="mdl-card__actions mdl-card--border message-input-container send-message-container">     
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <input class="mdl-textfield__input" type="text" id="messageText" (keyup.enter)="send(messageText)" [(ngModel)]="messageText">
-        <label class="mdl-textfield__label" for="messageText">Message text...</label>
       </div>
 
-      <label for="file-upload" class="custom-file-attach" id="file-upload-icon" title="Click to attach an image">
-        <i class="material-icons" [class.green]="attachedImage">attach_file</i>
+      <label for="file-upload" class="mdl-button mdl-js-button js-button-effect custom-file-attach" id="file-upload-icon" title="Click to attach an image">
+        <!-- <i class="material-icons" [class.green]="attachedImage">attach_file</i> -->
+        <i class="material-icons">attach_file</i>
       </label>
       <!-- <div class="mdl-tooltip mdl-tooltip--top" for="file-upload-icon">
           Click to attach an image
       </div> -->
       <input id="file-upload" type="file" (click)="AttachImage($event)" name="file"/>
 
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect send-button" (click)="send(messageText)">
+      <button class="mdl-button mdl-js-button js-button-effect send-button" (click)="send(messageText)">
         <i class="material-icons">send</i>
       </button>
     </div>
