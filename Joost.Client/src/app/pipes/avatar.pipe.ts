@@ -18,6 +18,9 @@ export class AvatarPipe implements PipeTransform { // version just for friday me
                 return "assets/img/man.png"
             }
             else {
+                if  (value.search("random") != -1) {
+                    return value;
+                }
                 let id = value.substring(0,value.indexOf('_'));
                 return "http://localhost:51248/api/avatars/"+id;
             }

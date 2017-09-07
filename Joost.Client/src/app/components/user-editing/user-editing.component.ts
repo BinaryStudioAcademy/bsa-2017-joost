@@ -47,7 +47,8 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
     editableDateField: true
   };
 
-  private imgSrc: string;
+  private avatarImageSrc: string;
+  private avatarImage: HTMLInputElement;
 
   private changeStatusSubscription: Subscription;
 
@@ -67,6 +68,7 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
     this.GetUser();
     this.changeStatusSubscription = this.eventEmitterService.changeStatusEvent.subscribe(data => {
       this.user.Status = data;
+
     }); 
   }
   //Потрібно для заміни звичайного інпута на інпут з емодзі після заванатаження даних
@@ -98,16 +100,27 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
        this.user.Status = text;
     }
     this.accountService.updateUser(this.user);
-    this.eventEmitterService.changeProfileDataEvent.emit(this.user);
-    this.router.navigate(['menu']);
-    // add refresh component (menu and user-editing) command here when SignalR notificator will be ready
+    if(this.avatarImage) {
+          this.avatarService.SetUserAvatar(this.avatarImage.files[0]).subscribe(
+            res => {
+              this.user.Avatar = this.user.Id + "_avatar." + this.fileService.getFileExtensions(this.avatarImage.files[0].name);
+              this.avatarImageSrc = this.avatarService.getFullUrl(this.user.Id, false) + '?random+\=' + Math.random();
+              this.eventEmitterService.changeProfileDataEvent.emit(this.user);
+              this.router.navigate(['menu']);
+          }, 
+            error => console.log("Fail when setting avatar"));
+        } else {
+          this.eventEmitterService.changeProfileDataEvent.emit(this.user);
+          this.router.navigate(['menu']);
+        }
   }
 
   GetUser() {
     this.accountService.getUser().subscribe( d => {
       this.user = d;
       this.getUserBirthDate();
-      this.imgSrc = this.avatarService.getFullUrl(this.user.Id, false);
+      if (this.user.Avatar)
+        this.avatarImageSrc = this.avatarService.getFullUrl(this.user.Id, false) + '?random+\=' + Math.random();
       this.isLoadFinished = true;
     },
     async err=> {
@@ -116,6 +129,8 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
           this.accountService.getUser().subscribe(d => {
             this.user = d;
             this.getUserBirthDate();
+            if (this.user.Avatar)
+              this.avatarImageSrc = this.avatarService.getFullUrl(this.user.Id, false) + '?random+\=' + Math.random();            
             this.isLoadFinished = true;
           },
           err => {
@@ -165,14 +180,7 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
   }
   
   SendAvatar(e: Event) {
-    var target: HTMLInputElement = e.target as HTMLInputElement;
-    this.avatarService.SetUserAvatar(target.files[0]).subscribe(
-      res => {
-        this.user.Avatar = this.user.Id + "_avatar." + this.fileService.getFileExtensions(target.files[0].name);
-        this.imgSrc = this.avatarService.getFullUrl(this.user.Id, false) + '?random+\=' + Math.random();
-        location.reload(); // temporary, delete when SignalR notificator will be ready
-      }, 
-      error => console.log("Fail when setting avatar"));
+    this.avatarImage = e.target as HTMLInputElement;
   }
 
   getUserBirthDate() { // convertung date from server to date for datePicker
