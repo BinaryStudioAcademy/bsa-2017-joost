@@ -6,7 +6,7 @@
           <div class="left-panel-header">
             <a [routerLink]="['user-editing']">
               <div class="avatar-container">
-                <img src="{{curUser.Avatar | avatarPipe}}" class="main-avatar">
+                <img src="{{avatarImgSrc | avatarPipe}}" class="main-avatar">
                 <div class="online-indecator"></div>
               </div>
             </a>
