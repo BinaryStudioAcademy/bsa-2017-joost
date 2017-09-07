@@ -98,7 +98,7 @@
 
 .avatar-container{
     position: relative;
-    background: red;
+    background: green;
     width: calc(#{$avatar-size} + #{$online-indicator-size} * 2);
     height: calc(#{$avatar-size} + #{$online-indicator-size} * 2);
     border-radius: calc((#{$avatar-size} + #{$online-indicator-size} * 2) / 2);

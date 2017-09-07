@@ -213,11 +213,7 @@ export class MenuSearchComponent implements OnInit{
 		    }
 		}
 	}
-	contactStatus(id:number):string{
-		let state = this.contactList.filter(x=>x.ContactId==id)[0];
-		if(state)
-			switch(state)
-	}
+
 
 	ContainsCyrillicChar(str) {
 		return /[\u0400-\u04FF]/.test(str);
