@@ -1,6 +1,6 @@
 ﻿<div class="jg-container mdl-card mdl-shadow--2dp">
   <div class="mdl-card__title mdl-shadow--2dp dialog-title">
-  	<img src="{{dialogImage | avatarPipe:isGroup}}" class="material-icons mdl-list__item-avatar" (click)="onNavigateTo()">
+  	<img src="{{dialogImage | avatarPipe:isGroup}}" class="material-icons mdl-list__item-avatar detail-info" (click)="onNavigateTo()">
       <div>
           <h2 class="mdl-card__title-text title-text">{{dialogName}}</h2>
           <div class="group-members accordion" *ngIf="isGroup && groupMembers!=null">
@@ -69,12 +69,8 @@
       </div>
 
       <label for="file-upload" class="mdl-button mdl-js-button js-button-effect custom-file-attach" id="file-upload-icon" title="Click to attach an image">
-        <!-- <i class="material-icons" [class.green]="attachedImage">attach_file</i> -->
         <i class="material-icons">attach_file</i>
       </label>
-      <!-- <div class="mdl-tooltip mdl-tooltip--top" for="file-upload-icon">
-          Click to attach an image
-      </div> -->
       <input id="file-upload" type="file" (click)="AttachImage($event)" name="file"/>
 
       <button class="mdl-button mdl-js-button js-button-effect send-button" (click)="send(messageText)">

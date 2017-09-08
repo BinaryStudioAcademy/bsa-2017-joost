@@ -36,6 +36,9 @@
 .accordion, .accordion .mdl-list{
 	padding: 0 8px;
 }
+.accordion{
+  overflow:hidden;
+}
 .accordion input{
 	margin:0;
 }
@@ -86,78 +89,68 @@ ul {
     padding-bottom: 4px;
     padding-top: 12px;
 }
-
-ul li:nth-of-type(1) {
-    animation-delay: 0.5s;
+.accordion li:nth-of-type(1) {
+  animation-delay: 0.5s;
 }
-
-ul li:nth-of-type(2) {
-    animation-delay: 0.75s;
+.accordion li:nth-of-type(2) {
+  animation-delay: 0.75s;
 }
-
-ul li:nth-of-type(3) {
-    animation-delay: 1s;
+.accordion  li:nth-of-type(3) {
+  animation-delay: 1s;
 }
-
-ul li:last-of-type {
-    padding-bottom: 0;
+.accordion li:last-of-type {
+  padding-bottom: 0;
 }
-
-ul li i.arrow {
-    position: absolute;
-    transform: translate(-6px, 0);
-    margin-top: 8px;
-    right: 4px;
+.accordion li i.arrow {
+  position: absolute;
+  transform: translate(-6px, 0);
+  margin-top: 8px;
+  right: 4px;
 }
-
-ul li i.arrow:before, ul li i.arrow:after {
-    content: "";
-    position: absolute;
-    background-color: white;
-    width: 3px;
-    height: 9px;
+.accordion li i.arrow:before, .accordion li i.arrow:after {
+  content: "";
+  position: absolute;
+  background-color: white;
+  width: 3px;
+  height: 9px;
 }
-
-ul li i.arrow:before {
-    transform: translate(-2px, 0) rotate(45deg);
+.accordion li i.arrow:before {
+  transform: translate(-2px, 0) rotate(45deg);
 }
-
-ul li i.arrow:after {
-    transform: translate(2px, 0) rotate(-45deg);
+.accordion  li i.arrow:after {
+  transform: translate(2px, 0) rotate(-45deg);
 }
-
-ul li input[type=checkbox] {
-    position: absolute;
-    cursor: pointer;
-    width: 100%;
-    height: 22px;
-    z-index: 1;
-    opacity: 0;
+.accordion li input[type=checkbox] {
+  position: absolute;
+  cursor: pointer;
+  width: 100%;
+  height: 22px;
+  z-index: 1;
+  opacity: 0;
 }
-
-ul li input[type=checkbox] ~ ul {
-    margin: 16px 0;
-    transition: all 0.3s;
-    display: block;
-    height: auto;
-    opacity: 1;
+.accordion li input[type=checkbox]~ ul {
+	margin:4px -16px;
+	transition:all 0.3s;
+	display: block;
+	height:auto;
+	opacity: 1;
 }
-
-ul li input[type=checkbox]:checked ~ ul {
-    margin-top: 0;
-    max-height: 0;
-    opacity: 0;
-    height: 0;
-    display: none;
-    transform: translate(0, 50%);
+.accordion .messages li{
+  padding:8px;
 }
-
-ul li input[type=checkbox]:checked ~ i.arrow:before {
-    transform: translate(2px, 0) rotate(45deg);
+.accordion li input[type=checkbox]:checked ~ ul {
+	margin-top: 0;
+	max-height: 0;
+	opacity: 0;
+	height:0;
+	display:none;
+	transform: translate(0, 50%);
 }
-
-ul li input[type=checkbox]:checked ~ i.arrow:after {
-    transform: translate(-2px, 0) rotate(-45deg);
+.accordion  li input[type=checkbox]:checked ~ i.arrow:before {
+  transform: translate(2px, 0) rotate(45deg);
+}
+.accordion  li input[type=checkbox]:checked ~ i.arrow:after {
+  transform: translate(-2px, 0) rotate(-45deg);
 }
 
 @keyframes flipdown {

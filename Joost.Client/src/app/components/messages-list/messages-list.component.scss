@@ -423,25 +423,38 @@ ul {
   transform:rotate(90deg);
   margin-top: 5px;
 }
-.user-state{
+.members-list ::ng-deep .user-state{
   height:10px;
   width:10px;
   display:inline-block;
-  background-color: #54d253;
   border-radius: 10px;
   margin-right: 2px;
-}
+  &.online-state {
+     background-color: $color-online-indicator;
+  }
 
+  &.busy-state{
+   background-color: $color-busy-indicator;
+  }
+  &.offline-state{
+    background-color: $color-offline-indicator;
+  }
+  &.inacceptable-state{
+    background-color: $color-inacceptable-indicator;
+  }
+}
 .wrap-textarea-input ::ng-deep .emojionearea-editor{
     min-height: 1em;
     max-height: 5em;
     margin-right: 0;
 }
-
 .cursor-user-detail:hover {
     cursor: pointer;
 }
 
 .wrap-textarea-input{
     padding: 0px;
+}
+.detail-info{
+  cursor:pointer;
 }

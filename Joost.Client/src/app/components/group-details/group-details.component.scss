@@ -43,7 +43,6 @@
     flex: 0.9;
     li:hover{
         background-color: #F5F5F5;
-        margin-left: 1px;
     }
 }
 
@@ -109,9 +108,9 @@ $margin-value: 15px;
 
 .jc-user-avatar-container {
     position: relative;
-    width: 150px;
-    height: 150px;
-    border-radius: 75px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
     margin: 16px;
 }
 

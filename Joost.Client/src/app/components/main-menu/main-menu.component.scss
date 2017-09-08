@@ -6,15 +6,13 @@
 .main-avatar {
   width: $avatar-size;
   height: $avatar-size;
-  border-radius: calc(#{$avatar-size} / 2);
+  border-radius: 50%;
   position: relative;
-  top: calc(#{$online-indicator-size} / 2);
-  left: calc(#{$online-indicator-size} / 2);
+  border:2px solid green;
 }
-
 .mdl-layout__container{
     position: absolute;
-}
+}е
 
 .mdl-layout__drawer .avatar {
   margin-bottom: 16px;
@@ -39,6 +37,7 @@
   display: -ms-flexbox;
   display: flex;
   padding: 16px;
+  align-items:center;
 }
 
 .left-panel-header a{
@@ -94,15 +93,6 @@
     bottom: 2px;
     right: 2px;
     
-}
-
-.avatar-container{
-    position: relative;
-    background: green;
-    width: calc(#{$avatar-size} + #{$online-indicator-size} * 2);
-    height: calc(#{$avatar-size} + #{$online-indicator-size} * 2);
-    border-radius: calc((#{$avatar-size} + #{$online-indicator-size} * 2) / 2);
-    padding: $online-indicator-size 0 0 $online-indicator-size;
 }
 
 .header-user-name{

@@ -5,10 +5,7 @@
         <header>
           <div class="left-panel-header">
             <a [routerLink]="['user-editing']">
-              <div class="avatar-container">
                 <img src="{{curUser.Avatar | avatarPipe}}" class="main-avatar">
-                <!-- <div class="online-indicator"></div> -->
-              </div>
             </a>
             <div class="left-panel-user-info">
               <a [routerLink]="['user-editing']" skipLocationChange>
