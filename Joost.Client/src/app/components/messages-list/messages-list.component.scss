@@ -189,6 +189,8 @@ input[type="file"] {
     justify-content: center;
     vertical-align: center;
     align-items: center;
+    padding-left: 0;
+    padding-right: 0;
     > div{
         width: 80%;
     }
@@ -415,10 +417,14 @@ ul {
 
 .wrap-textarea-input ::ng-deep .emojionearea-editor{
     min-height: 1em;
-    max-height: 4em;
+    max-height: 5em;
     margin-right: 0;
 }
 
 .cursor-user-detail:hover {
     cursor: pointer;
+}
+
+.wrap-textarea-input{
+    padding: 0px;
 }
