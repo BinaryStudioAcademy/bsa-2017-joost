@@ -66,9 +66,9 @@ div .mdl-list__item:hover{
 }
 
 .jg-container{
-    width: 74%;
-    height: 100vh;
-    margin: 0 26%;
+    width: calc(74% - 2 * #{$card-padding});
+    height: calc(100vh - 2 * #{$card-padding});
+    margin: $card-padding $card-padding $card-padding calc(26% + #{$card-padding});
     > div{
         &:nth-last-child(2){
             flex: 1;

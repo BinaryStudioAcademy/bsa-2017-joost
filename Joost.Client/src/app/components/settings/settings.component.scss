@@ -25,6 +25,8 @@
     //min-height: calc(100vh - 10px);
    position: absolute;
    margin-left: calc(26% + #{$card-padding});
+   top: 0;
+   left: 0;
 }
 @media (max-width: 1024px){
     .jg-container{

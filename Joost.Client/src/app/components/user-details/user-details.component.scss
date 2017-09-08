@@ -16,7 +16,7 @@
 }
 
 .jg-container{
-    max-width: calc(100% - #{$card-padding} - #{$card-padding});
+    max-width: calc(100% - 2 * #{$card-padding});
     width: 100%;
     position: absolute;
     min-height: calc(100% - 2 * #{$card-padding});
