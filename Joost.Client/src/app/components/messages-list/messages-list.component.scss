@@ -154,7 +154,19 @@ div .mdl-list__item:hover{
     overflow: auto;
 }
 
-
+.messages-content::-webkit-scrollbar {
+    width: 10px;
+    
+}
+ 
+.messages-content::-webkit-scrollbar-track {
+     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+}
+ 
+.messages-content::-webkit-scrollbar-thumb {
+  background-color: $color-primary;
+//   outline: 1px solid slategrey;
+}
 
 input[type="file"] {
     display: none;
