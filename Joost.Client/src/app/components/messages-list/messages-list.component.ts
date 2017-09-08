@@ -244,7 +244,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             text = $(".emojionearea-editor").html();
             this.messageEmoji[0].emojioneArea.setText("");
         }
-        
         if ((text != null && text != "") || this.attachedImage != null) {
             let fileName =  "";
             if (this.attachedImage != null) {
