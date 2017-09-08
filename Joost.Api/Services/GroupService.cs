@@ -103,6 +103,9 @@ namespace Joost.Api.Services
 			{
 				string folderPath = HttpContext.Current.Server.MapPath("~/App_Data/AttachedFiles/");
 
+				if (!Directory.Exists(folderPath))
+					Directory.CreateDirectory(folderPath);
+
 				var filePath = Directory.EnumerateFiles(folderPath, newGr.Avatar + ".*", SearchOption.AllDirectories)
 				.Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp") || s.EndsWith(".gif")).FirstOrDefault();
 
