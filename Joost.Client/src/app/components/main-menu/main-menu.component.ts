@@ -90,7 +90,7 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
   }
 
   onCreateGroup(){
-    this.router.navigate(["groups/new"], { relativeTo: this.route });
+      this.router.navigate(["groups/new"], { relativeTo: this.route, skipLocationChange: true });
   }
 
   private runNotifications() {

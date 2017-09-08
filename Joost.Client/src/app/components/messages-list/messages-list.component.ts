@@ -462,6 +462,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         var copyElement = document.createElement("textarea");
         copyElement.style.position = 'fixed';
         copyElement.style.opacity = '0';
+        //message.Text = message.Text.replace("<span>", "");
+        //message.Text = message.Text.replace("</span>", "");
+        //message.Text = message.Text.replace("<div>", "");
+        //message.Text = message.Text.replace("</div>", "");
+        //message.Text = message.Text.replace("<br>", "");
         if (!message.IsGroup) {
             copyElement.textContent = user + ' [' + message.CreatedAt + ']: "' + message.Text + '"';
         } else {
