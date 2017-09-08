@@ -14,7 +14,8 @@ import { UserDetail } from "../../models/user-detail";
 
 import { FileService } from '../../services/file.service';
 import { EventEmitterService } from "../../services/event-emitter.service";
-import { UserStatePipe} from "../../pipes/user-state.pipe";
+import { UserStatePipe } from "../../pipes/user-state.pipe";
+
 declare var jquery: any;
 declare var $: any;
 
@@ -26,7 +27,7 @@ declare var $: any;
 export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     private subscription: Subscription;
-    private messageEmoji:any;
+    private messageEmoji: any;
     private currentUser: UserProfile;
     private receiverId: number;
     private userId: number;
@@ -72,7 +73,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.isAllMessagesReceived = false;
         this.toBottom = true;
     }
-
     ngOnInit() {
         this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
             this.addToMessages(message);
@@ -453,5 +453,26 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             this.router.navigate(["menu/groups/details", this.receiverId]);
         else
             this.router.navigate(["menu/user-details", this.receiverId]);  
+    }
+
+    copyEvent(message: Message, user: string): void {
+        this.copyToClipboard(message, user);
+    }
+
+    copyToClipboard(message: Message, user: string) {
+        var copyElement = document.createElement("textarea");
+        copyElement.style.position = 'fixed';
+        copyElement.style.opacity = '0';
+        if (!message.IsGroup) {
+            copyElement.textContent = user + ' [' + message.CreatedAt + ']: "' + message.Text + '"';
+        } else {
+            let sender = this.getMember(message.SenderId);
+            copyElement.textContent = sender.LastName + ' ' + sender.FirstName + ' [' + message.CreatedAt + ']: "' + message.Text + '"';
+        }
+        var body = document.getElementsByTagName('body')[0];
+        body.appendChild(copyElement);
+        copyElement.select();
+        document.execCommand('copy');
+        body.removeChild(copyElement);
     }
 }
