@@ -89,7 +89,8 @@ export class UserAddContactComponent extends MDL implements OnInit{
 			    this.contactService.confirmContact(id).subscribe(ok => {
 				  this.router.navigate(["menu"]);
 				  this.contact.State = ContactState.Accept;
-				  this.contactService.changeContactNotify(this.contact);
+                  this.contactService.changeContactNotify(this.contact);
+                  this.eventEmitterService.removeNewContact.emit(this.contact); 
 			  	});
 			  }
 			});
@@ -99,7 +100,8 @@ export class UserAddContactComponent extends MDL implements OnInit{
 		this.contactService.declineContact(id).subscribe(ok=>{
 			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Canceled;
-			this.contactService.changeContactNotify(this.contact);
+            this.contactService.changeContactNotify(this.contact);
+            this.eventEmitterService.removeNewContact.emit(this.contact);
 		},
 	    async err=> {
 			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
@@ -107,7 +109,8 @@ export class UserAddContactComponent extends MDL implements OnInit{
 			    this.contactService.declineContact(id).subscribe(ok => {
 				  this.router.navigate(["menu"]);
 				  this.contact.State = ContactState.Canceled;
-				  this.contactService.changeContactNotify(this.contact);
+                  this.contactService.changeContactNotify(this.contact);
+                  this.eventEmitterService.removeNewContact.emit(this.contact); 
 				  });
 			  }
 			});
