@@ -58,25 +58,30 @@ html, body {
 }
 .user-state{
     .online-state {
-     background-color: $color-online-indecator;
+     background-color: $color-online-indicator;
     }
 
     .busy-state{
-     background-color: $color-offline-indecator;
+     background-color: $color-offline-indicator;
     }
     .offline-state{
-        background-color: $color-offline-indecator;
+        background-color: $color-offline-indicator;
     }
 }
 .online-state {
-    color: $color-online-indecator;
+ color: $color-online-indicator;
 }
 
 .busy-state{
-    color: $color-offline-indecator;
+ color: $color-inacceptable-indicator;
+ background-color: $color-online-indicator;
+}
+
+.busy-state{
+ background-color: $color-offline-indicator;
 }
 .offline-state{
-    color: $color-offline-indecator;
+    background-color: $color-offline-indicator;
 }
 // style for inputs on menu tabs
 

@@ -214,6 +214,7 @@ export class MenuSearchComponent implements OnInit{
 		}
 	}
 
+
 	ContainsCyrillicChar(str) {
 		return /[\u0400-\u04FF]/.test(str);
 	}

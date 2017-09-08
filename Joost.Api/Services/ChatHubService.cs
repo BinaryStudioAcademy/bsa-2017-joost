@@ -50,7 +50,7 @@ namespace Joost.Api.Services
 				{
 					var contactUserDto = new UserContactDto
 					{
-						Id = contact.Id,
+						Id = currentUserId,
 						//State = (Models.ContactState)contact.State,
 						State = Models.ContactState.New,
 						Avatar = contact.User.Avatar,

@@ -8,6 +8,9 @@ import { DialogService } from "../../services/dialog.service";
 import { ChatHubService } from "../../services/chat-hub.service";
 import { GroupService } from "../../services/group.service";
 import { EventEmitterService } from "../../services/event-emitter.service";
+import { UserContact } from "../../models/user-contact";
+import { ContactState } from "../../models/contact";
+import { ContactService } from "../../services/contact.service";
 
 @Component({
   selector: 'app-menu-messages',
@@ -17,6 +20,7 @@ import { EventEmitterService } from "../../services/event-emitter.service";
 export class MenuMessagesComponent implements OnInit, OnDestroy {
 
   private dialogs: Dialog[];
+  private contacts: UserContact[] = [];
   private filteredDialogs: Dialog[];
   private searchString: string;
 
@@ -24,11 +28,14 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private receiverSubscription: Subscription;
   private addingGroupsSubscription: Subscription;
   private newGroupSubscription: Subscription;
+  private newContactSubscription: Subscription;
+  private removeNewContactSubscription: Subscription;
 
   constructor(
     private router: Router,
     private dialogService: DialogService, 
     private chatHubService: ChatHubService, 
+    private contactService: ContactService,
     private groupServive: GroupService,
     private eventEmitterService: EventEmitterService) {
       this.updateDialogs();
@@ -49,13 +56,28 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => {
         this.dialogs.push(groupDialog);
       });
+
+      this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
+            if (userContact.State == ContactState.New) {
+                this.contacts.push(userContact);
+            }
+      });
+      this.removeNewContactSubscription = this.eventEmitterService.removeNewContact.subscribe((userContact: UserContact) => {
+          for (let i = 0; i < this.contacts.length; i++) {
+              if (this.contacts[i].Id == userContact.Id) {
+                  this.contacts.splice(i, 1);
+              }
+          }
+      });
   }
 
   ngOnDestroy() {
       this.senderSubscription.unsubscribe();
       this.receiverSubscription.unsubscribe();
       this.addingGroupsSubscription.unsubscribe();
+      this.newContactSubscription.unsubscribe();
       this.newGroupSubscription.unsubscribe();
+      this.removeNewContactSubscription.unsubscribe();
   }
 
   private updateDialogs() {
@@ -73,6 +95,13 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
           }); 
         }
       });
+    });
+    this.contactService.getAllContacts().subscribe(data => {
+        for (let item of data) {
+            if (item.State == ContactState.New) {
+                this.contacts.push(item);
+            }
+        }
     });
   }
   
@@ -125,4 +154,18 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       });
   }
 
+  private goToConfirm(id: number) {
+      if (this.isNewContact(id) || this.isDeclineContact(id)) {
+          this.contactService.changeContactIdNotify(id);
+          this.router.navigate(['menu/add-contact']);
+      }
+  }
+
+  isNewContact(id: number): boolean {
+      return this.contacts.filter(t => t.Id == id)[0].State === ContactState.New;
+  }
+
+  isDeclineContact(id: number): boolean {
+      return this.contacts.filter(t => t.Id == id)[0].State === ContactState.Decline;
+  }
 }

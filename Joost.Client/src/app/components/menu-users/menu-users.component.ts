@@ -116,7 +116,13 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 	}
 	isNewContact(id:number):boolean{
 		return this.result.filter(t=>t.Id==id)[0].State===ContactState.New;
-	}
+    }
+    isSentContact(id: number): boolean {
+        return this.result.filter(t => t.Id == id)[0].State === ContactState.Sent;
+    }
+    isAcceptContact(id: number): boolean {
+        return this.result.filter(t => t.Id == id)[0].State === ContactState.Accept;
+    }
 	isDeclineContact(id:number):boolean{
 		return this.result.filter(t=>t.Id==id)[0].State===ContactState.Decline;
     }
@@ -139,7 +145,15 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 		    		return "";
 		    }
 		}
-	}
+    }
+
+    private navigateToMessages(userId: number) {
+        this.router.navigate(["/menu/messages", "user", userId]);
+    }
+
+    private goToUserDetail(userId: number): void {
+        this.router.navigate(['menu/user-details', userId], { skipLocationChange: true });
+    }
 
 
 }

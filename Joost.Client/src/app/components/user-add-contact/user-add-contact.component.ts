@@ -6,6 +6,7 @@ import { UserContact } from "../../models/user-contact";
 import { ContactState} from "../../models/contact";
 import { AuthenticationService } from '../../services/authentication.service';
 import { MDL } from "../mdl-base.component";
+import { EventEmitterService } from "../../services/event-emitter.service";
 
 @Component({
   selector: 'app-user-add-contact',
@@ -20,22 +21,23 @@ export class UserAddContactComponent extends MDL implements OnInit{
 	private contact: UserContact;
 	constructor(
 		private router: Router,
-		private location: Location,
+        private location: Location,
+        private eventEmitterService: EventEmitterService,
 		private contactService: ContactService
 	) {
 		super();
 	}
 
-	ngOnInit() {
+    ngOnInit() {
 		this.isError = null;
 		this.isLoad = false;
-		this.contactService.changeContactId.subscribe(id =>{
+        this.contactService.changeContactId.subscribe(id => {
 			this.contactService.getAllContacts().subscribe(
 			data =>{
-				this.contact = data.filter(t=>t.Id==id)[0];
+                this.contact = data.filter(t => t.Id == id)[0];
 				this.isLoad = true;
 			},
-			async err => {
+            async err => {
 				await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 					if (ok) {
 					  this.contactService.getAllContacts().subscribe(data => {
@@ -78,7 +80,8 @@ export class UserAddContactComponent extends MDL implements OnInit{
 		this.contactService.confirmContact(id).subscribe(ok =>{
 			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Accept;
-			this.contactService.changeContactNotify(this.contact);
+            this.contactService.changeContactNotify(this.contact);
+            this.eventEmitterService.removeNewContact.emit(this.contact); 
 		},
 	    async err=> {
 			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 

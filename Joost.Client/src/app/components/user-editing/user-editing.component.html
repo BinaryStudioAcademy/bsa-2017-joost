@@ -9,9 +9,8 @@
   	                <i class="material-icons">create</i>
   	              </div>
                 </div>
-                <img src="{{user.Avatar | avatarPipe}}" class="avatar-upload-image"></label>
+                <img src="{{avatarImageSrc | avatarPipe}}" class="avatar-upload-image"></label>
                 <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
-                
               </div>
               <div>
                 <h3>{{user | namePipe}}</h3>
@@ -19,7 +18,6 @@
                    <input class="mdl-textfield__input user-status-text" type="text" id="userStatus" value="{{user.Status}}" #userStatus>
                 </div>
                 <div [innerHtml]="user.State | statePipe"></div>
-                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="passwordDiv = !passwordDiv"> Change password</button>                              
               </div>
         </div>
 
