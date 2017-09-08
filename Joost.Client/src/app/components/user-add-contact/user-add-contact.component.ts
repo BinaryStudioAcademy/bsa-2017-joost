@@ -34,7 +34,7 @@ export class UserAddContactComponent extends MDL implements OnInit{
         this.contactService.changeContactId.subscribe(id => {
 			this.contactService.getAllContacts().subscribe(
 			data =>{
-				this.contact = data.filter(t=>t.Id==id)[0];
+                this.contact = data.filter(t => t.Id == id)[0];
 				this.isLoad = true;
 			},
             async err => {
