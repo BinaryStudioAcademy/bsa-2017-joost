@@ -56,30 +56,14 @@ html, body {
     align-items:center;
     padding: 10px 0;
 }
-.user-state{
-    .online-state {
-     background-color: $color-online-indicator;
-    }
-
-    .busy-state{
-     background-color: $color-offline-indicator;
-    }
-    .offline-state{
-        background-color: $color-offline-indicator;
-    }
-}
 .online-state {
  color: $color-online-indicator;
 }
 
 .busy-state{
  color: $color-inacceptable-indicator;
- background-color: $color-online-indicator;
 }
 
-.busy-state{
- background-color: $color-offline-indicator;
-}
 .offline-state{
     background-color: $color-offline-indicator;
 }

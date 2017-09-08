@@ -64,7 +64,7 @@
       <i class="arrow"></i>
       <h2>Direct Messages</h2>
         <ul class="demo-list-three mdl-list">
-            <div *ngFor="let dialog of filteredDialogs">
+            <div *ngFor="let dialog of filteredDialogs" class="messages">
               <li class="mdl-list__item mdl-list__item--three-line" *ngIf="!dialog.IsGroup" (click)="navigateToMessages(dialog)">
                 <span  class="mdl-list__item-primary-content">
                   <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
@@ -82,7 +82,7 @@
     <i class="arrow"></i>
     <h2>Groups</h2>
       <ul class="demo-list-three mdl-list">
-          <div *ngFor="let dialog of filteredDialogs">
+          <div *ngFor="let dialog of filteredDialogs" class="messages">
               <li class="mdl-list__item mdl-list__item--three-line" *ngIf="dialog.IsGroup" (click)="navigateToMessages(dialog)">
                   <span class="mdl-list__item-primary-content">
                       <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">

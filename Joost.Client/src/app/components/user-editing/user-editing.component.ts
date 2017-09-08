@@ -173,11 +173,11 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
     }
   }
   
-  CancelPassword() {
-    this.passwordDiv = !this.passwordDiv;
-    this.passwordOld = this.passwordFirst = this.passwordSecond ="";
-    this.errorPasswordDiv = false;
-  }
+  // CancelPassword() {
+  //   this.passwordDiv = !this.passwordDiv;
+  //   this.passwordOld = this.passwordFirst = this.passwordSecond ="";
+  //   this.errorPasswordDiv = false;
+  // }
   
   SendAvatar(e: Event) {
     this.avatarImage = e.target as HTMLInputElement;

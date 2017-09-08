@@ -95,6 +95,7 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 		this.newContactSubscription.unsubscribe();
 	}
 	search(){
+		this.searchContact = this.result;
 		if (this.searchString!=="") {
 			this.searchContact = this.result.filter(t=>t.Name.toLowerCase().includes(this.searchString.toLowerCase()));
 		}
