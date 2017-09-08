@@ -10,7 +10,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.mdl-list__item-text-body .emojioneemoji{
+.mdl-list__item-text-body ::ng-deep .emojioneemoji{
   height:1.2em;
   width:1.2em;
 }

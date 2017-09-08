@@ -98,7 +98,7 @@ export class UserAddContactComponent extends MDL implements OnInit{
 	decline(id:number){
 		this.contactService.declineContact(id).subscribe(ok=>{
 			this.router.navigate(["menu"]);
-			this.contact.State = ContactState.Decline;
+			this.contact.State = ContactState.Canceled;
 			this.contactService.changeContactNotify(this.contact);
 		},
 	    async err=> {
@@ -106,7 +106,7 @@ export class UserAddContactComponent extends MDL implements OnInit{
 				if (ok) {
 			    this.contactService.declineContact(id).subscribe(ok => {
 				  this.router.navigate(["menu"]);
-				  this.contact.State = ContactState.Decline;
+				  this.contact.State = ContactState.Canceled;
 				  this.contactService.changeContactNotify(this.contact);
 				  });
 			  }
@@ -114,7 +114,7 @@ export class UserAddContactComponent extends MDL implements OnInit{
 		});
 	}
 	retry(id:number){
-		this.contactService.addContact(id).subscribe(succes=>{
+		this.contactService.addContact(id).subscribe(success=>{
 			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Sent;
 			this.contactService.changeContactNotify(this.contact);

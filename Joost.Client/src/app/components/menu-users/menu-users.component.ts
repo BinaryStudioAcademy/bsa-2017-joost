@@ -27,9 +27,11 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 		) { }
 
 	ngOnInit() {
-        this.contactService.getAllContacts().subscribe(data => {
-            this.result = data;
-        },
+		this.contactService.getAllContacts().subscribe(
+			data=> {
+				this.result = data;
+				this.searchContact = this.result;
+			},
 			async err => {
 				await this.contactService.handleTokenErrorIfExist(err).then(ok => {
 					if (ok) { 
@@ -98,7 +100,7 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 		}
 	}
 	goToConfirm(id:number){
-		if (this.isNewContact(id) || this.isDeclineContact(id)) {
+		if (this.isNewContact(id) || this.isDeclineContact(id) || this.isCanceledContact(id)) {
 			this.contactService.changeContactIdNotify(id);
 			this.router.navigate(['menu/add-contact']);
 		}
@@ -123,15 +125,22 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
     }
 	isDeclineContact(id:number):boolean{
 		return this.result.filter(t=>t.Id==id)[0].State===ContactState.Decline;
-	}
-	private ContactStatus(id:number):string{
+    }
+    isCanceledContact(id: number): boolean {
+        return this.result.filter(t => t.Id == id)[0].State === ContactState.Canceled;
+    }
+	ContactStatus(id:number):string{
 		let state =  this.result.filter(t=>t.Id==id)[0];
 		if (state) {
 			switch (state.State) {
 				case ContactState.New:
 					return "new_releases";
 				case ContactState.Sent:
-					return "person_add";
+                    return "person_add";
+                case ContactState.Decline:
+                    return "cancel";
+                case ContactState.Canceled:
+                    return "clear";
 		    	default:
 		    		return "";
 		    }
@@ -145,5 +154,6 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
     private goToUserDetail(userId: number): void {
         this.router.navigate(['menu/user-details', userId], { skipLocationChange: true });
     }
+
 
 }

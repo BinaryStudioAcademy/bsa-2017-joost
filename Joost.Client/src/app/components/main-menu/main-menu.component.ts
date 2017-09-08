@@ -10,6 +10,7 @@ import { Dialog } from "../../models/dialog";
 import { UserContact } from "../../models/user-contact";
 import { NotificationService } from "../../services/notification.service";
 import { EventEmitterService } from "../../services/event-emitter.service";
+import { AvatarService } from "../../services/avatar.service";
 
 @Component({
   selector: 'app-main-menu',
@@ -21,6 +22,7 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
   private curUser: UserProfile;
   private editMode: boolean = false;
   private previousStatus: string;
+  private avatarImgSrc: string;
   
   private messageNotifSubscription: Subscription;
   private contactNotifSubscription: Subscription;
@@ -33,6 +35,7 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
     private accountService: AccountService,
     private chatHubService: ChatHubService,
     private notificationService: NotificationService,
+    private avatarService: AvatarService,
     private vRef: ViewContainerRef,
     private eventEmitterService: EventEmitterService) {
       super();
@@ -56,6 +59,8 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
   ngOnInit() {
     this.accountService.getUser().subscribe(async data => {
       this.curUser = data;
+      if (this.curUser.Avatar)
+        this.avatarImgSrc = this.avatarService.getFullUrl(this.curUser.Id, false) + '?random+\=' + Math.random();
       await this.chatHubService.connect(data.Id);
       this.runNotifications();
     },
@@ -64,6 +69,8 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
         if(ok) {
           this.accountService.getUser().subscribe(async data => {
             this.curUser = data;
+            if (this.curUser.Avatar)
+              this.avatarImgSrc = this.avatarService.getFullUrl(this.curUser.Id, false) + '?random+\=' + Math.random();
             await this.chatHubService.connect(data.Id);
             this.runNotifications();
           });
@@ -73,6 +80,7 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
 
     this.changeProfileDataSubscription = this.eventEmitterService.changeProfileDataEvent.subscribe(data => {
       this.curUser = data;
+      this.avatarImgSrc = this.avatarService.getFullUrl(this.curUser.Id, false) + '?random+\=' + Math.random();
     })
   }
 

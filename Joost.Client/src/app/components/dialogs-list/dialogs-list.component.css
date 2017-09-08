@@ -39,7 +39,7 @@ span .mdl-list__item-text-body{
     color:white; 
 }
 
-.online-indecator[_ngcontent-c1] {
+.online-indicator[_ngcontent-c1] {
     width: 12px;
     height: 12px;
     border-radius: 6px;

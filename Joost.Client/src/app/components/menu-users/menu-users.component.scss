@@ -194,3 +194,15 @@ ul li input[type=checkbox]:checked ~ i.arrow:after {
         transform: rotateX(0deg);
     }
 }
+}
+.img-container{
+    background: red;
+    width: 42px;
+    height: 42px;
+    border-radius: 21px;
+    bottom: 1px;
+    right: 1px;
+}
+.mdl-list__item-avatar{
+    margin: 1px 0 0 1px;
+}

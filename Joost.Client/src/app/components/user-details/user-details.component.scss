@@ -14,12 +14,13 @@
 .jg-full-width-container{
     width: 100%;
 }
-$card-padding: 15px;
+
 .jg-container{
     max-width: calc(100% - #{$card-padding} - #{$card-padding});
     width: 100%;
     position: absolute;
     min-height: calc(100% - 2 * #{$card-padding});
+    margin: 0;
 }
 
 .jg-card{

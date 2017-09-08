@@ -23,7 +23,7 @@ export class MenuSearchComponent implements OnInit{
 	constructor(
 		private accountService: AccountService,
 		private authService: AuthenticationService,
-		private contactService: ContactService,
+		private contactService: ContactService
 	) { }
 
 	ngOnInit() {
@@ -213,6 +213,7 @@ export class MenuSearchComponent implements OnInit{
 		    }
 		}
 	}
+
 
 	ContainsCyrillicChar(str) {
 		return /[\u0400-\u04FF]/.test(str);

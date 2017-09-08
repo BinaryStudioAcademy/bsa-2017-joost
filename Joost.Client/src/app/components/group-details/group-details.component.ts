@@ -46,32 +46,18 @@ export class GroupDetailsComponent extends MDL implements OnInit {
           });
       
       // get current user contact list
-      this.groupService.getGroupMembers(id)
-      .subscribe(response => {
-          this.selectedMembers = response;
-      },
-          async err => {
-              await this.contactService.handleTokenErrorIfExist(err).then(ok => {
-                  if (ok) {
-                      this.groupService.getGroupMembers(id).subscribe(response => {
-                          this.selectedMembers = response;
-                      })
-                  }
-              });
-          }
-      );
-        
+
       this.groupService.getGroup(id)
         .subscribe(response => {
             this.group = response;
-            this.initArrays();
+            this.loadMembers();
         },
         async err => {
             await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
                 if (ok) {
                     this.groupService.getGroup(id).subscribe(response => {                
                       this.group = response;
-                      this.initArrays();
+                      this.loadMembers();
                     });
                 }
             });
@@ -83,8 +69,25 @@ export class GroupDetailsComponent extends MDL implements OnInit {
         this.filteredMembers = this.selectedMembers.filter(member => (member.FirstName + ' ' + member.LastName).toLocaleLowerCase().includes(this.filterStr));
     }
 
-    initArrays(): void{
-          this.filteredMembers = this.selectedMembers;
+    loadMembers(): void{
+        if(this.group){
+            this.groupService.getGroupMembers(this.group.Id)
+            .subscribe(response => {
+                this.selectedMembers = response;
+                this.filteredMembers = this.selectedMembers;
+            },
+                async err => {
+                    await this.contactService.handleTokenErrorIfExist(err).then(ok => {
+                        if (ok) {
+                            this.groupService.getGroupMembers(this.group.Id).subscribe(response => {
+                                this.selectedMembers = response;
+                                this.filteredMembers = this.selectedMembers;
+                            })
+                        }
+                    });
+                }
+            );
+        }
     }
 
     onGoToUser(Id: number){

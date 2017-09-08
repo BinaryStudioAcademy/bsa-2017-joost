@@ -7,7 +7,7 @@
             <a [routerLink]="['user-editing']">
               <div class="avatar-container">
                 <img src="{{curUser.Avatar | avatarPipe}}" class="main-avatar">
-                <div class="online-indecator"></div>
+                <!-- <div class="online-indicator"></div> -->
               </div>
             </a>
             <div class="left-panel-user-info">
@@ -26,7 +26,7 @@
                   </div>
                 <ng-template #showMode>
                   <span class="status-text" (click)="onEditStatus()">
-                    <span *ngIf="curUser.Status; else showLabel">{{ curUser.Status }}</span>
+                    <span *ngIf="curUser.Status; else showLabel" >{{curUser.Status}}</span>
                     <ng-template #showLabel>
                       <span class="status-message">change status...</span>
                     </ng-template>
