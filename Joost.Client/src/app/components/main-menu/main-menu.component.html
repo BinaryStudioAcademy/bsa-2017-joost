@@ -4,9 +4,26 @@
       <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
         <header>
           <div class="left-panel-header">
-            <a [routerLink]="['user-editing']">
+          <div  class="user-avatar">
+          	<a [routerLink]="['user-editing']">
                 <img src="{{curUser.Avatar | avatarPipe}}" class="main-avatar">
             </a>
+	            <div>
+		            <div class="wrap-state">
+	                	<span [innerHTML]="curUser.State | userState"></span>
+	                	<span class="change-state" (click)="showStateList()">
+	                		<i class="material-icons open-list">arrow_drop_down</i>
+	                	</span>
+	                </div>
+		            <ul class="state-list mdl-shadow--4dp">
+	            		<li [ngClass]="{'active': curUser.State == 0}" (click)="changeState(0)"><i class="user-state online-state"></i><span>Online</span></li>
+	            		<li [ngClass]="{'active': curUser.State == 1}" (click)="changeState(1)"><i class="user-state busy-state"></i><span>Busy</span></li>
+	            		<li [ngClass]="{'active': curUser.State == 2}" (click)="changeState(2)"><i class="user-state inacceptable-state"></i><span>Inacceptable</span></li>
+	            		<li [ngClass]="{'active': curUser.State == 3}" (click)="changeState(3)"><i class="user-state offline-state"></i><span>Offline</span></li>
+	            	</ul>
+	            </div>
+          </div>
+            
             <div class="left-panel-user-info">
               <a [routerLink]="['user-editing']" skipLocationChange>
                   <div class="header-user-name" *ngIf="curUser.FirstName">{{curUser.FirstName + ' ' + curUser.LastName}}</div>

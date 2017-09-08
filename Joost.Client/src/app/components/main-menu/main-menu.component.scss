@@ -8,7 +8,6 @@
   height: $avatar-size;
   border-radius: 50%;
   position: relative;
-  border:2px solid green;
 }
 .mdl-layout__container{
     position: absolute;
@@ -176,4 +175,119 @@ a.setting-icon {
 }
 .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after{
   display:none;
+}
+.wrap-state {
+  position:absolute;
+  right:-2px;
+  bottom:-2px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  z-index: 5;
+  & .change-state{
+    display:none;
+    border:1px solid $color-primary;
+    height:100%;
+    width:100%;
+    box-sizing:border-box;
+    border-radius: 50%;
+    color:white;
+    background-color: $color-primary;
+    margin-bottom:5px;
+    cursor:pointer;
+    i{
+      border:1px solid white;
+      height:100%;
+      width:100%;
+      display:block;
+      font-size:14px;
+      box-sizing:border-box;
+      border-radius: 50%;
+    }
+  }
+  &:hover ::ng-deep .user-state{
+    display:none;
+  }
+   &:hover .change-state{ 
+    display:block;
+   }
+}
+.wrap-state ::ng-deep .user-state{
+  border:2px solid $color-primary;
+  height:100%;
+  width:100%;
+  box-sizing:border-box;
+  display:inline-block;
+  border-radius: 50%;
+  &.online-state {
+     background-color: $color-online-indicator;
+  }
+
+  &.busy-state{
+   background-color: $color-busy-indicator;
+  }
+  &.offline-state{
+    background-color: $color-offline-indicator;
+  }
+  &.inacceptable-state{
+    background-color: $color-inacceptable-indicator;
+  }
+}
+.user-avatar{
+  position:relative;
+}
+.state-list{
+  position:absolute;
+  display:none;
+  background-color:white;
+  margin: 0;
+  z-index: 3;
+  left: calc(100% - 20px);
+  padding:0;
+  top: calc(100% + 5px);
+  li{
+    padding: 4px 16px;
+    list-style-type: none;
+    display:flex;
+    align-items: center;
+    color:rgba(0, 0, 0, 0.87);
+    cursor:pointer;
+    position:relative;
+    &:hover{
+      background-color:rgba(0, 0, 0, 0.1)
+    }
+    &.active{
+      cursor:context-menu;
+      background-color:initial;
+    }
+    &.active::before{
+      background-color:rgba(0, 0, 0, 0.2);
+      content: " ";
+      position:absolute;
+      width:100%;
+      height:100%;
+      z-index:4;
+      left:0;
+      top:0;
+    }
+    i{
+      width:10px;
+      height:10px;
+      display:inline-block;
+      margin-right:8px;
+      border-radius:50%;
+      &.online-state {
+        background-color: $color-online-indicator;
+      }
+      &.busy-state{
+        background-color: $color-busy-indicator;
+      }
+      &.offline-state{
+        background-color: $color-offline-indicator;
+      }
+      &.inacceptable-state{
+        background-color: $color-inacceptable-indicator;
+      }
+    }
+  }
 }
