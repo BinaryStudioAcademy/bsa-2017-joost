@@ -83,6 +83,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private updateDialogs() {
     this.dialogService.getDialogs().subscribe(d => {
       var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
+      this.UpdateFirstDlgMessages(sortArray);
       this.dialogs = sortArray;
       this.filteredDialogs = sortArray;
     },
@@ -90,6 +91,8 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
         if (ok) {
           this.dialogService.getDialogs().subscribe(d => {
+            var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
+            this.UpdateFirstDlgMessages(sortArray);
             this.dialogs = d;
             this.filteredDialogs = d;
           }); 
@@ -104,11 +107,27 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
         }
     });
   }
+
+  private UpdateFirstDlgMessages(dialogs: Dialog[]){
+    for(let dialog of dialogs){
+        dialog.LastMessage = this.GetFristMуssageLine(dialog.LastMessage);
+    }
+  }
   
+  private GetFristMуssageLine(text: string): string {
+    let index = text.search('<div>');
+    let msgTxt: string = "";
+    if(index != -1)
+        msgTxt = text.substr(0, index);
+    else
+        msgTxt = text;
+    return msgTxt;
+  }
+
   private updateLastUserMessage(message: Message) {
     let filteredDialogs = this.dialogs.filter(d => (d.Id == message.SenderId || d.Id == message.ReceiverId) && !d.IsGroup);
     if (filteredDialogs.length > 0) {
-        filteredDialogs[0].LastMessage = message.Text;
+        filteredDialogs[0].LastMessage = this.GetFristMуssageLine(message.Text);
         filteredDialogs[0].DateLastMessage = message.CreatedAt;
         this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
     }
@@ -117,13 +136,14 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   private updateLastGroupMessage(message: Message) {
     let filteredDialogs = this.dialogs.filter(d => d.Id == message.ReceiverId && d.IsGroup);
     if (filteredDialogs.length > 0) {
-        filteredDialogs[0].LastMessage = message.Text;
+        filteredDialogs[0].LastMessage = this.GetFristMуssageLine(message.Text);
         filteredDialogs[0].DateLastMessage = message.CreatedAt;
         this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
     }
   }
 
   private updateLastMessage(message: Message) {
+    // show only first line
     if (message.IsGroup) {
       this.updateLastGroupMessage(message);
     }

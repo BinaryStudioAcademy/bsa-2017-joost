@@ -51,7 +51,7 @@
                     (click)="onAddMember(member.Id)"
                     class="mdl-list__item">                                        
                     <span class="mdl-list__item-primary-content">
-                            <i class="material-icons mdl-list__item-icon">person</i>
+                            <img src="{{member.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
                             {{member.Name}}
                     </span>
                 </li>
@@ -65,7 +65,7 @@
                     (click)="onDeleteMember(member.Id)"
                     class="mdl-list__item">                                        
                     <span class="mdl-list__item-primary-content">
-                            <i class="material-icons mdl-list__item-icon">person</i>
+                            <img src="{{member.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
                             {{member.Name}}
                     </span>
                 </li>
