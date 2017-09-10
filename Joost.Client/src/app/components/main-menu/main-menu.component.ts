@@ -8,14 +8,19 @@ import { Message } from "../../models/message";
 import { ChatHubService } from "../../services/chat-hub.service";
 import { Dialog } from "../../models/dialog";
 import { UserContact } from "../../models/user-contact";
+import { UserState } from "../../models/user-detail";
 import { NotificationService } from "../../services/notification.service";
 import { EventEmitterService } from "../../services/event-emitter.service";
 import { AvatarService } from "../../services/avatar.service";
-
+declare var jquery: any;
+declare var $: any;
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.scss']
+  styleUrls: ['./main-menu.component.scss'],
+  host: {
+   '(document:click)': 'onClickOutside($event)',
+  },
 })
 export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
 
@@ -41,7 +46,21 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
       super();
       notificationService.setViewContainerRef(vRef);
   }
-
+  showStateList(){
+    $(".state-list").slideToggle(300);
+  }
+  onClickOutside(event) {
+    if (!$(event.target).is('.open-list, .state-list, .state-list *')){
+      $(".state-list").slideUp(300);
+    }
+  }
+  changeState(state:UserState){
+    if (this.curUser.State!=state) {
+      this.curUser.State = state;
+      this.accountService.updateUser(this.curUser);
+      $(".state-list").slideUp(300);
+    }
+  }
   onEditStatus(){
     this.editMode = true;
     this.previousStatus = this.curUser.Status;

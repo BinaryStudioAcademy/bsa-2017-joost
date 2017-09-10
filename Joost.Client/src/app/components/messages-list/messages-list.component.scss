@@ -66,9 +66,9 @@ div .mdl-list__item:hover{
 }
 
 .jg-container{
-    width: 74%;
-    height: 100vh;
-    margin: 0 26%;
+    width: calc(74% - 2 * #{$card-padding});
+    height: calc(100vh - 2 * #{$card-padding});
+    margin: $card-padding $card-padding $card-padding calc(26% + #{$card-padding});
     > div{
         &:nth-last-child(2){
             flex: 1;
@@ -77,7 +77,7 @@ div .mdl-list__item:hover{
 }
 
 .message-container {
-    max-width: 50%;
+    width: 92%;
     font-size: 0.8em;
     display: flex;
 }
@@ -99,8 +99,8 @@ div .mdl-list__item:hover{
 }
 
 .message-text {
-    padding: 5px 10px 5px 10px;
-    font-size: 1.2em;
+    padding: 10px 15px;
+    font-size: 1.286em;
 }
 
 .message-text ::ng-deep .emojioneemoji{
@@ -119,12 +119,12 @@ div .mdl-list__item:hover{
 }
 
 .message-content{
-    border-radius: 10px;
+    border-radius: 6px;
     display: flex;
     flex-direction: column;
     background-color: #BBDEFB;
     display: -webkit-inline-box;
-    max-width: 100%;
+    width: 100%;
     word-wrap: break-word;
     img{
         margin: 10px;
@@ -134,15 +134,20 @@ div .mdl-list__item:hover{
 }
 
 .self-message {
-  justify-content: flex-end;
-  
- .main-message-content-container{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    width: 100%;
-    margin-left: 0;
-  }
+    justify-content: flex-end;
+
+    .message-content {
+        background-color: #F4F5F7;
+        width: 100%;
+    }
+
+    .main-message-content-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        width: 100%;
+        margin-left: 0;
+    }
 }
 
 .message-input-container {
@@ -154,7 +159,19 @@ div .mdl-list__item:hover{
     overflow: auto;
 }
 
-
+.messages-content::-webkit-scrollbar {
+    width: 10px;
+    
+}
+ 
+.messages-content::-webkit-scrollbar-track {
+     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+}
+ 
+.messages-content::-webkit-scrollbar-thumb {
+  background-color: $color-primary;
+//   outline: 1px solid slategrey;
+}
 
 input[type="file"] {
     display: none;
@@ -411,25 +428,38 @@ ul {
   transform:rotate(90deg);
   margin-top: 5px;
 }
-.user-state{
+.members-list ::ng-deep .user-state{
   height:10px;
   width:10px;
   display:inline-block;
-  background-color: #54d253;
   border-radius: 10px;
   margin-right: 2px;
-}
+  &.online-state {
+     background-color: $color-online-indicator;
+  }
 
+  &.busy-state{
+   background-color: $color-busy-indicator;
+  }
+  &.offline-state{
+    background-color: $color-offline-indicator;
+  }
+  &.inacceptable-state{
+    background-color: $color-inacceptable-indicator;
+  }
+}
 .wrap-textarea-input ::ng-deep .emojionearea-editor{
     min-height: 1em;
     max-height: 5em;
     margin-right: 0;
 }
-
 .cursor-user-detail:hover {
     cursor: pointer;
 }
 
 .wrap-textarea-input{
     padding: 0px;
+}
+.detail-info{
+  cursor:pointer;
 }

@@ -1,8 +1,11 @@
-button{
-    float: right;
-    margin: 10px;
-    margin-right: 0px;
-  }
+﻿#sign-in {
+    padding-top: 8px;
+}
+button {
+    margin-bottom: 26px;
+    margin-top: 18px;
+    width: 100%;
+}
 .mdl-textfield.is-invalid .mdl-textfield__input{
 	border-color: #9698ab; 
 }

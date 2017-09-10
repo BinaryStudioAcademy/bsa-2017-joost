@@ -1,4 +1,4 @@
-html, div {
+﻿html, div {
   margin: 5px;
   padding: 0;
   border: 0;
@@ -24,9 +24,15 @@ body {
   background-position: center;
   flex-direction:column;
 }
-.logo{
-  height:130px;
-  margin-bottom: 10px;
+.logo-container  {
+    align-items:center;
+    width: 100%;
+    position: absolute;
+    height: 140px;
+    margin-top: -300px;
+}
+.logo {
+    height: 130px;
 }
 .container {
     padding: 200px auto;

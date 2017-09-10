@@ -15,8 +15,11 @@ export class UserStatePipe implements PipeTransform {
         case UserState.Busy:
             rez += '<i class="busy-state user-state"></i>';
             break;
-        case UserState.Inaccesible, UserState.Offline:
+        case UserState.Offline:
             rez += '<i class="offline-state user-state"></i>';
+            break;
+        case UserState.Inaccesible:
+            rez += '<i class="inacceptable-state user-state"></i>';
             break;
         default:
             console.log("Wrong input data send to stateIconPipe")
