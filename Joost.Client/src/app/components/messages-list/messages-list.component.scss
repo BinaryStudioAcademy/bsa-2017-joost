@@ -88,6 +88,8 @@ div .mdl-list__item:hover{
   flex-direction: column;
 }
 .message-header {
+    // padding:0 15px;
+    font-style: italic;
     display: flex;
     flex-direction: row;
     margin-bottom:5px;
@@ -99,8 +101,12 @@ div .mdl-list__item:hover{
 }
 
 .message-text {
-    padding: 5px 10px 5px 10px;
+    // padding: 5px 10px 5px 10px;
     font-size: 1.2em;
+    color: #455A64;
+    @media (width: 20px) {
+        text-align: center;
+    }
 }
 
 .message-text ::ng-deep .emojioneemoji{
@@ -119,17 +125,37 @@ div .mdl-list__item:hover{
 }
 
 .message-content{
-    border-radius: 10px;
     display: flex;
     flex-direction: column;
-    background-color: #BBDEFB;
+    background-color: #B3E5FC;
     display: -webkit-inline-box;
     max-width: 100%;
     word-wrap: break-word;
+    position: relative;
+    padding: 15px;
+    border-radius: 15px;
+    
+    //min-width: 25px;
+
     img{
         margin: 10px;
         max-height: 200px;
         max-width:  200px;
+    }
+
+    &::after {
+        content: "";
+        position: absolute;
+        opacity: 1;
+        // left: 20px;
+        // bottom: -0.4em;
+        top: 1.2em;
+        left: -0.4em;
+        width:1em;
+        height:1em;
+        background-color:#B3E5FC;
+        z-index: -1;
+        transform:rotate(45deg);
     }
 }
 
@@ -143,6 +169,25 @@ div .mdl-list__item:hover{
     width: 100%;
     margin-left: 0;
   }
+
+  .message-content {
+    background-color:#81D4FA;
+
+    &::after{
+        left: auto;
+        
+        // right: 20px;
+
+        
+        right: -0.4em;
+
+        background-color:#81D4FA;
+    }
+  }
+}
+
+.message-item-avatar{
+    margin-top: 0.4em;
 }
 
 .message-input-container {
@@ -311,7 +356,8 @@ input[type="file"] {
   .attached-file{
     margin: 4px;
     text-decoration: none;
-    color:#B0BEC5;
+    
+    color:#9E9E9E;
    
     i{
         font-size: 4em;
@@ -319,7 +365,7 @@ input[type="file"] {
   }
 
   .attached-file:hover{
-    color:#9E9E9E;
+    color:#B0BEC5;
   }
 
   .attched-in-self-msg{
