@@ -1,5 +1,5 @@
 ﻿<div class="mdl-tabs__panel" id="sign-up">
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
         <input class="mdl-textfield__input"
                type="email"
                name="signInEmail"
@@ -16,7 +16,7 @@
         <div *ngIf="signInEmail.errors.required">Email is required.</div>
         <div *ngIf="signInEmail.errors.email">Please provide a valid email address.</div>
     </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
         <input class="mdl-textfield__input" type="password" name="password_user" [(ngModel)]="password" #password_user="ngModel" [minlength]="6" required/>
         <label class="mdl-textfield__label" for="sign-up-password">Password</label>
     </div>
@@ -24,7 +24,7 @@
         <div *ngIf="password_user.errors.required">Password is required.</div>
         <div *ngIf="password_user.errors.minlength && password_user.touched">Password cannot less 6 characters.</div>
     </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
         <input class="mdl-textfield__input" type="password" [(ngModel)]="confirmPassword" name="confirmpassword_user" #confirmpassword_user="ngModel" required>
         <label class="mdl-textfield__label" for="sign-up-confirm">Confirm Password</label>
     </div>
@@ -35,6 +35,6 @@
             (click)="registrate()"
             id="button"
             [disabled]="password != confirmPassword || password_user.invalid || signInEmail.invalid || !userIsEmpty">
-    Register
+            Register
     </button>
 </div>

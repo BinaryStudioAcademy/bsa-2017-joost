@@ -23,8 +23,18 @@
             <!-- content -->
             <div class="invite-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); margin-left: 200px">
                 <div *ngIf="contact.State==0">
-                    <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> wants to add you in friend list.</h3>
-                    <h3 style="text-align:center">What do you think about that?</h3>
+                    <h3 style="text-align:center; font-size: 1.4em;"><span style="font-weight: bold">{{contact.Name}}</span> wants to add you in friend list.</h3>
+                    <h3 style="text-align:center; font-size: 1.4em; margin-top: -22px;">What do you think about that?</h3>
+                    <span *ngIf="contact.State==0">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect invite-button"
+                                (click)="accept(contact.Id)">
+                            Accept
+                        </button>
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect invite-button"
+                                (click)="decline(contact.Id)">
+                            Decline
+                        </button>
+                    </span>
                 </div>
                 <div *ngIf="contact.State==3">
                     <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> did not want to add you to contact list.</h3>
@@ -39,16 +49,7 @@
             <!-- bottom buttons-->
             <div style="border-top: 1px solid rgba(0,0,0,.1); position: absolute; bottom: 0; width:100%">
                 <div style="float:right; padding: 16px; ">
-                    <span *ngIf="contact.State==0">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
-                                (click)="accept(contact.Id)">
-                            Accept
-                        </button>
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
-                                (click)="decline(contact.Id)">
-                            Decline
-                        </button>
-                    </span>
+                    
                     <span *ngIf="contact.State==3">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
                                 (click)="retry(contact.Id)">
