@@ -1,4 +1,6 @@
-﻿.invite-text {
+﻿@import '../../../vars.scss';
+
+.invite-text {
     text-align: center;
     padding: 10px 20px;
     color: #686872;
@@ -28,10 +30,21 @@
     color: #ef5350;
 }
 
-.jg-container {
-    width: calc(100% - 10px);
-    min-height: calc(100vh - 10px);
-    margin: 5px auto;
+.jg-container{
+    max-width: calc(100% - 2 * #{$card-padding});
+    width: 100%;
+    position: absolute;
+    min-height: calc(100% - 2 * #{$card-padding});
+    margin: 0;
+}
+
+.jg-card{
+    padding: $card-padding;
+    max-width: calc(74% - 2 * #{$card-padding});
+    width: 100%;
+    position: absolute;
+    min-height: calc(100% - 2 * #{$card-padding});
+    margin-left: 26%;
 }
 
 .jg-buttons-bottom-container {
