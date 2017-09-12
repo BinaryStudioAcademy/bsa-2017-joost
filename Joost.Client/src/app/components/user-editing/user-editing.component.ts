@@ -30,9 +30,13 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
   user: UserProfile;
   private messageEmoji:any;
   private isLoadFinished:boolean = false;
+
   private passwordDiv: boolean = false;
-  private errorPasswordDiv: boolean = false;
-  private errorPasswordDivMessage: string;
+  private isWrongPreviousPassword: boolean = false;
+  private isNewPasswordsNotMatch: boolean = false;
+  private isPasswordFieldEmpty: boolean = false;
+  private isPasswordFirstValid: boolean = true;
+
   private isEmojiLoad:boolean = false;
   private passwordOld: string = "";
   private passwordFirst: string = "";
@@ -146,38 +150,46 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
   }
 
   ChangePassword() {
+    this.isWrongPreviousPassword = false;
+    this.isNewPasswordsNotMatch = false;
+    this.isPasswordFieldEmpty = false;    
     
     if(this.passwordOld == "" || this.passwordFirst == "" || this.passwordSecond == "") {
-      this.errorPasswordDivMessage = "One of the inputs is empty.";
-      this.errorPasswordDiv = true;
+       this.isPasswordFieldEmpty = true;
       return;
     }
     else{
       if(this.passwordOld != this.user.Password) {
-        this.errorPasswordDivMessage = "Wrong previous password.";
-        this.errorPasswordDiv = true;
+        this.isWrongPreviousPassword = true;
         return;
       }
       else {
         if(this.passwordFirst != this.passwordSecond) {
-          this.errorPasswordDivMessage = "Passwords do not match.";
-          this.errorPasswordDiv = true;
+          this.isNewPasswordsNotMatch = true;
           return;
         }
         else {
+          this.isPasswordFirstValid = false;
+          this.isPasswordFirstValid = $('#userNewPassword')[0].checkValidity();
+          if(!this.isPasswordFirstValid) {
+            return;
+          }
           this.user.Password = this.passwordFirst;
           this.accountService.updateUser(this.user);
-          this.passwordDiv = false;
+          this.CancelPassword();
         }
       }
     }
   }
-  
-  // CancelPassword() {
-  //   this.passwordDiv = !this.passwordDiv;
-  //   this.passwordOld = this.passwordFirst = this.passwordSecond ="";
-  //   this.errorPasswordDiv = false;
-  // }
+    
+  CancelPassword() {
+    this.passwordOld = this.passwordFirst = this.passwordSecond ="";
+    this.isWrongPreviousPassword = false;
+    this.isNewPasswordsNotMatch = false;
+    this.isPasswordFieldEmpty = false;
+    this.isPasswordFirstValid = true;
+    this.passwordDiv = false;
+  }
   
   SendAvatar(e: Event) {
     this.avatarImage = e.target as HTMLInputElement;

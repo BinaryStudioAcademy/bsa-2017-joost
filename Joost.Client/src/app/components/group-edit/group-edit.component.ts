@@ -26,6 +26,7 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
     editMode: boolean = false;
     imgSrc: string;
     saved: boolean = false;
+    isWrongGroupName: boolean = false;
     constructor(
         private route: ActivatedRoute,
         private groupService: GroupService,
@@ -131,8 +132,14 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
     }
 
     onSubmit(): void {
-        if(!this.isCanSaveOrCreate())
+        if(this.group.Name.length < 4) {
+            this.isWrongGroupName = true;
             return;
+        }
+        if(this.selectedMembers.length < 1) {
+            console.log(document.getElementsByClassName("members-notification")[0].setAttribute("style", "color: #d50000;"));
+            return;
+        }
         if (!this.editMode) {
             // route: /groups/new
             this.groupService.addGroup(this.group).subscribe(response => {                
@@ -230,15 +237,4 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
         return user.Id;
     }
 
-    canShowWrongNameTip(): boolean{
-        return !(this.group && this.group.Name && this.group.Name.length >=4)
-    }
-
-    canShowNotEnoughMembers(): boolean{
-        return !this.canShowWrongNameTip() && this.group.SelectedMembersId.length < 1;
-    }
-
-    isCanSaveOrCreate(): boolean{
-        return !(this.canShowNotEnoughMembers() || this.canShowWrongNameTip());
-    }
 }

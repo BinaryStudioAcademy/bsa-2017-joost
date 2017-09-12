@@ -33,6 +33,7 @@
 
 .jc-list-added{
     margin-top: 82px;
+    position: relative;
 }
 
 .jg-buttons-bottom-cantainer{
@@ -163,3 +164,25 @@ input[type="file"] {
 }
 
 // end of avatar styles
+
+.members-notification {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    left: 0;
+    text-align: center;
+    h6 {
+        padding: 0;
+        margin: 0;
+    }
+}
+
+.mdl-error {
+    color: #d50000;
+    position: absolute;
+    font-size: 12px;
+    margin-top: 3px;
+    display: block;
+
+}
