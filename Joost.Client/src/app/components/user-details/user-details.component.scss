@@ -50,6 +50,25 @@
     }
 }
 
+.avatar-info{
+    display: flex;
+    width: 100%;
+}
+
+.back-button{
+    float: right!important; 
+    font-weight: bold; 
+    font-size: 40px; 
+    cursor: pointer;
+    width: 25px;
+    height: 20px;
+    padding: 6px 4px 0 0;
+    
+}
+.back-button:hover{
+    width: 25px;
+    height: 20px;
+}
 .jc-user-details-container{
     padding: 8px;
     margin: 10px;
@@ -82,5 +101,8 @@
 //     width:100%;
 //     margin-left: 400px;
 // }
-
+#notifications-details{
+    height: 60px;
+    padding-top: 18px;
+}
 
