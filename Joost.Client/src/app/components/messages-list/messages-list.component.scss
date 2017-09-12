@@ -5,6 +5,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    z-index: 1;
 }
 
 .title-text {
@@ -99,7 +100,7 @@ div .mdl-list__item:hover{
 }
 
 .message-text {
-    padding: 10px 15px;
+    padding: 15px 15px;
     font-size: 1.286em;
 }
 
@@ -118,19 +119,75 @@ div .mdl-list__item:hover{
     height: auto;
 }
 
+
 .message-content{
+    position: relative;
     border-radius: 6px;
     display: flex;
     flex-direction: column;
-    background-color: #BBDEFB;
+    background-color: #B3E5FC;
     display: -webkit-inline-box;
     width: 100%;
     word-wrap: break-word;
-    img{
-        margin: 10px;
-        max-height: 200px;
-        max-width:  200px;
+    
+    &::after {
+        content: "";
+        position: absolute;
+        opacity: 1;
+        top: 1.24em;
+        left: -0.4em;
+        width:1em;
+        height:1em;
+        background-color:#B3E5FC;
+        z-index: -1;
+        transform:rotate(45deg);
     }
+}
+
+.msg-att-img{
+
+    font-size: 1.286em;
+    margin: 10px;
+    max-height: 200px;
+    max-width:  200px;
+    cursor: pointer;
+    position: relative;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .overlay {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s all;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        opacity: 0;
+        color: white;
+
+
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    &:hover {
+        .overlay {
+            opacity: 1;
+        }
+
+        img {
+            filter: blur(2px);
+        }
+    }
+}
+
+.message-item-avatar{
+    margin-top: 0.4em;
 }
 
 .self-message {
@@ -139,6 +196,9 @@ div .mdl-list__item:hover{
     .message-content {
         background-color: #F4F5F7;
         width: 100%;
+        &::after {
+            display: none;
+        }
     }
 
     .main-message-content-container {
@@ -168,10 +228,10 @@ div .mdl-list__item:hover{
      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
 }
  
-.messages-content::-webkit-scrollbar-thumb {
-  background-color: $color-primary;
-//   outline: 1px solid slategrey;
-}
+// .messages-content::-webkit-scrollbar-thumb {
+//   background-color: $color-primary;
+// //   outline: 1px solid slategrey;
+// }
 
 input[type="file"] {
     display: none;
@@ -184,15 +244,21 @@ input[type="file"] {
   transition:all 0.3s;
   &:hover{
     transition:all 0.3s;
-    color:#000;
+    color: #005A8A;
     background-color: transparent;
   }
   &:active{
-    color:#000;
+    color: #005A8A;
     transition:all 0.3s;
     background-color: rgba(158,158,158,.2);
   }
 }
+
+.can-send-msg-state {
+    transition:all 0.3s;
+    color: #005A8A;
+}
+
 .custom-file-attach {
     cursor: pointer;
     margin-left:10px;
@@ -206,13 +272,49 @@ input[type="file"] {
     background-color: none;
 }
 .send-message-container{
-    display: flex;
+    display: block;
     flex-direction: row;
     justify-content: center;
-    vertical-align: center;
-    align-items: stretch;
+    // vertical-align: center;
+    // align-items: stretch;
     padding-left: 16px;
     padding-right: 16px;
+    // > div{
+    //     flex: 1;
+    // }
+}
+
+.attached-file-name{
+    border-radius: 20px;
+    background-color: #B3E5FC;
+    color: #424242;
+    padding: 3px 10px;
+    margin-bottom: 8px;
+    display: inline-block;
+
+    > i{
+        vertical-align: middle;
+        
+        &:first-child {
+            color: #9E9E9E;
+        }
+
+        &:last-child {
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+
+            &:hover {
+                color: #FF5722;
+            }
+        }
+    }
+}
+
+.messages-input-container{
+    display: flex;
+    vertical-align: center;
+    align-items: stretch;
     > div{
         flex: 1;
     }
@@ -221,6 +323,7 @@ input[type="file"] {
 .send-button{
     align-self: center;
     margin-left: 14px;
+    
     >i {
         transform-origin: center center;
         // transform:  rotate(-10deg);
@@ -232,6 +335,8 @@ input[type="file"] {
     width: 50px;
     height: 50px;
 }
+
+
 
 .material-icons.green {
     color: rgb(46,204,113);
@@ -317,14 +422,11 @@ input[type="file"] {
     margin: 4px;
     text-decoration: none;
     color:#B0BEC5;
-   
+    display: flex;
+    
     i{
         font-size: 4em;
-    }  
-  }
-
-  .attached-file:hover{
-    color:#9E9E9E;
+    }
   }
 
   .attched-in-self-msg{
@@ -332,15 +434,22 @@ input[type="file"] {
   }
 
   .att-file-container{
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      
-      >div{
-          font-size: 1.5em;
-          text-transform: uppercase;
-      }
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    color: #0288D1;
+
+    &:hover {
+        color: #0277BD;
     }
+
+    >div{
+        font-size: 1.5em;
+        text-transform: uppercase;
+    }
+
+}
 .mdl-list__item-avatar{
   align-self: start;
 }
@@ -460,6 +569,7 @@ ul {
 .wrap-textarea-input{
     padding: 0px;
 }
+
 .detail-info{
   cursor:pointer;
 }
