@@ -254,7 +254,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                         this._send(text, fileName);
                     },
                     error => console.log("Fail when uploading file to server!"));
-                this.attachedFile = null;
+                this.attachedFileName = null;
             } 
             else {
                 console.log("before sending group message");
