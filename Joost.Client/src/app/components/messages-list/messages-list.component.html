@@ -45,8 +45,8 @@
                         <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
                         </div>
-                        <div *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" class="attached-file" (click)="onDownloadFile(message.AttachedFile)">
-                         <div class="att-file-container" >  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
+                        <div *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" class="attached-file">
+                         <div class="att-file-container"  (click)="onDownloadFile(message.AttachedFile)">  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
                             <i class="material-icons">insert_drive_file</i>
                             <div class="att-file-ex">
                               <strong>{{getFileExtension(message.AttachedFile)}}</strong> 
@@ -63,6 +63,15 @@
     </div>
   </div>
   <div class="mdl-card__actions mdl-card--border message-input-container send-message-container">     
+    <div *ngIf="IsAttachedFile()" class="attached-file-name">
+        <i class="material-icons">attachment</i>
+        {{attachedFileName}}
+        <i class="material-icons" (click)="deleteFileFromMsg()">close</i>
+    </div>
+    <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="attached-file-name">
+      Group name cannot be empty or less than 4 symbols
+    </div>     
+    <div class="messages-input-container">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label wrap-textarea-input">
         <textarea id="messageText" [(ngModel)]="messageText"></textarea>
         <!-- <input class="mdl-textfield__input" type="text" id="messageText" (keyup.enter)="send(messageText)" [(ngModel)]="messageText"> -->
@@ -71,12 +80,14 @@
       <label for="file-upload" class="mdl-button mdl-js-button js-button-effect custom-file-attach" id="file-upload-icon" title="Click to attach an image">
         <i class="material-icons">attach_file</i>
       </label>
-      <input id="file-upload" type="file" (click)="AttachImage($event)" name="file"/>
+      <input id="file-upload" type="file" (click)="AttachImage($event)" name="file" (change)="OnChangesFile()"/>
 
-      <button class="mdl-button mdl-js-button js-button-effect send-button" (click)="send(messageText)">
+      <button class="send-button mdl-button mdl-js-button js-button-effect" (click)="send(messageText)" [class.can-send-msg-state]="IsCanHoverSendButton()">
         <i class="material-icons">send</i>
       </button>
+
     </div>
+  </div>
 </div>
 
 <div class="modal-container">
