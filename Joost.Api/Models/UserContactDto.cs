@@ -1,4 +1,6 @@
-﻿namespace Joost.Api.Models
+﻿using Joost.DbAccess.Entities;
+
+namespace Joost.Api.Models
 {
     public class UserContactDto
     {
@@ -7,5 +9,6 @@
         public string Avatar { get; set; }
         public string City { get; set; }
         public ContactState State { get; set; }
+        public UserState UserState { get; set; }
     }
 }

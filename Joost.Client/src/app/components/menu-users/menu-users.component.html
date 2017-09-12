@@ -13,12 +13,17 @@
             <ul class="demo-list-three mdl-list">
                 <div *ngFor="let user of result">
                     <li class="mdl-list__item mdl-list__item--three-line" *ngIf="isSentContact(user.Id)" (click)="goToUserDetail(user.Id)">
-                        <span class="mdl-list__item-primary-content">
-                            <img src="{{user.Avatar | avatarPipe:false}}" class="material-icons mdl-list__item-avatar">
-                            <span>{{user.Name}}</span>
-                            <span class="mdl-list__item-text-body">
-                                {{user.City}}
-                            </span>
+                        <span class="mdl-list__item-primary-content list__item">
+                            <div class="user-state-wrap">
+                              <img src="{{user.Avatar | avatarPipe:false}}" class="material-icons mdl-list__item-avatar">
+                              <div class="user-state" [innerHTML]="user.UserState | userState"></div>
+                            </div>
+                            <div>
+                              <span>{{user.Name}}</span>
+                              <span class="mdl-list__item-text-body">
+                                  {{user.City}}
+                              </span>
+                            </div>
                         </span>
                         <a class="mdl-list__item-secondary-action add-contact" ><i class="material-icons light">{{ContactStatus(user.Id)}}</i></a>
                     </li>
@@ -32,12 +37,17 @@
             <ul class="demo-list-three mdl-list">
                 <div *ngFor="let user of result">
                     <li class="mdl-list__item mdl-list__item--three-line" *ngIf="isAcceptContact(user.Id)" (click)="navigateToMessages(user.Id)">
-                        <span class="mdl-list__item-primary-content">
-                            <img src="{{user.Avatar | avatarPipe:false}}" class="material-icons mdl-list__item-avatar">
-                            <span>{{user.Name}}</span>
-                            <span class="mdl-list__item-text-body">
-                                {{user.City}}
-                            </span>
+                        <span class="mdl-list__item-primary-content list__item">
+                           <div class="user-state-wrap">
+                              <img src="{{user.Avatar | avatarPipe:false}}" class="material-icons mdl-list__item-avatar">
+                              <div class="user-state" [innerHTML]="user.UserState | userState"></div>
+                            </div>
+                            <div>
+                              <span>{{user.Name}}</span>
+                              <span class="mdl-list__item-text-body">
+                                  {{user.City}}
+                              </span>
+                            </div>
                         </span>
                     </li>
                 </div>

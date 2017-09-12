@@ -122,7 +122,8 @@ namespace Joost.Api.Controllers
                 State = (Models.ContactState)t.State,
                 Avatar = t.ContactUser.Avatar,
                 Name = t.ContactUser.FirstName + " " + t.ContactUser.LastName,
-                City = t.ContactUser.City
+                City = t.ContactUser.City,
+                UserState = t.ContactUser.State
             }).OrderBy(t => t.State).ToList();
             return Ok(cont);
         }
