@@ -272,7 +272,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private _send(text: string, fileName: string) {
-        this.deleteFileFromMsg();
+        if(fileName)
+            this.deleteFileFromMsg();
         if (this.isGroup) {
             console.log("sending group message");
             this.sendGroupMessage(text, fileName);
