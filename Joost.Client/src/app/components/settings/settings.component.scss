@@ -1,7 +1,11 @@
 ﻿@import '../../../vars.scss';
 
 .settings-item {
-    margin-top: 2em;
+    padding-bottom: 2.2em;
+}
+
+.logout-settings-item {
+    padding-top: 0.8em;
 }
 
 .jg-buttons-bottom-cantainer{
@@ -42,5 +46,21 @@
     }
     > div{
         padding: 8px;    
+    }
+}
+
+.mdl-switch::ng-deep .mdl-switch__track {
+    background: rgba(125, 170, 194, 0.5);
+}
+
+.mdl-switch.is-checked::ng-deep .mdl-switch__thumb {
+    background: royalblue;
+}
+
+.setting-subscription-text {
+    padding-left: 1.5em;
+    color: grey;
+    >p {
+        font-size: 80%;
     }
 }

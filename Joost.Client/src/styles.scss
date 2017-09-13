@@ -144,9 +144,23 @@ html, body {
 .dropdown-menu.textcomplete-dropdown[data-strategy=emojionearea]{
     margin-top:-15px !important;
 }
+
+#toast-container {
+    >div {
+        box-shadow: 0 0 3px #999 !important;
+    }
+}
+
+#toast-container {
+    >div:hover {
+        box-shadow: 0 0 6px #999 !important;
+	}
+}
+
 .button__log.mdl-button--accent.mdl-button--accent.mdl-button--raised{
 	background-color:rgb(25, 118, 210);
 }
+
 .button__log.mdl-button--accent.mdl-button--accent.mdl-button--raised[disabled]{
 	background-color: rgba(0,0,0,.12);
 }

@@ -75,6 +75,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.getMessages = false;
         this.isAllMessagesReceived = false;
         this.toBottom = true;
+        this.messageEmoji = null;
     }
     ngOnInit() {
         this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
@@ -278,7 +279,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private _send(text: string, fileName: string) {
-        //this.deleteFileFromMsg();
+        if(fileName)
+            this.deleteFileFromMsg();
         if (this.isGroup) {
             console.log("sending group message");
             this.sendGroupMessage(text, fileName);

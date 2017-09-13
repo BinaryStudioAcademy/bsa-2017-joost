@@ -133,12 +133,12 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
   private showMessageNotification(message: Message) {
     if (message.IsGroup) {
       if (message.SenderId != this.curUser.Id && !this.isOnGroupMessages(message.ReceiverId))
-        this.notificationService.showNewMessageInChat(message.Title, message.Text);
+        this.notificationService.showNewMessageInChat(message);
     }
     else {
       if (!this.isOnUserMessages(message.SenderId))
       {
-        this.notificationService.showNewMessage(message.Title, message.Text);
+        this.notificationService.showNewMessage(message);
       }
     }
   }
