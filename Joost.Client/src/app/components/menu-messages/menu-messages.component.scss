@@ -181,3 +181,13 @@ ul {
         transform: rotateX(0deg);
     }
 }
+
+.menu-message-form {
+  display: flex;
+  flex-direction: column; 
+  
+  .menu-messages-container{
+    flex: 1;
+    overflow :auto;
+  }
+}

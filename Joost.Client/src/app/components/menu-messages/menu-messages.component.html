@@ -1,113 +1,77 @@
-﻿<form>
-  <div class="text-input-container">
-    <div class="menu-input mdl-textfield mdl-js-textfield mdl-textfield--floating-label menu-input">
-      <input class="mdl-textfield__input" name="search" type="text" [(ngModel)]="searchString" (keyup)="search()" id="search-dialogs">
-      <label class="mdl-textfield__label" for="search-dialogs">Find...</label>
+﻿<form class="menu-message-form">
+  <div class="menu-messages-container">
+    <div class="text-input-container">
+      <div class="menu-input mdl-textfield mdl-js-textfield mdl-textfield--floating-label menu-input">
+        <input class="mdl-textfield__input" name="search" type="text" [(ngModel)]="searchString" (keyup)="search()" id="search-dialogs">
+        <label class="mdl-textfield__label" for="search-dialogs">Find...</label>
+      </div>
     </div>
-  </div>
-  <!-- <div class="accordion">
-    <div class="title">
-      <div class="name">Direct messages</div>
-      <div class="arrow"></div>
-    </div>
-    <ul class="demo-list-three mdl-list">
-      <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let dialog of filteredDialogs" (click)="navigateToMessages(dialog)">
-        <span class="mdl-list__item-primary-content">
-          <img src="{{dialog.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
-          <span>{{dialog.Name}}</span>
-          <span class="mdl-list__item-text-body">
-            {{dialog.LastMessage}}
-          </span>
-        </span>
+    <ul class="accordion">
+      <li *ngIf="contacts.length != 0">
+          <input type="checkbox">
+          <i class="arrow"></i>
+          <h2>New Contacts</h2>
+          <ul class="demo-list-three mdl-list">
+              <div *ngFor="let user of contacts">
+                  <li class="mdl-list__item mdl-list__item--three-line" (click)="goToConfirm(user.Id)">
+                      <span class="mdl-list__item-primary-content list__item">
+                          <div class="user-state-wrap">
+                            <img src="{{user.Avatar | avatarPipe:false}}" class="material-icons mdl-list__item-avatar">
+                            <div class="user-state" [innerHTML]="user.UserState | userState"></div>
+                          </div>
+                          <div>
+                            <span>{{user.Name}}</span>
+                            <span class="mdl-list__item-text-body">
+                                {{user.City}}
+                            </span>
+                          </div>
+                      </span>
+                      <a class="mdl-list__item-secondary-action add_contact new_releases"><i class="material-icons light">new_releases</i></a>
+                  </li>
+              </div>
+          </ul>
       </li>
-    </ul>
-  </div> -->
-  <!-- <div class="accordion">
-    <div class="title">
-      <div class="name">Groups</div>
-      <div class="arrow"></div>
-    </div>
-    <ul class="demo-list-three mdl-list">
-      <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let dialog of filteredDialogs" (click)="navigateToMessages(dialog)">
-        <span class="mdl-list__item-primary-content">
-          <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
-          <span>{{dialog.Name}}</span>
-          <span class="mdl-list__item-text-body">
-            {{dialog.LastMessage}}
-          </span>
-        </span>
-      </li>
-    </ul>
-  </div> -->
-  <ul class="accordion">
-    <li *ngIf="contacts.length != 0">
+      <li>
         <input type="checkbox">
         <i class="arrow"></i>
-        <h2>New Contacts</h2>
-        <ul class="demo-list-three mdl-list">
-            <div *ngFor="let user of contacts">
-                <li class="mdl-list__item mdl-list__item--three-line" (click)="goToConfirm(user.Id)">
-                    <span class="mdl-list__item-primary-content list__item">
-                        <div class="user-state-wrap">
-                          <img src="{{user.Avatar | avatarPipe:false}}" class="material-icons mdl-list__item-avatar">
-                          <div class="user-state" [innerHTML]="user.UserState | userState"></div>
-                        </div>
-                        <div>
-                          <span>{{user.Name}}</span>
-                          <span class="mdl-list__item-text-body">
-                              {{user.City}}
-                          </span>
-                        </div>
-                    </span>
-                    <a class="mdl-list__item-secondary-action add_contact new_releases"><i class="material-icons light">new_releases</i></a>
-                </li>
-            </div>
-        </ul>
-    </li>
-    <li>
-      <input type="checkbox">
-      <i class="arrow"></i>
-      <h2>Direct Messages</h2>
-        <ul class="demo-list-three mdl-list">
-            <div *ngFor="let dialog of filteredDialogs" class="messages">
-              <li class="mdl-list__item mdl-list__item--three-line" *ngIf="!dialog.IsGroup" (click)="navigateToMessages(dialog)">
-                <span  class="mdl-list__item-primary-content list__item">
-                  <div class="user-state-wrap">
-                    <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
-                    <div class="user-state" [innerHTML]="dialog.UserState | userState"></div>
-                  </div>
-                  <div>
-                    <span>{{dialog.Name}}</span>
-                    <span class="mdl-list__item-text-body" [innerHTML]="dialog.LastMessage">
-                    <!-- {{dialog.LastMessage}} -->
-                    </span>
-                   </div>
-                </span>
-              </li>
-            </div>
-        </ul>
-    </li>
-  <li>
-    <input type="checkbox" checked>
-    <i class="arrow"></i>
-    <h2>Groups</h2>
-      <ul class="demo-list-three mdl-list">
-          <div *ngFor="let dialog of filteredDialogs" class="messages">
-              <li class="mdl-list__item mdl-list__item--three-line" *ngIf="dialog.IsGroup" (click)="navigateToMessages(dialog)">
-                  <span class="mdl-list__item-primary-content">
+        <h2>Direct Messages</h2>
+          <ul class="demo-list-three mdl-list">
+              <div *ngFor="let dialog of filteredDialogs" class="messages">
+                <li class="mdl-list__item mdl-list__item--three-line" *ngIf="!dialog.IsGroup" (click)="navigateToMessages(dialog)">
+                  <span  class="mdl-list__item-primary-content list__item">
+                    <div class="user-state-wrap">
                       <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
+                      <div class="user-state" [innerHTML]="dialog.UserState | userState"></div>
+                    </div>
+                    <div>
                       <span>{{dialog.Name}}</span>
                       <span class="mdl-list__item-text-body" [innerHTML]="dialog.LastMessage">
-                          <!-- {{dialog.LastMessage}} -->
+                      <!-- {{dialog.LastMessage}} -->
                       </span>
+                    </div>
                   </span>
-              </li>
-            </div>
-        </ul>
-    </li>
-  </ul>
-  <!--<div class="menu__search__not_found" *ngIf="filteredDialogs!==undefiend && filteredDialogs.length === 0 && searchString!==''" >Unfortunately, nothing was found on your request(</div>-->
-	<!--<div class="wrapper__spiner">
-		<div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active" [hidden]="(isLoad && searchString) || !searchString"></div>
-	</div>-->
+                </li>
+              </div>
+          </ul>
+      </li>
+    <li>
+      <input type="checkbox" checked>
+      <i class="arrow"></i>
+      <h2>Groups</h2>
+        <ul class="demo-list-three mdl-list">
+            <div *ngFor="let dialog of filteredDialogs" class="messages">
+                <li class="mdl-list__item mdl-list__item--three-line" *ngIf="dialog.IsGroup" (click)="navigateToMessages(dialog)">
+                    <span class="mdl-list__item-primary-content">
+                        <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
+                        <span>{{dialog.Name}}</span>
+                        <span class="mdl-list__item-text-body" [innerHTML]="dialog.LastMessage">
+                            <!-- {{dialog.LastMessage}} -->
+                        </span>
+                    </span>
+                </li>
+              </div>
+          </ul>
+      </li>
+    </ul>
+  </div>
 </form>

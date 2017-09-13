@@ -205,3 +205,11 @@ ul li input[type=checkbox]:checked ~ i.arrow:after {
 .mdl-list__item-avatar{
     margin: 1px 0 0 1px;
 }
+
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label{
+    color: #4FC3F7 !important;
+}
+  
+.mdl-textfield__label:after {
+    background: #4FC3F7 !important;
+}
