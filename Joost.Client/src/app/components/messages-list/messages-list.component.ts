@@ -38,7 +38,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private dialogName: string;
     private dialogImage: string;
     private messageText: string;
-    private attachedImage: HTMLInputElement;
+    private attachedFile: HTMLInputElement;
+    private attachedFileName: string;
     private groupMembers: UserDetail[];
     private isFocusMessage: number;
     private testHtml: string = "Hello";
@@ -69,7 +70,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.dialogName = null;
         this.dialogImage = null;
         this.messageText = null;
-        this.attachedImage = null;
+        this.attachedFile = null;
         this.groupMembers = null;
         this.getMessages = false;
         this.isAllMessagesReceived = false;
@@ -246,16 +247,16 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             text = $(".emojionearea-editor").html();
             this.messageEmoji[0].emojioneArea.setText("");
         }
-        if ((text != null && text != "") || this.attachedImage != null) {
+        if ((text != null && text != "") || this.attachedFile != null) {
             let fileName =  "";
-            if (this.attachedImage != null) {
-                fileName = this.currentUser.Id + "_" +  this.receiverId + "_" + Date.now() + '.' + this.fileService.getFileExtensions(this.attachedImage.files[0].name);               
-                this.fileService.UploadFile(this.attachedImage.files[0], fileName).subscribe(
+            if (this.attachedFile != null) {
+                fileName = this.currentUser.Id + "_" +  this.receiverId + "_" + Date.now() + '.' + this.fileService.getFileExtensions(this.attachedFile.files[0].name);               
+                this.fileService.UploadFile(this.attachedFile.files[0], fileName).subscribe(
                     res => { // if successfully uploaded file to server, then we can send a message
                         this._send(text, fileName);
                     },
                     error => console.log("Fail when uploading file to server!"));
-                this.attachedImage = null;
+                this.attachedFileName = null;
             } 
             else {
                 console.log("before sending group message");
@@ -264,7 +265,16 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         }
     }
 
+    private IsAttachedFile():boolean {
+        return this.attachedFile && this.attachedFile.files.length > 0;
+    }
+
+    private IsCanHoverSendButton(): boolean{
+        return this.IsAttachedFile() || this.messageEmoji[0]!==undefined && $(".emojionearea-editor").html();
+    }
+
     private _send(text: string, fileName: string) {
+        this.deleteFileFromMsg();
         if (this.isGroup) {
             console.log("sending group message");
             this.sendGroupMessage(text, fileName);
@@ -309,7 +319,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     private addToMessages(message: Message) {
         this.messages.push(message);
-        this.messageText = "";
+        this.messageText = null;
         this.toBottom = true;
     }
 
@@ -412,8 +422,15 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.cdRef.detectChanges();
     }
 
+    private OnChangesFile(): void{
+        if(this.attachedFile && this.attachedFile.files.length > 0) {
+            this.attachedFileName = this.attachedFile.files[0].name;
+            console.log(this.attachedFileName);
+        }
+    }
+
     AttachImage(e: Event) {
-        this.attachedImage = e.target as HTMLInputElement;
+        this.attachedFile = e.target as HTMLInputElement;
     }
 
     onShowModal(fileName: string): void{
@@ -481,4 +498,12 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         content += '<i class="material-icons" style="font-size: 8px">format_quote</i>';
         this.testHtml = content;
     }
+
+    deleteFileFromMsg(): void {
+        this.attachedFile.value = '';
+    }
+
+    onGoToUser(Id: number){
+        this.router.navigate(["/menu/user-details", Id]);
+      }
 }

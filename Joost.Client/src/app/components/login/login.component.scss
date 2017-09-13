@@ -29,10 +29,11 @@ body {
     width: 100%;
     position: absolute;
     height: 140px;
-    margin-top: -300px;
+    margin-top: -180px;
 }
 .logo {
-    height: 130px;
+    max-width: 350px;
+    width: 80vw;
 }
 .container {
     padding: 200px auto;
@@ -51,6 +52,7 @@ body {
 #card {
   width: 400px;
   position:relative;
+  margin-top:200px;
 }
 .wrapper-modal{
   position: absolute;

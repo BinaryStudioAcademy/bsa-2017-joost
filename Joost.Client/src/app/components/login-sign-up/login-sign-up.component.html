@@ -1,40 +1,61 @@
 ﻿<div class="mdl-tabs__panel" id="sign-up">
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
-        <input class="mdl-textfield__input"
+    <form action="" name="refister-form" #refisterLogin="ngForm">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
+            <!-- <input class="mdl-textfield__input" 
                type="email"
                name="signInEmail"
                [(ngModel)]="email"
                #signInEmail="ngModel"
                (blur)="checkEmailIsEmpty(email)"
+               (focus)="focusLoginInput()"
+               required=""
+               email> -->
+            <input class="mdl-textfield__input" 
+               type="email"
+               name="signInEmail"
+               [(ngModel)]="email"
+               #signInEmail="ngModel"
+               (focus)="focusLoginInput()"
                required=""
                email>
-        <label class="mdl-textfield__label" for="sign-up-email">Email</label>
-    </div>
-    <div *ngIf="!userIsEmpty" class="validate">User with this email adress already exists.</div>
-    <div *ngIf="signInEmail.invalid && (signInEmail.dirty || signInEmail.touched)" class="validate">
-        <div *ngIf="!userIsEmpty">User with this email adress already exists.</div>
-        <div *ngIf="signInEmail.errors.required">Email is required.</div>
-        <div *ngIf="signInEmail.errors.email">Please provide a valid email address.</div>
-    </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
-        <input class="mdl-textfield__input" type="password" name="password_user" [(ngModel)]="password" #password_user="ngModel" [minlength]="6" required/>
-        <label class="mdl-textfield__label" for="sign-up-password">Password</label>
-    </div>
-    <div *ngIf="password_user.invalid && (password_user.dirty || password_user.touched)" class="validate">
-        <div *ngIf="password_user.errors.required">Password is required.</div>
-        <div *ngIf="password_user.errors.minlength && password_user.touched">Password cannot less 6 characters.</div>
-    </div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
-        <input class="mdl-textfield__input" type="password" [(ngModel)]="confirmPassword" name="confirmpassword_user" #confirmpassword_user="ngModel" required>
-        <label class="mdl-textfield__label" for="sign-up-confirm">Confirm Password</label>
-    </div>
-    <div *ngIf="confirmPassword != password && (confirmpassword_user.dirty || confirmpassword_user.touched)" class="validate">
-        <div>Passwords don't match.</div>
-    </div>
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-            (click)="registrate()"
-            id="button"
-            [disabled]="password != confirmPassword || password_user.invalid || signInEmail.invalid || !userIsEmpty">
-            Register
-    </button>
+            <label class="mdl-textfield__label" for="sign-up-email">Email</label>
+        </div>
+        <div *ngIf="isFormChecked && loginError" class="validate">
+            <div *ngIf="!userIsEmpty">User with this email adress already exists.</div>
+            <div *ngIf="signInEmail.errors.required">Email is required.</div>
+            <div *ngIf="signInEmail.errors.email">Please provide a valid email address.</div>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
+            <input class="mdl-textfield__input" 
+            type="password" 
+            name="passwordUser" 
+            [(ngModel)]="password" 
+            (focus)="focusPasswordInput()"
+            #password_user="ngModel" 
+            [minlength]="6" 
+            required>
+            <label class="mdl-textfield__label" for="sign-up-password">Password</label>
+        </div>
+        <div *ngIf="isFormChecked && passwordError" class="validate">
+            <div *ngIf="password_user.errors.required">Password is required.</div>
+            <div *ngIf="password_user.errors.minlength && password_user.touched">Password cannot less 6 characters.</div>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
+            <input class="mdl-textfield__input" 
+            type="password" 
+            [(ngModel)]="confirmPassword" 
+            name="passwordConfirmUser"
+            #confirmpassword_user="ngModel" 
+            required>
+            <label class="mdl-textfield__label" for="sign-up-confirm">Confirm Password</label>
+        </div>
+        <div *ngIf="isFormChecked && passwordConfirmError" class="validate">
+            <div>Passwords don't match.</div>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button__log"
+                (click)="registrate(refisterLogin)"
+                id="button">
+                Register
+        </button>
+    </form>
 </div>

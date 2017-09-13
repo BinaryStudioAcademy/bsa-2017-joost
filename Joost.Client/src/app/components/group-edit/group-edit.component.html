@@ -1,4 +1,3 @@
-
 <div class="group-edit">
 <div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="group">
     <div class="mdl-card__title">
@@ -25,6 +24,9 @@
                         value="{{group.Name}}"
                         (keyup)="onGroupNameKeyUp(groupName.value)">
                     <label class="mdl-textfield__label" for="groupName">Group name</label>
+                    <div class="mdl-error" [hidden]="!isWrongGroupName">
+                        Group name cannot be empty or less than 4 symbols!
+                    </div>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
                     <input class="mdl-textfield__input"
@@ -59,6 +61,10 @@
         </div>
         <div class="mdl-cell mdl-cell--6-col">
             <ul class="jc-list-user jc-list-added mdl-list mdl-shadow--2dp scrollable">
+               <div *ngIf="!selectedMembers.length" class="members-notification">
+                     <h6>List of group members</h6>
+                     <p>(can`t be empty)</p>
+                 </div>   
                     <li
                     *ngFor="let member of selectedMembers"
                     style="cursor: pointer"
@@ -74,19 +80,13 @@
     </div>
     <div class="mdl-card__actions mdl-card--border jg-buttons-bottom-cantainer">
         <div id="btnSaveCreate">
-            <button [disabled]="!isCanSaveOrCreate()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="onSubmit()">
+            <button  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="onSubmit()">
                 {{editMode ? 'Save' : 'Create'}}
             </button>
         </div>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="onCancel()">
             Cancel
-        </button>
-        <div *ngIf="canShowNotEnoughMembers()" class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="btnSaveCreate">
-            Cannot create group without members
-        </div>
-        <div *ngIf="canShowWrongNameTip()" class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="btnSaveCreate">
-            Group name cannot be empty or less than 4 symbols
-        </div>      
+        </button>    
     </div>
 </div>
 </div>

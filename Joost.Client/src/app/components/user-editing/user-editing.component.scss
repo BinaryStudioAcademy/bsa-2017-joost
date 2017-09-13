@@ -9,13 +9,10 @@
     margin: 10px 10px 10px 0px;
 }
 
-.jg-full-width-container{
-    width: 47%;
+.jg-half-width-container{
+    width: 45%;
 }
 
-.jg-half-width-container{
-    width: 47%;
-}
 .date-picker-style{
     width: 200px;
 }
@@ -33,6 +30,7 @@
     position: absolute;
     min-height: calc(100% - 2 * #{$card-padding});
     margin-left: 26%;
+    overflow-y: auto;
 }
 @media (max-width: 1024px){
     .jg-card{
@@ -44,13 +42,27 @@
   
 .jg-header-container{
     width:  100%;
+    box-sizing: border-box;
     display: flex;
+    justify-content: flex-start;
     flex-wrap: wrap;
     h3 {
         margin: 0;
     }
     > div{
         margin: 0px 8px;    
+    }
+}
+
+.jg-content-container{
+    width:  100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0px 20px;
+    > div {
+         margin: 0px 20px; 
     }
 }
 
@@ -136,18 +148,34 @@ input[type="file"] {
     display: inline-block;
 }
 
-.padding-right-20 {
-    padding-right: 20px;
+.password-notification{
+    width: 100%;
+    padding: 0;
 }
 
-.password-notification{
-    width: 94%;
-    padding-top: 0px;
-    padding-bottom: 0px;
-}
 .ng -textfield{
     max-width: 48%;
 }
 .emoji-input.mdl-textfield{
   padding:10px 0 0 !important;
+}
+
+.jg-error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0px;
+
+    h6 {
+        margin: 0px 10px 0px 10px;
+    }
+}
+
+.mdl-error {
+    color: #d50000;
+    position: absolute;
+    font-size: 12px;
+    margin-top: 3px;
+    display: block;
+
 }

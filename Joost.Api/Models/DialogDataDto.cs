@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Joost.DbAccess.Entities;
+using System;
 
 namespace Joost.Api.Models
 {
@@ -10,5 +11,6 @@ namespace Joost.Api.Models
         public DateTime DateLastMessage { get; set; }
         public string Avatar { get; set; }
         public bool IsGroup { get; set; }
+        public UserState UserState { get; set; }
     }
 }
