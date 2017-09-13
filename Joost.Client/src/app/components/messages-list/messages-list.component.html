@@ -7,7 +7,7 @@
             <h3 (click)="toggleListMember($event)"><i></i>Members: {{groupMembers.length}}</h3>
             <div class="members-toggle">
               <ul class="members-list">
-                <li *ngFor="let member of groupMembers">
+                <li *ngFor="let member of groupMembers" (click)="onGoToUser(member.Id)">
                   <span [outerHTML]="member.State | userState">
                    
                   </span>

@@ -495,4 +495,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     deleteFileFromMsg(): void {
         this.attachedFile.value = '';
     }
+
+    onGoToUser(Id: number){
+        this.router.navigate(["/menu/user-details", Id]);
+      }
 }

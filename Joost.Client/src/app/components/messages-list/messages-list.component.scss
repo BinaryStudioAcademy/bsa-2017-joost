@@ -528,7 +528,12 @@ ul {
   display: flex;
   margin-left:-10px;
   flex-wrap:wrap;
+
+  >li {
+      cursor: pointer;
+  }
 }
+
 .accordion.group-members h3{
   cursor:pointer;
 }
