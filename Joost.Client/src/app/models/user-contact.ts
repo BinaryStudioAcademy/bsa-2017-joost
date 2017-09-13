@@ -1,4 +1,5 @@
 import {ContactState} from "./contact";
+import {UserState} from "./user-detail";
 
 export class UserContact{
     public Id: number;
@@ -6,4 +7,5 @@ export class UserContact{
     public City: string;
     public Avatar: string;
     public State: ContactState;
+    public UserState: UserState;
 }

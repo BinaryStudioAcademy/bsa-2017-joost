@@ -108,7 +108,7 @@ namespace Joost.Api.Controllers
 
 		// GET: api/users/check/{login}
 		[HttpGet]
-		[Route("check/{login}")]
+		[Route("check")]
 		public async Task<IHttpActionResult> CheckUserForUniqueness(string login)
 		{
 			if (string.IsNullOrEmpty(login))

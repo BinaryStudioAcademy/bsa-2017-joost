@@ -99,9 +99,13 @@ namespace Joost.Api.Controllers
             {
                 return NotFound();
             }
-            user.Contacts.Remove(contact);
 
-            await _unitOfWork.SaveAsync();
+			var cnt = await _unitOfWork.Repository<Contact>().GetAsync(contact.Id);
+			if(cnt != null)
+				_unitOfWork.Repository<Contact>().Delete(cnt);
+			user.Contacts.Remove(contact);
+			await _unitOfWork.SaveAsync();
+
             return Ok();
         }
 
@@ -122,7 +126,8 @@ namespace Joost.Api.Controllers
                 State = (Models.ContactState)t.State,
                 Avatar = t.ContactUser.Avatar,
                 Name = t.ContactUser.FirstName + " " + t.ContactUser.LastName,
-                City = t.ContactUser.City
+                City = t.ContactUser.City,
+                UserState = t.ContactUser.State
             }).OrderBy(t => t.State).ToList();
             return Ok(cont);
         }

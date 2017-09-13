@@ -9,16 +9,22 @@
                     <div class="settings-item">
                         <label #notifyFromUsers class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-users">
                             <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input" name="notificationFromUsers" [(ngModel)]="notificationFromUsers" (ngModelChange)="onNotificationsFromUsers()">
-                            <span class="mdl-switch__label">Turn off notifications from users</span>
+                            <span class="mdl-switch__label">Notifications from users</span>
+                            <div class="setting-subscription-text">
+                                <p>Here you can toggle notification settings from users</p>
+                            </div>
                         </label>
                     </div>
                     <div class="settings-item">
                         <label #notifyFromGroups class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-groups"> 
                             <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input" [(ngModel)]="notificationFromGroups" (ngModelChange)="onNotificationsFromGroups()">
-                            <span class="mdl-switch__label">Turn off notifications from groups</span>
+                            <span class="mdl-switch__label">Notifications from groups</span>
+                            <div class="setting-subscription-text">
+                                <p>Here you can toggle notification settings from groups</p>
+                            </div>
                         </label>
                     </div>
-                    <div class="settings-item">
+                    <div class="logout-settings-item">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="logout()">Logout</button>
                     </div>
                 </div>

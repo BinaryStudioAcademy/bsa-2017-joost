@@ -2,23 +2,26 @@
     <div class="mdl-tabs__panel is-active"  id="sign-in">
       <form name="login-form" #formLogin="ngForm">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
-          <input class="mdl-textfield__input" required="" name="login" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}"   id="sign-in-login" #loginUser="ngModel"  [(ngModel)]="email" >
+          <input class="mdl-textfield__input" required="" name="login" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}" (focus)="focusLoginInput()" id="sign-in-login" #loginUser="ngModel"  [(ngModel)]="email" >
           <label class="mdl-textfield__label" for="sign-in-login">Login</label>
         </div>
-        <div *ngIf="loginUser.invalid && (loginUser.dirty || loginUser.touched)" class="validate">
+        <div *ngIf="isFormChecked && loginError" class="validate">
             <div *ngIf="loginUser.errors.required">Login is required.</div>
             <div *ngIf="loginUser.errors.pattern">Please provide a valid login.</div>
         </div>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
-          <input class="mdl-textfield__input" required="" name="password" minlength="6" type="password" #passwordUser="ngModel" id="sign-in-password" [(ngModel)]="password">
+          <input class="mdl-textfield__input" required="" name="password" minlength="6" type="password" (focus)="focusPasswordInput()" #passwordUser="ngModel" id="sign-in-password" [(ngModel)]="password">
           <label class="mdl-textfield__label" for="sign-in-password">Password</label>
         </div>
-        <div *ngIf="passwordUser.invalid && (passwordUser.dirty || passwordUser.touched)" class="validate">
+        <div *ngIf="isFormChecked && passwordError" class="validate">
             <div *ngIf="passwordUser.errors.required">Password is required.</div>
             <div *ngIf="passwordUser.errors.minlength && passwordUser.touched">Password cannot less 6 characters.</div>
         </div>
-        <div class="validate" *ngIf="isError">{{isError}}</div>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" [disabled]="!formLogin.valid"  id="button" (click)="logIn()">
+        <div class="validate" *ngIf="errorResponse && isErrorFromServer">
+            <div *ngIf="errorResponse.status==404">User with this login and password not found.</div>
+            <div *ngIf="errorResponse.status==403">You need to activate your account.</div>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent button__log"  id="button" (click)="logIn(formLogin)">
         Log in
         </button>
       </form>
