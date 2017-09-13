@@ -84,15 +84,17 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   }
 
   ngAfterViewChecked(): void {
-    console.log($("#message-panel")[0].offsetHeight);
-    let el = $("#message-panel")[0];
-    if(el)
+    if($("#message-panel").length > 0)
     {
-        let height = el.offsetHeight;
-        $(".menu-message-form")[0].style.height = height + 'px';
-        $(".menu-messages-container")[0].style.maxHeight = height + 'px';
-        // $(".menu-messages-container")[0].style.height = height;
+        let height = $("#message-panel")[0].offsetHeight;
+        if($(".menu-message-form").length > 0){
+            $(".menu-message-form")[0].style.maxHeight = height + 'px';
+        }
     }
+  }
+
+  onResize($event) {
+      console.log($event);
   }
 
   private updateDialogs() {
