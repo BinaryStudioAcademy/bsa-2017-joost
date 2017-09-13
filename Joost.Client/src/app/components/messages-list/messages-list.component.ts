@@ -40,7 +40,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private messageText: string;
     private attachedImage: HTMLInputElement;
     private groupMembers: UserDetail[];
-    
+    private isFocusMessage: number;
+    private testHtml: string = "Hello";
+
     @ViewChild('scroll') private scrollContainer: ElementRef;
     private getMessages: boolean = false;
     private isAllMessagesReceived: boolean = false;
@@ -454,29 +456,29 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             this.router.navigate(["menu/user-details", this.receiverId]);  
     }
 
-    copyEvent(message: Message, user: string): void {
-        this.copyToClipboard(message, user);
+    private focusMessage(messageId: number) {
+        this.isFocusMessage = messageId;
     }
 
-    copyToClipboard(message: Message, user: string) {
-        var copyElement = document.createElement("textarea");
-        copyElement.style.position = 'fixed';
-        copyElement.style.opacity = '0';
-        //message.Text = message.Text.replace("<span>", "");
-        //message.Text = message.Text.replace("</span>", "");
-        //message.Text = message.Text.replace("<div>", "");
-        //message.Text = message.Text.replace("</div>", "");
-        //message.Text = message.Text.replace("<br>", "");
+    private focusoutMessage() {
+        this.isFocusMessage = 0;
+    }
+
+    private isFocus(messageId: number) {
+        let result = this.isFocusMessage == messageId;
+        return result;
+    }
+
+    makeCitation(message: Message, user: string) {
+        debugger;
+        var content = '<i class="material-icons" style="font-size: 8px">format_quote</i>' + message.Text + '<br>';
         if (!message.IsGroup) {
-            copyElement.textContent = user + ' [' + message.CreatedAt + ']: "' + message.Text + '"';
+            content += user + ', ' + message.CreatedAt;
         } else {
             let sender = this.getMember(message.SenderId);
-            copyElement.textContent = sender.LastName + ' ' + sender.FirstName + ' [' + message.CreatedAt + ']: "' + message.Text + '"';
+            content += sender.LastName + ' ' + sender.FirstName + ', ' + message.CreatedAt;
         }
-        var body = document.getElementsByTagName('body')[0];
-        body.appendChild(copyElement);
-        copyElement.select();
-        document.execCommand('copy');
-        body.removeChild(copyElement);
+        content += '<i class="material-icons" style="font-size: 8px">format_quote</i>';
+        this.testHtml = content;
     }
 }

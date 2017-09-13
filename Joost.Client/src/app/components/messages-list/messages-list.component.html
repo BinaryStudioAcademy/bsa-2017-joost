@@ -40,7 +40,12 @@
                       </div>   
                     </div>
                     <div class="message-content">
-                        <div class="message-text" *ngIf="message.Text" [innerHTML]="message.Text" (copy)="copyEvent(message, dialogName)">
+                        <div class="message-text mdl-grid" *ngIf="message.Text" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()">
+                            <div [innerHTML]="message.Text"></div>
+                            <i *ngIf="isFocus(message.Id)" id="citation" class="tiny material-icons" style="font-size: 16px" (click)="makeCitation(message, dialogName)">chat_bubble</i>
+                            <div class="mdl-tooltip" data-mdl-for="citation">
+                                Make a citation
+                            </div>
                         </div>
                         <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">

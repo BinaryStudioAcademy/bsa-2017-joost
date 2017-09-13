@@ -1,4 +1,4 @@
-@import '../../../vars.scss';
+﻿@import '../../../vars.scss';
 .user-status > img{
   height:1.2em;
   width:1.2em;
@@ -290,4 +290,8 @@ a.setting-icon {
       }
     }
   }
+}
+
+.tiny{
+    font-size: 50px !important;
 }
