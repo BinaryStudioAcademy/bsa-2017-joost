@@ -99,9 +99,13 @@ namespace Joost.Api.Controllers
             {
                 return NotFound();
             }
-            user.Contacts.Remove(contact);
 
-            await _unitOfWork.SaveAsync();
+			var cnt = await _unitOfWork.Repository<Contact>().GetAsync(contact.Id);
+			if(cnt != null)
+				_unitOfWork.Repository<Contact>().Delete(cnt);
+			user.Contacts.Remove(contact);
+			await _unitOfWork.SaveAsync();
+
             return Ok();
         }
 
