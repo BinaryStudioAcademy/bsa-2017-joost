@@ -39,8 +39,13 @@
                           {{message.CreatedAt | date:'HH:mm:ss'}}
                       </div>   
                     </div>
-                    <div class="message-content">
-                        <div class="message-text" *ngIf="message.Text" [innerHTML]="message.Text" (copy)="copyEvent(message, dialogName)">
+                    <div class="message-content" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()" style="display: inline-block;">
+                        <div class="message-text" style="display: inline-block;"*ngIf="message.Text">
+                            <div [innerHTML]="message.Text"></div>
+                        </div>
+                        <i *ngIf="isFocus(message.Id)" id="citation" class="tooltip-citation material-icons" style="font-size: 16px;float: right;" (click)="makeCitation(message, dialogName)">chat_bubble</i>
+                        <div class="mdl-tooltip" data-mdl-for="citation">
+                            Make a citation
                         </div>
                         <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)" class="msg-att-img">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
@@ -70,6 +75,10 @@
         <i class="material-icons">attachment</i>
         {{attachedFileName}}
         <i class="material-icons" (click)="deleteFileFromMsg()">close</i>
+    </div>
+    <div *ngIf="citation" class="attached-citation">
+        <div [innerHTML]="citation"></div>
+        <i class="material-icons" (click)="deleteCitation()">close</i>
     </div>
     <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="attached-file-name">
       Group name cannot be empty or less than 4 symbols

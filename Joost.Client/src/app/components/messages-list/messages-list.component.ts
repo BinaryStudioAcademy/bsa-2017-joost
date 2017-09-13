@@ -41,7 +41,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private attachedFile: HTMLInputElement;
     private attachedFileName: string;
     private groupMembers: UserDetail[];
-    
+    private isFocusMessage: number;
+    private citation: string;
+
     @ViewChild('scroll') private scrollContainer: ElementRef;
     private getMessages: boolean = false;
     private isAllMessagesReceived: boolean = false;
@@ -73,6 +75,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.getMessages = false;
         this.isAllMessagesReceived = false;
         this.toBottom = true;
+        this.messageEmoji = null;
     }
     ngOnInit() {
         this.subscription = this.chatHubService.addMessageEvent.subscribe(message => {
@@ -245,7 +248,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             text = $(".emojionearea-editor").html();
             this.messageEmoji[0].emojioneArea.setText("");
         }
-        if ((text != null && text != "") || this.attachedFile != null) {
+        if ((text != null && text != "") || this.attachedFile != null || this.citation) {
+            if (this.citation) {
+                text += '<br>' + this.citation;
+                this.citation = undefined;
+            }
             let fileName =  "";
             if (this.attachedFile != null) {
                 fileName = this.currentUser.Id + "_" +  this.receiverId + "_" + Date.now() + '.' + this.fileService.getFileExtensions(this.attachedFile.files[0].name);               
@@ -285,14 +292,15 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     private sendUserMessage(text: string, fileName: string) {
         let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, false);
-        this.addToMessages(message);
-        this.messageService.sendUserMessage(message).subscribe(data => { 
+        this.messageService.sendUserMessage(message).subscribe(data => {
+            this.addToMessages(message);
             this.eventEmitterService.addMessageEvent.emit(message); 
         },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.sendUserMessage(message).subscribe(data => {
+                            this.addToMessages(message);
                             this.eventEmitterService.addMessageEvent.emit(message);
                         });
                     }
@@ -303,12 +311,14 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private sendGroupMessage(text: string, fileName: string) {
         let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, true);        
         this.messageService.sendGroupMessage(message).subscribe(data => { 
+            this.addToMessages(message);
             this.eventEmitterService.addMessageEvent.emit(message);             
         },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.sendGroupMessage(message).subscribe(data => {
+                            this.addToMessages(message);
                             this.eventEmitterService.addMessageEvent.emit(message);             
                         });
                     }
@@ -472,32 +482,45 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
             this.router.navigate(["menu/user-details", this.receiverId]);  
     }
 
-    copyEvent(message: Message, user: string): void {
-        this.copyToClipboard(message, user);
+    private focusMessage(messageId: number) {
+        this.isFocusMessage = messageId;
     }
 
-    copyToClipboard(message: Message, user: string) {
-        var copyElement = document.createElement("textarea");
-        copyElement.style.position = 'fixed';
-        copyElement.style.opacity = '0';
-        if (!message.IsGroup) {
-            copyElement.textContent = user + ' [' + message.CreatedAt + ']: "' + message.Text + '"';
-        } else {
-            let sender = this.getMember(message.SenderId);
-            copyElement.textContent = sender.LastName + ' ' + sender.FirstName + ' [' + message.CreatedAt + ']: "' + message.Text + '"';
-        }
-        var body = document.getElementsByTagName('body')[0];
-        body.appendChild(copyElement);
-        copyElement.select();
-        document.execCommand('copy');
-        body.removeChild(copyElement);
+    private focusoutMessage() {
+        this.isFocusMessage = 0;
+    }
+
+    private isFocus(messageId: number) {
+        let result = this.isFocusMessage == messageId;
+        return result;
+    }
+
+    makeCitation(message: Message, user: string) {
+        this.userService.getUserDetails(message.SenderId).subscribe(data => {
+            var content = '<i class="material-icons" style="font-size: 8px">format_quote</i>' + message.Text;
+            if (message.AttachedFile)
+                content += '<img style="max-width: 200px;" src="' + this.fileService.getFullFileUrlWithOutEx(message.AttachedFile) + '">';
+            content += '<i class="material-icons" style="font-size: 8px">format_quote</i><br>';
+            if (!message.IsGroup) {
+                content += data.FirstName + " " + data.LastName + ', ' + message.CreatedAt;
+            } else {
+                let sender = this.getMember(message.SenderId);
+                content += sender.LastName + ' ' + sender.FirstName + ', ' + message.CreatedAt;
+            }
+            this.citation = content;
+        });
+
     }
 
     deleteFileFromMsg(): void {
         this.attachedFile.value = '';
     }
 
+    deleteCitation(): void {
+        this.citation = undefined;
+    }
+
     onGoToUser(Id: number){
         this.router.navigate(["/menu/user-details", Id]);
-      }
+    }
 }
