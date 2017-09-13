@@ -284,7 +284,7 @@ input[type="file"] {
     // }
 }
 
-.attached-file-name{
+.attached-file-name {
     border-radius: 20px;
     background-color: #B3E5FC;
     color: #424242;
@@ -292,9 +292,9 @@ input[type="file"] {
     margin-bottom: 8px;
     display: inline-block;
 
-    > i{
+    > i {
         vertical-align: middle;
-        
+
         &:first-child {
             color: #9E9E9E;
         }
@@ -577,4 +577,40 @@ ul {
 
 .detail-info{
   cursor:pointer;
+}
+
+.attached-citation {
+    border-radius: 20px;
+    background-color: #B3E5FC;
+    color: #424242;
+    padding: 3px 10px;
+    margin-bottom: 8px;
+    display: inline-block;
+
+    > i {
+        vertical-align: top;
+
+        &:last-child {
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+
+            &:hover {
+                color: #FF5722;
+            }
+        }
+    }
+
+    > div {
+        display: inline-block;
+
+        > img {
+            max-width: 200px;
+        }
+    }
+}
+
+i.tooltip-citation {
+    vertical-align: bottom;
+    cursor: pointer;
 }
