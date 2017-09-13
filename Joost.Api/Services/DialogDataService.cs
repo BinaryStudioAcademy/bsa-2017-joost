@@ -60,7 +60,8 @@ namespace Joost.Api.Services
                     LastMessage = lastMessage.Text,
                     DateLastMessage = lastMessage.CreatedAt,
                     Avatar = item.Avatar,
-                    IsGroup = false
+                    IsGroup = false,
+                    UserState = item.State
                 });
             }
             return dialogs;

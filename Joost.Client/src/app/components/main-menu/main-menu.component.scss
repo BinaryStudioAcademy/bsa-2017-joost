@@ -152,6 +152,7 @@ a.setting-icon {
   padding:0;
   display:flex;
   width:100%;
+  color: darkgray;
 }
 .status .mdl-textfield .mdl-textfield__input{
   font-size:14px;
@@ -166,6 +167,7 @@ a.setting-icon {
   padding: 2px 0;
   border-bottom: 1px solid transparent;
   width:100%;
+  color: darkgray;
 }
 .status .status-text span{
   overflow: hidden;
@@ -253,22 +255,17 @@ a.setting-icon {
     color:rgba(0, 0, 0, 0.87);
     cursor:pointer;
     position:relative;
+    transition:all .2s;
     &:hover{
-      background-color:rgba(0, 0, 0, 0.1)
+      background-color:rgba($color-primary-dark, 0.9);
+      transition:all .2s;
+      color:white;
     }
     &.active{
       cursor:context-menu;
-      background-color:initial;
-    }
-    &.active::before{
-      background-color:rgba(0, 0, 0, 0.2);
-      content: " ";
-      position:absolute;
-      width:100%;
-      height:100%;
-      z-index:4;
-      left:0;
-      top:0;
+      color:white;
+      transition:all .2s;
+      background-color:$color-primary;
     }
     i{
       width:10px;

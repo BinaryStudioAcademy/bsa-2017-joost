@@ -1,6 +1,6 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable, EventEmitter } from '@angular/core';
 //import { HttpClient } from "@angular/common/http";
-import { HttpRequest, HttpResponse } from "@angular/common/http";
+import { HttpRequest, HttpResponse,HttpErrorResponse } from "@angular/common/http";
 import { HttpService } from '../services/http.service';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
@@ -12,8 +12,7 @@ import { Tokens } from '../models/tokens';
 @Injectable()
 export class AuthenticationService extends BaseApiService {
   private token: string;
-  private isError:boolean;
-
+  public errorEvent: EventEmitter<HttpErrorResponse> = new EventEmitter<HttpErrorResponse>();
   constructor(http: HttpService) {
     super(http);
     this.parUrl = "account";
@@ -38,7 +37,8 @@ export class AuthenticationService extends BaseApiService {
         localStorage.setItem('joostUserRefreshToken', data.refreshToken);        
         console.log('token saved');
       },
-      err=> this.isError = true
+      err=> {
+        this.errorEvent.emit(err);      }
     );
   }
 
