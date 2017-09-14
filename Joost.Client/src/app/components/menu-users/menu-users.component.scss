@@ -1,4 +1,4 @@
-﻿@import '../../../vars.scss';
+@import '../../../vars.scss';
 
 .mdl-list__item-primary-content{
  color: $color-text-primary;
@@ -212,4 +212,10 @@ ul li input[type=checkbox]:checked ~ i.arrow:after {
   
 .mdl-textfield__label:after {
     background: #4FC3F7 !important;
+}
+.m4-16{
+    margin: 4px -16px!important;
+}
+.p8{
+    padding: 8px!important;
 }
