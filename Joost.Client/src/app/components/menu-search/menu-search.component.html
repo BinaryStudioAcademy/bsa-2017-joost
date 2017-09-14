@@ -6,8 +6,8 @@
     </div>
   </div>
   <div>
-    <ul class="demo-list-three mdl-list">
-      <li class="mdl-list__item mdl-list__item--three-line" *ngFor="let user of result">
+    <ul class="demo-list-three mdl-list m4-16">
+      <li class="mdl-list__item mdl-list__item--three-line p8" *ngFor="let user of result">
         <span class="mdl-list__item-primary-content">
           <a [routerLink]="['user-details', user.Id]" skipLocationChange>
             <img src="{{user.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
