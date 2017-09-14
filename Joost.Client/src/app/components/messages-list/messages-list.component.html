@@ -40,12 +40,11 @@
                       </div>   
                     </div>
                     <div class="message-content" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()">
-                        <div class="message-text" *ngIf="message.Text" style="display:inline-block;">
+                        <div class="message-text" *ngIf="message.Text">
                             <div [innerHTML]="message.Text"></div>
-                            <div class="">
-                                <i *ngIf="isFocus(message)" id="citation" class="tooltip-citation material-icons" style="font-size: 20px;float: right;" (click)="makeCitation(message)">chat_bubble</i>
-                                <div class="mdl-tooltip" data-mdl-for="citation">
-                                    Make a citation
+                            <div class="citation-msg-container"  *ngIf="isFocus(message)">
+                                <div class="tooltip-top" data-tooltip="Click to citation this message" >
+                                  <i class="citation material-icons" (click)="makeCitation(message)">chat_bubble</i>
                                 </div>
                             </div>
                         </div>

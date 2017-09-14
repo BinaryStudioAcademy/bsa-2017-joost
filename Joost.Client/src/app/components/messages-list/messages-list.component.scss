@@ -129,6 +129,7 @@ div .mdl-list__item:hover{
     display: -webkit-inline-box;
     width: 100%;
     word-wrap: break-word;
+    padding-right: 1em;
 
     &::after {
         content: "";
@@ -196,6 +197,7 @@ div .mdl-list__item:hover{
     .message-content {
         background-color: #F4F5F7;
         width: 100%;
+        padding-right: 0;
         &::after {
             display: none;
         }
@@ -610,10 +612,36 @@ ul {
     }
 }
 
-i.tooltip-citation {
-    vertical-align: bottom;
+.citation {
+    color: #005A8A;
+    font-size: 0.9em;
+    // position: absolute;
+    // top: 0.5em;
+    // right: 0.5em;
+    background-color: white;
+    padding: 5px;
+    border-radius: 50%;
+    // border-color: #0074b1;
+    // border-width: 1px;
     cursor: pointer;
+
+    &:hover {
+        color:#2196F3;
+    }
 }
+
+.citation-msg-container {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+
+    .tooltip-top::after {
+        top: -1.7em;
+        background-color:rgb(138,163,175);
+        transform: translateX(-100%) translateY(0);
+    }
+}
+
 
 // Tooltip styles
 
@@ -659,6 +687,18 @@ i.tooltip-citation {
     }
   }
   
+  .tooltip-top {
+    &:after {
+      left: 0;
+      transform: translateX(-112%) translateY(0);
+    }
+    &:hover {
+      &:after {
+        transform: translateX(-110%) translateY(0);
+      }
+    }
+  }
+
   .tooltip-right {
     &:after {
       left: 100%;

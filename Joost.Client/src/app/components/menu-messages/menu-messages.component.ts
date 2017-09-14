@@ -88,7 +88,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     {
         let height = $("#message-panel")[0].offsetHeight;
         if($(".menu-message-form").length > 0){
-            $(".menu-message-form")[0].style.maxHeight = height + 'px';
+            $(".menu-message-form")[0].style.maxHeight = height - 10 + 'px';
         }
     }
   }
