@@ -54,13 +54,14 @@
                           </div>
                         </div>
                         <div *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" class="attached-file">
-                         <div class="att-file-container"  (click)="onDownloadFile(message.AttachedFile)">  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
-                            <i class="material-icons">insert_drive_file</i>
-                            <div class="att-file-ex">
-                              <strong>{{getFileExtension(message.AttachedFile)}}</strong> 
-                            </div>
-                          </div>  
-                            
+                          <div class="tooltip-right" data-tooltip="Click to download">
+                              <div class="att-file-container"  (click)="onDownloadFile(message.AttachedFile)">  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
+                                <i class="material-icons">insert_drive_file</i>
+                                <div class="att-file-ex">
+                                  <strong>{{getFileExtension(message.AttachedFile)}}</strong> 
+                                </div>
+                              </div>  
+                          </div> 
                         </div>
                     </div>
                   </div>
