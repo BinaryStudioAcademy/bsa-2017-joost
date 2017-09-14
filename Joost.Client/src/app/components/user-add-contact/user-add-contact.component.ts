@@ -72,9 +72,8 @@ export class UserAddContactComponent extends MDL implements OnInit{
 		});
 	}
 	
-	goBack(){
-		// this.location.back();
-		this.router.navigate(["menu"]);
+	goBack(): void {
+		this.location.back();
 	}
 	accept(id:number){
 		this.contactService.confirmContact(id).subscribe(ok =>{
