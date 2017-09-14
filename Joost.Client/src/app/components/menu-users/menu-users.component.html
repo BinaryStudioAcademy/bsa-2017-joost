@@ -11,7 +11,7 @@
             <i class="arrow"></i>
             <h2>Sent Invitation</h2>
             <ul class="demo-list-three mdl-list m4-16">
-                <div *ngFor="let user of result">
+                <div *ngFor="let user of searchContact">
                     <li class="mdl-list__item mdl-list__item--three-line p8" *ngIf="isSentContact(user.Id)" (click)="goToUserDetail(user.Id)">
                         <span class="mdl-list__item-primary-content list__item">
                             <div class="user-state-wrap">
@@ -35,7 +35,7 @@
             <i class="arrow"></i>
             <h2>Contacts</h2>
             <ul class="demo-list-three mdl-list m4-16">
-                <div *ngFor="let user of result">
+                <div *ngFor="let user of searchContact">
                     <li class="mdl-list__item mdl-list__item--three-line p8" *ngIf="isAcceptContact(user.Id)" (click)="navigateToMessages(user.Id)">
                         <span class="mdl-list__item-primary-content list__item">
                            <div class="user-state-wrap">
