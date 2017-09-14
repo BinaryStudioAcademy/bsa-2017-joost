@@ -103,4 +103,8 @@
     background: #4FC3F7 !important;
 }
 
-
+.menu-search-form {
+  display: flex;
+  flex-direction: column; 
+  overflow :auto;
+}

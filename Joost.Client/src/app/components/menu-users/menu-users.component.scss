@@ -219,3 +219,9 @@ ul li input[type=checkbox]:checked ~ i.arrow:after {
 .p8{
     padding: 8px!important;
 }
+
+.menu-message-form {
+    display: flex;
+    flex-direction: column; 
+    overflow :auto;
+}
