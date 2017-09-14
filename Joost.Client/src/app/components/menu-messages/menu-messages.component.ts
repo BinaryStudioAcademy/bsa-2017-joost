@@ -132,12 +132,16 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   }
   
   private GetFristMуssageLine(text: string): string {
-    let index = text.search('<div>');
+    let index = text.search('<'); // костильненько, проте наразі зійде =)
     let msgTxt: string = "";
-    if(index != -1)
+    if(index != -1) {
         msgTxt = text.substr(0, index);
-    else
+        if(msgTxt.length == 0)
+        msgTxt = "...";
+    }
+    else {
         msgTxt = text;
+    }
     return msgTxt;
   }
 
