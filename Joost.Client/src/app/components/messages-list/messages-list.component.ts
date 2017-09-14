@@ -490,12 +490,12 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.isFocusMessage = 0;
     }
 
-    private isFocus(messageId: number) {
-        let result = this.isFocusMessage == messageId;
+    private isFocus(message: Message) {
+        let result = this.isFocusMessage == message.Id && this.currentUser.Id != message.SenderId;
         return result;
     }
 
-    makeCitation(message: Message, user: string) {
+    makeCitation(message: Message) {
         this.userService.getUserDetails(message.SenderId).subscribe(data => {
             var content = '<i class="material-icons" style="font-size: 8px">format_quote</i>' + message.Text;
             if (message.AttachedFile)

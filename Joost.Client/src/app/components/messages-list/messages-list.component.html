@@ -39,13 +39,15 @@
                           {{message.CreatedAt | date:'HH:mm:ss'}}
                       </div>   
                     </div>
-                    <div class="message-content" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()" style="display: inline-block;">
-                        <div class="message-text" style="display: inline-block;"*ngIf="message.Text">
+                    <div class="message-content" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()">
+                        <div class="message-text" *ngIf="message.Text" style="display:inline-block;">
                             <div [innerHTML]="message.Text"></div>
-                        </div>
-                        <i *ngIf="isFocus(message.Id)" id="citation" class="tooltip-citation material-icons" style="font-size: 16px;float: right;" (click)="makeCitation(message, dialogName)">chat_bubble</i>
-                        <div class="mdl-tooltip" data-mdl-for="citation">
-                            Make a citation
+                            <div class="">
+                                <i *ngIf="isFocus(message)" id="citation" class="tooltip-citation material-icons" style="font-size: 20px;float: right;" (click)="makeCitation(message)">chat_bubble</i>
+                                <div class="mdl-tooltip" data-mdl-for="citation">
+                                    Make a citation
+                                </div>
+                            </div>
                         </div>
                         <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)" class="msg-att-img">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
