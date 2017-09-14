@@ -259,9 +259,10 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 this.fileService.UploadFile(this.attachedFile.files[0], fileName).subscribe(
                     res => { // if successfully uploaded file to server, then we can send a message
                         this._send(text, fileName);
+                        console.log("file was sended");
                     },
                     error => console.log("Fail when uploading file to server!"));
-                this.attachedFileName = null;
+                this.deleteFileFromMsg();
             } 
             else {
                 console.log("before sending group message");
@@ -279,8 +280,6 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private _send(text: string, fileName: string) {
-        if(fileName)
-            this.deleteFileFromMsg();
         if (this.isGroup) {
             console.log("sending group message");
             this.sendGroupMessage(text, fileName);
@@ -513,7 +512,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     deleteFileFromMsg(): void {
-        this.attachedFile.value = '';
+        if(this.attachedFile) {
+            this.attachedFile.value = '';
+            this.attachedFile = null;
+            this.attachedFileName = null;
+        }
     }
 
     deleteCitation(): void {
