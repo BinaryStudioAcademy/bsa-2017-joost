@@ -1,4 +1,4 @@
-﻿@import '../../../vars.scss';
+@import '../../../vars.scss';
 .user-status > img{
   height:1.2em;
   width:1.2em;
@@ -137,13 +137,13 @@ a.setting-icon {
 .status-message{
     font-size: 13px;
 }
-.setting-button{
-  color:#9698ab;
-  display: flex;
-  align-self: center;
-  padding:0;
-  height:auto;
-  width:auto
+.setting-button {
+    color: rgba(250, 250, 250, 0.5);
+    display: flex;
+    align-self: center;
+    padding: 0;
+    height: auto;
+    width: auto
 }
 .setting-button:hover{
   color:white;
@@ -291,4 +291,19 @@ a.setting-icon {
 
 .tiny{
     font-size: 50px !important;
+}
+
+.left-panel-inner{
+  flex: 1;  
+  display: flex;
+
+  .mdl-tabs {
+
+    display: flex;
+    flex-direction: column;
+
+    >.mdl-tabs__panel{
+      flex: 1;
+    }
+  }
 }

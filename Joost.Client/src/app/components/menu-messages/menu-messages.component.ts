@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs/Rx";
-import { ViewEncapsulation } from '@angular/core';
+import { ViewEncapsulation, AfterViewChecked } from '@angular/core';
 import { Dialog } from "../../models/dialog";
 import { Message } from "../../models/message";
 import { DialogService } from "../../services/dialog.service";
@@ -12,13 +12,16 @@ import { UserContact } from "../../models/user-contact";
 import { ContactState } from "../../models/contact";
 import { ContactService } from "../../services/contact.service";
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'app-menu-messages',
   templateUrl: './menu-messages.component.html',
   styleUrls: ['./menu-messages.component.scss']
 })
-export class MenuMessagesComponent implements OnInit, OnDestroy {
-
+export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
+    
   private dialogs: Dialog[];
   private contacts: UserContact[] = [];
   private filteredDialogs: Dialog[];
@@ -78,6 +81,20 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       this.newContactSubscription.unsubscribe();
       this.newGroupSubscription.unsubscribe();
       this.removeNewContactSubscription.unsubscribe();
+  }
+
+  ngAfterViewChecked(): void {
+    if($("#message-panel").length > 0)
+    {
+        let height = $("#message-panel")[0].offsetHeight;
+        if($(".menu-message-form").length > 0){
+            $(".menu-message-form")[0].style.maxHeight = height + 'px';
+        }
+    }
+  }
+
+  onResize($event) {
+      console.log($event);
   }
 
   private updateDialogs() {

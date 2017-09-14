@@ -1,4 +1,4 @@
-﻿@import '../../../vars.scss';
+@import '../../../vars.scss';
 
 .mdl-list__item-primary-content{
  color: $color-text-primary;
@@ -180,4 +180,21 @@ ul {
         transform-origin: top center;
         transform: rotateX(0deg);
     }
+}
+
+.menu-message-form {
+  display: flex;
+  flex-direction: column; 
+  
+  .menu-messages-container{
+    flex: 1;
+    overflow :auto;
+  }
+}
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label {
+    color: #4FC3F7 !important;
+}
+
+.mdl-textfield__label:after {
+    background: #4FC3F7 !important;
 }

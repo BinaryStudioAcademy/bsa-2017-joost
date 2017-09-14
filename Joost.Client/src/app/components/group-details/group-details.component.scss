@@ -5,7 +5,8 @@
     padding-top: 0;
     padding-bottom: 0;
     flex-direction: row;
-    width: 100%;
+    width: 96%;
+    position: absolute;
 }
 
 .jc-ge-title-input-container{
@@ -77,7 +78,7 @@ $margin-value: 15px;
     margin-left: calc(26% + #{$margin-value});
     > div{
         &:nth-last-child(2){
-            flex: 1;
+            flex: 0.5;
         }
     }
 }
@@ -88,6 +89,18 @@ $margin-value: 15px;
         max-height: unset;
     }
 }
+
+.back-button{
+    float: right!important; 
+    font-weight: bold; 
+    font-size: 40px; 
+    cursor: pointer;
+    width: 25px;
+    height: 20px;
+    padding: 17px 14px;
+    
+}
+
 .mdl-textfield.is-invalid .mdl-textfield__input{
 	border-color: rgba(0,0,0,.12); 
 }
