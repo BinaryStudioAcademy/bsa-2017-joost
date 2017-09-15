@@ -19,7 +19,9 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 	private result:UserContact[];
 	private searchContact:UserContact[];
 	private searchString:string;
-	private newContactSubscription: Subscription;
+	private addContactSubscription: Subscription;
+	private confirmContactSubscription: Subscription;
+	private canceledContactSubscription: Subscription;	
 	constructor(
 		private router: Router,
 		private contactService: ContactService,
@@ -86,13 +88,25 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 			});
 		});
 
-		this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
+		this.addContactSubscription = this.chatHubService.onAddContactEvent.subscribe((userContact: UserContact) => {
 			this.result.push(userContact);
+		});
+		this.confirmContactSubscription = this.chatHubService.onConfirmContactEvent.subscribe((userContact: UserContact) => {
+			console.log("confirm");
+			let contact = this.result.find(c => c.Id == userContact.Id);
+			contact = userContact;
+		});
+		this.canceledContactSubscription = this.chatHubService.onCanceledContactEvent.subscribe((userContact: UserContact) => {
+			console.log("canceled");			
+			let contact = this.result.find(c => c.Id == userContact.Id);
+			contact = userContact;
 		});
 	}
 
 	ngOnDestroy() {
-		this.newContactSubscription.unsubscribe();
+		this.addContactSubscription.unsubscribe();
+		this.confirmContactSubscription.unsubscribe();
+		this.canceledContactSubscription.unsubscribe();		
 	}
 	search(){
 		this.searchContact = this.result;

@@ -68,7 +68,7 @@ namespace Joost.Api.Controllers
 			{
 				return NotFound();
 			}
-			var cont = user.Contacts.Select(t => new ContactDto() { ContactId = t.ContactUser.Id, State = (Models.ContactState)t.State }).ToList();
+			var cont = user.Contacts.Select(t => new ContactDto() { ContactId = t.ContactUser.Id, State = t.State }).ToList();
 			return Ok(cont);
 		}
 
@@ -84,7 +84,7 @@ namespace Joost.Api.Controllers
 			}
 			var cont = user.Contacts.Select(t => new UserContactDto {
 				Id = t.ContactUser.Id,
-				State = (Models.ContactState)t.State,
+				State = t.State,
 				Avatar = t.ContactUser.Avatar,
 				Name = t.ContactUser.FirstName + " " + t.ContactUser.LastName,
 				City = t.ContactUser.City
