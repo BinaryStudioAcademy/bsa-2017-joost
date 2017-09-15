@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs/Rx";
 import { ViewEncapsulation, AfterViewChecked } from '@angular/core';
@@ -10,7 +10,10 @@ import { GroupService } from "../../services/group.service";
 import { EventEmitterService } from "../../services/event-emitter.service";
 import { UserContact } from "../../models/user-contact";
 import { ContactState } from "../../models/contact";
+import { UserNetState } from "../../models/user-netstate";
+import { UserState } from "../../models/user-detail";
 import { ContactService } from "../../services/contact.service";
+import { MessagesListComponent } from "../messages-list/messages-list.component";
 
 declare var jquery: any;
 declare var $: any;
@@ -33,6 +36,9 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   private newGroupSubscription: Subscription;
   private newContactSubscription: Subscription;
   private removeNewContactSubscription: Subscription;
+  private userOnlineSubscription: Subscription;
+  private userOfflineSubscription: Subscription;
+  private userChangeStateSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -45,7 +51,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   }
 
   ngOnInit() {
-      this.receiverSubscription = this.chatHubService.addMessageEvent.subscribe(message => {
+      this.receiverSubscription = this.chatHubService.onAddMessageEvent.subscribe(message => {
           this.updateLastMessage(message);
       });
       this.senderSubscription = this.eventEmitterService.addMessageEvent.subscribe(message => {
@@ -56,15 +62,18 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
         this.updateDialogs();
       });
 
-      this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => {
-        this.dialogs.push(groupDialog);
+      this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((data: any) => {
+        this.dialogs.push(data.dialog);
       });
 
-      this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
-            if (userContact.State == ContactState.New) {
-                this.contacts.push(userContact);
-            }
-      });
+      // this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
+      //       if (userContact.IsOnline) {
+      //         userContact.UserState = UserState.Offline;
+      //       }
+      //       if (userContact.State == ContactState.New) {
+      //           this.contacts.push(userContact);
+      //       }
+      // });
       this.removeNewContactSubscription = this.eventEmitterService.removeNewContact.subscribe((userContact: UserContact) => {
           for (let i = 0; i < this.contacts.length; i++) {
               if (this.contacts[i].Id == userContact.Id) {
@@ -72,15 +81,24 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
               }
           }
       });
+      this.userOnlineSubscription = this.chatHubService.onNewUserConnectedEvent.subscribe( (user:UserNetState)=> {
+        this.onUserStateChange(user);
+      });
+      this.userOfflineSubscription = this.chatHubService.onUserDisconnectedEvent.subscribe( (user:UserNetState)=> {
+        this.onUserStateChange(user);
+      });
+      this.userChangeStateSubscription = this.chatHubService.onUserStateChangeEvent.subscribe((user:UserNetState)=> {
+        this.onUserStateChange(user);
+      });
   }
 
   ngOnDestroy() {
-      this.senderSubscription.unsubscribe();
-      this.receiverSubscription.unsubscribe();
-      this.addingGroupsSubscription.unsubscribe();
-      this.newContactSubscription.unsubscribe();
-      this.newGroupSubscription.unsubscribe();
-      this.removeNewContactSubscription.unsubscribe();
+      // this.senderSubscription.unsubscribe();
+      // this.receiverSubscription.unsubscribe();
+      // this.addingGroupsSubscription.unsubscribe();
+      // this.newContactSubscription.unsubscribe();
+      // this.newGroupSubscription.unsubscribe();
+      // this.removeNewContactSubscription.unsubscribe();
   }
 
   ngAfterViewChecked(): void {
@@ -88,11 +106,24 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     {
         let height = $("#message-panel")[0].offsetHeight;
         if($(".menu-message-form").length > 0){
-            $(".menu-message-form")[0].style.maxHeight = height + 'px';
+            $(".menu-message-form")[0].style.maxHeight = height - 10 + 'px';
         }
     }
   }
-
+  private onUserStateChange(user:UserNetState){
+    if (this.dialogs) {
+       let userFromDialog = this.dialogs.filter(t=>!t.IsGroup && t.Id ==user.Id)[0];
+       if (userFromDialog) {
+         userFromDialog.UserState = user.IsOnline ? user.State : UserState.Offline;
+       }
+    }
+    if (this.contacts) {
+      let userFromNewContact = this.contacts.filter(t=>t.Id == user.Id)[0];
+       if (userFromNewContact) {
+        userFromNewContact.UserState = user.IsOnline ? user.State : UserState.Offline;
+       }
+    }
+  }
   onResize($event) {
       console.log($event);
   }
@@ -117,11 +148,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
       });
     });
     this.contactService.getAllContacts().subscribe(data => {
-        for (let item of data) {
-            if (item.State == ContactState.New) {
-                this.contacts.push(item);
-            }
-        }
+        this.contacts = data.filter(t=>t.State == ContactState.New);
     });
   }
 
@@ -132,12 +159,16 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   }
   
   private GetFristMуssageLine(text: string): string {
-    let index = text.search('<div>');
+    let index = text.search('<'); // костильненько, проте наразі зійде =)
     let msgTxt: string = "";
-    if(index != -1)
+    if(index != -1) {
         msgTxt = text.substr(0, index);
-    else
+        if(msgTxt.length == 0)
+        msgTxt = "...";
+    }
+    else {
         msgTxt = text;
+    }
     return msgTxt;
   }
 

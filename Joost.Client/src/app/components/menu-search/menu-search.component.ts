@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 
 import { AccountService } from '../../services/account.service';
 import { ContactService } from "../../services/contact.service";
@@ -8,12 +8,15 @@ import { UserSearch } from "../../models/user-search";
 import { Contact,ContactState} from "../../models/contact";
 import { UserContact} from "../../models/user-contact";
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'app-menu-search',
   templateUrl: './menu-search.component.html',
   styleUrls: ['./menu-search.component.scss']
 })
-export class MenuSearchComponent implements OnInit{
+export class MenuSearchComponent implements OnInit, AfterViewChecked {
 
     private result:UserSearch[];
 	private searchString:string;
@@ -74,6 +77,16 @@ export class MenuSearchComponent implements OnInit{
 			    }
 			});
 		});
+	}
+
+	ngAfterViewChecked(): void {
+		if($("#message-panel").length > 0)
+		{
+			let height = $("#message-panel")[0].offsetHeight;
+			if($(".menu-search-form").length > 0){
+				$(".menu-search-form")[0].style.maxHeight = height - 10 + 'px';
+			}
+		}
 	}
 
 	search(){
@@ -198,7 +211,7 @@ export class MenuSearchComponent implements OnInit{
 		});
 	}
 	checkInContact(id:number):boolean{
-		return this.contactList.map(t=>t.ContactId).indexOf(id) > -1 ;
+		return this.contactList.filter(t=> t.State!=ContactState.Canceled).filter(t=> t.State!=ContactState.Decline).map(t=>t.ContactId).indexOf(id) > -1 ;
 	}
 	findContact(id:number):string{
 		let state =  this.contactList.filter(t=>t.ContactId==id)[0];
@@ -208,6 +221,8 @@ export class MenuSearchComponent implements OnInit{
 					return "new_releases";
 				case ContactState.Sent:
 					return "person_add";
+				case ContactState.Canceled:
+					return "clear";
 		    	default:
 		    		return "";
 		    }

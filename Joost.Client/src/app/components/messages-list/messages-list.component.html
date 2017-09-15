@@ -8,7 +8,7 @@
             <div class="members-toggle">
               <ul class="members-list">
                 <li *ngFor="let member of groupMembers" (click)="onGoToUser(member.Id)">
-                  <span [outerHTML]="member.State | userState">
+                  <span [innerHTML]="member.State | userState">
                    
                   </span>
                   <span class="member__name">{{member.FirstName}} {{member.LastName}}</span>
@@ -39,20 +39,29 @@
                           {{message.CreatedAt | date:'HH:mm:ss'}}
                       </div>   
                     </div>
-                    <div class="message-content" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()" style="display: inline-block;">
-                        <div class="message-text" style="display: inline-block;"*ngIf="message.Text">
+                    <div class="message-content" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()">
+                        <div class="message-text" *ngIf="message.Text">
                             <div [innerHTML]="message.Text"></div>
+                            <div class="citation-msg-container"  *ngIf="isFocus(message) || isImage(message.AttachedFile)">
+                                <div class="tooltip-top" data-tooltip="Click to citation this message" >
+                                  <i class="citation material-icons" (click)="makeCitation(message)">chat_bubble</i>
+                                </div>
+                            </div>
                         </div>
-                        <i *ngIf="isFocus(message.Id)" id="citation" class="tooltip-citation material-icons" style="font-size: 16px;float: right;" (click)="makeCitation(message, dialogName)">chat_bubble</i>
-                        <div class="mdl-tooltip" data-mdl-for="citation">
-                            Make a citation
+                        <div>
+                            <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)" class="msg-att-img">
+                                <img src="{{message.AttachedFile | attachedImagePipe}}">
+                                <div class="overlay">
+                                    Click to open preview
+                                </div>
+                            </div>
+                            <div class="citation-msg-container" *ngIf="isFocus(message) && !message.Text">
+                                <div class="tooltip-top" data-tooltip="Click to citation this message">
+                                    <i class="citation material-icons" (click)="makeCitation(message)">chat_bubble</i>
+                                </div>
+                            </div>
                         </div>
-                        <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)" class="msg-att-img">
-                          <img src="{{message.AttachedFile | attachedImagePipe}}">
-                          <div class="overlay">
-                            Click to open preview
-                          </div>
-                        </div>
+
                         <div *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" class="attached-file">
                           <div class="tooltip-right" data-tooltip="Click to download">
                               <div class="att-file-container"  (click)="onDownloadFile(message.AttachedFile)">  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
@@ -61,7 +70,7 @@
                                   <strong>{{getFileExtension(message.AttachedFile)}}</strong> 
                                 </div>
                               </div>  
-                          </div> 
+                          </div>
                         </div>
                     </div>
                   </div>
@@ -79,7 +88,7 @@
     </div>
     <div *ngIf="citation" class="attached-citation">
         <div [innerHTML]="citation"></div>
-        <i class="material-icons" (click)="deleteCitation()">close</i>
+        <i class="material-icons close-attachment" (click)="deleteCitation()">close</i>
     </div>
     <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="attached-file-name">
       Group name cannot be empty or less than 4 symbols

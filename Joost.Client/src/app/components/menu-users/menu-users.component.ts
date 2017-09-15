@@ -1,25 +1,38 @@
-﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ContactService } from "../../services/contact.service";
 
 import { UserSearch } from "../../models/user-search";
+import { UserNetState } from "../../models/user-netstate";
+import { UserState } from "../../models/user-detail";
 import { Contact,ContactState} from "../../models/contact";
 import { UserContact} from "../../models/user-contact";
 import { ChatHubService } from "../../services/chat-hub.service";
 import { Subscription } from "rxjs/Rx";
+
+declare var jquery: any;
+declare var $: any;
 
 @Component({
   selector: 'app-menu-users',
   templateUrl: './menu-users.component.html',
   styleUrls: ['./menu-users.component.scss']
 })
-export class MenuUsersComponent implements OnInit, OnDestroy {
+export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  {
 
 	private result:UserContact[];
 	private searchContact:UserContact[];
 	private searchString:string;
+	private addContactSubscription: Subscription;
+	private confirmContactSubscription: Subscription;
+	private canceledContactSubscription: Subscription;	
 	private newContactSubscription: Subscription;
+	private userOnlineSubscription: Subscription;
+	private userOfflineSubscription: Subscription;
+	private userChangeStateSubscription: Subscription;
+
+	
 	constructor(
 		private router: Router,
 		private contactService: ContactService,
@@ -55,7 +68,7 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 					if (user.State==ContactState.Decline) {
 						this.result.splice(this.result.indexOf(user), 1);
 					}
-					else {
+					else if (user.State==ContactState.Accept){
 						this.result.push(user);
 					}
 				}
@@ -75,7 +88,7 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 						    	if (user.State==ContactState.Decline) {
 						    		this.result.splice(this.result.indexOf(user), 1);
 						    	}
-						    	else {
+						    	else if (user.State==ContactState.Accept){
 						    		this.result.push(user);
 						    	}
 						    }
@@ -86,14 +99,55 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 			});
 		});
 
-		this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
+		this.addContactSubscription = this.chatHubService.onAddContactEvent.subscribe((userContact: UserContact) => {
 			this.result.push(userContact);
+			this.searchContact = this.result;
+		});
+		this.userOnlineSubscription = this.chatHubService.onNewUserConnectedEvent.subscribe( (user:UserNetState)=> {
+		  this.onUserStateChange(user);
+		});
+		this.userOfflineSubscription = this.chatHubService.onUserDisconnectedEvent.subscribe( (user:UserNetState)=> {
+		  this.onUserStateChange(user);
+		});
+		this.userChangeStateSubscription = this.chatHubService.onUserStateChangeEvent.subscribe((user:UserNetState)=> {
+		  this.onUserStateChange(user);
+		});
+		this.confirmContactSubscription = this.chatHubService.onConfirmContactEvent.subscribe((userContact: UserContact) => {
+			console.log("confirm");
+			let contact = this.result.find(c => c.Id == userContact.Id);
+			contact = userContact;
+		});
+		this.canceledContactSubscription = this.chatHubService.onCanceledContactEvent.subscribe((userContact: UserContact) => {
+			console.log("canceled");			
+			let contact = this.result.find(c => c.Id == userContact.Id);
+			contact = userContact;
 		});
 	}
-
-	ngOnDestroy() {
-		this.newContactSubscription.unsubscribe();
+	onUserStateChange(user:UserNetState){
+	  if (this.result) {
+	    let userFromNewContact = this.result.filter(t=>t.Id == user.Id)[0];
+	     if (userFromNewContact) {
+	      userFromNewContact.UserState = user.IsOnline ? user.State : UserState.Offline;
+	     }
+	  }
+	  this.searchContact = this.result;
 	}
+	ngOnDestroy() {
+		this.addContactSubscription.unsubscribe();
+		this.confirmContactSubscription.unsubscribe();
+		this.canceledContactSubscription.unsubscribe();		
+	}
+
+	ngAfterViewChecked(): void {
+		if($("#message-panel").length > 0)
+		{
+			let height = $("#message-panel")[0].offsetHeight;
+			if($(".menu-user-form").length > 0){
+				$(".menu-user-form")[0].style.maxHeight = height - 10 + 'px';
+			}
+		}
+	  }
+
 	search(){
 		this.searchContact = this.result;
 		if (this.searchString!=="") {

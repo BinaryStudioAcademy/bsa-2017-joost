@@ -9,8 +9,9 @@
   	                <i class="material-icons">create</i>
   	              </div>
                 </div>
-                <img src="{{avatarImageSrc | avatarPipe}}" class="avatar-upload-image"></label>
-                <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/>
+                <img src="{{avatarImageSrc | avatarPipe}}" id="preview__image" class="avatar-upload-image"></label>
+                <!-- <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/jpeg,image/png,image/gif"/> -->
+                 <input id="file-upload" type="file" (change)="SendAvatar($event)" name="file" accept="image/*"/>
               </div>
               <div>
                 <h3>{{user | namePipe}}</h3>

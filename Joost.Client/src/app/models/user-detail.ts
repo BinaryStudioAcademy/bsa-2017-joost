@@ -9,6 +9,7 @@
     Status: string;
     Avatar: string;
     State: UserState;
+    IsOnline:boolean;
 }
 
 export class Login {

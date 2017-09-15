@@ -58,31 +58,14 @@ export class LoginSignInComponent implements OnInit {
       }
       return;
     }
-    
-    // this.authService.login(this.email, this.password).add(
-    //     data => {
-    //     console.log("1) " + localStorage.getItem("joostUserAccessToken"));
-    //     this.router.navigate(['menu/user-editing'], {skipLocationChange: true});
-    //     this.loadEvent.emit(true);
-    //   });
-    //   /*error =>{
-    //      console.log(error);
-    //      this.isError = "User with this login and password not found!";
-    //      this.loadEvent.emit(true);
-    //    })*/
-    // };
+    this.loadEvent.emit(false);
     this.authService.login(this.email, this.password).add(
         data => {
         console.log("1) " + localStorage.getItem("joostUserAccessToken"));
         if (!this.errorResponse) {
-            this.router.navigate(['menu/user-editing']/*, {skipLocationChange: true}*/);
+            this.router.navigate(['menu/user-editing']);
         }
         this.loadEvent.emit(true);
       });
-      /*error =>{
-         console.log(error);
-         this.isError = "User with this login and password not found!";
-         this.loadEvent.emit(true);
-       })*/
     };
   }

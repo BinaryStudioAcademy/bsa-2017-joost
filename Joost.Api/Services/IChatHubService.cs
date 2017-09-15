@@ -1,4 +1,5 @@
 ﻿using Joost.Api.Models;
+using Joost.DbAccess.Entities;
 using System.Threading.Tasks;
 
 namespace Joost.Api.Services
@@ -7,7 +8,8 @@ namespace Joost.Api.Services
     {
         Task SendToUser(MessageDto message);
         Task SendToGroup(MessageDto message);
-		Task AddContact(int currentUserId, int contactUserId);
+		Task RunContactAction(int currentUserId, int contactUserId, ContactState state);
 		Task AddGroup(int currentUserId);
+        Task ChangeUserState(User user, string connectionId);
     }
 }

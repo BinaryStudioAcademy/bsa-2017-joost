@@ -36,14 +36,10 @@ export class ContactService extends BaseApiService {
 	getAllContacts(){
 		let req = new HttpRequest("GET", this.generateUrl()+ "/contacts-detail");
 		return this.http.sendRequest<UserContact[]>(req);
-		//return this.http
-		//.get<UserContact[]>(this.generateUrl()+ "/all-contact");
 	}
 	getContacts(){
 		let req = new HttpRequest("GET", this.generateUrl());
 		return this.http.sendRequest<Contact[]>(req);
-		//return this.http
-		//.get<Contact[]>(this.generateUrl()+ "/contact");
     }
     getUserIdByContactId(contactId: number) {
         let req = new HttpRequest("GET", this.generateUrl() + "/user/", {
@@ -55,33 +51,21 @@ export class ContactService extends BaseApiService {
 		let req = new HttpRequest("POST", this.generateUrl(),
 		  { "ContactId": contactId, "State": ContactState.New });
 		return this.http.sendRequest(req);
-			//return this.http
-			//.post(this.generateUrl() + "/contact",
-		//  {  	  "ContactId":contactId ,"State": ContactState.New 	});
 	}
 	confirmContact(contactId:number){
 		let req = new HttpRequest("POST", this.generateUrl() + "/confirm-contact",
 		  { "ContactId":contactId ,"State": ContactState.Accept });
 		return this.http.sendRequest(req);
-		//return this.http
-		//.post(this.generateUrl() + "/confirm-contact",
-		// {      "ContactId":contactId ,"State": ContactState.Accept });
 	}
 	declineContact(contactId:number){
 		let req = new HttpRequest("POST", this.generateUrl() + "/decline-contact", { 
 		  "ContactId": contactId ,"State": ContactState.Decline });
 		return this.http.sendRequest(req);
-		//.post(this.generateUrl() + "/decline-contact",
-		//  {      "ContactId":contactId ,"State": ContactState.Decline });
 	}
 	deleteContact(contactId:number){
 		let req = new HttpRequest("DELETE", this.generateUrl(), {
 				params: new HttpParams().set('id', contactId.toString())
 		});
 		return this.http.sendRequest(req);
-		//return this.http
-		//.delete(this.generateUrl() + "/contact",{
-		//	params: new HttpParams().set('id', contactId.toString())
-		//});
 	}
 }
