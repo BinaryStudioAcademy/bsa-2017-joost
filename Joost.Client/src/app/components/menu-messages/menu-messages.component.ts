@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs/Rx";
-import { ViewEncapsulation } from '@angular/core';
+import { ViewEncapsulation, AfterViewChecked } from '@angular/core';
 import { Dialog } from "../../models/dialog";
 import { Message } from "../../models/message";
 import { DialogService } from "../../services/dialog.service";
@@ -13,13 +13,16 @@ import { ContactState } from "../../models/contact";
 import { ContactService } from "../../services/contact.service";
 import { MessagesListComponent } from "../messages-list/messages-list.component";
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'app-menu-messages',
   templateUrl: './menu-messages.component.html',
   styleUrls: ['./menu-messages.component.scss']
 })
-export class MenuMessagesComponent implements OnInit, OnDestroy {
-
+export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
+    
   private dialogs: Dialog[];
   private contacts: UserContact[] = [];
   private filteredDialogs: Dialog[];
@@ -81,6 +84,20 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
       this.removeNewContactSubscription.unsubscribe();
   }
 
+  ngAfterViewChecked(): void {
+    if($("#message-panel").length > 0)
+    {
+        let height = $("#message-panel")[0].offsetHeight;
+        if($(".menu-message-form").length > 0){
+            $(".menu-message-form")[0].style.maxHeight = height - 10 + 'px';
+        }
+    }
+  }
+
+  onResize($event) {
+      console.log($event);
+  }
+
   private updateDialogs() {
     this.dialogService.getDialogs().subscribe(d => {
       var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
@@ -116,12 +133,16 @@ export class MenuMessagesComponent implements OnInit, OnDestroy {
   }
   
   private GetFristMуssageLine(text: string): string {
-    let index = text.search('<div>');
+    let index = text.search('<'); // костильненько, проте наразі зійде =)
     let msgTxt: string = "";
-    if(index != -1)
+    if(index != -1) {
         msgTxt = text.substr(0, index);
-    else
+        if(msgTxt.length == 0)
+        msgTxt = "...";
+    }
+    else {
         msgTxt = text;
+    }
     return msgTxt;
   }
 

@@ -1,51 +1,64 @@
 ﻿<div class="jg-card mdl-grid">
-<div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="user">
-    <div class="jg-header-container mdl-shadow--2dp">
-      <div class="avatar-info">
-        <img src="{{user.Avatar | avatarPipe}}" class="jc-user-avatar-container">
-        <div class="ud-main-info-container">
-            <h3>{{user.FirstName}} {{user.LastName}}</h3>
-            <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
-            <div [innerHtml]="user.State | statePipe"></div>
+  <div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="user">
+      <div class="jg-header-container mdl-shadow--2dp">
+        <div class="avatar-info">
+          <img src="{{user.Avatar | avatarPipe}}" class="jc-user-avatar-container">
+          <div class="ud-main-info-container">
+              <h3>{{user.FirstName}} {{user.LastName}}</h3>
+              <div class="mdl-layout-spacer"><i>{{user.Status}}</i></div>
+              <div [innerHtml]="user.State | statePipe"></div>
+          </div>
+        </div>
+          <span class="back-button" (click)="goBack()">&times;</span>
+      </div>
+      <div class="jc-user-details-container">
+        <div>
+          <h5>Address:</h5>
+          <span>{{user.City ? user.City : 'Unknown'}}, {{user.Country ? user.Country : 'Unknown'}}</span>
+        </div>
+        <div>
+          <h5>Birthday:</h5>
+          <span>{{user.BirthDate | date:'shortDate'}}</span>
+        </div>
+        <div>
+          <h5>Gender:</h5>
+          <span>{{user.Gender | genderPipe}}</span>
         </div>
       </div>
-        <span class="back-button" (click)="goBack()">&times;</span>
-    </div>
-    <div class="jc-user-details-container">
-      <div>
-        <h5>Address:</h5>
-        <span>{{user.City ? user.City : 'Unknown'}}, {{user.Country ? user.Country : 'Unknown'}}</span>
+      <div mdl [hidden] = "!isFriend" class="user-details-main mdl-layout__content jc-user-actions-container">
+        <div class="user-details-group mdl-card__actions mdl-card--border" id="notifications-details">
+          <!-- <h5>Settings</h5> -->
+          <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
+            <input type="checkbox" id="switch-notifications" class="mdl-switch__input" checked>
+            <span class="mdl-switch__label">Notifications</span>
+          </label>
+        </div>
+        <div class="user-details-group mdl-card__actions mdl-card--border">
+          <!-- <h5>Actions</h5> -->
+          <!-- <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Clear History</button> -->
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Block User</button>
+        </div>
       </div>
-      <div>
-        <h5>Birthday:</h5>
-        <span>{{user.BirthDate | date:'shortDate'}}</span>
+      <div class="jg-buttons-bottom-cantainer jc-user-details-bottom-buttons mdl-card__actions mdl-card--border">
+        <!-- <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jc-back-btn" (click)="goBack()">
+            <i class="material-icons">arrow_back</i>Back
+        </button> -->
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="contactActionClick()">
+          {{isFriend ? 'Delete' : 'Add'}}
+        </button>
       </div>
-      <div>
-        <h5>Gender:</h5>
-        <span>{{user.Gender | genderPipe}}</span>
-      </div>
-    </div>
-    <div mdl [hidden] = "!isFriend" class="user-details-main mdl-layout__content jc-user-actions-container">
-      <div class="user-details-group mdl-card__actions mdl-card--border" id="notifications-details">
-        <!-- <h5>Settings</h5> -->
-        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications">
-          <input type="checkbox" id="switch-notifications" class="mdl-switch__input" checked>
-          <span class="mdl-switch__label">Notifications</span>
-        </label>
-      </div>
-      <div class="user-details-group mdl-card__actions mdl-card--border">
-        <!-- <h5>Actions</h5> -->
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Clear History</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom"> Block User</button>
-      </div>
-    </div>
-    <div class="jg-buttons-bottom-cantainer jc-user-details-bottom-buttons mdl-card__actions mdl-card--border">
-      <!-- <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jc-back-btn" (click)="goBack()">
-          <i class="material-icons">arrow_back</i>Back
-      </button> -->
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="contactActionClick(user.Id)">
-        {{isFriend ? 'Delete' : 'Add'}}
-      </button>
-    </div>
+  </div>
 </div>
-</div>
+
+<div class="modal-container">
+    <div class="wrapper-modal">
+      <div class="modal through mdl-shadow--8dp">
+        <div class="modal-text">
+            Are you sure want to delete this user from your contacts?
+        </div>
+        <div class="modal-buttons-container">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="deleteFromContact()">Yes</button>
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"(click)="closeModal()">No</button>
+        </div>
+    </div>
+  </div>

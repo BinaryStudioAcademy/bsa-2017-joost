@@ -1,4 +1,4 @@
-﻿@import '../../../vars.scss';
+@import '../../../vars.scss';
 
 .mdl-list__item-primary-content{
  color: $color-text-primary;
@@ -204,4 +204,17 @@ ul li input[type=checkbox]:checked ~ i.arrow:after {
 }
 .mdl-list__item-avatar{
     margin: 1px 0 0 1px;
+}
+
+.m4-16{
+    margin: 4px -16px!important;
+}
+.p8{
+    padding: 8px!important;
+}
+
+.menu-message-form {
+    display: flex;
+    flex-direction: column; 
+    overflow :auto;
 }

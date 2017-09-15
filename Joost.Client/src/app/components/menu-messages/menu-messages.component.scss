@@ -1,4 +1,4 @@
-﻿@import '../../../vars.scss';
+@import '../../../vars.scss';
 
 .mdl-list__item-primary-content{
  color: $color-text-primary;
@@ -181,3 +181,14 @@ ul {
         transform: rotateX(0deg);
     }
 }
+
+.menu-message-form {
+  display: flex;
+  flex-direction: column; 
+  
+  .menu-messages-container{
+    flex: 1;
+    overflow :auto;
+  }
+}
+

@@ -39,13 +39,14 @@
                           {{message.CreatedAt | date:'HH:mm:ss'}}
                       </div>   
                     </div>
-                    <div class="message-content" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()" style="display: inline-block;">
-                        <div class="message-text" style="display: inline-block;"*ngIf="message.Text">
+                    <div class="message-content" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()">
+                        <div class="message-text" *ngIf="message.Text">
                             <div [innerHTML]="message.Text"></div>
-                        </div>
-                        <i *ngIf="isFocus(message.Id)" id="citation" class="tooltip-citation material-icons" style="font-size: 16px;float: right;" (click)="makeCitation(message, dialogName)">chat_bubble</i>
-                        <div class="mdl-tooltip" data-mdl-for="citation">
-                            Make a citation
+                            <div class="citation-msg-container"  *ngIf="isFocus(message)">
+                                <div class="tooltip-top" data-tooltip="Click to citation this message" >
+                                  <i class="citation material-icons" (click)="makeCitation(message)">chat_bubble</i>
+                                </div>
+                            </div>
                         </div>
                         <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)" class="msg-att-img">
                           <img src="{{message.AttachedFile | attachedImagePipe}}">
@@ -54,13 +55,14 @@
                           </div>
                         </div>
                         <div *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" class="attached-file">
-                         <div class="att-file-container"  (click)="onDownloadFile(message.AttachedFile)">  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
-                            <i class="material-icons">insert_drive_file</i>
-                            <div class="att-file-ex">
-                              <strong>{{getFileExtension(message.AttachedFile)}}</strong> 
-                            </div>
-                          </div>  
-                            
+                          <div class="tooltip-right" data-tooltip="Click to download">
+                              <div class="att-file-container"  (click)="onDownloadFile(message.AttachedFile)">  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
+                                <i class="material-icons">insert_drive_file</i>
+                                <div class="att-file-ex">
+                                  <strong>{{getFileExtension(message.AttachedFile)}}</strong> 
+                                </div>
+                              </div>  
+                          </div> 
                         </div>
                     </div>
                   </div>

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ContactService } from "../../services/contact.service";
@@ -9,12 +9,15 @@ import { UserContact} from "../../models/user-contact";
 import { ChatHubService } from "../../services/chat-hub.service";
 import { Subscription } from "rxjs/Rx";
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'app-menu-users',
   templateUrl: './menu-users.component.html',
   styleUrls: ['./menu-users.component.scss']
 })
-export class MenuUsersComponent implements OnInit, OnDestroy {
+export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  {
 
 	private result:UserContact[];
 	private searchContact:UserContact[];
@@ -108,6 +111,17 @@ export class MenuUsersComponent implements OnInit, OnDestroy {
 		this.confirmContactSubscription.unsubscribe();
 		this.canceledContactSubscription.unsubscribe();		
 	}
+
+	ngAfterViewChecked(): void {
+		if($("#message-panel").length > 0)
+		{
+			let height = $("#message-panel")[0].offsetHeight;
+			if($(".menu-user-form").length > 0){
+				$(".menu-user-form")[0].style.maxHeight = height - 10 + 'px';
+			}
+		}
+	  }
+
 	search(){
 		this.searchContact = this.result;
 		if (this.searchString!=="") {

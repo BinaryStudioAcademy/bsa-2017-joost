@@ -37,7 +37,7 @@ export class UserDetailsComponent extends MDL implements OnInit {
       .switchMap((params: ParamMap) => this.userService.getUserDetails(+params.get('id')))
       .subscribe(user => {
         this.user = user;
-        this.checkInContact(user.Id);
+        this.checkInContact();
       },
       async err=> {
         await this.userService.handleTokenErrorIfExist(err).then(ok => { 
@@ -45,7 +45,7 @@ export class UserDetailsComponent extends MDL implements OnInit {
             this.route.paramMap
             .switchMap((params: ParamMap) => this.userService.getUserDetails(+params.get('id'))).subscribe(user => {
               this.user = user;
-              this.checkInContact(user.Id);
+              this.checkInContact();
             });
           }
         });
@@ -54,14 +54,14 @@ export class UserDetailsComponent extends MDL implements OnInit {
       });
   }
 
-  addToContact(contactId:number){
-		this.contactService.addContact(contactId).subscribe(() =>{
+  addToContact(){
+		this.contactService.addContact(this.user.Id).subscribe(() =>{
       this.isFriend = true;
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => { 
         if (ok) {
-          this.contactService.addContact(contactId).subscribe(() => {
+          this.contactService.addContact(this.user.Id).subscribe(() => {
             this.isFriend = true;
           });
         }
@@ -69,14 +69,15 @@ export class UserDetailsComponent extends MDL implements OnInit {
     });
   }
 
-  deleteFromContact(contactId:number){
-		this.contactService.deleteContact(contactId).subscribe(() =>{
+  deleteFromContact(){
+    this.closeModal();
+		this.contactService.deleteContact(this.user.Id).subscribe(() =>{
       this.isFriend = false;
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => { 
         if (ok) {
-          this.contactService.deleteContact(contactId).subscribe(() => {
+          this.contactService.deleteContact(this.user.Id).subscribe(() => {
             this.isFriend = false;
           });
         }
@@ -84,15 +85,15 @@ export class UserDetailsComponent extends MDL implements OnInit {
     });
   }
   
-	checkInContact(id:number):void {
+	checkInContact():void {
 		this.contactService.getContacts().subscribe( list => {
-      this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0; 
+      this.isFriend = list.map(t=>t.ContactId).indexOf(this.user.Id) >= 0; 
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => {
         if (ok) { 
           this.contactService.getContacts().subscribe(list => {
-            this.isFriend = list.map(t=>t.ContactId).indexOf(id) >= 0;
+            this.isFriend = list.map(t=>t.ContactId).indexOf(this.user.Id) >= 0;
           });
         }
       });
@@ -103,10 +104,21 @@ export class UserDetailsComponent extends MDL implements OnInit {
     this.location.back();
   }
 
-  contactActionClick(id: number):void {
+  contactActionClick():void {
     if(this.isFriend)
-      this.deleteFromContact(id);
+      this.onShowModal();
     else
-      this.addToContact(id);
+      this.addToContact();
   }
+
+  onShowModal(): void{
+    var dialog = document.querySelector('.wrapper-modal');
+    dialog.classList.add("show");
+  }
+
+  closeModal(): void {
+    var dialog = document.querySelector('.wrapper-modal');
+    dialog.classList.remove("show");
+  }
+
 }
