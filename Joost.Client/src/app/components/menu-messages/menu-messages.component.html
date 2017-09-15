@@ -37,7 +37,9 @@
         <h2>Direct Messages</h2>
           <ul class="demo-list-three mdl-list">
               <div *ngFor="let dialog of filteredDialogs" class="messages">
-                <li class="mdl-list__item mdl-list__item--three-line" *ngIf="!dialog.IsGroup" (click)="navigateToMessages(dialog)">
+                <li class="mdl-list__item mdl-list__item--three-line" 
+                    *ngIf="!dialog.IsGroup" (click)="navigateToMessages(dialog)"
+                    [ngClass]="{'selected': dialog.Id === currentDialogId && currentDialogIsGroup === dialog.IsGroup}">
                   <span  class="mdl-list__item-primary-content list__item">
                     <div class="user-state-wrap">
                       <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
@@ -60,7 +62,9 @@
       <h2>Groups</h2>
         <ul class="demo-list-three mdl-list">
             <div *ngFor="let dialog of filteredDialogs" class="messages">
-                <li class="mdl-list__item mdl-list__item--three-line" *ngIf="dialog.IsGroup" (click)="navigateToMessages(dialog)">
+                <li class="mdl-list__item mdl-list__item--three-line"
+                    *ngIf="dialog.IsGroup" (click)="navigateToMessages(dialog)"
+                    [ngClass]="{'selected': dialog.Id === currentDialogId && currentDialogIsGroup === dialog.IsGroup}">
                     <span class="mdl-list__item-primary-content">
                         <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
                         <span>{{dialog.Name}}</span>

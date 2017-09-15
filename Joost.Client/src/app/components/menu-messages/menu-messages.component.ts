@@ -29,6 +29,8 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   private contacts: UserContact[] = [];
   private filteredDialogs: Dialog[];
   private searchString: string;
+  private currentDialogId: number = -1;
+  private currentDialogIsGroup: boolean;
 
   private senderSubscription: Subscription;
   private receiverSubscription: Subscription;
@@ -201,6 +203,8 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   }
 
   private navigateToMessages(dialog: Dialog) {
+    this.currentDialogId = dialog.Id;
+    this.currentDialogIsGroup = dialog.IsGroup;
     this.router.navigate(["/menu/messages", dialog.IsGroup ? "group": "user", dialog.Id]);
   }
 
