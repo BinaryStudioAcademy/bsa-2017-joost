@@ -96,9 +96,9 @@ export class NotificationService {
       .subscribe(toast => {            
         if (toast.timeoutId) {
           clearTimeout(toast.timeoutId);
-        }
-        this.toastr.clearAllToasts();   
-        this.navigateToMessages(message);    
+          this.toastr.clearAllToasts();   
+          this.navigateToMessages(message);
+        }      
     });
   }
 
