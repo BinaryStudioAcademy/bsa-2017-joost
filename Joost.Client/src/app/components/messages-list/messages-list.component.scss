@@ -288,7 +288,7 @@ input[type="file"] {
 
 .attached-file-name {
     border-radius: 20px;
-    background-color: #B3E5FC;
+    background-color: #b2fcf9;/*#B3E5FC;*/
     color: #424242;
     padding: 3px 10px;
     margin-bottom: 8px;
@@ -583,7 +583,7 @@ ul {
 
 .attached-citation {
     border-radius: 20px;
-    background-color: #B3E5FC;
+    background-color: #b2fcf9;/*#B3E5FC;*/
     color: #424242;
     padding: 3px 10px;
     margin-bottom: 8px;
@@ -606,6 +606,10 @@ ul {
     > div {
         display: inline-block;
     }
+}
+
+.close-attachment {
+    margin-top: 0.5em;
 }
 
 :host ::ng-deep .img-citation{

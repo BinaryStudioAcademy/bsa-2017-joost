@@ -88,7 +88,7 @@
     </div>
     <div *ngIf="citation" class="attached-citation">
         <div [innerHTML]="citation"></div>
-        <i class="material-icons" (click)="deleteCitation()">close</i>
+        <i class="material-icons close-attachment" (click)="deleteCitation()">close</i>
     </div>
     <div class="mdl-tooltip mdl-tooltip--large mdl-tooltip--top" for="attached-file-name">
       Group name cannot be empty or less than 4 symbols
