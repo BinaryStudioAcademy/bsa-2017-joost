@@ -605,24 +605,30 @@ ul {
 
     > div {
         display: inline-block;
-
-        > img {
-            max-width: 200px;
-        }
     }
+}
+
+:host ::ng-deep .img-citation{
+    max-width: 200px;
+}
+
+:host ::ng-deep .citation-show {
+    background-color: #b2fcf9;
+    display: inline-block;
+    border-radius: 6px;
+    padding: 1em;
+}
+
+.text-citation {
+    display: inline-block;
 }
 
 .citation {
     color: #005A8A;
     font-size: 0.9em;
-    // position: absolute;
-    // top: 0.5em;
-    // right: 0.5em;
     background-color: white;
     padding: 5px;
     border-radius: 50%;
-    // border-color: #0074b1;
-    // border-width: 1px;
     cursor: pointer;
 
     &:hover {
@@ -712,4 +718,3 @@ ul {
   }
   
   // End of Tooltip styles
-  

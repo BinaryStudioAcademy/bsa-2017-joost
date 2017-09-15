@@ -103,9 +103,10 @@ namespace Joost.Api.Services
                                 AttachedFile = message.AttachedFile
                             };
                             _unitOfWork.Repository<Message>().Add(newMessage);
-							message.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
-                            await _chatHubService.SendToUser(message);
                             await _unitOfWork.SaveAsync();
+							message.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
+                            message.Id = newMessage.Id;
+                            await _chatHubService.SendToUser(message);
                         }
                     }
                 }

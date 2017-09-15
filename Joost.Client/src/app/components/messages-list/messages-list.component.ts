@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ViewChild, ElementRef, NgModule, AfterViewChecked, Output, EventEmitter, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { Subscription } from "rxjs/Rx";
 import { Router, ActivatedRoute, ParamMap, NavigationEnd } from '@angular/router';
 
@@ -496,19 +496,24 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     makeCitation(message: Message) {
         this.userService.getUserDetails(message.SenderId).subscribe(data => {
-            var content = '<i class="material-icons" style="font-size: 8px">format_quote</i>' + message.Text;
-            if (message.AttachedFile)
-                content += '<img style="max-width: 200px;" src="' + this.fileService.getFullFileUrlWithOutEx(message.AttachedFile) + '">';
+            var content = '<div class="citation-show"><i class="material-icons" style="font-size: 8px">format_quote</i>' + message.Text + '';
+            if (message.AttachedFile) {
+                if (this.isImage(message.AttachedFile))
+                    content += '<img class="img-citation" src="' + this.fileService.getFullFileUrlWithOutEx(message.AttachedFile) + '">';
+                else
+                    content += '<i class="material-icons">insert_drive_file</i>';
+            }
             content += '<i class="material-icons" style="font-size: 8px">format_quote</i><br>';
+            var date = new Date(message.CreatedAt);
             if (!message.IsGroup) {
-                content += data.FirstName + " " + data.LastName + ', ' + message.CreatedAt;
+                content += data.FirstName + " " + data.LastName + ', ' + date.toDateString();
             } else {
                 let sender = this.getMember(message.SenderId);
-                content += sender.LastName + ' ' + sender.FirstName + ', ' + message.CreatedAt;
+                content += sender.LastName + ' ' + sender.FirstName + ', ' + date.toDateString();
             }
+            content += '</div>';
             this.citation = content;
         });
-
     }
 
     deleteFileFromMsg(): void {

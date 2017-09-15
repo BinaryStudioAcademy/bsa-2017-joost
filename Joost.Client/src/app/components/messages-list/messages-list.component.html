@@ -42,18 +42,26 @@
                     <div class="message-content" (mouseover)="focusMessage(message.Id)" (mouseleave)="focusoutMessage()">
                         <div class="message-text" *ngIf="message.Text">
                             <div [innerHTML]="message.Text"></div>
-                            <div class="citation-msg-container"  *ngIf="isFocus(message)">
+                            <div class="citation-msg-container"  *ngIf="isFocus(message) || isImage(message.AttachedFile)">
                                 <div class="tooltip-top" data-tooltip="Click to citation this message" >
                                   <i class="citation material-icons" (click)="makeCitation(message)">chat_bubble</i>
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)" class="msg-att-img">
-                          <img src="{{message.AttachedFile | attachedImagePipe}}">
-                          <div class="overlay">
-                            Click to open preview
-                          </div>
+                        <div>
+                            <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)" class="msg-att-img">
+                                <img src="{{message.AttachedFile | attachedImagePipe}}">
+                                <div class="overlay">
+                                    Click to open preview
+                                </div>
+                            </div>
+                            <div class="citation-msg-container" *ngIf="isFocus(message) && !message.Text">
+                                <div class="tooltip-top" data-tooltip="Click to citation this message">
+                                    <i class="citation material-icons" (click)="makeCitation(message)">chat_bubble</i>
+                                </div>
+                            </div>
                         </div>
+
                         <div *ngIf="message.AttachedFile && !isImage(message.AttachedFile)" class="attached-file">
                           <div class="tooltip-right" data-tooltip="Click to download">
                               <div class="att-file-container"  (click)="onDownloadFile(message.AttachedFile)">  <!-- [class.attched-in-self-msg]="!messageService.isOwnMessage(message, receiverId)" -->
@@ -62,7 +70,7 @@
                                   <strong>{{getFileExtension(message.AttachedFile)}}</strong> 
                                 </div>
                               </div>  
-                          </div> 
+                          </div>
                         </div>
                     </div>
                   </div>
