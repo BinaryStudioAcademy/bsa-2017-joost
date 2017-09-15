@@ -27,17 +27,17 @@ namespace Joost.Api.Services
 				var receiver = await userRepository.GetAsync(message.ReceiverId);
 				if (receiver != null && !string.IsNullOrEmpty(receiver.ConnectionId))
 				{
-					await _hubContext.Clients.Client(receiver.ConnectionId).addMessage(message);
+					await _hubContext.Clients.Client(receiver.ConnectionId).onAddMessage(message);
 				}
 			}
 		}
 
 		public async Task SendToGroup(MessageDto message)
 		{
-			await _hubContext.Clients.Group(message.ReceiverId.ToString()).addMessage(message);
+			await _hubContext.Clients.Group(message.ReceiverId.ToString()).onAddMessage(message);
 		}
 
-		public async Task AddContact(int currentUserId, int contactUserId)
+		public async Task RunContactAction(int currentUserId, int contactUserId, ContactState state)
 		{
 			using (var contactRepository = _unitOfWork.Repository<Contact>())
 			{
@@ -51,8 +51,7 @@ namespace Joost.Api.Services
 					var contactUserDto = new UserContactDto
 					{
 						Id = currentUserId,
-						//State = (Models.ContactState)contact.State,
-						State = Models.ContactState.New,
+						State = state,
 						Avatar = contact.User.Avatar,
 						Name = contact.User.FirstName + " " + contact.User.LastName,
 						City = contact.User.City
@@ -65,7 +64,7 @@ namespace Joost.Api.Services
 							.SingleOrDefaultAsync(u => u.Id == contactUserId);
 						if (contactUser != null && !string.IsNullOrEmpty(contactUser.ConnectionId))
 						{
-							await _hubContext.Clients.Client(contactUser.ConnectionId).onNewUserInContacts(contactUserDto);
+							await _hubContext.Clients.Client(contactUser.ConnectionId).onContactAction(contactUserDto);
 						}
 					}
 				}
@@ -87,7 +86,6 @@ namespace Joost.Api.Services
 						.FirstOrDefault();
 					if (lastGroup != null)
 					{
-						//var lastGroupDto = GroupDto.FromModel(lastGroup);
 						var lastMessage = await GetLastMessageInGroupDialog(lastGroup.Id);
 						var groupDialog = new DialogDataDto
 						{
@@ -104,7 +102,7 @@ namespace Joost.Api.Services
 						foreach (var userCId in usersCId)
 						{
 							if (!string.IsNullOrEmpty(userCId) && userCId != groupCreatorCId)
-								await _hubContext.Clients.Client(userCId).onNewGroupCreated(groupDialog);
+								await _hubContext.Clients.Client(userCId).onNewGroupCreated(groupDialog, UserDetailsDto.FromModel(currentUser));
 						}
 					}
 				}

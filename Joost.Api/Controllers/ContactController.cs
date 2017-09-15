@@ -30,7 +30,7 @@ namespace Joost.Api.Controllers
             {
                 return NotFound();
             }
-            var cont = user.Contacts.Select(t => new ContactDto() { ContactId = t.ContactUser.Id, State = (Models.ContactState)t.State }).ToList();
+            var cont = user.Contacts.Select(t => new ContactDto() { ContactId = t.ContactUser.Id, State = (ContactState)t.State }).ToList();
             return Ok(cont);
         }
 
@@ -77,7 +77,7 @@ namespace Joost.Api.Controllers
             }
 
 			await _unitOfWork.SaveAsync();
-			await _chatHubService.AddContact(userId, contact.ContactId);
+			await _chatHubService.RunContactAction(userId, contact.ContactId, ContactState.New);
 
 			return Ok();
         }
@@ -105,8 +105,9 @@ namespace Joost.Api.Controllers
 				_unitOfWork.Repository<Contact>().Delete(cnt);
 			user.Contacts.Remove(contact);
 			await _unitOfWork.SaveAsync();
+			await _chatHubService.RunContactAction(userId, contact.Id, ContactState.Sent);
 
-            return Ok();
+			return Ok();
         }
 
         // Get: api/contacts/contacts-detail
@@ -123,7 +124,7 @@ namespace Joost.Api.Controllers
             var cont = user.Contacts.Select(t => new UserContactDto
             {
                 Id = t.ContactUser.Id,
-                State = (Models.ContactState)t.State,
+                State = t.State,
                 Avatar = t.ContactUser.Avatar,
                 Name = t.ContactUser.FirstName + " " + t.ContactUser.LastName,
                 City = t.ContactUser.City,
@@ -152,12 +153,13 @@ namespace Joost.Api.Controllers
             {
                 return NotFound();
             }
-            user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Accept;
-            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Accept;
+            user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = ContactState.Accept;
+            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = ContactState.Accept;
 
             await _unitOfWork.SaveAsync();
+			await _chatHubService.RunContactAction(userId, contact.ContactId, ContactState.Accept);
 
-            return Ok();
+			return Ok();
         }
 
         // Post: api/contacts/decline-contact
@@ -180,11 +182,12 @@ namespace Joost.Api.Controllers
             {
                 return NotFound();
             }
-            user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Canceled;
-            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
+            user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = ContactState.Canceled;
+            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = ContactState.Decline;
             await _unitOfWork.SaveAsync();
+			await _chatHubService.RunContactAction(userId, contact.ContactId, ContactState.Canceled);
 
-            return Ok();
+			return Ok();
         }                          
     }
 }

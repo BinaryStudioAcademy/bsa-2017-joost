@@ -67,14 +67,14 @@ namespace Joost.Api.Hubs
                 var receiver = await userRepository.GetAsync(message.ReceiverId);
                 if (receiver != null && !string.IsNullOrEmpty(receiver.ConnectionId))
                 {
-                    await Clients.Client(receiver.ConnectionId).addMessage(message);
+                    await Clients.Client(receiver.ConnectionId).onAddMessage(message);
                 }
             }
         }
 
         private async Task SendToGroup(MessageDto message)
         {
-            await Clients.Group(message.ReceiverId.ToString()).addMessage(message);
+            await Clients.Group(message.ReceiverId.ToString()).onAddMessage(message);
         }
     }
 }

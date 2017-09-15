@@ -113,14 +113,14 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
   }
 
   private runNotifications() {
-    this.messageNotifSubscription = this.chatHubService.addMessageEvent.subscribe((message: Message) => {
+    this.messageNotifSubscription = this.chatHubService.onAddMessageEvent.subscribe((message: Message) => {
       this.showMessageNotification(message);
     });
-    this.contactNotifSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((user: UserContact) => {
+    this.contactNotifSubscription = this.chatHubService.onAddContactEvent.subscribe((user: UserContact) => {
       this.notificationService.showAddUser(user.Name);
     });
-    this.groupNotifSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => { 
-      this.notificationService.showAddChat(groupDialog.Name, "");      
+    this.groupNotifSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((data: any) => { 
+      this.notificationService.showAddChat(data.user.FirstName + " " + data.user.LastName, data.dialog.Name);      
     });
   }
 

@@ -69,7 +69,7 @@
 
 .tooltip-left {
   &:after {
-    top: -4px;
+    top: 12px;
     left: 0;
     transform: translateX(-112%) translateY(0);
   }
@@ -95,12 +95,34 @@
 
 // End of Tooltip styles
 
-.mdl-textfield--floating-label.is-focused .mdl-textfield__label {
-    color: #4FC3F7 !important;
+.menu-search-form {
+  display: flex;
+  flex-direction: column; 
+  overflow :auto;
 }
 
-.mdl-textfield__label:after {
-    background: #4FC3F7 !important;
+.mdl-list {
+    padding: 0 8px;
 }
 
+.mdl-list__item {
+    padding: 0;
+    height: auto;
+}
+
+.mdl-list__item--three-line .mdl-list__item-primary-content {
+    height: 40px;
+}
+
+.mdl-list__item-avatar{
+    margin: 1px 0 0 1px;
+}
+
+.m4-16{
+    margin: 4px -16px!important;
+}
+
+.p8{
+    padding: 8px 16px !important;
+}
 

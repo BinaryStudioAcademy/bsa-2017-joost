@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 import { Subscription } from "rxjs/Rx";
 import { ViewEncapsulation, AfterViewChecked } from '@angular/core';
@@ -11,6 +11,7 @@ import { EventEmitterService } from "../../services/event-emitter.service";
 import { UserContact } from "../../models/user-contact";
 import { ContactState } from "../../models/contact";
 import { ContactService } from "../../services/contact.service";
+import { MessagesListComponent } from "../messages-list/messages-list.component";
 
 declare var jquery: any;
 declare var $: any;
@@ -45,7 +46,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   }
 
   ngOnInit() {
-      this.receiverSubscription = this.chatHubService.addMessageEvent.subscribe(message => {
+      this.receiverSubscription = this.chatHubService.onAddMessageEvent.subscribe(message => {
           this.updateLastMessage(message);
       });
       this.senderSubscription = this.eventEmitterService.addMessageEvent.subscribe(message => {
@@ -56,11 +57,11 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
         this.updateDialogs();
       });
 
-      this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((groupDialog: Dialog) => {
-        this.dialogs.push(groupDialog);
+      this.newGroupSubscription = this.chatHubService.onNewGroupCreatedEvent.subscribe((data: any) => {
+        this.dialogs.push(data.dialog);
       });
 
-      this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
+      this.newContactSubscription = this.chatHubService.onAddContactEvent.subscribe((userContact: UserContact) => {
             if (userContact.State == ContactState.New) {
                 this.contacts.push(userContact);
             }
