@@ -37,7 +37,12 @@ namespace Joost.Api.Services
 			await _hubContext.Clients.Group(message.ReceiverId.ToString()).onAddMessage(message);
 		}
 
-		public async Task RunContactAction(int currentUserId, int contactUserId, ContactState state)
+        public async Task ChangeUserState(User user, string connectionId)
+        {
+            await _hubContext.Clients.AllExcept(connectionId).onUserStateChange(UserStateDto.FromModel(user));
+        }
+
+        public async Task RunContactAction(int currentUserId, int contactUserId, ContactState state)
 		{
 			using (var contactRepository = _unitOfWork.Repository<Contact>())
 			{
@@ -54,7 +59,9 @@ namespace Joost.Api.Services
 						State = state,
 						Avatar = contact.User.Avatar,
 						Name = contact.User.FirstName + " " + contact.User.LastName,
-						City = contact.User.City
+						City = contact.User.City,
+                        UserState = contact.User.State,
+                        IsOnline = contact.User.IsOnline
 					};
 
 					using (var userRepository = _unitOfWork.Repository<User>())

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ContactService } from "../../services/contact.service";
 
 import { UserSearch } from "../../models/user-search";
+import { UserNetState } from "../../models/user-netstate";
+import { UserState } from "../../models/user-detail";
 import { Contact,ContactState} from "../../models/contact";
 import { UserContact} from "../../models/user-contact";
 import { ChatHubService } from "../../services/chat-hub.service";
@@ -25,6 +27,12 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 	private addContactSubscription: Subscription;
 	private confirmContactSubscription: Subscription;
 	private canceledContactSubscription: Subscription;	
+	private newContactSubscription: Subscription;
+	private userOnlineSubscription: Subscription;
+	private userOfflineSubscription: Subscription;
+	private userChangeStateSubscription: Subscription;
+
+	
 	constructor(
 		private router: Router,
 		private contactService: ContactService,
@@ -60,7 +68,7 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 					if (user.State==ContactState.Decline) {
 						this.result.splice(this.result.indexOf(user), 1);
 					}
-					else {
+					else if (user.State==ContactState.Accept){
 						this.result.push(user);
 					}
 				}
@@ -80,7 +88,7 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 						    	if (user.State==ContactState.Decline) {
 						    		this.result.splice(this.result.indexOf(user), 1);
 						    	}
-						    	else {
+						    	else if (user.State==ContactState.Accept){
 						    		this.result.push(user);
 						    	}
 						    }
@@ -93,6 +101,16 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 
 		this.addContactSubscription = this.chatHubService.onAddContactEvent.subscribe((userContact: UserContact) => {
 			this.result.push(userContact);
+			this.searchContact = this.result;
+		});
+		this.userOnlineSubscription = this.chatHubService.onNewUserConnectedEvent.subscribe( (user:UserNetState)=> {
+		  this.onUserStateChange(user);
+		});
+		this.userOfflineSubscription = this.chatHubService.onUserDisconnectedEvent.subscribe( (user:UserNetState)=> {
+		  this.onUserStateChange(user);
+		});
+		this.userChangeStateSubscription = this.chatHubService.onUserStateChangeEvent.subscribe((user:UserNetState)=> {
+		  this.onUserStateChange(user);
 		});
 		this.confirmContactSubscription = this.chatHubService.onConfirmContactEvent.subscribe((userContact: UserContact) => {
 			console.log("confirm");
@@ -105,7 +123,15 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 			contact = userContact;
 		});
 	}
-
+	onUserStateChange(user:UserNetState){
+	  if (this.result) {
+	    let userFromNewContact = this.result.filter(t=>t.Id == user.Id)[0];
+	     if (userFromNewContact) {
+	      userFromNewContact.UserState = user.IsOnline ? user.State : UserState.Offline;
+	     }
+	  }
+	  this.searchContact = this.result;
+	}
 	ngOnDestroy() {
 		this.addContactSubscription.unsubscribe();
 		this.confirmContactSubscription.unsubscribe();

@@ -9,6 +9,7 @@ using Joost.Api.Filters;
 using System.Linq;
 using System.Configuration;
 using System.Collections.Generic;
+using Joost.Api.Services;
 
 namespace Joost.Api.Controllers
 {
@@ -16,6 +17,7 @@ namespace Joost.Api.Controllers
     public class AccountController : BaseApiController
     {
         private static TimeSpan refreshTokenLifetime;
+        private IChatHubService _chatHubService;
 
         static AccountController()
         {
@@ -25,7 +27,9 @@ namespace Joost.Api.Controllers
             else
                 refreshTokenLifetime = new TimeSpan(7, 0, 0, 0);
         }
-        public AccountController(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public AccountController(IUnitOfWork unitOfWork, IChatHubService chatHubService) : base(unitOfWork) {
+            _chatHubService = chatHubService;
+        }
 
         // GET: api/account/myprofile
         [HttpGet]
@@ -59,8 +63,11 @@ namespace Joost.Api.Controllers
             user.Gender = profile.Gender;
             user.Status = profile.Status;
             user.Avatar = profile.Avatar;
-            user.State = profile.State;
-
+            if (user.State != profile.State)
+            {
+                user.State = profile.State;
+                await _chatHubService.ChangeUserState(user, user.ConnectionId);
+            }
             await _unitOfWork.SaveAsync();
             return Ok(user);
         }
@@ -148,7 +155,6 @@ namespace Joost.Api.Controllers
 
             return Ok(user.Status);
         }
-
 
         // Get api/account/refresh
         [Route("refresh")]

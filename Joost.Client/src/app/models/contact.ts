@@ -9,7 +9,7 @@
 
 export enum ContactState
 {
-    New ,
+    New,
     Sent,
     Accept,
     Decline,

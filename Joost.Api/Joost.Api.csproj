@@ -258,6 +258,7 @@
     <Compile Include="Models\UserDetailsDto.cs" />
     <Compile Include="Models\UserProfileDto.cs" />
     <Compile Include="Models\UserSearchDto.cs" />
+    <Compile Include="Models\UserStateDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ChatHubService.cs" />
     <Compile Include="Services\DialogDataService.cs" />

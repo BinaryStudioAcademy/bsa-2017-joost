@@ -211,7 +211,7 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 		});
 	}
 	checkInContact(id:number):boolean{
-		return this.contactList.map(t=>t.ContactId).indexOf(id) > -1 ;
+		return this.contactList.filter(t=> t.State!=ContactState.Canceled).filter(t=> t.State!=ContactState.Decline).map(t=>t.ContactId).indexOf(id) > -1 ;
 	}
 	findContact(id:number):string{
 		let state =  this.contactList.filter(t=>t.ContactId==id)[0];
@@ -221,6 +221,8 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 					return "new_releases";
 				case ContactState.Sent:
 					return "person_add";
+				case ContactState.Canceled:
+					return "clear";
 		    	default:
 		    		return "";
 		    }

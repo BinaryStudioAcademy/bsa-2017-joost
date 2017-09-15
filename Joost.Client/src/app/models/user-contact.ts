@@ -8,4 +8,5 @@ export class UserContact{
     public Avatar: string;
     public State: ContactState;
     public UserState: UserState;
+    public IsOnline:boolean;
 }

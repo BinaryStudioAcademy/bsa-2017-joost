@@ -5,11 +5,14 @@ namespace Joost.Api.Hubs
 {
     public interface IClient
     {
-        Task onConnected(string connectionId, int userId);
-        Task onNewUserConnected(string connectionId, int userId);
-        Task onUserDisconnected(string connectionId, int userId);
+        Task onConnected(UserStateDto userState);
+        Task onNewUserConnected(UserStateDto userState);
+        Task onUserDisconnected(UserStateDto userState);
         Task onAddMessage(MessageDto message);
-		Task onContactAction(UserContactDto user);
-		Task onNewGroupCreated(DialogDataDto group, UserDetailsDto creator);
+        Task onNewUserInContacts(UserContactDto user);
+		Task onNewGroupCreated(DialogDataDto group);
+        Task onUserStateChange(UserStateDto userState);
+        Task onContactAction(UserContactDto user);
+        Task onNewGroupCreated(DialogDataDto group, UserDetailsDto creator);
     }
 }

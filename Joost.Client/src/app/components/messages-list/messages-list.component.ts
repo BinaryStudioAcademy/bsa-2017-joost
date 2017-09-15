@@ -15,6 +15,8 @@ import { UserDetail } from "../../models/user-detail";
 import { FileService } from '../../services/file.service';
 import { EventEmitterService } from "../../services/event-emitter.service";
 import { UserStatePipe } from "../../pipes/user-state.pipe";
+import { UserNetState } from "../../models/user-netstate";
+import { UserState } from "../../models/user-detail";
 
 declare var jquery: any;
 declare var $: any;
@@ -42,6 +44,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private groupMembers: UserDetail[];
     private isFocusMessage: number;
     private citation: string;
+    private userOnlineSubscription: Subscription;
+    private userOfflineSubscription: Subscription;
+    private userChangeStateSubscription: Subscription;
 
     @ViewChild('scroll') private scrollContainer: ElementRef;
     private getMessages: boolean = false;
@@ -133,8 +138,25 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                    self.send();
                }
             });
-        }        
+        }  
+        this.userOnlineSubscription = this.chatHubService.onNewUserConnectedEvent.subscribe( (user:UserNetState)=> {
+          this.onUserStateChange(user);
+        });
+        this.userOfflineSubscription = this.chatHubService.onUserDisconnectedEvent.subscribe( (user:UserNetState)=> {
+          this.onUserStateChange(user);
+        });
+        this.userChangeStateSubscription = this.chatHubService.onUserStateChangeEvent.subscribe((user:UserNetState)=> {
+          this.onUserStateChange(user);
+        });      
     }
+    private onUserStateChange(user:UserNetState){
+        if (this.groupMembers) {
+           let userFromDialog = this.groupMembers.filter(t=>t.Id !=user.Id)[0];
+           if (userFromDialog) {
+             userFromDialog.State = user.IsOnline ? user.State : UserState.Offline;
+           }
+        }
+      }
     private toggleListMember(event){
         $(".members-toggle").slideToggle(300);
         $(".group-members h3").toggleClass("open");
@@ -206,9 +228,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private getMember(id: number): UserDetail {
-        return this.groupMembers.find(m => m.Id == id);
+        if (this.groupMembers) {
+            return this.groupMembers.find(m => m.Id == id);
+        }
+        
     }
-
     private getUserData() {
         this.userService.getUserDetails(this.receiverId).subscribe(user => {
             this.dialogName = user.FirstName + " " + user.LastName;

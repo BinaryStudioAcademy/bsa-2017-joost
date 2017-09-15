@@ -10,5 +10,6 @@ namespace Joost.Api.Services
         Task SendToGroup(MessageDto message);
 		Task RunContactAction(int currentUserId, int contactUserId, ContactState state);
 		Task AddGroup(int currentUserId);
+        Task ChangeUserState(User user, string connectionId);
     }
 }

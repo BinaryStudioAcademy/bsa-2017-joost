@@ -40,7 +40,7 @@ export class NotificationService {
                          enableHTML: true
                         });
   }
-
+  
   showAddChat(notificationTitle:string, notificationMessage:string) {
     this.playNotificationSound();
     let htmlmessage: string = 

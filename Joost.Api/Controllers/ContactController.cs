@@ -93,21 +93,18 @@ namespace Joost.Api.Controllers
                 return NotFound();
             }
 
-            var contact = user.Contacts.FirstOrDefault(u => u.ContactUser.Id == id);
-
-            if (contact == null)
+            var contactUser = await _unitOfWork.Repository<User>().GetAsync(id);
+            if (contactUser == null)
             {
                 return NotFound();
             }
 
-			var cnt = await _unitOfWork.Repository<Contact>().GetAsync(contact.Id);
-			if(cnt != null)
-				_unitOfWork.Repository<Contact>().Delete(cnt);
-			user.Contacts.Remove(contact);
-			await _unitOfWork.SaveAsync();
-			await _chatHubService.RunContactAction(userId, contact.Id, ContactState.Sent);
+            user.Contacts.FirstOrDefault(t => t.ContactUser.Id == contactUser.Id).State = DbAccess.Entities.ContactState.Canceled;
+            contactUser.Contacts.FirstOrDefault(t => t.ContactUser.Id == user.Id).State = DbAccess.Entities.ContactState.Decline;
+            await _unitOfWork.SaveAsync();
+            await _chatHubService.RunContactAction(userId, contactUser.Id, ContactState.Sent);
 
-			return Ok();
+            return Ok();
         }
 
         // Get: api/contacts/contacts-detail

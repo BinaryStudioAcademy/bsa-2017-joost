@@ -8,7 +8,7 @@
             <div class="members-toggle">
               <ul class="members-list">
                 <li *ngFor="let member of groupMembers" (click)="onGoToUser(member.Id)">
-                  <span [outerHTML]="member.State | userState">
+                  <span [innerHTML]="member.State | userState">
                    
                   </span>
                   <span class="member__name">{{member.FirstName}} {{member.LastName}}</span>

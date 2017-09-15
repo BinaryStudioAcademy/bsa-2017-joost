@@ -18,6 +18,7 @@ namespace Joost.DbAccess.Entities
         public string Status { get; set; }
         public string Avatar { get; set; }
         public UserState State { get; set; }
+        public bool IsOnline { get; set; }
         public bool IsActived { get; set; }
         public bool NotificationsFromUsers { get; set; }
         public bool NotificationsFromGroups { get; set; }
