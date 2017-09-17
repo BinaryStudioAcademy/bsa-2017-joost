@@ -5,6 +5,9 @@ using Joost.DbAccess.Entities;
 using Joost.Api.Models;
 using System.Data.Entity;
 using System.Collections.Generic;
+using Microsoft.Bot.Connector.DirectLine;
+using System.Configuration;
+using System;
 
 namespace Joost.Api.Services
 {
@@ -13,7 +16,7 @@ namespace Joost.Api.Services
         private IUnitOfWork _unitOfWork;
         private IChatHubService _chatHubService;
 
-        public MessageService(IUnitOfWork unitOfWork, IChatHubService chatHubService)
+		public MessageService(IUnitOfWork unitOfWork, IChatHubService chatHubService)
         {
             _unitOfWork = unitOfWork;
             _chatHubService = chatHubService;
@@ -225,5 +228,50 @@ namespace Joost.Api.Services
 				else return false;
             }
         }
-    }
+
+
+		private static int _chatBotIdInDb;
+		private static string _botId;
+		private static string _microsoftAppId;
+		private static string _microsoftAppPassword;
+		private static string _directLineSecret;
+		//private static string _chatBotUri;
+
+		private static DirectLineClient _client;
+		private static Conversation _conversation;
+
+		static MessageService()
+		{
+			int chatBotIdInDb;
+			if (int.TryParse(ConfigurationManager.AppSettings["chatBotIdInDb"], out chatBotIdInDb))
+				_chatBotIdInDb = chatBotIdInDb;
+			else
+				chatBotIdInDb = 1;
+			_botId = ConfigurationManager.AppSettings["botId"];
+			_microsoftAppId = ConfigurationManager.AppSettings["microsoftAppId"];
+			_microsoftAppPassword = ConfigurationManager.AppSettings["microsoftAppPassword"];
+			_directLineSecret = ConfigurationManager.AppSettings["directLineSecret"];
+			//_chatBotUri = ConfigurationManager.AppSettings["chatBotUri"];
+
+			StartConversation();
+		}
+
+		private static void StartConversation()
+		{
+			_client = new DirectLineClient(_directLineSecret);
+			_client.BaseUri = new Uri("https://localhost:3979/api/chatbot/messages");
+			_conversation = _client.Conversations.StartConversation();
+		}
+
+		public async Task<ResourceResponse> SendMessageToBot(MessageDto message)
+		{
+			Activity userMessage = new Activity
+			{
+				From = new ChannelAccount(message.SenderId.ToString()),
+				Text = message.Text,
+				Type = ActivityTypes.Message
+			};
+			return await _client.Conversations.PostActivityAsync(_conversation.ConversationId, userMessage);
+		}
+	}
 }

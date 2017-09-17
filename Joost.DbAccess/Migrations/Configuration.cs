@@ -16,16 +16,18 @@
 
         protected override void Seed(JoostDbContext context)
         {
-            var users = new List<User>
+			var chatBot = new User { FirstName = "Joost", LastName = "Bot", State = UserState.Online, Avatar = "1_avatar.png", IsActived = true };
+
+			var users = new List<User>
             {
-                new User { Email="andrewbulkovskiy@gmail.com", Password="password", FirstName="Andrew", LastName = "Bulkovskiy" , State = UserState.Online, Avatar = "1_avatar.jpg", IsActived = true },
+                new User { Email="andrewbulkovskiy@gmail.com", Password="password", FirstName="Andrew", LastName = "Bulkovskiy" , State = UserState.Online, Avatar = "2_avatar.jpg", IsActived = true },
                 new User { Email="amateishchuk@gmail.com", Password="password", FirstName="Andrii", LastName = "Mateishchuk" , State = UserState.Online, IsActived = true },
-                new User { Email="artyom@gmail.com", Password="password", FirstName="Artyom", LastName = "Moiseenko" , State = UserState.Online, Avatar = "3_avatar.jpg", IsActived = true },
-                new User { Email="diana@gmail.com", Password="password", FirstName="Diana", LastName = "Kolisnichenko" , State = UserState.Online, Avatar = "4_avatar.jpg", IsActived = true },
-                new User { Email="raingeragon@gmail.com", Password="password", FirstName="Ilya", LastName = "Khomenko" , State = UserState.Online, Avatar = "5_avatar.jpg", IsActived = true },
-                new User { Email="legodov@gmail.com", Password="password", FirstName="Oleh", LastName = "Dovhan" , State = UserState.Online, Avatar = "6_avatar.jpg", IsActived = true },
-                new User { Email="straber@ukr.net", Password="password", FirstName="Oleksandr", LastName = "Truba" , State = UserState.Online, Avatar = "7_avatar.jpg", IsActived = true },
-                new User { Email="daria@gmail.com", Password="password", FirstName="Darina", LastName = "Korotkih" , State = UserState.Online, Avatar = "8_avatar.jpg", IsActived = true },
+                new User { Email="artyom@gmail.com", Password="password", FirstName="Artyom", LastName = "Moiseenko" , State = UserState.Online, Avatar = "4_avatar.jpg", IsActived = true },
+                new User { Email="diana@gmail.com", Password="password", FirstName="Diana", LastName = "Kolisnichenko" , State = UserState.Online, Avatar = "5_avatar.jpg", IsActived = true },
+                new User { Email="raingeragon@gmail.com", Password="password", FirstName="Ilya", LastName = "Khomenko" , State = UserState.Online, Avatar = "6_avatar.jpg", IsActived = true },
+                new User { Email="legodov@gmail.com", Password="password", FirstName="Oleh", LastName = "Dovhan" , State = UserState.Online, Avatar = "7_avatar.jpg", IsActived = true },
+                new User { Email="straber@ukr.net", Password="password", FirstName="Oleksandr", LastName = "Truba" , State = UserState.Online, Avatar = "8_avatar.jpg", IsActived = true },
+                new User { Email="daria@gmail.com", Password="password", FirstName="Darina", LastName = "Korotkih" , State = UserState.Online, Avatar = "9_avatar.jpg", IsActived = true },
             };
 
             var vitaliy = new User { Email = "vitaly@gmail.com", Password = "admin", FirstName = "Віталій", LastName = "Ільченко", State = UserState.Online, IsActived = true };
@@ -48,6 +50,7 @@
 
             if (!context.Users.Any())  // if table is empty
             {
+				context.Users.Add(chatBot);
                 users.ForEach(c => context.Users.Add(c));
                 context.Users.Add(vitaliy);
                 context.Users.Add(vasyl);
@@ -60,7 +63,10 @@
                 user.Contacts.Add(new Contact { State = ContactState.Accept, User = user, ContactUser = vasyl });
                 vasyl.Contacts.Add(new Contact { State = ContactState.Accept, User = vasyl, ContactUser = user });
 
-                users[5].Contacts.Add(new Contact { State = ContactState.Accept, User = users[5], ContactUser = users[3] });
+				users[5].Contacts.Add(new Contact { State = ContactState.Accept, User = users[5], ContactUser = chatBot });
+				chatBot.Contacts.Add(new Contact { State = ContactState.Accept, User = chatBot, ContactUser = users[5] });
+
+				users[5].Contacts.Add(new Contact { State = ContactState.Accept, User = users[5], ContactUser = users[3] });
                 users[3].Contacts.Add(new Contact { State = ContactState.Accept, User = users[3], ContactUser = users[5] });
                 users[5].Contacts.Add(new Contact { State = ContactState.Accept, User = users[5], ContactUser = users[6] });
                 users[6].Contacts.Add(new Contact { State = ContactState.Accept, User = users[6], ContactUser = users[5] });
