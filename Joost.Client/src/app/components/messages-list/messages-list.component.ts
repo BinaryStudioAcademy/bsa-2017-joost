@@ -29,6 +29,7 @@ declare var $: any;
 export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     private subscription: Subscription;
+    private messageDeleteSubscription: Subscription;    
     private messageEmoji: any;
     private currentUser: UserProfile;
     private receiverId: number;
@@ -148,6 +149,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.userChangeStateSubscription = this.chatHubService.onUserStateChangeEvent.subscribe((user:UserNetState)=> {
           this.onUserStateChange(user);
         });      
+        this.messageDeleteSubscription = this.chatHubService.onDeleteMessageEvent.subscribe((message: Message)=> {
+            let index = this.messages.findIndex( u=> u.Id == message.Id);
+            this.messages.splice(index, 1);
+            this.cdRef.detectChanges();
+        });         
     }
     private onUserStateChange(user:UserNetState){
         if (this.groupMembers) {
@@ -328,6 +334,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private sendUserMessage(text: string, fileName: string) {
         let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, false);
         this.messageService.sendUserMessage(message).subscribe(data => {
+            message.Id = data;
             this.addToMessages(message);
             this.messageText = null;
             this.eventEmitterService.addMessageEvent.emit(message); 
@@ -336,6 +343,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.sendUserMessage(message).subscribe(data => {
+                            message.Id = data;                        
                             this.addToMessages(message);
                             this.messageText = null;
                             this.eventEmitterService.addMessageEvent.emit(message);
@@ -579,5 +587,20 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     onGoToUser(Id: number){
         this.router.navigate(["/menu/user-details", Id]);
+    }
+
+    deleteMessage(msg: Message) {
+            console.log(msg);
+        
+        this.messageService.deleteUserMessage(msg.Id).subscribe(() => {
+            let index = this.messages.findIndex( u=> u.Id == msg.Id);
+            this.messages.splice(index, 1);
+            this.cdRef.detectChanges();
+            console.log("Message with id: " + msg.Id + " deleted successfully!");
+        },
+        err => {
+            console.log("Error when deleting message with id: " + msg.Id);
+            console.log(err);
+        });
     }
 }

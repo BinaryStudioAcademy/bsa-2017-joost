@@ -250,14 +250,14 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 	}
 
 	deleteDuplicatedResults(array) {
-		let a = array.concat();
-		for(let i=0; i<a.length; ++i) {
-			for(let j=i+1; j<a.length; ++j) {
-				if(a[i].Id === a[j].Id)
-					a.splice(j--, 1);
+		let arr = array.concat();
+		for(let i=0; i<arr.length; ++i) {
+			for(let j=i+1; j<arr.length; ++j) {
+				if(arr[i].Id === arr[j].Id)
+					arr.splice(j--, 1);
 			}
 		}
-		return a;
+		return arr;
 	}
 
 	private UAorRUtoENReplacePattern = {

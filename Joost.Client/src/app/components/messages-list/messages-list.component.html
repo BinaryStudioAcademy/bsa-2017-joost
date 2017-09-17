@@ -47,6 +47,13 @@
                                   <i class="citation material-icons" (click)="makeCitation(message)">chat_bubble</i>
                                 </div>
                             </div>
+                            <div *ngIf="messageService.isOwnMessage(message, currentUser.Id)" class="delete-button">
+                              <div class="citation-msg-container">
+                                <div class="tooltip-top" data-tooltip="Click to delete this message" >
+                                  <i class="citation material-icons" (click)="deleteMessage(message)">delete</i>
+                                </div>
+                            </div>
+                            </div>                              
                         </div>
                         <div>
                             <div *ngIf="message.AttachedFile && isImage(message.AttachedFile)" (click)="onShowModal(message.AttachedFile)" class="msg-att-img">

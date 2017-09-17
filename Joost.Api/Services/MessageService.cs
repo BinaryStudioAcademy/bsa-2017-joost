@@ -75,7 +75,7 @@ namespace Joost.Api.Services
             }
         }
 
-		public async Task AddUserMessage(MessageDto message)
+		public async Task<int> AddUserMessage(MessageDto message)
         {
             if (message != null)
             {
@@ -107,10 +107,12 @@ namespace Joost.Api.Services
 							message.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
                             message.Id = newMessage.Id;
                             await _chatHubService.SendToUser(message);
+                            return message.Id;
                         }
                     }
                 }
             }
+            return -1;
         }
 
         public async Task AddGroupMessage(MessageDto groupMessage)
@@ -198,10 +200,12 @@ namespace Joost.Api.Services
                 var message = await messageRepository
 					.Query()
 					.Include(m => m.Sender)
-					.FirstOrDefaultAsync(m => m.Id == messageId);
+					.Include(m => m.Receiver)
+                    .FirstOrDefaultAsync(m => m.Id == messageId);
 				if (message != null && message.Sender.Id == senderId)
 				{
-					messageRepository.Delete(message);
+                    await _chatHubService.DeleteUserMessage(MessageDto.FromMessageModel(message));
+                    messageRepository.Delete(message);
 					await _unitOfWork.SaveAsync();
 					return true;
 				}

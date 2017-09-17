@@ -9,7 +9,7 @@ namespace Joost.Api.Services
     {
         Task<IEnumerable<MessageDto>> GetUserMessages(int senderId, int receiverId, int skip, int take);
         Task<IEnumerable<MessageDto>> GetGroupMessages(int senderId, int receiverId, int skip, int take);
-        Task AddUserMessage(MessageDto message);
+        Task<int> AddUserMessage(MessageDto message);
 		Task AddGroupMessage(MessageDto groupMessage);
 		Task<bool> EditUserMessage(MessageDto message);
         Task<bool> EditGroupMessage(MessageDto groupMessage);

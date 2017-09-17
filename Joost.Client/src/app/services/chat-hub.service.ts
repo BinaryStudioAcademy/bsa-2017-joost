@@ -21,6 +21,7 @@ export class ChatHubService {
 
 
   public onAddMessageEvent: EventEmitter<Message>;
+  public onDeleteMessageEvent: EventEmitter<Message>;
   public onAddContactEvent: EventEmitter<UserContact>;
   public onConfirmContactEvent: EventEmitter<UserContact>;
   public onDeclineContactEvent: EventEmitter<UserContact>;
@@ -41,6 +42,7 @@ export class ChatHubService {
     this.registerEvents();
 
     this.onAddMessageEvent = new EventEmitter<Message>();
+    this.onDeleteMessageEvent = new EventEmitter<Message>();  
     this.onAddContactEvent = new EventEmitter<UserContact>();
     this.onConfirmContactEvent = new EventEmitter<UserContact>();
     this.onDeclineContactEvent = new EventEmitter<UserContact>();
@@ -85,6 +87,10 @@ export class ChatHubService {
     this.ChatProxy.on('onUserStateChange', function (user:UserNetState) {
       console.log(user);
        self.onUserStateChangeEvent.emit(user);
+    });
+
+    this.ChatProxy.on('onDeleteMessage', function (message: Message) {
+       self.onDeleteMessageEvent.emit(message);
     });
 
     this.ChatProxy.on('onContactAction', function (contact: UserContact) {

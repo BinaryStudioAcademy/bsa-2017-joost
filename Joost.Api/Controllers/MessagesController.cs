@@ -57,8 +57,8 @@ namespace Joost.Api.Controllers
             var currentUserId = GetCurrentUserId();
 			if (currentUserId == message.SenderId && !message.IsGroup)
 			{
-				await _messageService.AddUserMessage(message);
-				return Ok();
+				int id = await _messageService.AddUserMessage(message);
+				return Ok(id);
 			}
 			else return StatusCode(HttpStatusCode.MethodNotAllowed);
 		}
