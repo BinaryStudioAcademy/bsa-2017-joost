@@ -68,7 +68,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     private clearAllFields() {
         this.currentUser = null;
-        this.receiverId = null;
+        this.receiverId = 0;
         this.isGroup = null;
         this.skip = 0;
         this.messages = null;
