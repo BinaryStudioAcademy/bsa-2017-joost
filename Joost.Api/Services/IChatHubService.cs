@@ -8,6 +8,7 @@ namespace Joost.Api.Services
     {
         Task SendToUser(MessageDto message);
         Task DeleteUserMessage(MessageDto message);
+        Task DeleteGroupMessage(MessageDto message);
         Task SendToGroup(MessageDto message);
 		Task RunContactAction(int currentUserId, int contactUserId, ContactState state);
 		Task AddGroup(int currentUserId);

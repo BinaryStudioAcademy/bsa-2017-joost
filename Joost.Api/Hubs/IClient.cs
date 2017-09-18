@@ -9,7 +9,7 @@ namespace Joost.Api.Hubs
         Task onNewUserConnected(UserStateDto userState);
         Task onUserDisconnected(UserStateDto userState);
         Task onAddMessage(MessageDto message);
-        Task onDeleteMessage(MessageDto message);
+        Task onDeleteMessage(int messageId);
         Task onNewUserInContacts(UserContactDto user);
 		Task onNewGroupCreated(DialogDataDto group);
         Task onUserStateChange(UserStateDto userState);

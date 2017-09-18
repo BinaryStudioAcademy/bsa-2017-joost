@@ -50,9 +50,9 @@ export class MessageService extends BaseApiService {
     return this.http.sendRequest<number>(req);
   }
 
-  sendGroupMessage(message: Message) {  
+  sendGroupMessage(message: Message): Observable<number> {  
     let req = new HttpRequest("POST", this.generateUrl() + "/group-messages", message);    
-    return this.http.sendRequest(req);
+    return this.http.sendRequest<number>(req);
   }
 
   editUserMessage(message: Message): Observable<Message> {

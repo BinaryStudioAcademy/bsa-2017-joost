@@ -39,9 +39,14 @@ namespace Joost.Api.Services
                 var receiver = await userRepository.GetAsync(message.ReceiverId);
                 if (receiver != null && !string.IsNullOrEmpty(receiver.ConnectionId))
                 {
-                    await _hubContext.Clients.Client(receiver.ConnectionId).onDeleteMessage(message);
+                    await _hubContext.Clients.Client(receiver.ConnectionId).onDeleteMessage(message.Id);
                 }
             }
+        }
+
+        public async Task DeleteGroupMessage(MessageDto message)
+        {
+            await _hubContext.Clients.Group(message.ReceiverId.ToString()).onDeleteMessage(message.Id);
         }
 
         public async Task SendToGroup(MessageDto message)
