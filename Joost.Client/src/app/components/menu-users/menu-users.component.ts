@@ -148,6 +148,20 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 		}
 	  }
 
+    private checkSentInvitation() {
+        if (this.searchContact && this.searchContact.length > 0) {
+            return this.searchContact.filter(item => this.isSentContact(item.Id)).length > 0;
+        }
+        return false;
+    }
+
+    private checkContacts() {
+        if (this.searchContact && this.searchContact.length > 0) {
+            return this.searchContact.filter(item => this.isAcceptContact(item.Id)).length > 0;
+        }
+        return false;
+    }
+
 	search(){
 		this.searchContact = this.result;
 		if (this.searchString!=="") {

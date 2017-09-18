@@ -154,6 +154,20 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     });
   }
 
+  private checkDirectDialogs() {
+      if (this.filteredDialogs && this.filteredDialogs.length > 0) {
+          return this.filteredDialogs.filter(item => !item.IsGroup).length > 0;
+      }
+      return false;
+  }
+
+  private checkGroupDialogs() {
+      if (this.filteredDialogs && this.filteredDialogs.length > 0) {
+          return this.filteredDialogs.filter(item => item.IsGroup).length > 0;
+      }
+      return false;
+  }
+
   private UpdateFirstDlgMessages(dialogs: Dialog[]){
     for(let dialog of dialogs){
         dialog.LastMessage = this.GetFristMуssageLine(dialog.LastMessage);
