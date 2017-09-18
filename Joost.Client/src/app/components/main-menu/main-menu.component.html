@@ -6,7 +6,8 @@
           <div class="left-panel-header">
           <div  class="user-avatar">
           	<a [routerLink]="['user-editing']">
-                <img src="{{avatarImgSrc}}" class="main-avatar" id="avatar__image">
+                <!-- <img src="{{avatarImgSrc}}" class="main-avatar" id="avatar__image"> -->
+                <img src="{{curUser.Avatar | avatarPipe}}" class="main-avatar" id="avatar__image">
             </a>
 	            <div>
 		            <div class="wrap-state">

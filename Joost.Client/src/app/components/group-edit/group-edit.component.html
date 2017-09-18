@@ -1,92 +1,94 @@
-<div class="group-edit">
-<div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="group">
-    <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text">{{ editMode ? 'Edit group' : 'Create new group'}} </h2>
-    </div>
-    <div class="mdl-card__title jc-group-edit-title-container">
-        <div class="avatar-upload-container">
-            <label for="file-upload" class="custom-file-upload">
-            <div class="wrapper-avatar">
-                <div class="avatar-upload-overlay">
-                <i class="material-icons">create</i>
-                </div>
+<div class="jg-card group-edit">
+    <div class="jg-container mdl-shadow--2dp" *ngIf="group">
+        <div class="jg-scroll-container">
+            <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">{{ editMode ? 'Edit group' : 'Create new group'}} </h2>
             </div>
-            <img [src]="imgSrc" class="avatar-upload-image"></label>
-            <input id="file-upload" type="file" (change)="SendAvatar($event)"  name="file" accept="image/jpeg,image/png,image/gif"/>    
-        </div>
-        <div class="jc-ge-title-input-container">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
-                    <input class="mdl-textfield__input"
-                        type="text"
-                        id="groupName"
-                        #groupName
-                        required minlength="4"
-                        value="{{group.Name}}"
-                        (keyup)="onGroupNameKeyUp(groupName.value)">
-                    <label class="mdl-textfield__label" for="groupName">Group name</label>
-                    <div class="mdl-error" [hidden]="!isWrongGroupName">
-                        Group name cannot be empty or less than 4 symbols!
+            <div class="mdl-card__title jc-group-edit-title-container">
+                <div class="avatar-upload-container">
+                    <label for="file-upload" class="custom-file-upload">
+                    <div class="wrapper-avatar">
+                        <div class="avatar-upload-overlay">
+                        <i class="material-icons">create</i>
+                        </div>
                     </div>
+                    <img [src]="imgSrc" class="avatar-upload-image"></label>
+                    <input id="file-upload" type="file" (change)="SendAvatar($event)"  name="file" accept="image/jpeg,image/png,image/gif"/>    
                 </div>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
-                    <input class="mdl-textfield__input"
-                        type="text"
-                        id="groupDescription"
-                        #groupDescription
-                        value="{{group.Description}}"
-                        (keyup)="onGroupDescriptionKeyUp(groupDescription.value)">
-                    <label class="mdl-textfield__label" for="groupDescription">Description</label>
-                </div>   
-        </div>
-    </div>
-    <div class="mdl-card__supporting-text mdl-grid groups-list-container">
-        <div class="mdl-cell mdl-cell--6-col">
-            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
-                    <input class="mdl-textfield__input" type="text" id="geSearch" #geSearch
-                    (keyup)="onSearch(geSearch.value)">
-                    <label class="mdl-textfield__label" for="geSearch">Search...</label>
+                <div class="jc-ge-title-input-container">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
+                            <input class="mdl-textfield__input"
+                                type="text"
+                                id="groupName"
+                                #groupName
+                                required minlength="4"
+                                value="{{group.Name}}"
+                                (keyup)="onGroupNameKeyUp(groupName.value)">
+                            <label class="mdl-textfield__label" for="groupName">Group name</label>
+                            <div class="mdl-error" [hidden]="!isWrongGroupName">
+                                Group name cannot be empty or less than 4 symbols!
+                            </div>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
+                            <input class="mdl-textfield__input"
+                                type="text"
+                                id="groupDescription"
+                                #groupDescription
+                                value="{{group.Description}}"
+                                (keyup)="onGroupDescriptionKeyUp(groupDescription.value)">
+                            <label class="mdl-textfield__label" for="groupDescription">Description</label>
+                        </div>   
+                </div>
             </div>
-            <ul class="jc-list-user mdl-list mdl-shadow--2dp scrollable">
-                <li
-                    *ngFor="let member of filteredMembers"
-                    style="cursor: pointer"
-                    (click)="onAddMember(member.Id)"
-                    class="mdl-list__item">                                        
-                    <span class="mdl-list__item-primary-content">
-                            <img src="{{member.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
-                            {{member.Name}}
-                    </span>
-                </li>
-            </ul>
-        </div>
-        <div class="mdl-cell mdl-cell--6-col">
-            <ul class="jc-list-user jc-list-added mdl-list mdl-shadow--2dp scrollable">
-               <div *ngIf="!selectedMembers.length" class="members-notification">
-                     <h6>List of group members</h6>
-                     <p>(can`t be empty)</p>
-                 </div>   
-                    <li
-                    *ngFor="let member of selectedMembers"
-                    style="cursor: pointer"
-                    (click)="onDeleteMember(member.Id)"
-                    class="mdl-list__item">                                        
-                    <span class="mdl-list__item-primary-content">
-                            <img src="{{member.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
-                            {{member.Name}}
-                    </span>
-                </li>
-            </ul>
+            <div class="mdl-card__supporting-text mdl-grid groups-list-container">
+                <div class="mdl-cell mdl-cell--6-col">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
+                            <input class="mdl-textfield__input" type="text" id="geSearch" #geSearch
+                            (keyup)="onSearch(geSearch.value)">
+                            <label class="mdl-textfield__label" for="geSearch">Search...</label>
+                    </div>
+                    <ul class="jc-list-user mdl-list mdl-shadow--2dp scrollable">
+                        <li
+                            *ngFor="let member of filteredMembers"
+                            style="cursor: pointer"
+                            (click)="onAddMember(member.Id)"
+                            class="mdl-list__item">                                        
+                            <span class="mdl-list__item-primary-content">
+                                    <img src="{{member.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+                                    {{member.Name}}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col">
+                    <ul class="jc-list-user jc-list-added mdl-list mdl-shadow--2dp scrollable">
+                       <div *ngIf="!selectedMembers.length" class="members-notification">
+                             <h6>List of group members</h6>
+                             <p>(can`t be empty)</p>
+                         </div>   
+                            <li
+                            *ngFor="let member of selectedMembers"
+                            style="cursor: pointer"
+                            (click)="onDeleteMember(member.Id)"
+                            class="mdl-list__item">                                        
+                            <span class="mdl-list__item-primary-content">
+                                    <img src="{{member.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+                                    {{member.Name}}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mdl-card__actions mdl-card--border jg-buttons-bottom-cantainer">
+                <div id="btnSaveCreate">
+                    <button  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="onSubmit()">
+                        {{editMode ? 'Save' : 'Create'}}
+                    </button>
+                </div>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="onCancel()">
+                    Cancel
+                </button>    
+            </div>
         </div>
     </div>
-    <div class="mdl-card__actions mdl-card--border jg-buttons-bottom-cantainer">
-        <div id="btnSaveCreate">
-            <button  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="onSubmit()">
-                {{editMode ? 'Save' : 'Create'}}
-            </button>
-        </div>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="onCancel()">
-            Cancel
-        </button>    
-    </div>
-</div>
 </div>

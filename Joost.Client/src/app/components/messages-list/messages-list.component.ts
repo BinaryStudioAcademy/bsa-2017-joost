@@ -219,14 +219,24 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private getGroupMembers() {
         this.groupService.getGroupMembers(this.receiverId)
             .subscribe(m => {
-                this.groupMembers = m.map(m => m);             
+                this.groupMembers = m;
+                for (var i = this.groupMembers.length - 1; i >= 0; i--) {
+                  if (!this.groupMembers[i].IsOnline) {
+                    this.groupMembers[i].State = UserState.Offline;
+                  }
+                }             
             },
             async err => {
                 await this.groupService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.groupService.getGroupMembers(this.receiverId)
                         .subscribe(m => {
-                            this.groupMembers = m.map(m => m);           
+                            this.groupMembers = m;           
+                            for (var i = this.groupMembers.length - 1; i >= 0; i--) {
+                              if (!this.groupMembers[i].IsOnline) {
+                                this.groupMembers[i].State = UserState.Offline;
+                              }
+                            }  
                         });
                     }
                 });

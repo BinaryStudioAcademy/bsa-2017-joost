@@ -54,25 +54,13 @@
     width: 100%;
 }
 .jg-container{
-    margin: $card-padding;
-    width: calc(74% - 2 * #{$card-padding});
-    min-height: calc(100% - 2 * #{$card-padding});
-    max-height: 100%;
-    position: absolute;
-    margin-left: calc(26% + #{$card-padding});
     > div{
         &:nth-last-child(2){
             flex: 1;
         }
     }
 }
-@media (max-width: 1024px){
-    .jg-container{
-        margin: $card-padding 26%;
-        right: calc(-13% + #{$card-padding});
-        max-height: unset;
-    }
-}
+
 .mdl-textfield.is-invalid .mdl-textfield__input{
 	border-color: rgba(0,0,0,.12); 
 }

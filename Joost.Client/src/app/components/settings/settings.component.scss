@@ -22,21 +22,8 @@
 .jg-full-width-container{
     width: 100%;
 }
-
 .jg-container{
-    margin: $card-padding;
-    width: calc(74% - 2 * #{$card-padding});
-    //min-height: calc(100vh - 10px);
-   position: absolute;
-   margin-left: calc(26% + #{$card-padding});
-   top: 0;
-   left: 0;
-}
-@media (max-width: 1024px){
-    .jg-container{
-        margin: $card-padding 26%;
-        right: calc(-13% + #{$card-padding});
-    }
+    height:auto;
 }
 .jg-header-container{
     width:  100%;

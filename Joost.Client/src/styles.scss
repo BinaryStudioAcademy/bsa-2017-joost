@@ -169,3 +169,49 @@ html, body {
 .button__log.mdl-button--accent.mdl-button--accent.mdl-button--raised[disabled]{
 	background-color: rgba(0,0,0,.12);
 }
+*:focus{
+	outline:none;
+}
+.jg-container{
+	width:calc(100% - 2 * #{$card-padding});
+    position: absolute;
+    height: calc(100% - 2 * #{$card-padding});
+    margin: 15px;
+    overflow-y:auto;
+    background-color:#fff;
+}
+.jg-scroll-container{
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+}
+.jg-card{
+    width: calc(100% - #{$left-panel-width} );
+    position: absolute;
+    height: 100vh;
+    margin-left: $left-panel-width;
+}
+.left-panel.mdl-layout__drawer{
+    width: $left-panel-width;
+}
+.left-panel.mdl-layout__drawer{
+	transform: translateX(0);
+}
+@media only screen and (max-width : 1024px) {
+    .jg-card{
+	    width: calc(100%  - 60px);
+	    margin-left: 60px;
+	}
+    .left-panel.mdl-layout__drawer{
+    	transform: translateX(-100%);
+	    width: $left-panel-phone-width;
+    }
+    .main-layout .mdl-layout__drawer-button {
+	    color: rgba(0,0,0,.5);
+	    margin: 15px;
+	    height: 65px;
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	}
+}

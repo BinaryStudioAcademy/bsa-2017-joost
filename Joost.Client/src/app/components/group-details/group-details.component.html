@@ -1,37 +1,41 @@
-<div class="jg-container mdl-card mdl-shadow--2dp" *ngIf="group">
-  <div class="gd-container mdl-shadow--2dp">
-    <div class="mdl-card__title jc-group-edit-title-container">
-      <img src="{{group.Avatar | avatarPipe:true}}" class="jc-user-avatar-container"> 
-      <div class="group-info">
-        <div class="group-name">
-          {{group.Name}}
+<div class="jg-card">
+  <div class="jg-container mdl-shadow--2dp" *ngIf="group">
+    <div class="jg-scroll-container">
+      <div class="gd-container mdl-shadow--2dp">
+        <div class="mdl-card__title jc-group-edit-title-container">
+          <img src="{{group.Avatar | avatarPipe:true}}" class="jc-user-avatar-container"> 
+          <div class="group-info">
+            <div class="group-name">
+              {{group.Name}}
+            </div>
+            <div class="group-description">
+              {{group.Description}}
+            </div>   
+          </div>
         </div>
-        <div class="group-description">
-          {{group.Description}}
-        </div>   
+        <span class="back-button" (click)="goBack()">&times;</span>
+      </div>
+      <div class="mdl-card__supporting-text mdl-grid groups-list-container">
+          <div class="mdl-cell mdl-cell--8-col gd-list-container">
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
+                      <input class="mdl-textfield__input" type="text" id="geSearch" #geSearch
+                      (keyup)="onSearch(geSearch.value)">
+                      <label class="mdl-textfield__label" for="geSearch">Search...</label>
+              </div>
+              <ul class="jc-list-user mdl-list mdl-shadow--2dp scrollable">
+                  <li
+                      *ngFor="let member of filteredMembers"
+                      style="cursor: pointer"
+                      class="mdl-list__item"
+                      (click)="onGoToUser(member.Id)">                                        
+                      <span class="mdl-list__item-primary-content">
+                        <img src="{{member.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
+                        {{member.FirstName}} {{member.LastName}}
+                      </span>
+                  </li>
+              </ul>
+          </div>
       </div>
     </div>
-    <span class="back-button" (click)="goBack()">&times;</span>
-  </div>
-  <div class="mdl-card__supporting-text mdl-grid groups-list-container">
-      <div class="mdl-cell mdl-cell--8-col gd-list-container">
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label jg-full-width-container">
-                  <input class="mdl-textfield__input" type="text" id="geSearch" #geSearch
-                  (keyup)="onSearch(geSearch.value)">
-                  <label class="mdl-textfield__label" for="geSearch">Search...</label>
-          </div>
-          <ul class="jc-list-user mdl-list mdl-shadow--2dp scrollable">
-              <li
-                  *ngFor="let member of filteredMembers"
-                  style="cursor: pointer"
-                  class="mdl-list__item"
-                  (click)="onGoToUser(member.Id)">                                        
-                  <span class="mdl-list__item-primary-content">
-                    <img src="{{member.Avatar | avatarPipe}}" class="material-icons mdl-list__item-avatar">
-                    {{member.FirstName}} {{member.LastName}}
-                  </span>
-              </li>
-          </ul>
-      </div>
   </div>
 </div>

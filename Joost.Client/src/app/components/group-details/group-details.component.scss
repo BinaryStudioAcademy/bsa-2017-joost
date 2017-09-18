@@ -5,10 +5,21 @@
     padding-top: 0;
     padding-bottom: 0;
     flex-direction: row;
-    width: 96%;
-    position: absolute;
+    width: 100%;
+    position:relative;
 }
-
+.back-button{
+    position:absolute;
+    right:0px;
+    top:0px; 
+    font-weight: bold; 
+    font-size: 40px; 
+    cursor: pointer;
+    width: 25px;
+    height: 20px;
+    padding: 17px 14px;
+    
+}
 .jc-ge-title-input-container{
     flex: 1;
     padding: 1em;
@@ -67,38 +78,6 @@
 
 .jg-full-width-container{
     width: 100%;
-}
-$margin-value: 15px;
-.jg-container{
-    margin: $margin-value;
-    width: calc(74% - 2 * #{$margin-value});
-    min-height: calc(100% - 2 * #{$margin-value});
-    max-height: 100%;
-    position: absolute;
-    margin-left: calc(26% + #{$margin-value});
-    > div{
-        &:nth-last-child(2){
-            flex: 0.5;
-        }
-    }
-}
-@media (max-width: 1024px){
-    .jg-container{
-        margin: $margin-value 26%;
-        right: calc(-13% + #{$margin-value});
-        max-height: unset;
-    }
-}
-
-.back-button{
-    float: right!important; 
-    font-weight: bold; 
-    font-size: 40px; 
-    cursor: pointer;
-    width: 25px;
-    height: 20px;
-    padding: 17px 14px;
-    
 }
 
 .mdl-textfield.is-invalid .mdl-textfield__input{

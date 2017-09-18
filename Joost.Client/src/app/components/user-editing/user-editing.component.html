@@ -1,6 +1,7 @@
 <div *ngIf="isLoadFinished">
-  <div class="jg-card mdl-grid">
-  <div class="jg-container mdl-card mdl-shadow--2dp">
+  <div class="jg-card">
+    <div class="jg-container mdl-shadow--2dp">
+      <div class="jg-scroll-container">
         <div class="jg-header-container mdl-grid mdl-shadow--2dp">
               <div class="avatar-upload-container">
                 <label for="file-upload" class="custom-file-upload">
@@ -22,115 +23,116 @@
               </div>
         </div>
 
-      <div class="jg-content-container mdl-grid">
-         <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-           <h5>First name:</h5>
-           <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.FirstName" id="userFirstName" />
-           <label class="mdl-textfield__label" for="userFirstName"></label>
-         </div>
-         <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-             <h5>Last name:</h5>
-             <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.LastName" id="userLastName" />
-             <label class="mdl-textfield__label" for="userLastName"></label>
-         </div>
-         <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-           <h5>City:</h5>
-           <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.City" id="userCity" />
-           <label class="mdl-textfield__label" for="userCity"></label>
-         </div>      
-         <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-             <h5>Country:</h5>
-             <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.Country" id="userCountry" />
-             <label class="mdl-textfield__label" for="userCountry"></label>
-         </div>          
-          <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-           <h5>Birthday:</h5>
-           <div class="date-picker-style">
-           <my-date-picker [(ngModel)]="datePickerValue" [options]="datePickerOptions" ></my-date-picker> 
+        <div class="jg-content-container mdl-grid">
+           <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+             <h5>First name:</h5>
+             <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.FirstName" id="userFirstName" />
+             <label class="mdl-textfield__label" for="userFirstName"></label>
            </div>
-         </div>          
-         <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-           <h5>Gender:</h5>
-           <div class="jg-radiobutton-item">
-             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGenderMale">
-               <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="0" [checked]="user.Gender==0">
-               <span class="mdl-radio__label">Male</span>
-             </label>
+           <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+               <h5>Last name:</h5>
+               <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.LastName" id="userLastName" />
+               <label class="mdl-textfield__label" for="userLastName"></label>
            </div>
-           <div class="jg-radiobutton-item">
-             <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGendeFemale">
-               <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="1" [checked]="user.Gender==1">
-               <span class="mdl-radio__label">Female</span>
-             </label>
-           </div>
-         </div>      
-      </div>
-
-      <div class ="jg-buttons-bottom-cantainer mdl-card__actions">
-        <button [hidden]="passwordDiv" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="passwordDiv = !passwordDiv"> Change password</button>
-      </div>
-
-      <div [hidden]="!passwordDiv" class ="mdl-card__actions mdl-card--border">
-          <div class="jg-content-container mdl-grid">  
-            <div class="mdl-textfield mdl-js-textfield password-notification">
-              <h5>Please remember!</h5>
-              <h6>Password lenght should be longer then five  characters and contain at least one letter and one number.</h6>
-            </div>                       
+           <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+             <h5>City:</h5>
+             <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.City" id="userCity" />
+             <label class="mdl-textfield__label" for="userCity"></label>
+           </div>      
+           <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+               <h5>Country:</h5>
+               <input class="mdl-textfield__input" type="text"  [(ngModel)]="user.Country" id="userCountry" />
+               <label class="mdl-textfield__label" for="userCountry"></label>
+           </div>          
             <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-              <h5>Old password:</h5>
-              <input class="mdl-textfield__input" type="password"  [(ngModel)]="passwordOld" id="userOldPassword" />
-              <label class="mdl-textfield__label" for="userOldPassword"></label>
-              <div class="mdl-error" [hidden]="!isPasswordFieldEmpty || passwordOld">
-                Did you missed this field?
-              </div>              
-              <div class="mdl-error" [hidden]="!isWrongPreviousPassword">
-                Wrong previous password!
-              </div>
-            </div>
-            <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-            </div>        
-            <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-              <h5>New password:</h5>
-              <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordFirst" id="userNewPassword" name="userNewPassword"/>
-              <label class="mdl-textfield__label" for="userNewPassword"></label>
-                <div class="mdl-error" [hidden]="isPasswordFirstValid">
-                  Input is not valid!
-                </div>   
-              <div class="mdl-error" [hidden]="!isPasswordFieldEmpty || passwordFirst">
-                Did you missed this field?
-              </div> 
-              <div class="mdl-error" [hidden]="!isNewPasswordsNotMatch">
-                New passwords do not match!
-              </div>
-            </div>
-            <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-            </div>                
-            <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-              <h5>Confirm new password:</h5>
-              <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordSecond" id="userNewPassword" />
-              <label class="mdl-textfield__label" for="userNewPassword"></label>
-              <div class="mdl-error" [hidden]="isPasswordFirstValid">
-              Input is not valid!
-            </div>   
-              <div class="mdl-error" [hidden]="!isPasswordFieldEmpty || passwordSecond">
-                Did you missed this field?
-              </div> 
-              <div class="mdl-error" [hidden]="!isNewPasswordsNotMatch">
-                New passwords do not match!
-              </div>
-            </div>
-            <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
-            </div>
-         </div>                        
-          <div class ="jg-buttons-bottom-cantainer">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="ChangePassword()">Change password</button>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="CancelPassword()">Cancel</button>
-          </div>
+             <h5>Birthday:</h5>
+             <div class="date-picker-style">
+             <my-date-picker [(ngModel)]="datePickerValue" [options]="datePickerOptions" ></my-date-picker> 
+             </div>
+           </div>          
+           <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+             <h5>Gender:</h5>
+             <div class="jg-radiobutton-item">
+               <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGenderMale">
+                 <input type="radio" id="userGenderMale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="0" [checked]="user.Gender==0">
+                 <span class="mdl-radio__label">Male</span>
+               </label>
+             </div>
+             <div class="jg-radiobutton-item">
+               <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="userGendeFemale">
+                 <input type="radio" id="userGendeFemale" class="mdl-radio__button" [(ngModel)]="user.Gender" name="Gender" [value]="1" [checked]="user.Gender==1">
+                 <span class="mdl-radio__label">Female</span>
+               </label>
+             </div>
+           </div>      
         </div>
 
-      <div class ="jg-buttons-bottom-cantainer mdl-card__actions mdl-card--border">
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="SaveUser()"> Save</button>
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="Cancel()">Cancel</button>  
+        <div class ="jg-buttons-bottom-cantainer mdl-card__actions">
+          <button [hidden]="passwordDiv" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="passwordDiv = !passwordDiv"> Change password</button>
+        </div>
+
+        <div [hidden]="!passwordDiv" class ="mdl-card__actions mdl-card--border">
+            <div class="jg-content-container mdl-grid">  
+              <div class="mdl-textfield mdl-js-textfield password-notification">
+                <h5>Please remember!</h5>
+                <h6>Password lenght should be longer then five  characters and contain at least one letter and one number.</h6>
+              </div>                       
+              <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+                <h5>Old password:</h5>
+                <input class="mdl-textfield__input" type="password"  [(ngModel)]="passwordOld" id="userOldPassword" />
+                <label class="mdl-textfield__label" for="userOldPassword"></label>
+                <div class="mdl-error" [hidden]="!isPasswordFieldEmpty || passwordOld">
+                  Did you missed this field?
+                </div>              
+                <div class="mdl-error" [hidden]="!isWrongPreviousPassword">
+                  Wrong previous password!
+                </div>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+              </div>        
+              <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+                <h5>New password:</h5>
+                <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordFirst" id="userNewPassword" name="userNewPassword"/>
+                <label class="mdl-textfield__label" for="userNewPassword"></label>
+                  <div class="mdl-error" [hidden]="isPasswordFirstValid">
+                    Input is not valid!
+                  </div>   
+                <div class="mdl-error" [hidden]="!isPasswordFieldEmpty || passwordFirst">
+                  Did you missed this field?
+                </div> 
+                <div class="mdl-error" [hidden]="!isNewPasswordsNotMatch">
+                  New passwords do not match!
+                </div>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+              </div>                
+              <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+                <h5>Confirm new password:</h5>
+                <input class="mdl-textfield__input" type="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" [(ngModel)]="passwordSecond" id="userNewPassword" />
+                <label class="mdl-textfield__label" for="userNewPassword"></label>
+                <div class="mdl-error" [hidden]="isPasswordFirstValid">
+                Input is not valid!
+              </div>   
+                <div class="mdl-error" [hidden]="!isPasswordFieldEmpty || passwordSecond">
+                  Did you missed this field?
+                </div> 
+                <div class="mdl-error" [hidden]="!isNewPasswordsNotMatch">
+                  New passwords do not match!
+                </div>
+              </div>
+              <div class="mdl-textfield mdl-js-textfield jg-half-width-container">
+              </div>
+           </div>                        
+            <div class ="jg-buttons-bottom-cantainer">
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="ChangePassword()">Change password</button>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="CancelPassword()">Cancel</button>
+            </div>
+          </div>
+
+        <div class ="jg-buttons-bottom-cantainer mdl-card__actions mdl-card--border">
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="SaveUser()"> Save</button>
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect jg-button-bottom" (click)="Cancel()">Cancel</button>  
+        </div>
       </div>
     </div>
   </div>

@@ -30,23 +30,6 @@
     color: #ef5350;
 }
 
-.jg-container{
-    max-width: calc(100% - 2 * #{$card-padding});
-    width: 100%;
-    position: absolute;
-    min-height: calc(100% - 2 * #{$card-padding});
-    margin: 0;
-}
-
-.jg-card{
-    padding: $card-padding;
-    max-width: calc(74% - 2 * #{$card-padding});
-    width: 100%;
-    position: absolute;
-    min-height: calc(100% - 2 * #{$card-padding});
-    margin-left: 26%;
-}
-
 .jg-buttons-bottom-container {
     margin-top: auto;
     display: flex;
@@ -60,22 +43,4 @@
     height: 100%;
     width: 100%;
     margin-left: 400px;
-}
-
-$card-padding: 15px;
-
-.jg-card {
-    padding: $card-padding;
-    max-width: calc(74% - 2 * #{$card-padding});
-    width: 100%;
-    position: absolute;
-    min-height: calc(100% - 2 * #{$card-padding});
-    margin-left: 26%;
-}
-
-@media (max-width: 1024px) {
-    .jg-card {
-        margin: 0 26%;
-        right: -13%;
-    }
 }
