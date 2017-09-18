@@ -22,14 +22,15 @@ namespace Joost.Api.Services
 
 		public async Task SendToUser(MessageDto message)
 		{
-			using (var userRepository = _unitOfWork.Repository<User>())
-			{
-				var receiver = await userRepository.GetAsync(message.ReceiverId);
+            //using (var userRepository = _unitOfWork.Repository<User>())
+            //{
+            var userRepository = _unitOfWork.Repository<User>();
+                var receiver = await userRepository.GetAsync(message.ReceiverId);
 				if (receiver != null && !string.IsNullOrEmpty(receiver.ConnectionId))
 				{
 					await _hubContext.Clients.Client(receiver.ConnectionId).onAddMessage(message);
 				}
-			}
+			//}
 		}
 
 		public async Task SendToGroup(MessageDto message)

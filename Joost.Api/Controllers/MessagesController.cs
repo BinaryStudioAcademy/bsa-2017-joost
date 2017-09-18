@@ -5,6 +5,7 @@ using System.Web.Http;
 using Joost.Api.Models;
 using System.Net;
 using Joost.Api.Filters;
+using Joost.DbAccess.DAL;
 
 namespace Joost.Api.Controllers
 {
@@ -57,11 +58,11 @@ namespace Joost.Api.Controllers
             var currentUserId = GetCurrentUserId();
 			if (currentUserId == message.SenderId && !message.IsGroup)
 			{
-				if (message.ReceiverId != 1)
-					await _messageService.AddUserMessage(message);
-				else
-				{
-					var response = await _messageService.SendMessageToBot(message);
+                await _messageService.AddUserMessage(message);    
+                if (message.ReceiverId == _messageService.ChatBotIdInDb)
+                {
+                    var responseMessage = await _messageService.SendMessageToBot(message);
+                    await _messageService.AddUserMessage(responseMessage);
 				}
 				return Ok();
 			}
