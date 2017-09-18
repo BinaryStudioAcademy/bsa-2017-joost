@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: flex-start;
     z-index: 1;
+    position:relative;
 }
 
 .title-text {
@@ -23,7 +24,9 @@ div .mdl-list__item:hover{
         padding: 0;
     }
 }
-
+.jg-scroll-container{
+  height:100% !important;
+}
 .jc-group-edit-title-container {
     display: flex;
     flex-direction: column;
@@ -67,9 +70,6 @@ div .mdl-list__item:hover{
 }
 
 .jg-container{
-    width: calc(74% - 2 * #{$card-padding});
-    height: calc(100vh - 2 * #{$card-padding});
-    margin: $card-padding $card-padding $card-padding calc(26% + #{$card-padding});
     > div{
         &:nth-last-child(2){
             flex: 1;

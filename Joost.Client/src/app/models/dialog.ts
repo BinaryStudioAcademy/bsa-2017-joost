@@ -6,5 +6,6 @@ export class Dialog {
   public DateLastMessage: Date;
   public Avatar: string;
   public IsGroup: boolean;
+  public IsOnline: boolean;
   public UserState: UserState;
 }

@@ -1,31 +1,33 @@
-﻿<div class="work-space-container">
-    <div class="jg-container mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__title">
-            <h2 class="mdl-card__title-text">Settings</h2>
-        </div>     
-        <div class="user-editing-group mdl-card__actions mdl-card--border">
-            <div class="mdl-grid">
-                <div class="mdl-cell mdl-cell--12-col">
-                    <div class="settings-item">
-                        <label #notifyFromUsers class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-users">
-                            <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input" name="notificationFromUsers" [(ngModel)]="notificationFromUsers" (ngModelChange)="onNotificationsFromUsers()">
-                            <span class="mdl-switch__label">Notifications from users</span>
-                            <div class="setting-subscription-text">
-                                <p>Here you can toggle notification settings from users</p>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="settings-item">
-                        <label #notifyFromGroups class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-groups"> 
-                            <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input" [(ngModel)]="notificationFromGroups" (ngModelChange)="onNotificationsFromGroups()">
-                            <span class="mdl-switch__label">Notifications from groups</span>
-                            <div class="setting-subscription-text">
-                                <p>Here you can toggle notification settings from groups</p>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="logout-settings-item">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="logout()">Logout</button>
+﻿<div class="jg-card">
+    <div class="jg-container mdl-shadow--2dp">
+        <div class="jg-scroll-container">
+            <div class="mdl-card__title">
+                <h2 class="mdl-card__title-text">Settings</h2>
+            </div>     
+            <div class="user-editing-group mdl-card__actions mdl-card--border">
+                <div class="mdl-grid">
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <div class="settings-item">
+                            <label #notifyFromUsers class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-users">
+                                <input type="checkbox" id="switch-notifications-users" class="mdl-switch__input" name="notificationFromUsers" [(ngModel)]="notificationFromUsers" (ngModelChange)="onNotificationsFromUsers()">
+                                <span class="mdl-switch__label">Notifications from users</span>
+                                <div class="setting-subscription-text">
+                                    <p>Here you can toggle notification settings from users</p>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="settings-item">
+                            <label #notifyFromGroups class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-notifications-groups"> 
+                                <input type="checkbox" id="switch-notifications-groups" class="mdl-switch__input" [(ngModel)]="notificationFromGroups" (ngModelChange)="onNotificationsFromGroups()">
+                                <span class="mdl-switch__label">Notifications from groups</span>
+                                <div class="setting-subscription-text">
+                                    <p>Here you can toggle notification settings from groups</p>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="logout-settings-item">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" (click)="logout()">Logout</button>
+                        </div>
                     </div>
                 </div>
             </div>

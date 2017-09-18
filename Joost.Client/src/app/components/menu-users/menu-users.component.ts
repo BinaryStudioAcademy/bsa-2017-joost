@@ -43,13 +43,23 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 		this.contactService.getAllContacts().subscribe(
 			data=> {
 				this.result = data;
-				this.searchContact = this.result;
+			    for (var i = this.result.length - 1; i >= 0; i--) {
+			      if (!this.result[i].IsOnline) {
+			        this.result[i].UserState = UserState.Offline;
+			      }
+			    }
+			    this.searchContact = this.result;
 			},
 			async err => {
 				await this.contactService.handleTokenErrorIfExist(err).then(ok => {
 					if (ok) { 
 					    this.contactService.getAllContacts().subscribe(data => {
 						    this.result = data;
+						    for (var i = this.result.length - 1; i >= 0; i--) {
+						      if (!this.result[i].IsOnline) {
+						        this.result[i].UserState = UserState.Offline;
+						      }
+						    }
 						    this.searchContact = this.result;
 					    });
 				    }

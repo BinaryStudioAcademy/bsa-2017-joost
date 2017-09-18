@@ -12,7 +12,7 @@
           <i class="arrow"></i>
           <h2>New Contacts</h2>
           <ul class="demo-list-three mdl-list">
-              <div *ngFor="let user of contacts">
+              <div *ngFor="let user of contacts"  class="messages">
                   <li class="mdl-list__item mdl-list__item--three-line" (click)="goToConfirm(user.Id)">
                       <span class="mdl-list__item-primary-content list__item">
                           <div class="user-state-wrap">

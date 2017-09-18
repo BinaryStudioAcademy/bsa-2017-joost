@@ -192,7 +192,6 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
   }
   
   SendAvatar(e) {
-    console.log(e);
     let preview = document.getElementById('preview__image') as any;
     preview.src = URL.createObjectURL(e.target.files[0]);
     this.avatarImage = e.target as HTMLInputElement;
