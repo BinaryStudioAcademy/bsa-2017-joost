@@ -156,6 +156,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     });
     this.contactService.getAllContacts().subscribe(data => {
         this.contacts = data.filter(t=>t.State == ContactState.New);
+        console.log(this.contacts);
         for (var i = this.contacts.length - 1; i >= 0; i--) {
           if (!this.contacts[i].IsOnline) {
             this.contacts[i].UserState = UserState.Offline;
@@ -202,7 +203,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     let filteredDialogs = this.dialogs.filter(d => (d.Id == message.SenderId || d.Id == message.ReceiverId) && !d.IsGroup);
     if (filteredDialogs.length > 0) {
         filteredDialogs[0].LastMessage = this.GetFristMуssageLine(message.Text);
-        filteredDialogs[0].DateLastMessage = message.CreatedAt;
+        filteredDialogs[0].DateLastMessage = new Date(new Date(message.CreatedAt).toLocaleString());
         this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
     }
   }
@@ -211,7 +212,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     let filteredDialogs = this.dialogs.filter(d => d.Id == message.ReceiverId && d.IsGroup);
     if (filteredDialogs.length > 0) {
         filteredDialogs[0].LastMessage = this.GetFristMуssageLine(message.Text);
-        filteredDialogs[0].DateLastMessage = message.CreatedAt;
+        filteredDialogs[0].DateLastMessage = new Date(message.CreatedAt);
         this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
     }
   }

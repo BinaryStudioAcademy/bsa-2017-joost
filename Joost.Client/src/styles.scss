@@ -12,7 +12,9 @@ html, body {
   background-color: #f5f5f5;
   overflow:hidden;
 }
-
+.emojionearea .emojionearea-button{
+	z-index: 3 !important;
+}
 .work-space-container{
     padding:5px;
 }
@@ -87,39 +89,42 @@ html, body {
 	}
 }
 .mdl-list__item:hover .user-state-wrap .user-state i{
-	border-color:$color-primary-dark;
+	border-color:$color-primary-dark !important;
+}
+.mdl-list__item.selected .user-state-wrap .user-state i{
+	border-color:#0069a2;
 }
 .user-state-wrap{
-		position: relative;
-		margin-right: 16px;
-		.user-state{
-			position:absolute;
-			right: -1px;
-			bottom: -1px;
-			i {
-				border: 2px solid #005A8A;
-			    width: 14px;
-			    height: 14px;
-			    border-radius: 50%;
-			    box-sizing: border-box;
-			}
-			.online-state {
-				background-color: $color-online-indicator;
-			}
+	position: relative;
+	margin-right: 16px;
+	.user-state{
+		position:absolute;
+		right: -1px;
+		bottom: -1px;
+		i {
+			border: 2px solid #005A8A;
+		    width: 14px;
+		    height: 14px;
+		    border-radius: 50%;
+		    box-sizing: border-box;
+		}
+		.online-state {
+			background-color: $color-online-indicator;
+		}
 
-			.busy-state{
-				background-color: $color-busy-indicator;
-			}
+		.busy-state{
+			background-color: $color-busy-indicator;
+		}
 
-			.inacceptable-state{
-				background-color: $color-inacceptable-indicator;
-			}
+		.inacceptable-state{
+			background-color: $color-inacceptable-indicator;
+		}
 
-			.offline-state{
-			    background-color: $color-offline-indicator;
-			}
+		.offline-state{
+		    background-color: $color-offline-indicator;
 		}
 	}
+}
 .text-input-container{
     padding:0 16px;
 }

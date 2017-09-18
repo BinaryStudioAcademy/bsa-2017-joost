@@ -157,10 +157,12 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
     private onUserStateChange(user:UserNetState){
         if (this.groupMembers) {
-           let userFromDialog = this.groupMembers.filter(t=>t.Id !=user.Id)[0];
+           let userFromDialog = this.groupMembers.filter(t=>t.Id ==user.Id)[0];
            if (userFromDialog) {
              userFromDialog.State = user.IsOnline ? user.State : UserState.Offline;
            }
+           let userF = this.groupMembers.filter(t=>t.Id !=user.Id)[0];
+           console.log("after-"+ userF);
         }
       }
     private toggleListMember(event){
@@ -200,7 +202,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         console.log("getting group messages");
         this.messageService.getGroupMessages(this.receiverId, this.skip, this.take)
             .subscribe(m => {
-                this.messages = m.map(m => m);
+                this.messages = m;
+                for (var i = this.messages.length - 1; i >= 0; i--) {
+                    this.messages[i].CreatedAt = this.convertUTCDateToLocalDate(this.messages[i].CreatedAt);
+                    this.messages[i].EditedAt = this.convertUTCDateToLocalDate(this.messages[i].EditedAt);
+                }
                 this.toBottom = true;                             
             },
             async err => {
@@ -208,7 +214,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                     if (ok) {
                         this.messageService.getGroupMessages(this.receiverId, this.skip, this.take)
                         .subscribe(m => {
-                            this.messages = m.map(m => m);  
+                            this.messages = m;  
+                            for (var i = this.messages.length - 1; i >= 0; i--) {
+                                this.messages[i].CreatedAt = this.convertUTCDateToLocalDate(this.messages[i].CreatedAt);
+                                this.messages[i].EditedAt = this.convertUTCDateToLocalDate(this.messages[i].EditedAt);
+                            }
                             this.toBottom = true;                             
                         });
                     }
@@ -224,7 +234,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                   if (!this.groupMembers[i].IsOnline) {
                     this.groupMembers[i].State = UserState.Offline;
                   }
-                }             
+                }          
             },
             async err => {
                 await this.groupService.handleTokenErrorIfExist(err).then(ok => { 
@@ -271,23 +281,38 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private getUserMessages() {
         this.messageService.getUserMessages(this.receiverId, this.skip, this.take)
             .subscribe(m => {
-                this.messages = m.map(m => m);
-                this.toBottom = true;  
-                console.log(this.messages);           
+                this.messages = m;
+                for (var i = this.messages.length - 1; i >= 0; i--) {
+                    this.messages[i].CreatedAt = this.convertUTCDateToLocalDate(this.messages[i].CreatedAt);
+                    this.messages[i].EditedAt = this.convertUTCDateToLocalDate(this.messages[i].EditedAt);
+                }
+                this.toBottom = true;           
             },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.getUserMessages(this.receiverId, this.skip, this.take)
                         .subscribe(m => {
-                            this.messages = m.map(m => m);   
+                            this.messages = m;   
+                            for (var i = this.messages.length - 1; i >= 0; i--) {
+                                this.messages[i].CreatedAt = this.convertUTCDateToLocalDate(this.messages[i].CreatedAt);
+                                this.messages[i].EditedAt = this.convertUTCDateToLocalDate(this.messages[i].EditedAt);
+                            }
                             this.toBottom = true;                             
                         })
                     }
                 });
             });
     }
+    private convertUTCDateToLocalDate(time:Date) {
+        let date = new Date(time);
+        var newDate = new Date(date.getTime() + date.getTimezoneOffset()*60*1000);
+        var offset = date.getTimezoneOffset() / 60;
+        var hours = date.getHours();
+        newDate.setHours(hours - offset);
 
+        return newDate;   
+    }
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }

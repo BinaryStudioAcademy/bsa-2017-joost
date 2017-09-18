@@ -50,6 +50,8 @@ namespace Joost.Api.Controllers
         [Route("user-messages")]
         public async Task<IHttpActionResult> AddUserMessage([FromBody]MessageDto message)
         {
+            message.CreatedAt = message.CreatedAt.ToUniversalTime();
+            message.EditedAt = message.EditedAt.ToUniversalTime();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

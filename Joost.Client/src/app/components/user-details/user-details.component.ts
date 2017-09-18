@@ -7,7 +7,7 @@ import 'rxjs/add/operator/switchMap';
 import { UserService } from "../../services/user.service";
 import { ContactService } from "../../services/contact.service";
 import { UserDetail } from "../../models/user-detail";
-import { Contact } from "../../models/contact";
+import { Contact, ContactState } from "../../models/contact";
 
 import { MDL } from '../mdl-base.component';
 declare var componentHandler: any;
@@ -87,13 +87,13 @@ export class UserDetailsComponent extends MDL implements OnInit {
   
 	checkInContact():void {
 		this.contactService.getContacts().subscribe( list => {
-      this.isFriend = list.map(t=>t.ContactId).indexOf(this.user.Id) >= 0; 
+      this.isFriend = list.filter(t=>t.State==ContactState.Accept).map(t=>t.ContactId).indexOf(this.user.Id) >= 0; 
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => {
         if (ok) { 
           this.contactService.getContacts().subscribe(list => {
-            this.isFriend = list.map(t=>t.ContactId).indexOf(this.user.Id) >= 0;
+            this.isFriend = list.filter(t=>t.State==ContactState.Accept).map(t=>t.ContactId).indexOf(this.user.Id) >= 0;
           });
         }
       });

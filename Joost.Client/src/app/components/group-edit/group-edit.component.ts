@@ -10,6 +10,8 @@ import { UserContact } from "../../models/user-contact";
 import { MDL } from "../mdl-base.component";
 import { FileService } from "../../services/file.service";
 import { AvatarService } from "../../services/avatar.service";
+import {ContactState } from "../../models/contact";
+
 
 @Component({
     selector: 'app-group-edit',
@@ -54,15 +56,15 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
         // get current user contact list
         this.contactService.getAllContacts()
         .subscribe(response => {
-            this.unselectedMembers = response;
-            this.filteredMembers = response;
+            this.unselectedMembers = response.filter(t=>t.State==ContactState.Accept || t.State==ContactState.Sent);
+            this.filteredMembers = this.unselectedMembers;
         },
             async err => {
                 await this.contactService.handleTokenErrorIfExist(err).then(ok => {
                     if (ok) {
                         this.contactService.getAllContacts().subscribe(response => {
-                            this.unselectedMembers = response;
-                            this.filteredMembers = response;
+                            this.unselectedMembers = response.filter(t=>t.State==ContactState.Accept || t.State==ContactState.Sent);
+                            this.filteredMembers = this.unselectedMembers;
                         })
                     }
                 });

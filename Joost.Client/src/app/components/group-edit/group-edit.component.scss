@@ -25,7 +25,8 @@
 .jc-list-user{
     max-height: 300px;
     overflow :auto;
-    flex: 0.9;
+    flex: 1;
+    min-height: 140px;
     li:hover{
         background-color: #F5F5F5;
     }

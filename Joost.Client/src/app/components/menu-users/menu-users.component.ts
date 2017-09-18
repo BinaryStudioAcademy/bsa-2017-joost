@@ -48,6 +48,7 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 			        this.result[i].UserState = UserState.Offline;
 			      }
 			    }
+			    console.log(this.result);
 			    this.searchContact = this.result;
 			},
 			async err => {
