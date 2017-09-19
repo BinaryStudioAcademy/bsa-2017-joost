@@ -78,7 +78,7 @@ namespace Joost.Api.Services
             }
         }
 
-		public async Task AddUserMessage(MessageDto message)
+		public async Task<int> AddUserMessage(MessageDto message)
         {
             if (message != null)
             {
@@ -107,16 +107,19 @@ namespace Joost.Api.Services
                                 AttachedFile = message.AttachedFile
                             };
                             _unitOfWork.Repository<Message>().Add(newMessage);
-							message.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
-                            await _chatHubService.SendToUser(message);
                             await _unitOfWork.SaveAsync();
+							message.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
+                            message.Id = newMessage.Id;
+                            await _chatHubService.SendToUser(message);
+                            return message.Id;
                         }
                     }
                 //}
             }
+            return -1;
         }
 
-        public async Task AddGroupMessage(MessageDto groupMessage)
+        public async Task<int> AddGroupMessage(MessageDto groupMessage)
         {
             if (groupMessage != null)
             {
@@ -144,12 +147,16 @@ namespace Joost.Api.Services
 							};
 							_unitOfWork.Repository<GroupMessage>().Add(newMessage);
 							groupMessage.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
-							await _chatHubService.SendToGroup(groupMessage);
+							
 							await _unitOfWork.SaveAsync();
-						}
+                            await _chatHubService.SendToGroup(MessageDto.FromGroupMessageModel(newMessage));
+                            int groupMessageId = newMessage.Id;
+                            return groupMessageId;
+                        }
 					}
 				}
 			}
+            return -1;
         }
 
         public async Task<bool> EditUserMessage(MessageDto message)
@@ -201,10 +208,12 @@ namespace Joost.Api.Services
                 var message = await messageRepository
 					.Query()
 					.Include(m => m.Sender)
-					.FirstOrDefaultAsync(m => m.Id == messageId);
+					.Include(m => m.Receiver)
+                    .FirstOrDefaultAsync(m => m.Id == messageId);
 				if (message != null && message.Sender.Id == senderId)
 				{
-					messageRepository.Delete(message);
+                    await _chatHubService.DeleteUserMessage(MessageDto.FromMessageModel(message));
+                    messageRepository.Delete(message);
 					await _unitOfWork.SaveAsync();
 					return true;
 				}
@@ -214,14 +223,16 @@ namespace Joost.Api.Services
 
         public async Task<bool> DeleteGroupMessage(int senderId, int groupMessageId)
         {
-            using (var groupMessageRepository = _unitOfWork.Repository<Message>())
+            using (var groupMessageRepository = _unitOfWork.Repository<GroupMessage>())
             {
                 var groupMessage = await groupMessageRepository
 					.Query()
 					.Include(m => m.Sender)
-					.FirstOrDefaultAsync(m => m.Id == groupMessageId);
+                    .Include(m => m.Receiver)
+                    .FirstOrDefaultAsync(m => m.Id == groupMessageId);
 				if (groupMessage != null && groupMessage.Sender.Id == senderId)
 				{
+                    await _chatHubService.DeleteGroupMessage(MessageDto.FromGroupMessageModel(groupMessage));
 					groupMessageRepository.Delete(groupMessage);
 					await _unitOfWork.SaveAsync();
 					return true;

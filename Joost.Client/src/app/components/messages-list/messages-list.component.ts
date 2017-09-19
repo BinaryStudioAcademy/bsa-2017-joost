@@ -15,6 +15,8 @@ import { UserDetail } from "../../models/user-detail";
 import { FileService } from '../../services/file.service';
 import { EventEmitterService } from "../../services/event-emitter.service";
 import { UserStatePipe } from "../../pipes/user-state.pipe";
+import { UserNetState } from "../../models/user-netstate";
+import { UserState } from "../../models/user-detail";
 
 declare var jquery: any;
 declare var $: any;
@@ -27,6 +29,7 @@ declare var $: any;
 export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
     private subscription: Subscription;
+    private messageDeleteSubscription: Subscription;    
     private messageEmoji: any;
     private currentUser: UserProfile;
     private receiverId: number;
@@ -42,6 +45,9 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private groupMembers: UserDetail[];
     private isFocusMessage: number;
     private citation: string;
+    private userOnlineSubscription: Subscription;
+    private userOfflineSubscription: Subscription;
+    private userChangeStateSubscription: Subscription;
 
     @ViewChild('scroll') private scrollContainer: ElementRef;
     private getMessages: boolean = false;
@@ -62,7 +68,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     private clearAllFields() {
         this.currentUser = null;
-        this.receiverId = null;
+        this.receiverId = 0;
         this.isGroup = null;
         this.skip = 0;
         this.messages = null;
@@ -133,8 +139,32 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                    self.send();
                }
             });
-        }        
+        }  
+        this.userOnlineSubscription = this.chatHubService.onNewUserConnectedEvent.subscribe( (user:UserNetState)=> {
+          this.onUserStateChange(user);
+        });
+        this.userOfflineSubscription = this.chatHubService.onUserDisconnectedEvent.subscribe( (user:UserNetState)=> {
+          this.onUserStateChange(user);
+        });
+        this.userChangeStateSubscription = this.chatHubService.onUserStateChangeEvent.subscribe((user:UserNetState)=> {
+          this.onUserStateChange(user);
+        });      
+        this.messageDeleteSubscription = this.chatHubService.onDeleteMessageEvent.subscribe((messageId: number)=> {
+            let index = this.messages.findIndex( u=> u.Id == messageId);
+            this.messages.splice(index, 1);
+            this.cdRef.detectChanges();
+        });         
     }
+    private onUserStateChange(user:UserNetState){
+        if (this.groupMembers) {
+           let userFromDialog = this.groupMembers.filter(t=>t.Id ==user.Id)[0];
+           if (userFromDialog) {
+             userFromDialog.State = user.IsOnline ? user.State : UserState.Offline;
+           }
+           let userF = this.groupMembers.filter(t=>t.Id !=user.Id)[0];
+           console.log("after-"+ userF);
+        }
+      }
     private toggleListMember(event){
         $(".members-toggle").slideToggle(300);
         $(".group-members h3").toggleClass("open");
@@ -172,7 +202,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         console.log("getting group messages");
         this.messageService.getGroupMessages(this.receiverId, this.skip, this.take)
             .subscribe(m => {
-                this.messages = m.map(m => m);
+                this.messages = m;
+                for (var i = this.messages.length - 1; i >= 0; i--) {
+                    this.messages[i].CreatedAt = this.convertUTCDateToLocalDate(this.messages[i].CreatedAt);
+                    this.messages[i].EditedAt = this.convertUTCDateToLocalDate(this.messages[i].EditedAt);
+                }
                 this.toBottom = true;                             
             },
             async err => {
@@ -180,7 +214,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                     if (ok) {
                         this.messageService.getGroupMessages(this.receiverId, this.skip, this.take)
                         .subscribe(m => {
-                            this.messages = m.map(m => m);  
+                            this.messages = m;  
+                            for (var i = this.messages.length - 1; i >= 0; i--) {
+                                this.messages[i].CreatedAt = this.convertUTCDateToLocalDate(this.messages[i].CreatedAt);
+                                this.messages[i].EditedAt = this.convertUTCDateToLocalDate(this.messages[i].EditedAt);
+                            }
                             this.toBottom = true;                             
                         });
                     }
@@ -191,14 +229,24 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private getGroupMembers() {
         this.groupService.getGroupMembers(this.receiverId)
             .subscribe(m => {
-                this.groupMembers = m.map(m => m);             
+                this.groupMembers = m;
+                for (var i = this.groupMembers.length - 1; i >= 0; i--) {
+                  if (!this.groupMembers[i].IsOnline) {
+                    this.groupMembers[i].State = UserState.Offline;
+                  }
+                }          
             },
             async err => {
                 await this.groupService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.groupService.getGroupMembers(this.receiverId)
                         .subscribe(m => {
-                            this.groupMembers = m.map(m => m);           
+                            this.groupMembers = m;           
+                            for (var i = this.groupMembers.length - 1; i >= 0; i--) {
+                              if (!this.groupMembers[i].IsOnline) {
+                                this.groupMembers[i].State = UserState.Offline;
+                              }
+                            }  
                         });
                     }
                 });
@@ -206,9 +254,11 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     private getMember(id: number): UserDetail {
-        return this.groupMembers.find(m => m.Id == id);
+        if (this.groupMembers) {
+            return this.groupMembers.find(m => m.Id == id);
+        }
+        
     }
-
     private getUserData() {
         this.userService.getUserDetails(this.receiverId).subscribe(user => {
             this.dialogName = user.FirstName + " " + user.LastName;
@@ -231,23 +281,38 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private getUserMessages() {
         this.messageService.getUserMessages(this.receiverId, this.skip, this.take)
             .subscribe(m => {
-                this.messages = m.map(m => m);
-                this.toBottom = true;  
-                console.log(this.messages);           
+                this.messages = m;
+                for (var i = this.messages.length - 1; i >= 0; i--) {
+                    this.messages[i].CreatedAt = this.convertUTCDateToLocalDate(this.messages[i].CreatedAt);
+                    this.messages[i].EditedAt = this.convertUTCDateToLocalDate(this.messages[i].EditedAt);
+                }
+                this.toBottom = true;           
             },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.getUserMessages(this.receiverId, this.skip, this.take)
                         .subscribe(m => {
-                            this.messages = m.map(m => m);   
+                            this.messages = m;   
+                            for (var i = this.messages.length - 1; i >= 0; i--) {
+                                this.messages[i].CreatedAt = this.convertUTCDateToLocalDate(this.messages[i].CreatedAt);
+                                this.messages[i].EditedAt = this.convertUTCDateToLocalDate(this.messages[i].EditedAt);
+                            }
                             this.toBottom = true;                             
                         })
                     }
                 });
             });
     }
+    private convertUTCDateToLocalDate(time:Date) {
+        let date = new Date(time);
+        var newDate = new Date(date.getTime() + date.getTimezoneOffset()*60*1000);
+        var offset = date.getTimezoneOffset() / 60;
+        var hours = date.getHours();
+        newDate.setHours(hours - offset);
 
+        return newDate;   
+    }
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
@@ -303,15 +368,17 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     private sendUserMessage(text: string, fileName: string) {
         let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, false);
-        this.addToMessages(message);
-        this.messageText = null;
-        this.messageService.sendUserMessage(message).subscribe(data => {
+		this.messageService.sendUserMessage(message).subscribe(data => {
+			message.Id = data;
+			this.addToMessages(message);
+			this.messageText = null;
             this.eventEmitterService.addMessageEvent.emit(message); 
         },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.sendUserMessage(message).subscribe(data => {
+                            message.Id = data;                        
                             this.addToMessages(message);
                             this.messageText = null;
                             this.eventEmitterService.addMessageEvent.emit(message);
@@ -324,6 +391,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     private sendGroupMessage(text: string, fileName: string) {
         let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, true);        
         this.messageService.sendGroupMessage(message).subscribe(data => {
+            message.Id = data;
             this.messageText = null; 
             this.eventEmitterService.addMessageEvent.emit(message);             
         },
@@ -331,6 +399,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
                         this.messageService.sendGroupMessage(message).subscribe(data => {
+                            message.Id = data;
                             this.messageText = null;
                             this.eventEmitterService.addMessageEvent.emit(message);             
                         });
@@ -521,19 +590,24 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     makeCitation(message: Message) {
         this.userService.getUserDetails(message.SenderId).subscribe(data => {
-            var content = '<i class="material-icons" style="font-size: 8px">format_quote</i>' + message.Text;
-            if (message.AttachedFile)
-                content += '<img style="max-width: 200px;" src="' + this.fileService.getFullFileUrlWithOutEx(message.AttachedFile) + '">';
+            var content = '<div class="citation-show"><i class="material-icons" style="font-size: 8px">format_quote</i>' + message.Text + '';
+            if (message.AttachedFile) {
+                if (this.isImage(message.AttachedFile))
+                    content += '<img class="img-citation" src="' + this.fileService.getFullFileUrlWithOutEx(message.AttachedFile) + '">';
+                else
+                    content += '<i class="material-icons">insert_drive_file</i>';
+            }
             content += '<i class="material-icons" style="font-size: 8px">format_quote</i><br>';
+            var date = new Date(message.CreatedAt);
             if (!message.IsGroup) {
-                content += data.FirstName + " " + data.LastName + ', ' + message.CreatedAt;
+                content += data.FirstName + " " + data.LastName + ', ' + date.toDateString();
             } else {
                 let sender = this.getMember(message.SenderId);
-                content += sender.LastName + ' ' + sender.FirstName + ', ' + message.CreatedAt;
+                content += sender.LastName + ' ' + sender.FirstName + ', ' + date.toDateString();
             }
+            content += '</div>';
             this.citation = content;
         });
-
     }
 
     deleteFileFromMsg(): void {
@@ -550,5 +624,28 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     onGoToUser(Id: number){
         this.router.navigate(["/menu/user-details", Id]);
+    }
+
+    deleteMessage(msg: Message) {
+        if (!this.isGroup){
+            this.messageService.deleteUserMessage(msg.Id).subscribe(() => {
+                let index = this.messages.findIndex( u=> u.Id == msg.Id);
+                this.messages.splice(index, 1);
+                this.cdRef.detectChanges();
+                console.log("Message with id: " + msg.Id + " deleted successfully!");
+            },
+            err => {
+                console.log("Error when deleting message with id: " + msg.Id);
+                console.log(err);
+            });
+        } else {
+            this.messageService.deleteGroupMessage(msg.Id).subscribe(() => {
+                console.log("Group message with id: " + msg.Id + " deleted successfully!");
+            },
+            err => {
+                console.log("Error when deleting gropu message with id: " + msg.Id);
+                console.log(err);
+            });
+        }
     }
 }

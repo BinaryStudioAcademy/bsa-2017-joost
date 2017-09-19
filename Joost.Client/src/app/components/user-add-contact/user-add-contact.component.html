@@ -1,70 +1,71 @@
-﻿<div class="jg-card mdl-grid">
-    <div class="jg-container mdl-card mdl-shadow--2dp">
-
-        <div class="loading-container" *ngIf="isError">
-            <div><i class="material-icons error-icon">error_outline</i></div>
-            <div>An error occured, please try again later</div>
-        </div>
-
-        <!--<div class="loading-container" *ngIf="isError===null && !isLoad">
-            <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active">
-            </div>
-            <div>Please wait, data is loading...</div>
-        </div>-->
-
-        <div *ngIf="isLoad">
-            <!-- header -->
-            <div class="mdl-card__title" style="width: 100%; overflow: hidden; display: block!important; border-bottom: 1px solid rgba(0,0,0,.1);">
-                <h2 class="mdl-card__title-text" style="display: block!important">
-                    <span style="padding: 8px 16px; float: left; width: auto; border: none; outline: none; display: block;">New invite to friends</span>
-                    <span style="float: right!important; font-weight: bold; font-size: 40px; cursor: pointer; margin-top: -16px" (click)="goBack()">&times;</span>
-                </h2>
+﻿<div class="jg-card">
+    <div class="jg-container mdl-shadow--2dp">
+        <div class="jg-scroll-container">
+            <div class="loading-container" *ngIf="isError">
+                <div><i class="material-icons error-icon">error_outline</i></div>
+                <div>An error occured, please try again later</div>
             </div>
 
-            <!-- content -->
-            <div class="invite-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
-                <div *ngIf="contact.State==0">
-                    <h3 style="text-align:center; font-size: 1.4em;"><span style="font-weight: bold">{{contact.Name}}</span> wants to add you in friend list.</h3>
-                    <h3 style="text-align:center; font-size: 1.4em; margin-top: -22px;">What do you think about that?</h3>
-                    <span *ngIf="contact.State==0">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect invite-button"
-                                (click)="accept(contact.Id)">
-                            Accept
-                        </button>
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect invite-button"
-                                (click)="decline(contact.Id)">
-                            Decline
-                        </button>
-                    </span>
+            <!--<div class="loading-container" *ngIf="isError===null && !isLoad">
+                <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active">
                 </div>
-                <div *ngIf="contact.State==3">
-                    <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> did not want to add you to contact list.</h3>
-                    <h3 style="text-align:center">You can try send the request to add to your contact list again.</h3>
-                </div>
-                <div *ngIf="contact.State==4">
-                    <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> doesn't present in your contact list</h3>
-                    <h3 style="text-align:center">You can return user back</h3>
-                </div>
-            </div>
+                <div>Please wait, data is loading...</div>
+            </div>-->
 
-            <!-- bottom buttons
-            <div style="border-top: 1px solid rgba(0,0,0,.1); position: absolute; bottom: 0; width:100%">
-                <div style="float:right; padding: 16px; ">
-                    
-                    <span *ngIf="contact.State==3">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
-                                (click)="retry(contact.Id)">
-                            Send
-                        </button>
-                    </span>
-                    <span *ngIf="contact.State==4">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
-                                (click)="accept(contact.Id)">
-                            Return to contacts
-                        </button>
-                    </span>
+            <div *ngIf="isLoad">
+                <!-- header -->
+                <div class="mdl-card__title" style="width: 100%; overflow: hidden; display: block!important; border-bottom: 1px solid rgba(0,0,0,.1);">
+                    <h2 class="mdl-card__title-text" style="display: block!important">
+                        <span style="padding: 8px 16px; float: left; width: auto; border: none; outline: none; display: block;">New invite to friends</span>
+                        <span style="float: right!important; font-weight: bold; font-size: 40px; cursor: pointer; margin-top: -16px" (click)="goBack()">&times;</span>
+                    </h2>
                 </div>
-            </div> -->
+
+                <!-- content -->
+                <div class="invite-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
+                    <div *ngIf="contact.State==0">
+                        <h3 style="text-align:center; font-size: 1.4em;"><span style="font-weight: bold">{{contact.Name}}</span> wants to add you in friend list.</h3>
+                        <h3 style="text-align:center; font-size: 1.4em; margin-top: -22px;">What do you think about that?</h3>
+                        <span *ngIf="contact.State==0">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect invite-button"
+                                    (click)="accept(contact.Id)">
+                                Accept
+                            </button>
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect invite-button"
+                                    (click)="decline(contact.Id)">
+                                Decline
+                            </button>
+                        </span>
+                    </div>
+                    <div *ngIf="contact.State==3">
+                        <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> did not want to add you to contact list.</h3>
+                        <h3 style="text-align:center">You can try send the request to add to your contact list again.</h3>
+                    </div>
+                    <div *ngIf="contact.State==4">
+                        <h3 style="text-align:center"><span style="font-weight: bold">{{contact.Name}}</span> doesn't present in your contact list</h3>
+                        <h3 style="text-align:center">You can return user back</h3>
+                    </div>
+                </div>
+
+                <!-- bottom buttons
+                <div style="border-top: 1px solid rgba(0,0,0,.1); position: absolute; bottom: 0; width:100%">
+                    <div style="float:right; padding: 16px; ">
+                        
+                        <span *ngIf="contact.State==3">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
+                                    (click)="retry(contact.Id)">
+                                Send
+                            </button>
+                        </span>
+                        <span *ngIf="contact.State==4">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-left: 16px;"
+                                    (click)="accept(contact.Id)">
+                                Return to contacts
+                            </button>
+                        </span>
+                    </div>
+                </div> -->
+            </div>
         </div>
     </div>
 </div>

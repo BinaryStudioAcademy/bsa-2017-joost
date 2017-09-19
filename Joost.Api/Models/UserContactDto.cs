@@ -10,5 +10,6 @@ namespace Joost.Api.Models
         public string City { get; set; }
         public ContactState State { get; set; }
         public UserState UserState { get; set; }
+        public bool IsOnline { get; set; }
     }
 }

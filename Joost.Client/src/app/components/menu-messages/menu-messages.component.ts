@@ -10,6 +10,8 @@ import { GroupService } from "../../services/group.service";
 import { EventEmitterService } from "../../services/event-emitter.service";
 import { UserContact } from "../../models/user-contact";
 import { ContactState } from "../../models/contact";
+import { UserNetState } from "../../models/user-netstate";
+import { UserState } from "../../models/user-detail";
 import { ContactService } from "../../services/contact.service";
 import { MessagesListComponent } from "../messages-list/messages-list.component";
 
@@ -27,6 +29,8 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   private contacts: UserContact[] = [];
   private filteredDialogs: Dialog[];
   private searchString: string;
+  private currentDialogId: number = -1;
+  private currentDialogIsGroup: boolean;
 
   private senderSubscription: Subscription;
   private receiverSubscription: Subscription;
@@ -34,6 +38,9 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   private newGroupSubscription: Subscription;
   private newContactSubscription: Subscription;
   private removeNewContactSubscription: Subscription;
+  private userOnlineSubscription: Subscription;
+  private userOfflineSubscription: Subscription;
+  private userChangeStateSubscription: Subscription;
 
   constructor(
     private router: Router,
@@ -61,11 +68,14 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
         this.dialogs.push(data.dialog);
       });
 
-      this.newContactSubscription = this.chatHubService.onAddContactEvent.subscribe((userContact: UserContact) => {
-            if (userContact.State == ContactState.New) {
-                this.contacts.push(userContact);
-            }
-      });
+      // this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
+      //       if (userContact.IsOnline) {
+      //         userContact.UserState = UserState.Offline;
+      //       }
+      //       if (userContact.State == ContactState.New) {
+      //           this.contacts.push(userContact);
+      //       }
+      // });
       this.removeNewContactSubscription = this.eventEmitterService.removeNewContact.subscribe((userContact: UserContact) => {
           for (let i = 0; i < this.contacts.length; i++) {
               if (this.contacts[i].Id == userContact.Id) {
@@ -73,15 +83,24 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
               }
           }
       });
+      this.userOnlineSubscription = this.chatHubService.onNewUserConnectedEvent.subscribe( (user:UserNetState)=> {
+        this.onUserStateChange(user);
+      });
+      this.userOfflineSubscription = this.chatHubService.onUserDisconnectedEvent.subscribe( (user:UserNetState)=> {
+        this.onUserStateChange(user);
+      });
+      this.userChangeStateSubscription = this.chatHubService.onUserStateChangeEvent.subscribe((user:UserNetState)=> {
+        this.onUserStateChange(user);
+      });
   }
 
   ngOnDestroy() {
-      this.senderSubscription.unsubscribe();
-      this.receiverSubscription.unsubscribe();
-      this.addingGroupsSubscription.unsubscribe();
-      this.newContactSubscription.unsubscribe();
-      this.newGroupSubscription.unsubscribe();
-      this.removeNewContactSubscription.unsubscribe();
+      // this.senderSubscription.unsubscribe();
+      // this.receiverSubscription.unsubscribe();
+      // this.addingGroupsSubscription.unsubscribe();
+      // this.newContactSubscription.unsubscribe();
+      // this.newGroupSubscription.unsubscribe();
+      // this.removeNewContactSubscription.unsubscribe();
   }
 
   ngAfterViewChecked(): void {
@@ -93,7 +112,20 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
         }
     }
   }
-
+  private onUserStateChange(user:UserNetState){
+    if (this.dialogs) {
+       let userFromDialog = this.dialogs.filter(t=>!t.IsGroup && t.Id ==user.Id)[0];
+       if (userFromDialog) {
+         userFromDialog.UserState = user.IsOnline ? user.State : UserState.Offline;
+       }
+    }
+    if (this.contacts) {
+      let userFromNewContact = this.contacts.filter(t=>t.Id == user.Id)[0];
+       if (userFromNewContact) {
+        userFromNewContact.UserState = user.IsOnline ? user.State : UserState.Offline;
+       }
+    }
+  }
   onResize($event) {
       console.log($event);
   }
@@ -103,7 +135,12 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
       var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
       this.UpdateFirstDlgMessages(sortArray);
       this.dialogs = sortArray;
-      this.filteredDialogs = sortArray;
+      for (var i = this.dialogs.length - 1; i >= 0; i--) {
+        if (!this.dialogs[i].IsOnline) {
+          this.dialogs[i].UserState = UserState.Offline;
+        }
+      }  
+      this.filteredDialogs = this.dialogs;
     },
     async err => {
       await this.dialogService.handleTokenErrorIfExist(err).then(ok => { 
@@ -118,12 +155,28 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
       });
     });
     this.contactService.getAllContacts().subscribe(data => {
-        for (let item of data) {
-            if (item.State == ContactState.New) {
-                this.contacts.push(item);
-            }
+        this.contacts = data.filter(t=>t.State == ContactState.New);
+        console.log(this.contacts);
+        for (var i = this.contacts.length - 1; i >= 0; i--) {
+          if (!this.contacts[i].IsOnline) {
+            this.contacts[i].UserState = UserState.Offline;
+          }
         }
     });
+  }
+
+  private checkDirectDialogs() {
+      if (this.filteredDialogs && this.filteredDialogs.length > 0) {
+          return this.filteredDialogs.filter(item => !item.IsGroup).length > 0;
+      }
+      return false;
+  }
+
+  private checkGroupDialogs() {
+      if (this.filteredDialogs && this.filteredDialogs.length > 0) {
+          return this.filteredDialogs.filter(item => item.IsGroup).length > 0;
+      }
+      return false;
   }
 
   private UpdateFirstDlgMessages(dialogs: Dialog[]){
@@ -150,7 +203,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     let filteredDialogs = this.dialogs.filter(d => (d.Id == message.SenderId || d.Id == message.ReceiverId) && !d.IsGroup);
     if (filteredDialogs.length > 0) {
         filteredDialogs[0].LastMessage = this.GetFristMуssageLine(message.Text);
-        filteredDialogs[0].DateLastMessage = message.CreatedAt;
+        filteredDialogs[0].DateLastMessage = new Date(new Date(message.CreatedAt).toLocaleString());
         this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
     }
   }
@@ -159,7 +212,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     let filteredDialogs = this.dialogs.filter(d => d.Id == message.ReceiverId && d.IsGroup);
     if (filteredDialogs.length > 0) {
         filteredDialogs[0].LastMessage = this.GetFristMуssageLine(message.Text);
-        filteredDialogs[0].DateLastMessage = message.CreatedAt;
+        filteredDialogs[0].DateLastMessage = new Date(message.CreatedAt);
         this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
     }
   }
@@ -175,6 +228,8 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
   }
 
   private navigateToMessages(dialog: Dialog) {
+    this.currentDialogId = dialog.Id;
+    this.currentDialogIsGroup = dialog.IsGroup;
     this.router.navigate(["/menu/messages", dialog.IsGroup ? "group": "user", dialog.Id]);
   }
 

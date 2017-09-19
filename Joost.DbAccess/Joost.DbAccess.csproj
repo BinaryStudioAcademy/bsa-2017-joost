@@ -83,6 +83,10 @@
     <Compile Include="Migrations\201709041945336_AddedGroupAvatars.Designer.cs">
       <DependentUpon>201709041945336_AddedGroupAvatars.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709141750074_UserIsOnlineField.cs" />
+    <Compile Include="Migrations\201709141750074_UserIsOnlineField.Designer.cs">
+      <DependentUpon>201709141750074_UserIsOnlineField.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -110,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709041945336_AddedGroupAvatars.resx">
       <DependentUpon>201709041945336_AddedGroupAvatars.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709141750074_UserIsOnlineField.resx">
+      <DependentUpon>201709141750074_UserIsOnlineField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

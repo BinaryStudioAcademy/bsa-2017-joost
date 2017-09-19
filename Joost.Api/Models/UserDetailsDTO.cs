@@ -15,6 +15,7 @@ namespace Joost.Api.Models
 		public string Status { get; set; }
 		public string Avatar { get; set; }
 		public UserState State { get; set; }
+        public bool IsOnline { get; set; }
         public bool Notifications { get; set; }
 
 		public static UserDetailsDto FromModel(User model)
@@ -34,7 +35,8 @@ namespace Joost.Api.Models
                     Status = model.Status,
                     Avatar = model.Avatar,
                     State = model.State,
-                    Notifications = model.Notifications
+                    Notifications = model.Notifications,
+                    IsOnline = model.IsOnline
 				};
 		}
 	}

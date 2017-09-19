@@ -61,6 +61,7 @@ namespace Joost.Api.Services
                     DateLastMessage = lastMessage.CreatedAt,
                     Avatar = item.Avatar,
                     IsGroup = false,
+                    IsOnline = item.IsOnline,
                     UserState = item.State
                 });
             }

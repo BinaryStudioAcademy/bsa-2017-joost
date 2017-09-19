@@ -191,7 +191,9 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
     this.passwordDiv = false;
   }
   
-  SendAvatar(e: Event) {
+  SendAvatar(e) {
+    let preview = document.getElementById('preview__image') as any;
+    preview.src = URL.createObjectURL(e.target.files[0]);
     this.avatarImage = e.target as HTMLInputElement;
   }
 

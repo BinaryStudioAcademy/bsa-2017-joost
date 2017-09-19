@@ -1,4 +1,4 @@
-<form class="menu-message-form">
+﻿<form class="menu-message-form">
   <div class="menu-messages-container">
     <div class="text-input-container">
       <div class="menu-input mdl-textfield mdl-js-textfield mdl-textfield--floating-label menu-input">
@@ -7,12 +7,12 @@
       </div>
     </div>
     <ul class="accordion">
-      <li *ngIf="contacts.length != 0">
+      <li [hidden]="contacts.length == 0">
           <input type="checkbox">
           <i class="arrow"></i>
           <h2>New Contacts</h2>
           <ul class="demo-list-three mdl-list">
-              <div *ngFor="let user of contacts">
+              <div *ngFor="let user of contacts"  class="messages">
                   <li class="mdl-list__item mdl-list__item--three-line" (click)="goToConfirm(user.Id)">
                       <span class="mdl-list__item-primary-content list__item">
                           <div class="user-state-wrap">
@@ -31,13 +31,15 @@
               </div>
           </ul>
       </li>
-      <li>
+      <li [hidden]="!checkDirectDialogs()">
         <input type="checkbox">
         <i class="arrow"></i>
         <h2>Direct Messages</h2>
           <ul class="demo-list-three mdl-list">
               <div *ngFor="let dialog of filteredDialogs" class="messages">
-                <li class="mdl-list__item mdl-list__item--three-line" *ngIf="!dialog.IsGroup" (click)="navigateToMessages(dialog)">
+                <li class="mdl-list__item mdl-list__item--three-line" 
+                    *ngIf="!dialog.IsGroup" (click)="navigateToMessages(dialog)"
+                    [ngClass]="{'selected': dialog.Id === currentDialogId && currentDialogIsGroup === dialog.IsGroup}">
                   <span  class="mdl-list__item-primary-content list__item">
                     <div class="user-state-wrap">
                       <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
@@ -54,13 +56,15 @@
               </div>
           </ul>
       </li>
-    <li>
-      <input type="checkbox" checked>
+    <li [hidden]="!checkGroupDialogs()">
+      <input type="checkbox">
       <i class="arrow"></i>
       <h2>Groups</h2>
         <ul class="demo-list-three mdl-list">
             <div *ngFor="let dialog of filteredDialogs" class="messages">
-                <li class="mdl-list__item mdl-list__item--three-line" *ngIf="dialog.IsGroup" (click)="navigateToMessages(dialog)">
+                <li class="mdl-list__item mdl-list__item--three-line"
+                    *ngIf="dialog.IsGroup" (click)="navigateToMessages(dialog)"
+                    [ngClass]="{'selected': dialog.Id === currentDialogId && currentDialogIsGroup === dialog.IsGroup}">
                     <span class="mdl-list__item-primary-content">
                         <img src="{{dialog.Avatar | avatarPipe:dialog.IsGroup}}" class="material-icons mdl-list__item-avatar">
                         <span>{{dialog.Name}}</span>

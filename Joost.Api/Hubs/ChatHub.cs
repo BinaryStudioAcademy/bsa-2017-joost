@@ -29,12 +29,13 @@ namespace Joost.Api.Hubs
                 if (user != null /*&& string.IsNullOrEmpty(user.ConnectionId)*/)
                 {
                     user.ConnectionId = connectionId;
+                    user.IsOnline = true;
                     foreach (var group in user.Groups)
                     {
                         await Groups.Add(connectionId, group.Id.ToString());
                     }
-                    await Clients.Caller.onConnected(connectionId, userId);
-                    await Clients.AllExcept(connectionId).onNewUserConnected(connectionId, userId);
+                    await Clients.Caller.onConnected(UserStateDto.FromModel(user));
+                    await Clients.AllExcept(connectionId).onNewUserConnected(UserStateDto.FromModel(user));
                     await _unitOfWork.SaveAsync();
                 }
             }
@@ -49,7 +50,8 @@ namespace Joost.Api.Hubs
                 if (user != null)
                 {
                     user.ConnectionId = string.Empty;
-                    Clients.All.onUserDisconnected(connectionId, user.Id);
+                    user.IsOnline = false;
+                    Clients.All.onUserDisconnected(UserStateDto.FromModel(user));
                     foreach (var group in user.Groups)
                     {
                         Groups.Remove(connectionId, group.Id.ToString());

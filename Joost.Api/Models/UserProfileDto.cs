@@ -21,8 +21,9 @@ namespace Joost.Api.Models
 		public string Avatar { get; set; }
 		public UserState State { get; set; }
 		public bool IsActived { get; set; }
+        public bool IsOnline { get; set; }
 
-		public static UserProfileDto FromModel(User model)
+        public static UserProfileDto FromModel(User model)
 		{
 			if (model == null)
 				return null;
@@ -41,7 +42,8 @@ namespace Joost.Api.Models
 					State = model.State,
 					Email = model.Email,
 					IsActived = model.IsActived,
-					Password = model.Password
+					Password = model.Password,
+                    IsOnline = model.IsOnline
 				};
 		}
 	}

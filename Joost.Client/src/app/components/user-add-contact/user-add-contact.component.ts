@@ -72,25 +72,24 @@ export class UserAddContactComponent extends MDL implements OnInit{
 		});
 	}
 	
-	goBack(){
-		// this.location.back();
-		this.router.navigate(["menu"]);
+	goBack(): void {
+		this.location.back();
 	}
 	accept(id:number){
 		this.contactService.confirmContact(id).subscribe(ok =>{
-			this.router.navigate(["menu"]);
 			this.contact.State = ContactState.Accept;
             this.contactService.changeContactNotify(this.contact);
-            this.eventEmitterService.removeNewContact.emit(this.contact); 
+            this.eventEmitterService.removeNewContact.emit(this.contact);
+			this.router.navigate(["menu"]); 
 		},
 	    async err=> {
 			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
 				if (ok) {
 			    this.contactService.confirmContact(id).subscribe(ok => {
-				  this.router.navigate(["menu"]);
 				  this.contact.State = ContactState.Accept;
                   this.contactService.changeContactNotify(this.contact);
                   this.eventEmitterService.removeNewContact.emit(this.contact); 
+                  this.router.navigate(["menu"]);
 			  	});
 			  }
 			});

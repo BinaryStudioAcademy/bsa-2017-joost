@@ -11,6 +11,7 @@ namespace Joost.Api.Models
         public DateTime DateLastMessage { get; set; }
         public string Avatar { get; set; }
         public bool IsGroup { get; set; }
+        public bool IsOnline { get; set; }
         public UserState UserState { get; set; }
     }
 }

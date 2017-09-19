@@ -6,6 +6,7 @@
     align-items: center;
     justify-content: flex-start;
     z-index: 1;
+    position:relative;
 }
 
 .title-text {
@@ -23,7 +24,9 @@ div .mdl-list__item:hover{
         padding: 0;
     }
 }
-
+.jg-scroll-container{
+  height:100% !important;
+}
 .jc-group-edit-title-container {
     display: flex;
     flex-direction: column;
@@ -67,9 +70,6 @@ div .mdl-list__item:hover{
 }
 
 .jg-container{
-    width: calc(74% - 2 * #{$card-padding});
-    height: calc(100vh - 2 * #{$card-padding});
-    margin: $card-padding $card-padding $card-padding calc(26% + #{$card-padding});
     > div{
         &:nth-last-child(2){
             flex: 1;
@@ -130,6 +130,11 @@ div .mdl-list__item:hover{
     width: 100%;
     word-wrap: break-word;
     padding-right: 1em;
+    &:hover {
+        .delete-button {
+            display: flex;
+        }
+    }
 
     &::after {
         content: "";
@@ -288,7 +293,7 @@ input[type="file"] {
 
 .attached-file-name {
     border-radius: 20px;
-    background-color: #B3E5FC;
+    background-color: #b2fcf9;/*#B3E5FC;*/
     color: #424242;
     padding: 3px 10px;
     margin-bottom: 8px;
@@ -583,7 +588,7 @@ ul {
 
 .attached-citation {
     border-radius: 20px;
-    background-color: #B3E5FC;
+    background-color: #b2fcf9;/*#B3E5FC;*/
     color: #424242;
     padding: 3px 10px;
     margin-bottom: 8px;
@@ -605,24 +610,34 @@ ul {
 
     > div {
         display: inline-block;
-
-        > img {
-            max-width: 200px;
-        }
     }
+}
+
+.close-attachment {
+    margin-top: 0.5em;
+}
+
+:host ::ng-deep .img-citation{
+    max-width: 200px;
+}
+
+:host ::ng-deep .citation-show {
+    background-color: #b2fcf9;
+    display: inline-block;
+    border-radius: 6px;
+    padding: 1em;
+}
+
+.text-citation {
+    display: inline-block;
 }
 
 .citation {
     color: #005A8A;
     font-size: 0.9em;
-    // position: absolute;
-    // top: 0.5em;
-    // right: 0.5em;
     background-color: white;
     padding: 5px;
     border-radius: 50%;
-    // border-color: #0074b1;
-    // border-width: 1px;
     cursor: pointer;
 
     &:hover {
@@ -712,4 +727,8 @@ ul {
   }
   
   // End of Tooltip styles
-  
+
+  .delete-button {
+      display: none;
+  }
+

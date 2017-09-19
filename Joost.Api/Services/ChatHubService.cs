@@ -33,12 +33,34 @@ namespace Joost.Api.Services
 			//}
 		}
 
-		public async Task SendToGroup(MessageDto message)
+        public async Task DeleteUserMessage(MessageDto message)
+        {
+            using (var userRepository = _unitOfWork.Repository<User>())
+            {
+                var receiver = await userRepository.GetAsync(message.ReceiverId);
+                if (receiver != null && !string.IsNullOrEmpty(receiver.ConnectionId))
+                {
+                    await _hubContext.Clients.Client(receiver.ConnectionId).onDeleteMessage(message.Id);
+                }
+            }
+        }
+
+        public async Task DeleteGroupMessage(MessageDto message)
+        {
+            await _hubContext.Clients.Group(message.ReceiverId.ToString()).onDeleteMessage(message.Id);
+        }
+
+        public async Task SendToGroup(MessageDto message)
 		{
 			await _hubContext.Clients.Group(message.ReceiverId.ToString()).onAddMessage(message);
 		}
 
-		public async Task RunContactAction(int currentUserId, int contactUserId, ContactState state)
+        public async Task ChangeUserState(User user, string connectionId)
+        {
+            await _hubContext.Clients.AllExcept(connectionId).onUserStateChange(UserStateDto.FromModel(user));
+        }
+
+        public async Task RunContactAction(int currentUserId, int contactUserId, ContactState state)
 		{
 			using (var contactRepository = _unitOfWork.Repository<Contact>())
 			{
@@ -55,7 +77,9 @@ namespace Joost.Api.Services
 						State = state,
 						Avatar = contact.User.Avatar,
 						Name = contact.User.FirstName + " " + contact.User.LastName,
-						City = contact.User.City
+						City = contact.User.City,
+                        UserState = contact.User.State,
+                        IsOnline = contact.User.IsOnline
 					};
 
 					using (var userRepository = _unitOfWork.Repository<User>())

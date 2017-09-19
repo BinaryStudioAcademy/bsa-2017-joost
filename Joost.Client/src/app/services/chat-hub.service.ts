@@ -6,6 +6,7 @@ import { Dialog } from "../models/dialog";
 import { UserContact } from "../models/user-contact";
 import { UserDetail } from "../models/user-detail";
 import { ContactState } from "../models/contact";
+import { UserNetState } from "../models/user-netstate";
 declare var jquery: any;
 declare var $: any;
 
@@ -18,16 +19,18 @@ export class ChatHubService {
   private ChatProxy: any;
   private ConnectionId: any;
 
-  //public onConnectedEvent: EventEmitter<void>;
-  //public onNewUserConnectedEvent: EventEmitter<void>;
+
   public onAddMessageEvent: EventEmitter<Message>;
-  //public onUserDisconnectedEvent: EventEmitter<void>;
+  public onDeleteMessageEvent: EventEmitter<number>;
   public onAddContactEvent: EventEmitter<UserContact>;
   public onConfirmContactEvent: EventEmitter<UserContact>;
   public onDeclineContactEvent: EventEmitter<UserContact>;
   public onCanceledContactEvent: EventEmitter<UserContact>;  
   public onDeleteContactEvent: EventEmitter<UserContact>;  
   public onNewGroupCreatedEvent: EventEmitter<any>;  
+  public onNewUserConnectedEvent: EventEmitter<UserNetState>;
+  public onUserDisconnectedEvent: EventEmitter<UserNetState>;
+  public onUserStateChangeEvent: EventEmitter<UserNetState>;
 
   constructor() {
     this.SignalrConnection = $.hubConnection(this.url, {
@@ -39,12 +42,16 @@ export class ChatHubService {
     this.registerEvents();
 
     this.onAddMessageEvent = new EventEmitter<Message>();
+    this.onDeleteMessageEvent = new EventEmitter<number>();  
     this.onAddContactEvent = new EventEmitter<UserContact>();
     this.onConfirmContactEvent = new EventEmitter<UserContact>();
     this.onDeclineContactEvent = new EventEmitter<UserContact>();
     this.onCanceledContactEvent = new EventEmitter<UserContact>();    
     this.onDeleteContactEvent = new EventEmitter<UserContact>();    
     this.onNewGroupCreatedEvent = new EventEmitter<any>();        
+    this.onNewUserConnectedEvent = new EventEmitter<UserNetState>();   
+    this.onUserDisconnectedEvent = new EventEmitter<UserNetState>(); 
+    this.onUserStateChangeEvent = new EventEmitter<UserNetState>();  
   }
 
   private async startConnection(): Promise<any> {
@@ -63,17 +70,27 @@ export class ChatHubService {
   private registerEvents(): void {
     let self = this;
 
-    this.ChatProxy.on('onConnected', function (connectionId: string, userId: number) {
+    this.ChatProxy.on('onConnected', function (user:UserNetState) {
     });
 
-    this.ChatProxy.on('onNewUserConnected', function (connectionId: string, userId: number) {
+    this.ChatProxy.on('onNewUserConnected', function (user:UserNetState) {
+      self.onNewUserConnectedEvent.emit(user);
     });
 
     this.ChatProxy.on('onAddMessage', function (message: Message) {
       self.onAddMessageEvent.emit(message); 
     });
+    this.ChatProxy.on('onUserDisconnected', function (user:UserNetState) {
+       self.onUserDisconnectedEvent.emit(user);
+    });
 
-    this.ChatProxy.on('onUserDisconnected', function (connectionId: string, userId: number) {
+    this.ChatProxy.on('onUserStateChange', function (user:UserNetState) {
+      console.log(user);
+       self.onUserStateChangeEvent.emit(user);
+    });
+
+    this.ChatProxy.on('onDeleteMessage', function (messageId: number) {
+       self.onDeleteMessageEvent.emit(messageId);
     });
 
     this.ChatProxy.on('onContactAction', function (contact: UserContact) {

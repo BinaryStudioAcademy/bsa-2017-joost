@@ -46,6 +46,7 @@ export class MainMenuComponent extends MDL implements OnInit, OnDestroy {
       super();
       notificationService.setViewContainerRef(vRef);
   }
+
   showStateList(){
     $(".state-list").slideToggle(300);
   }

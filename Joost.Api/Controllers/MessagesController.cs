@@ -51,6 +51,8 @@ namespace Joost.Api.Controllers
         [Route("user-messages")]
         public async Task<IHttpActionResult> AddUserMessage([FromBody]MessageDto message)
         {
+            message.CreatedAt = message.CreatedAt.ToUniversalTime();
+            message.EditedAt = message.EditedAt.ToUniversalTime();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -58,13 +60,13 @@ namespace Joost.Api.Controllers
             var currentUserId = GetCurrentUserId();
 			if (currentUserId == message.SenderId && !message.IsGroup)
 			{
-                await _messageService.AddUserMessage(message);    
-                if (message.ReceiverId == _messageService.ChatBotIdInDb)
-                {
-                    var responseMessage = await _messageService.SendMessageToBot(message);
-                    await _messageService.AddUserMessage(responseMessage);
+				int id = await _messageService.AddUserMessage(message);
+				if (message.ReceiverId == _messageService.ChatBotIdInDb)
+				{
+					var responseMessage = await _messageService.SendMessageToBot(message);
+					await _messageService.AddUserMessage(responseMessage);
 				}
-				return Ok();
+				return Ok(id);
 			}
 			else return StatusCode(HttpStatusCode.MethodNotAllowed);
 		}
@@ -81,9 +83,9 @@ namespace Joost.Api.Controllers
             var currentUserId = GetCurrentUserId();
             if (currentUserId == message.SenderId && message.IsGroup)
             {
-				await _messageService.AddGroupMessage(message);
-				return Ok();
-			}
+                int id = await _messageService.AddGroupMessage(message);
+                return Ok(id);
+            }
             else return StatusCode(HttpStatusCode.MethodNotAllowed);
         }
 

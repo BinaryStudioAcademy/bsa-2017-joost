@@ -38,21 +38,21 @@ export class MessageService extends BaseApiService {
     message.SenderId = senderId;
     message.ReceiverId = receiverId;
     message.Text = text;
-    message.CreatedAt = new Date(); // wrong timezone!!!
+    message.CreatedAt = new Date(new Date().toUTCString()); // wrong timezone!!!
     message.EditedAt = message.CreatedAt;
     message.AttachedFile = attachedFile;
     message.IsGroup = isGroup;
     return message;
   }
 
-  sendUserMessage(message: Message) {
+  sendUserMessage(message: Message): Observable<number> {
     let req = new HttpRequest("POST", this.generateUrl() + "/user-messages", message);
-    return this.http.sendRequest(req);
+    return this.http.sendRequest<number>(req);
   }
 
-  sendGroupMessage(message: Message) {  
+  sendGroupMessage(message: Message): Observable<number> {  
     let req = new HttpRequest("POST", this.generateUrl() + "/group-messages", message);    
-    return this.http.sendRequest(req);
+    return this.http.sendRequest<number>(req);
   }
 
   editUserMessage(message: Message): Observable<Message> {
