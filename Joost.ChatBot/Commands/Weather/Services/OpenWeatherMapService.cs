@@ -6,6 +6,7 @@ using System.Configuration;
 
 namespace Joost.ChatBot.Commands.Weather.Services
 {
+    [Serializable]
     public class OpenWeatherMapService : IWeatherService
     {
         private readonly IApiResponseConverter _converter;

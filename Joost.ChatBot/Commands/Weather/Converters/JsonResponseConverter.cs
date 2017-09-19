@@ -7,6 +7,7 @@ using Joost.ChatBot.Commands.Weather.Models;
 
 namespace Joost.ChatBot.Commands.Weather.Converters
 {
+    [Serializable]
     public class JsonResponseConverter : IApiResponseConverter
     {
         public Models.Weather Convert(string sResponse)
