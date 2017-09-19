@@ -23,6 +23,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,11 +65,26 @@
     <Reference Include="Microsoft.Rest.ClientRuntime, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Microsoft.Rest.ClientRuntime.2.3.2\lib\net45\Microsoft.Rest.ClientRuntime.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Microsoft.WindowsAzure.ConfigurationManager.3.1.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.WebApi, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.WebApi.WebHost, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.WebApi.WebHost.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.40306.1554, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -90,32 +106,154 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
+    <Content Include="Resources\Images\WeatherIcons\200d.png" />
+    <Content Include="Resources\Images\WeatherIcons\200n.png" />
+    <Content Include="Resources\Images\WeatherIcons\201d.png" />
+    <Content Include="Resources\Images\WeatherIcons\201n.png" />
+    <Content Include="Resources\Images\WeatherIcons\202d.png" />
+    <Content Include="Resources\Images\WeatherIcons\202n.png" />
+    <Content Include="Resources\Images\WeatherIcons\210d.png" />
+    <Content Include="Resources\Images\WeatherIcons\210n.png" />
+    <Content Include="Resources\Images\WeatherIcons\211d.png" />
+    <Content Include="Resources\Images\WeatherIcons\211n.png" />
+    <Content Include="Resources\Images\WeatherIcons\212d.png" />
+    <Content Include="Resources\Images\WeatherIcons\212n.png" />
+    <Content Include="Resources\Images\WeatherIcons\221d.png" />
+    <Content Include="Resources\Images\WeatherIcons\221n.png" />
+    <Content Include="Resources\Images\WeatherIcons\230d.png" />
+    <Content Include="Resources\Images\WeatherIcons\230n.png" />
+    <Content Include="Resources\Images\WeatherIcons\231d.png" />
+    <Content Include="Resources\Images\WeatherIcons\231n.png" />
+    <Content Include="Resources\Images\WeatherIcons\232d.png" />
+    <Content Include="Resources\Images\WeatherIcons\232n.png" />
+    <Content Include="Resources\Images\WeatherIcons\300d.png" />
+    <Content Include="Resources\Images\WeatherIcons\300n.png" />
+    <Content Include="Resources\Images\WeatherIcons\301d.png" />
+    <Content Include="Resources\Images\WeatherIcons\301n.png" />
+    <Content Include="Resources\Images\WeatherIcons\302d.png" />
+    <Content Include="Resources\Images\WeatherIcons\302n.png" />
+    <Content Include="Resources\Images\WeatherIcons\310d.png" />
+    <Content Include="Resources\Images\WeatherIcons\310n.png" />
+    <Content Include="Resources\Images\WeatherIcons\311d.png" />
+    <Content Include="Resources\Images\WeatherIcons\311n.png" />
+    <Content Include="Resources\Images\WeatherIcons\312d.png" />
+    <Content Include="Resources\Images\WeatherIcons\312n.png" />
+    <Content Include="Resources\Images\WeatherIcons\321d.png" />
+    <Content Include="Resources\Images\WeatherIcons\321n.png" />
+    <Content Include="Resources\Images\WeatherIcons\500d.png" />
+    <Content Include="Resources\Images\WeatherIcons\500n.png" />
+    <Content Include="Resources\Images\WeatherIcons\501d.png" />
+    <Content Include="Resources\Images\WeatherIcons\501n.png" />
+    <Content Include="Resources\Images\WeatherIcons\502d.png" />
+    <Content Include="Resources\Images\WeatherIcons\502n.png" />
+    <Content Include="Resources\Images\WeatherIcons\503d.png" />
+    <Content Include="Resources\Images\WeatherIcons\503n.png" />
+    <Content Include="Resources\Images\WeatherIcons\504d.png" />
+    <Content Include="Resources\Images\WeatherIcons\504n.png" />
+    <Content Include="Resources\Images\WeatherIcons\511d.png" />
+    <Content Include="Resources\Images\WeatherIcons\511n.png" />
+    <Content Include="Resources\Images\WeatherIcons\520d.png" />
+    <Content Include="Resources\Images\WeatherIcons\520n.png" />
+    <Content Include="Resources\Images\WeatherIcons\521d.png" />
+    <Content Include="Resources\Images\WeatherIcons\521n.png" />
+    <Content Include="Resources\Images\WeatherIcons\522d.png" />
+    <Content Include="Resources\Images\WeatherIcons\522n.png" />
+    <Content Include="Resources\Images\WeatherIcons\600d.png" />
+    <Content Include="Resources\Images\WeatherIcons\600n.png" />
+    <Content Include="Resources\Images\WeatherIcons\601d.png" />
+    <Content Include="Resources\Images\WeatherIcons\601n.png" />
+    <Content Include="Resources\Images\WeatherIcons\602d.png" />
+    <Content Include="Resources\Images\WeatherIcons\602n.png" />
+    <Content Include="Resources\Images\WeatherIcons\611d.png" />
+    <Content Include="Resources\Images\WeatherIcons\611n.png" />
+    <Content Include="Resources\Images\WeatherIcons\621d.png" />
+    <Content Include="Resources\Images\WeatherIcons\621n.png" />
+    <Content Include="Resources\Images\WeatherIcons\701d.png" />
+    <Content Include="Resources\Images\WeatherIcons\701n.png" />
+    <Content Include="Resources\Images\WeatherIcons\711d.png" />
+    <Content Include="Resources\Images\WeatherIcons\711n.png" />
+    <Content Include="Resources\Images\WeatherIcons\721d.png" />
+    <Content Include="Resources\Images\WeatherIcons\721n.png" />
+    <Content Include="Resources\Images\WeatherIcons\731d.png" />
+    <Content Include="Resources\Images\WeatherIcons\731n.png" />
+    <Content Include="Resources\Images\WeatherIcons\741d.png" />
+    <Content Include="Resources\Images\WeatherIcons\741n.png" />
+    <Content Include="Resources\Images\WeatherIcons\800d.png" />
+    <Content Include="Resources\Images\WeatherIcons\800n.png" />
+    <Content Include="Resources\Images\WeatherIcons\801d.png" />
+    <Content Include="Resources\Images\WeatherIcons\801n.png" />
+    <Content Include="Resources\Images\WeatherIcons\802d.png" />
+    <Content Include="Resources\Images\WeatherIcons\802n.png" />
+    <Content Include="Resources\Images\WeatherIcons\803d.png" />
+    <Content Include="Resources\Images\WeatherIcons\803n.png" />
+    <Content Include="Resources\Images\WeatherIcons\804d.png" />
+    <Content Include="Resources\Images\WeatherIcons\804n.png" />
+    <Content Include="Resources\Images\WeatherIcons\900d.png" />
+    <Content Include="Resources\Images\WeatherIcons\900n.png" />
+    <Content Include="Resources\Images\WeatherIcons\901d.png" />
+    <Content Include="Resources\Images\WeatherIcons\901n.png" />
+    <Content Include="Resources\Images\WeatherIcons\902d.png" />
+    <Content Include="Resources\Images\WeatherIcons\902n.png" />
+    <Content Include="Resources\Images\WeatherIcons\903d.png" />
+    <Content Include="Resources\Images\WeatherIcons\903n.png" />
+    <Content Include="Resources\Images\WeatherIcons\904d.png" />
+    <Content Include="Resources\Images\WeatherIcons\904n.png" />
+    <Content Include="Resources\Images\WeatherIcons\905d.png" />
+    <Content Include="Resources\Images\WeatherIcons\905n.png" />
+    <Content Include="Resources\Images\WeatherIcons\906d.png" />
+    <Content Include="Resources\Images\WeatherIcons\906n.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Commands\CommandService.cs" />
+    <Compile Include="Commands\IBotCommand.cs" />
+    <Compile Include="Commands\ICommandService.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\NinjectResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +266,11 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Commands\Joke\" />
+    <Folder Include="Commands\Translate\" />
+    <Folder Include="Commands\Weather\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
