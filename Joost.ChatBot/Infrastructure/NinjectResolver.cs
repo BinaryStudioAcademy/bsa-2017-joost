@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Ninject;
 using System.Web.Mvc;
+using Joost.ChatBot.Commands.Weather.Services;
+using Joost.ChatBot.Commands.Weather.Converters;
 
 namespace WeatherApp.Infrastructure
 {
@@ -27,6 +29,8 @@ namespace WeatherApp.Infrastructure
 
 		private void AddBindings()
 		{
-		}
+            kernel.Bind<IWeatherService>().To<OpenWeatherMapService>();
+            kernel.Bind<IApiResponseConverter>().To<JsonResponseConverter>();
+        }
 	}
 }
