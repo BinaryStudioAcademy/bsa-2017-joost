@@ -11,9 +11,9 @@ namespace Joost.ChatBot.App_Start
     using Ninject;
     using Ninject.Web.Common;
 	using System.Web.Mvc;
-	using WeatherApp.Infrastructure;
+    using Joost.ChatBot.Infrastructure;
 
-	public static class NinjectWebCommon 
+    public static class NinjectWebCommon 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
 

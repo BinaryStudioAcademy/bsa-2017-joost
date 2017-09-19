@@ -59,7 +59,7 @@ namespace Joost.ChatBot.Commands.Weather.Services
             {
                 resultHTML += $"<div class='bot-weather-item-container'>";
                 resultHTML += $"<div class='bot-weather-row'>";
-                resultHTML += $"<div class='bot-weather-icon'>{dailyForecast.Icon}</div>";
+                resultHTML += $"<div class='bot-weather-icon'> <img src='{dailyForecast.Icon}'/></div>";
                 resultHTML += $"<div class='bot-weather-column'>";
                 resultHTML += $"<div class='bot-weather-date'>{dailyForecast.Time}</div>";
                 resultHTML += $"<div class='bot-weather-description'>{dailyForecast.Description}</div>";

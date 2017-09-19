@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using Joost.ChatBot.Commands.Weather.Services;
 using Joost.ChatBot.Commands.Weather.Converters;
 
-namespace WeatherApp.Infrastructure
+namespace Joost.ChatBot.Infrastructure
 {
 	public class NinjectResolver : IDependencyResolver
 	{

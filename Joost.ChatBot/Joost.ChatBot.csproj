@@ -266,6 +266,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\NinjectResolver.cs" />
+    <Compile Include="LUIS\LUIS.cs" />
+    <Compile Include="LUIS\LUISService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
