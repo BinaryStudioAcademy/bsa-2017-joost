@@ -12,6 +12,10 @@ namespace Joost.ChatBot.Commands.Translate
 	{
 		public async Task<string> Execute(string[] parameters)
 		{
+			string rez = "Can't recognize translate parameters";
+
+			if (parameters.Length < 2)
+				return rez;
 
 			var service = new TranslateService(new BaseClientService.Initializer()
 			{
@@ -19,25 +23,33 @@ namespace Joost.ChatBot.Commands.Translate
 				ApplicationName = "Joost"
 			});
 
-			string[] srcText = new[] { parameters[1] };
-			var response = await service.Translations.List(srcText, parameters[0]).ExecuteAsync();
+			string[] srcText = new[] { parameters[0] };
 
-			string rez = "";
-			if(response.Translations.Count  == 0)
+			try
 			{
-				rez = $"Can't translate the \"{parameters[1]}\"";
-			}
-			else
-			{
-				rez = response.Translations[0].TranslatedText;
-			}
+				var response = await service.Translations.List(srcText, parameters[1]).ExecuteAsync();
 
-			return $"<div>{rez}</div>";
+				if (response.Translations.Count == 0)
+				{
+					rez = $"Can't translate the \"{parameters[1]}\"";
+				}
+				else
+				{
+					rez = response.Translations[0].TranslatedText;
+				}
+			}
+			catch
+			{
+				; // do nothing;
+			}
+			
+
+			return $"<i>{rez}</i>";
 		}
 
 		public string GetCommand()
 		{
-			return "Translate";
+			return "Translate.Translate";
 		}
 
 		public string GetDescription()

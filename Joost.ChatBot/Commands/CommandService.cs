@@ -4,6 +4,9 @@ using Joost.ChatBot.LUIS;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Joost.ChatBot.Commands.Help;
+using Joost.ChatBot.Commands.Weather;
+using Joost.ChatBot.Commands.Weather.Services;
+using Joost.ChatBot.Commands.Translate;
 
 namespace Joost.ChatBot.Commands
 {
@@ -18,7 +21,9 @@ namespace Joost.ChatBot.Commands
 
 			Commands = new List<IBotCommand>()
 			{
-				new TakeTheJokeCommand()
+				new GetWeatherCommand(),
+				new TakeTheJokeCommand(),
+				new TranslateCommand(),
 			};
 			var helpCmd = new HelpCommand(Commands);
 
@@ -30,6 +35,7 @@ namespace Joost.ChatBot.Commands
 		{
 			foreach (var cmd in Commands)
 			{
+				var str = cmd.GetCommand();
 				if (cmd.GetCommand() == command)
 					return cmd;
 			}
@@ -39,11 +45,21 @@ namespace Joost.ChatBot.Commands
 
 		public async Task<string> Execute(string query)
 		{
+			try
+			{
 			var luis = await _luis.QueryLuis(query);
 
 			var cmd = FindCommand(luis.topScoringIntent.intent);
+			List<string> aParams = new List<string>();
+			foreach (var entity in luis.entities)
+				aParams.Add(entity.entity);
+			return await cmd.Execute(aParams.ToArray());
 
-			return await cmd.Execute(null);
+			}
+			catch(Exception ex)
+			{
+				throw ex;
+			}
 		}
 	}
 }

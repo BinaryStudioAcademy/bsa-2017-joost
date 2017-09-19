@@ -732,57 +732,57 @@ ul {
       display: none;
   }
 
-.bot-weather-container {
+:host ::ng-deep .bot-weather-container {
     padding: 5px;
 }
 
-.bot-weather-city {
+:host ::ng-deep .bot-weather-city {
     font-size: 16px;
     font-weight: 600;
 }
 
-.bot-weather-item-container {
+:host ::ng-deep .bot-weather-item-container {
 
 }
 
-.bot-weather-row {
+:host ::ng-deep .bot-weather-row {
     display: flex;
     align-items: center;
     flex-direction: row;
     padding: 5px;
 }
 
-.bot-weather-column {
+:host ::ng-deep .bot-weather-column {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
 }
 
-.bot-weather-date {
+:host ::ng-deep .bot-weather-date {
     font-size: 12px;
     font-weight: 600;
     margin: 0px 10px;
 }
 
-.bot-weather-icon {
+:host ::ng-deep .bot-weather-icon {
     width: 60px;
     height: 40px;
     margin: 0;
     padding: 0;
 }
 
-.bot-weather-description {
+:host ::ng-deep .bot-weather-description {
     font-size: 24px;
     margin: 0px 10px;
 }
 
-.bot-weather-temperature-container {
+:host ::ng-deep .bot-weather-temperature-container {
     display: flex;
     align-items: center;
     flex-direction: row;
     padding: 5px;
 }
 
-.bot-weather-temperature-item {
+:host ::ng-deep .bot-weather-temperature-item {
     margin: 0px 5px;
 }
