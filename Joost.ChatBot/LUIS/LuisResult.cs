@@ -5,12 +5,6 @@ using System.Web;
 
 namespace Joost.ChatBot.LUIS
 {
-    public class TopScoringIntent
-    {
-        public string intent { get; set; }
-        public double score { get; set; }
-    }
-
     public class Intent
     {
         public string intent { get; set; }
@@ -30,10 +24,10 @@ namespace Joost.ChatBot.LUIS
         public Resolution resolution { get; set; }
     }
 
-    public class LUIS
+    public class LuisResult
     {
         public string query { get; set; }
-        public TopScoringIntent topScoringIntent { get; set; }
+        public Intent topScoringIntent { get; set; }
         public IList<Intent> intents { get; set; }
         public IList<Entity> entities { get; set; }
     }

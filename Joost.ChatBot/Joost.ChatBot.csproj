@@ -142,102 +142,6 @@
   <ItemGroup>
     <Content Include="default.htm" />
     <Content Include="Global.asax" />
-    <Content Include="Resources\Images\WeatherIcons\200d.png" />
-    <Content Include="Resources\Images\WeatherIcons\200n.png" />
-    <Content Include="Resources\Images\WeatherIcons\201d.png" />
-    <Content Include="Resources\Images\WeatherIcons\201n.png" />
-    <Content Include="Resources\Images\WeatherIcons\202d.png" />
-    <Content Include="Resources\Images\WeatherIcons\202n.png" />
-    <Content Include="Resources\Images\WeatherIcons\210d.png" />
-    <Content Include="Resources\Images\WeatherIcons\210n.png" />
-    <Content Include="Resources\Images\WeatherIcons\211d.png" />
-    <Content Include="Resources\Images\WeatherIcons\211n.png" />
-    <Content Include="Resources\Images\WeatherIcons\212d.png" />
-    <Content Include="Resources\Images\WeatherIcons\212n.png" />
-    <Content Include="Resources\Images\WeatherIcons\221d.png" />
-    <Content Include="Resources\Images\WeatherIcons\221n.png" />
-    <Content Include="Resources\Images\WeatherIcons\230d.png" />
-    <Content Include="Resources\Images\WeatherIcons\230n.png" />
-    <Content Include="Resources\Images\WeatherIcons\231d.png" />
-    <Content Include="Resources\Images\WeatherIcons\231n.png" />
-    <Content Include="Resources\Images\WeatherIcons\232d.png" />
-    <Content Include="Resources\Images\WeatherIcons\232n.png" />
-    <Content Include="Resources\Images\WeatherIcons\300d.png" />
-    <Content Include="Resources\Images\WeatherIcons\300n.png" />
-    <Content Include="Resources\Images\WeatherIcons\301d.png" />
-    <Content Include="Resources\Images\WeatherIcons\301n.png" />
-    <Content Include="Resources\Images\WeatherIcons\302d.png" />
-    <Content Include="Resources\Images\WeatherIcons\302n.png" />
-    <Content Include="Resources\Images\WeatherIcons\310d.png" />
-    <Content Include="Resources\Images\WeatherIcons\310n.png" />
-    <Content Include="Resources\Images\WeatherIcons\311d.png" />
-    <Content Include="Resources\Images\WeatherIcons\311n.png" />
-    <Content Include="Resources\Images\WeatherIcons\312d.png" />
-    <Content Include="Resources\Images\WeatherIcons\312n.png" />
-    <Content Include="Resources\Images\WeatherIcons\321d.png" />
-    <Content Include="Resources\Images\WeatherIcons\321n.png" />
-    <Content Include="Resources\Images\WeatherIcons\500d.png" />
-    <Content Include="Resources\Images\WeatherIcons\500n.png" />
-    <Content Include="Resources\Images\WeatherIcons\501d.png" />
-    <Content Include="Resources\Images\WeatherIcons\501n.png" />
-    <Content Include="Resources\Images\WeatherIcons\502d.png" />
-    <Content Include="Resources\Images\WeatherIcons\502n.png" />
-    <Content Include="Resources\Images\WeatherIcons\503d.png" />
-    <Content Include="Resources\Images\WeatherIcons\503n.png" />
-    <Content Include="Resources\Images\WeatherIcons\504d.png" />
-    <Content Include="Resources\Images\WeatherIcons\504n.png" />
-    <Content Include="Resources\Images\WeatherIcons\511d.png" />
-    <Content Include="Resources\Images\WeatherIcons\511n.png" />
-    <Content Include="Resources\Images\WeatherIcons\520d.png" />
-    <Content Include="Resources\Images\WeatherIcons\520n.png" />
-    <Content Include="Resources\Images\WeatherIcons\521d.png" />
-    <Content Include="Resources\Images\WeatherIcons\521n.png" />
-    <Content Include="Resources\Images\WeatherIcons\522d.png" />
-    <Content Include="Resources\Images\WeatherIcons\522n.png" />
-    <Content Include="Resources\Images\WeatherIcons\600d.png" />
-    <Content Include="Resources\Images\WeatherIcons\600n.png" />
-    <Content Include="Resources\Images\WeatherIcons\601d.png" />
-    <Content Include="Resources\Images\WeatherIcons\601n.png" />
-    <Content Include="Resources\Images\WeatherIcons\602d.png" />
-    <Content Include="Resources\Images\WeatherIcons\602n.png" />
-    <Content Include="Resources\Images\WeatherIcons\611d.png" />
-    <Content Include="Resources\Images\WeatherIcons\611n.png" />
-    <Content Include="Resources\Images\WeatherIcons\621d.png" />
-    <Content Include="Resources\Images\WeatherIcons\621n.png" />
-    <Content Include="Resources\Images\WeatherIcons\701d.png" />
-    <Content Include="Resources\Images\WeatherIcons\701n.png" />
-    <Content Include="Resources\Images\WeatherIcons\711d.png" />
-    <Content Include="Resources\Images\WeatherIcons\711n.png" />
-    <Content Include="Resources\Images\WeatherIcons\721d.png" />
-    <Content Include="Resources\Images\WeatherIcons\721n.png" />
-    <Content Include="Resources\Images\WeatherIcons\731d.png" />
-    <Content Include="Resources\Images\WeatherIcons\731n.png" />
-    <Content Include="Resources\Images\WeatherIcons\741d.png" />
-    <Content Include="Resources\Images\WeatherIcons\741n.png" />
-    <Content Include="Resources\Images\WeatherIcons\800d.png" />
-    <Content Include="Resources\Images\WeatherIcons\800n.png" />
-    <Content Include="Resources\Images\WeatherIcons\801d.png" />
-    <Content Include="Resources\Images\WeatherIcons\801n.png" />
-    <Content Include="Resources\Images\WeatherIcons\802d.png" />
-    <Content Include="Resources\Images\WeatherIcons\802n.png" />
-    <Content Include="Resources\Images\WeatherIcons\803d.png" />
-    <Content Include="Resources\Images\WeatherIcons\803n.png" />
-    <Content Include="Resources\Images\WeatherIcons\804d.png" />
-    <Content Include="Resources\Images\WeatherIcons\804n.png" />
-    <Content Include="Resources\Images\WeatherIcons\900d.png" />
-    <Content Include="Resources\Images\WeatherIcons\900n.png" />
-    <Content Include="Resources\Images\WeatherIcons\901d.png" />
-    <Content Include="Resources\Images\WeatherIcons\901n.png" />
-    <Content Include="Resources\Images\WeatherIcons\902d.png" />
-    <Content Include="Resources\Images\WeatherIcons\902n.png" />
-    <Content Include="Resources\Images\WeatherIcons\903d.png" />
-    <Content Include="Resources\Images\WeatherIcons\903n.png" />
-    <Content Include="Resources\Images\WeatherIcons\904d.png" />
-    <Content Include="Resources\Images\WeatherIcons\904n.png" />
-    <Content Include="Resources\Images\WeatherIcons\905d.png" />
-    <Content Include="Resources\Images\WeatherIcons\905n.png" />
-    <Content Include="Resources\Images\WeatherIcons\906d.png" />
-    <Content Include="Resources\Images\WeatherIcons\906n.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -246,8 +150,10 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Commands\CommandService.cs" />
+    <Compile Include="Commands\Help\HelpCommand.cs" />
     <Compile Include="Commands\IBotCommand.cs" />
     <Compile Include="Commands\ICommandService.cs" />
+    <Compile Include="Commands\Joke\TakeTheJokeCommand.cs" />
     <Compile Include="Commands\Weather\Converters\IApiResponseConverter.cs" />
     <Compile Include="Commands\Weather\Converters\JsonResponseConverter.cs" />
     <Compile Include="Commands\Weather\Models\DailyForecast.cs" />
@@ -266,8 +172,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\NinjectResolver.cs" />
-    <Compile Include="LUIS\LUIS.cs" />
-    <Compile Include="LUIS\LUISService.cs" />
+    <Compile Include="LUIS\IluisService.cs" />
+    <Compile Include="LUIS\LuisResult.cs" />
+    <Compile Include="LUIS\LuisService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -282,8 +189,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\Joke\" />
     <Folder Include="Commands\Translate\" />
+    <Folder Include="Resources\Images\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

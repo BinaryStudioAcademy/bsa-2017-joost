@@ -4,28 +4,45 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
+using System;
+using Joost.ChatBot.Commands;
 
 namespace Joost.ChatBot
 {
 	[BotAuthentication]
 	public class MessagesController : ApiController
 	{
+		private readonly ICommandService _commandService;
+
+		public MessagesController(ICommandService commandService)
+		{
+			_commandService = commandService;
+		}
 		/// <summary>
 		/// POST: api/Messages
 		/// Receive a message from a user and reply to it
 		/// </summary>
 		public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
 		{
-			if (activity.Type == ActivityTypes.Message)
+			try
 			{
-				await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+				if (activity.Type == ActivityTypes.Message)
+				{
+					await Conversation.SendAsync(activity, () => new Dialogs.RootDialog(_commandService));
+				}
+				else
+				{
+					HandleSystemMessage(activity);
+				}
+				var response = Request.CreateResponse(HttpStatusCode.OK);
+				return response;
 			}
-			else
+			catch(Exception ex)
 			{
-				HandleSystemMessage(activity);
+				throw ex;
 			}
-			var response = Request.CreateResponse(HttpStatusCode.OK);
-			return response;
+
+			
 		}
 
 		private Activity HandleSystemMessage(Activity message)

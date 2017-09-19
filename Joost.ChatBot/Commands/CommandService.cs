@@ -1,16 +1,28 @@
 ﻿using System;
+using Joost.ChatBot.Commands.Joke;
+using Joost.ChatBot.LUIS;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Joost.ChatBot.Commands.Help;
 
 namespace Joost.ChatBot.Commands
 {
+	[Serializable]
 	public class CommandService : ICommandService
 	{
 		private List<IBotCommand> Commands { get; set; }
-
-		public CommandService()
+		private ILuisService _luis;
+		public CommandService(ILuisService luis)
 		{
-			Commands = new List<IBotCommand>();
+			_luis = luis;
+
+			Commands = new List<IBotCommand>()
+			{
+				new TakeTheJokeCommand()
+			};
+			var helpCmd = new HelpCommand(Commands);
+
+			Commands.Add(helpCmd);
 		}
 
 
@@ -25,12 +37,13 @@ namespace Joost.ChatBot.Commands
 		}
 
 
-		public async Task<string> Execute(string message)
+		public async Task<string> Execute(string query)
 		{
-			var command = FindCommand(message.Split(' ')[0]);
-			if (command != null)
-				return await command.Execute(message.Split(' '));
-			return null;
+			var luis = await _luis.QueryLuis(query);
+
+			var cmd = FindCommand(luis.topScoringIntent.intent);
+
+			return await cmd.Execute(null);
 		}
 	}
 }

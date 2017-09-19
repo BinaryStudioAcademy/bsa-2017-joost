@@ -1,18 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Configuration;
 
 namespace Joost.ChatBot.LUIS
 {
-    public class LUISService
+	[Serializable]
+	public class LuisService: ILuisService
     {
-        private static async Task<LUIS> QueryLUIS(string Query)
+		public async Task<LuisResult> QueryLuis(string Query)
         {
-            LUIS LUISResult = new LUIS();
+            LuisResult LUISResult = new LuisResult();
 
             var LUISQuery = Uri.EscapeDataString(Query);
 
@@ -33,13 +31,12 @@ namespace Joost.ChatBot.LUIS
                 if (msg.IsSuccessStatusCode)
                 {
                     var JsonDataResponse = await msg.Content.ReadAsStringAsync();
-                    LUISResult = JsonConvert.DeserializeObject<LUIS>(JsonDataResponse);
+                    LUISResult = JsonConvert.DeserializeObject<LuisResult>(JsonDataResponse);
                 }
             }
 
             return LUISResult;
 
         }
-
-    }
+	}
 }
