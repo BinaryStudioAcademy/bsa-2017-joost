@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Joost.ChatBot.Commands.Cargo.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
@@ -16,17 +19,26 @@ namespace Joost.ChatBot.Commands.Cargo
             if (parameters != null || parameters.Length >= 1)
             {
                 string cargoId = parameters[0];
-                var sUrl = WebConfigurationManager.AppSettings["NovaPoshta_Api_Key"];
+                var sUrl = WebConfigurationManager.AppSettings["NovaPoshta_Site_Url"];
+                var apiKey = WebConfigurationManager.AppSettings["NovaPoshta_Api_Key"];
+
+                string jsonObject = "{\"apiKey\":\"" + apiKey + "\",\"modelName\": \"TrackingDocument\",\"calledMethod\":\"getStatusDocuments\",\"methodProperties\":{\"Documents\": [{\"DocumentNumber\": \"" + cargoId + "\",\"Phone\":\"\"}]}}";
+
                 try
                 {
                     using (var client = new HttpClient())
                     {
-                        client.DefaultRequestHeaders.Add("Accept", "text/plain");
-                        using (var response = await client.GetAsync(sUrl))
+                        var contentJson = new StringContent(jsonObject.ToString(), Encoding.UTF8, "application/json");
+
+                        using (var response = await client.PostAsync(sUrl, contentJson))
                         using (var content = response.Content)
                         {
                             var apiResponse = await content.ReadAsStringAsync();
-                            return apiResponse;
+                            var cargo = Convert(apiResponse);
+                            if (cargo != null)
+                                return CargoItemToHTMLString(cargo);
+                            else
+                                return "Error when creating an HTML code";
                         }
                     }
                 }
@@ -37,7 +49,7 @@ namespace Joost.ChatBot.Commands.Cargo
             }
             else
             {
-                return "Error occured when cargo info";
+                return "Error occured when getting cargo info";
             }
         }
 
@@ -49,6 +61,37 @@ namespace Joost.ChatBot.Commands.Cargo
         public string GetDescription()
         {
             return "I have some friends at NovaPoshta. Just ask me if you need to track your cargo";
+        }
+
+
+        public CargoItem Convert(string sResponse)
+        {
+            if (sResponse == null)
+                return null;
+            var cargo = JsonConvert.DeserializeObject<CargoItem>(sResponse);
+            if (cargo == null)
+                return null;
+            return cargo;
+        }
+
+        public string CargoItemToHTMLString(CargoItem item)
+        {
+            if (item == null)
+                return "An error occured";
+            string resultHTML = String.Empty;
+
+            if (item.success == true)
+            {
+                resultHTML += $"<p>Status of your request: {item.data[0].Status}</p>";
+                resultHTML += $"<p>Expected delivery date: {item.data[0].ScheduledDeliveryDate}</p>";
+                resultHTML += $"<p>Place of arrival: {item.data[0].WarehouseRecipient}</p>";
+            }
+            else
+            {
+                resultHTML += "Can`t find your cargo";
+            }
+          
+            return resultHTML;
         }
     }
 }
