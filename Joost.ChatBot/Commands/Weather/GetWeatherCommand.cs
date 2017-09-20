@@ -101,6 +101,7 @@ namespace Joost.ChatBot.Commands.Weather
 				resultHTML += $"</div>";
 				resultHTML += $"</div>";
 				resultHTML += $"</div>";
+				resultHTML += $"</div>";
 			}
 			resultHTML += $"</div>";
 			resultHTML += $"</div>";

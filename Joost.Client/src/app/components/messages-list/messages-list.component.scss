@@ -733,8 +733,17 @@ ul {
   }
 
 :host ::ng-deep .bot-weather-container {
-    padding: 0.5em;
     color: #546E7A;
+    background-color: #E3F2FD;
+    margin: 0.5em;
+    padding: 0.5em;
+    border-radius: 5px;
+}
+
+:host ::ng-deep .bot-weather-items-container{
+    div:nth-child(odd){
+        background-color: #E1F5FE;
+    }
 }
 
 :host ::ng-deep .bot-weather-city {
@@ -761,7 +770,7 @@ ul {
 
 :host ::ng-deep .bot-weather-date {
     // font-size: 12px;
-    font-size: 1em;
+    font-size: 1.5em;
     font-weight: 600;
     // margin: 0px 10px;
 }
@@ -778,7 +787,7 @@ ul {
 }
 
 :host ::ng-deep .bot-weather-description {
-    font-size: 24px;
+    font-size: 1.25em;
     margin: 0px 10px;
 }
 
