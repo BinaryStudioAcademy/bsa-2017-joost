@@ -40,7 +40,13 @@ export class ContactService extends BaseApiService {
 	getContacts(){
 		let req = new HttpRequest("GET", this.generateUrl());
 		return this.http.sendRequest<Contact[]>(req);
-    }
+	}
+	
+	getContactsForGroup(){
+		let req = new HttpRequest("GET", this.generateUrl()+ "/group");
+		return this.http.sendRequest<UserContact[]>(req);
+	}
+	
     getUserIdByContactId(contactId: number) {
         let req = new HttpRequest("GET", this.generateUrl() + "/user/", {
             params: new HttpParams().set('contactId', contactId.toString())

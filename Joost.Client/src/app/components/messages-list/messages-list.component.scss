@@ -732,3 +732,122 @@ ul {
       display: none;
   }
 
+:host ::ng-deep .bot-weather-container {
+    color: #546E7A;
+    background-color: #E3F2FD;
+    margin: 0.5em;
+    border-radius: 5px;
+}
+
+:host ::ng-deep .bot-weather-items-container {
+    padding: 0.5em;
+    >div:nth-child(odd){
+        background-color: #FAFAFA;
+    }
+}
+
+:host ::ng-deep .bot-weather-city {
+    padding: 0.5em;
+    font-size: 1.5em;
+    padding-bottom: 0.4em;
+    font-weight: 600;
+}
+
+:host ::ng-deep .bot-weather-item-container {
+    padding:0.3em;
+}
+
+
+:host ::ng-deep .bot-weather-row {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: row;
+    padding: 5px;
+}
+
+:host ::ng-deep .bot-weather-column {
+    display: flex;
+    flex-direction: row;
+}
+
+:host ::ng-deep .bot-weather-date {
+    // font-size: 12px;
+    font-size: 1.5em;
+    font-weight: 600;
+    // margin: 0px 10px;
+}
+
+:host ::ng-deep .bot-weather-icon {
+    width: 100px;
+    height: 70px;
+    margin: 0;
+    padding: 0;
+    > img {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+:host ::ng-deep .bot-weather-description {
+    font-size: 1.25em;
+    margin: 0px 10px;
+}
+
+:host ::ng-deep .bot-weather-temperature-container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding: 5px;
+}
+
+:host ::ng-deep .bot-weather-temperature-item {
+    margin: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    div:first-child{
+        padding-bottom: 0.5em;
+        color: #0277BD;
+        font-weight: 600;
+    }
+}
+
+// help command
+
+:host ::ng-deep .bot-help-container {
+    font-size: 1.286em;
+}
+
+:host ::ng-deep .bot-cmd-list {
+    padding: 0;
+    font-size: 0.8em;
+    >li {
+        list-style-type: none;
+    }
+}
+
+:host ::ng-deep .bot-command-header{
+    display: flex;
+}
+
+:host ::ng-deep .bot-command-description{
+    color: #546E7A;
+    padding-left: 1.5em;
+}
+
+//cargo bot
+
+:host ::ng-deep .bot-cargo-container{
+    display: flex;
+    flex-direction: column;
+}
+
+:host ::ng-deep .bot-cargo-item{
+    display: flex;
+    margin: 3px;
+    div:last-child {
+        color: #546E7A;
+        padding-left: 5px; 
+    }
+}

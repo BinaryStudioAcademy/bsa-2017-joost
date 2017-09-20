@@ -5,6 +5,7 @@ using System.Web.Http;
 using Joost.Api.Models;
 using System.Net;
 using Joost.Api.Filters;
+using Joost.DbAccess.DAL;
 
 namespace Joost.Api.Controllers
 {
@@ -60,6 +61,11 @@ namespace Joost.Api.Controllers
 			if (currentUserId == message.SenderId && !message.IsGroup)
 			{
 				int id = await _messageService.AddUserMessage(message);
+				if (message.ReceiverId == _messageService.ChatBotIdInDb)
+				{
+					var responseMessage = await _messageService.SendMessageToBot(message);
+					await _messageService.AddUserMessage(responseMessage);
+				}
 				return Ok(id);
 			}
 			else return StatusCode(HttpStatusCode.MethodNotAllowed);
