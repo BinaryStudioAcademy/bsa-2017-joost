@@ -1,7 +1,8 @@
 ﻿@import '../../../vars.scss';
 
 .dialog-title {
-    display: flex;
+    //display: flex;
+    display: -webkit-box;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
