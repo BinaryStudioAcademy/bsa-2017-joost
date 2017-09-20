@@ -54,10 +54,12 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
 
   ngOnInit() {
       this.receiverSubscription = this.chatHubService.onAddMessageEvent.subscribe(message => {
+          this.updateDialogs();
           this.updateLastMessage(message);
       });
       this.senderSubscription = this.eventEmitterService.addMessageEvent.subscribe(message => {
-        this.updateLastMessage(message);        
+          this.updateDialogs();
+          this.updateLastMessage(message);        
       });
 
       this.addingGroupsSubscription = this.groupServive.addGroupEvent.subscribe(group => {
@@ -68,14 +70,14 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
         this.dialogs.push(data.dialog);
       });
 
-      // this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
-      //       if (userContact.IsOnline) {
-      //         userContact.UserState = UserState.Offline;
-      //       }
-      //       if (userContact.State == ContactState.New) {
-      //           this.contacts.push(userContact);
-      //       }
-      // });
+      this.newContactSubscription = this.chatHubService.onAddContactEvent.subscribe((userContact: UserContact) => {
+             if (userContact.IsOnline) {
+               userContact.UserState = UserState.Offline;
+             }
+             if (userContact.State == ContactState.New) {
+                 this.contacts.push(userContact);
+             }
+       });
       this.removeNewContactSubscription = this.eventEmitterService.removeNewContact.subscribe((userContact: UserContact) => {
           for (let i = 0; i < this.contacts.length; i++) {
               if (this.contacts[i].Id == userContact.Id) {

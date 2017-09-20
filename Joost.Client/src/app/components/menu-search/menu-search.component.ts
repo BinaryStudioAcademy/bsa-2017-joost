@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+﻿import { Component, OnInit, AfterViewChecked } from '@angular/core';
 
 import { AccountService } from '../../services/account.service';
 import { ContactService } from "../../services/contact.service";
@@ -6,7 +6,8 @@ import { AuthenticationService } from '../../services/authentication.service';
 
 import { UserSearch } from "../../models/user-search";
 import { Contact,ContactState} from "../../models/contact";
-import { UserContact} from "../../models/user-contact";
+import { UserContact } from "../../models/user-contact";
+import { EventEmitterService } from "../../services/event-emitter.service";
 
 declare var jquery: any;
 declare var $: any;
@@ -21,11 +22,12 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
     private result:UserSearch[];
 	private searchString:string;
 	private isLoad:boolean = false;
-	private contactList:Contact[];
+    private contactList: Contact[];
 
 	constructor(
 		private accountService: AccountService,
-		private authService: AuthenticationService,
+        private authService: AuthenticationService,
+        private eventEmitterService: EventEmitterService,
 		private contactService: ContactService
 	) { }
 
@@ -76,7 +78,7 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 				    });
 			    }
 			});
-		});
+        });
 	}
 
 	ngAfterViewChecked(): void {
@@ -191,8 +193,9 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 			newContact.City= userInfo.City;
 			newContact.Avatar = userInfo.Avatar;
 			newContact.State = ContactState.Sent;
-			this.contactService.changeContactNotify(newContact);
-		},
+            this.contactService.changeContactNotify(newContact);
+            this.eventEmitterService.addNewContact.emit(newContact); 
+        },
 	    async err => {
 			await this.contactService.handleTokenErrorIfExist(err).then(ok => {
 				if (ok) { 
@@ -204,7 +207,8 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 					    newContact.City= userInfo.City;
 				    	newContact.Avatar = userInfo.Avatar;
 			    		newContact.State = ContactState.Sent;
-				    	this.contactService.changeContactNotify(newContact);
+                        this.contactService.changeContactNotify(newContact);
+                        this.eventEmitterService.addNewContact.emit(newContact); 
 			    	});
 		     	}
 			});
