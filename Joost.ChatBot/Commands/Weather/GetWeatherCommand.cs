@@ -74,26 +74,38 @@ namespace Joost.ChatBot.Commands.Weather
 
 			resultHTML += $"<div class='bot-weather-container'>";
 			resultHTML += $"<div class='bot-weather-city'>Weather in {w.CityName}</div>";
+			resultHTML += $"<div class='bot-weather-items-container'>";
 			foreach (var dailyForecast in w.WeatherList)
 			{
 				resultHTML += $"<div class='bot-weather-item-container'>";
+				resultHTML += $"<div class='bot-weather-date'>{dailyForecast.Time.ToString("m")}</div>";
 				resultHTML += $"<div class='bot-weather-row'>";
-				resultHTML += $"<div> <img class='bot-weather-icon' src='assets/img/WeatherIcons/{dailyForecast.Icon}'/></div>";
-				resultHTML += $"<div class='bot-weather-column'>";
-				resultHTML += $"<div class='bot-weather-date'>{dailyForecast.Time}</div>";
+				resultHTML += $"<div class='bot-weather-icon'> <img src='assets/img/WeatherIcons/{dailyForecast.Icon}'/></div>";
+				resultHTML += $"<div class='bot-weather-main-info-container'>";
 				resultHTML += $"<div class='bot-weather-description'>{dailyForecast.Description}</div>";
-				resultHTML += $"</div>";
-				resultHTML += $"</div>";
+
 				resultHTML += $"<div class='bot-weather-temperature-container'>";
-				resultHTML += $"<div class='bot-weather-temperature-item'>Day: {dailyForecast.DayTemp}°</div>";
-				resultHTML += $"<div class='bot-weather-temperature-item'>Min: {dailyForecast.MinTemp}°</div>";
-				resultHTML += $"<div class='bot-weather-temperature-item'>Max: {dailyForecast.MaxTemp}°</div>";
+				resultHTML += $"<div class='bot-weather-column'>";
+
+				resultHTML += $"<div class='bot-weather-temperature-item'><div>Day:</div><div>{dailyForecast.DayTemp}°</div>";
+				resultHTML += $"</div>";
+
+				resultHTML += $"<div class='bot-weather-temperature-item'><div>Min:</div><div>{dailyForecast.MinTemp}°</div>";
+				resultHTML += $"</div>";
+
+				resultHTML += $"<div class='bot-weather-temperature-item'><div>Max:</div><div>{dailyForecast.MaxTemp}°</div>";
+				resultHTML += $"</div>";
+
+				resultHTML += $"</div>";
+
+				resultHTML += $"</div>";
 				resultHTML += $"</div>";
 				resultHTML += $"</div>";
 			}
 			resultHTML += $"</div>";
-
+			resultHTML += $"</div>";
 			return resultHTML;
+
 		}
 
 		public Models.Weather Convert(string sResponse)

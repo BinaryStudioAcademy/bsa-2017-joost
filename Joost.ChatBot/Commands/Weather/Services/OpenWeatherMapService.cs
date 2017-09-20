@@ -59,19 +59,29 @@ namespace Joost.ChatBot.Commands.Weather.Services
             foreach (var dailyForecast in w.WeatherList)
             {
                 resultHTML += $"<div class='bot-weather-item-container'>";
+                resultHTML += $"<div class='bot-weather-date'>{dailyForecast.Time.ToString("m")}</div>";
                 resultHTML += $"<div class='bot-weather-row'>";
                 resultHTML += $"<div class='bot-weather-icon'> <img src='{dailyForecast.Icon}'/></div>";
-                resultHTML += $"<div class='bot-weather-column'>";
-                resultHTML += $"<div class='bot-weather-date'>{dailyForecast.Time}</div>";
+                resultHTML += $"<div class='bot-weather-main-info-container'>";
                 resultHTML += $"<div class='bot-weather-description'>{dailyForecast.Description}</div>";
-                resultHTML += $"</div>";
-                resultHTML += $"</div>";
+
                 resultHTML += $"<div class='bot-weather-temperature-container'>";
-                resultHTML += $"<div class='bot-weather-temperature-item'>Day: {dailyForecast.DayTemp}°</div>";
-                resultHTML += $"<div class='bot-weather-temperature-item'>Min: {dailyForecast.MinTemp}°</div>";
-                resultHTML += $"<div class='bot-weather-temperature-item'>Max: {dailyForecast.MaxTemp}°</div>";
+                resultHTML += $"<div class='bot-weather-column'>";
+
+				resultHTML += $"<div class='bot-weather-temperature-item'>Day: </div><div>{dailyForecast.DayTemp}°</div>";
                 resultHTML += $"</div>";
+
+				resultHTML += $"<div class='bot-weather-temperature-item'>Min: </div><div>{dailyForecast.MinTemp}°</div>";
+				resultHTML += $"</div>";
+
+				resultHTML += $"<div class='bot-weather-temperature-item'>Max: </div><div>{dailyForecast.MaxTemp}°</div>";
+				resultHTML += $"</div>";
+
+				resultHTML += $"</div>";
+
                 resultHTML += $"</div>";
+				resultHTML += $"</div>";
+				resultHTML += $"</div>";
             }
             resultHTML += $"</div>";
 
