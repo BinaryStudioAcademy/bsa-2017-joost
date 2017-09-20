@@ -5,7 +5,6 @@ using Ninject;
 using Joost.DbAccess.Interfaces;
 using Joost.DbAccess.DAL;
 using Joost.Api.Services;
-using Joost.Api.ChatBot;
 
 namespace WeatherApp.Infrastructure
 {
@@ -36,7 +35,6 @@ namespace WeatherApp.Infrastructure
             kernel.Bind<IDialogDataService>().To<DialogDataService>();
             kernel.Bind<IMessageService>().To<MessageService>();
 			kernel.Bind<IGroupService>().To<GroupService>();
-			kernel.Bind<IBotService>().To<ChatBotService>();
         }
 	}
 }

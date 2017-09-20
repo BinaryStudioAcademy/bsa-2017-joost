@@ -5,7 +5,6 @@ using System.Web.Http;
 using Joost.Api.Models;
 using System.Net;
 using Joost.Api.Filters;
-using Joost.Api.ChatBot;
 
 namespace Joost.Api.Controllers
 {
@@ -14,14 +13,11 @@ namespace Joost.Api.Controllers
     public class MessagesController : BaseApiController
     {
         private IMessageService _messageService;
-		IBotService _botSrvive;
 
-		public MessagesController(IMessageService messageService, IUnitOfWork unitOfWork, IBotService botSrvive) : base(unitOfWork)
+        public MessagesController(IMessageService messageService, IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _messageService = messageService;
-			_botSrvive = botSrvive;
-
-		}
+        }
 
         [HttpGet]
         [Route("user-messages")]
@@ -63,10 +59,6 @@ namespace Joost.Api.Controllers
             var currentUserId = GetCurrentUserId();
 			if (currentUserId == message.SenderId && !message.IsGroup)
 			{
-				if(message.ReceiverId == 1)
-				{
-					await _botSrvive.Execute(message);
-				}
 				int id = await _messageService.AddUserMessage(message);
 				return Ok(id);
 			}
