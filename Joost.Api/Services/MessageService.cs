@@ -5,6 +5,9 @@ using Joost.DbAccess.Entities;
 using Joost.Api.Models;
 using System.Data.Entity;
 using System.Collections.Generic;
+using Microsoft.Bot.Connector.DirectLine;
+using System.Configuration;
+using System;
 
 namespace Joost.Api.Services
 {
@@ -13,7 +16,7 @@ namespace Joost.Api.Services
         private IUnitOfWork _unitOfWork;
         private IChatHubService _chatHubService;
 
-        public MessageService(IUnitOfWork unitOfWork, IChatHubService chatHubService)
+		public MessageService(IUnitOfWork unitOfWork, IChatHubService chatHubService)
         {
             _unitOfWork = unitOfWork;
             _chatHubService = chatHubService;
@@ -79,12 +82,13 @@ namespace Joost.Api.Services
         {
             if (message != null)
             {
-                using (var userRepository = _unitOfWork.Repository<User>())
-                {
-                    var sender = await userRepository
-						.Query()
-						.Include(s => s.Contacts)
-						.FirstOrDefaultAsync(s => s.Id == message.SenderId);
+                //using (var userRepository = _unitOfWork.Repository<User>())
+                //{
+                var userRepository = _unitOfWork.Repository<User>();
+                     var sender = await userRepository
+                            .Query()
+                            .Include(s => s.Contacts)
+                            .FirstOrDefaultAsync(s => s.Id == message.SenderId);
                     if (sender != null)
                     {
 						var receiver = sender.Contacts
@@ -110,7 +114,7 @@ namespace Joost.Api.Services
                             return message.Id;
                         }
                     }
-                }
+                //}
             }
             return -1;
         }
@@ -237,6 +241,83 @@ namespace Joost.Api.Services
 				}
 				else return false;
             }
+        }
+
+        private static string _botId;
+        private static int _chatBotIdInDb;
+		private static string _directLineSecret;
+
+		private static DirectLineClient _client;
+		private static Conversation _conversation;
+
+		static MessageService()
+		{
+            _botId = ConfigurationManager.AppSettings["botId"];
+            int chatBotIdInDb;
+			if (int.TryParse(ConfigurationManager.AppSettings["chatBotIdInDb"], out chatBotIdInDb))
+				_chatBotIdInDb = chatBotIdInDb;
+			else
+				chatBotIdInDb = 1;
+			_directLineSecret = ConfigurationManager.AppSettings["directLineSecret"];
+
+			StartConversationAsync();
+		}
+
+        public int ChatBotIdInDb
+        {
+            get { return _chatBotIdInDb; }
+        }
+
+        private static void StartConversationAsync()
+		{
+			_client = new DirectLineClient(_directLineSecret);
+			_conversation = _client.Conversations.StartConversation();
+		}
+
+        public async Task<MessageDto> SendMessageToBot(MessageDto message)
+        {
+            var responseMessage = new MessageDto();
+            var resourceResponse = await _SendMessageToBot(message);
+            if (resourceResponse != null)
+            {
+                var text = await GetMessageFromBot(resourceResponse.Id, message.SenderId);
+                if (text != null)
+                {
+                    responseMessage.SenderId = _chatBotIdInDb;
+                    responseMessage.ReceiverId = message.SenderId;
+                    responseMessage.Title = "Joost Bot";
+                    responseMessage.Text = text;
+                    responseMessage.CreatedAt = DateTime.UtcNow;
+					responseMessage.EditedAt = DateTime.UtcNow;
+					responseMessage.IsGroup = false;
+                }
+            }
+            return responseMessage;
+        }
+
+		private async Task<ResourceResponse> _SendMessageToBot(MessageDto message)
+		{
+			Activity userMessage = new Activity
+			{
+				From = new ChannelAccount(message.SenderId.ToString()),
+				Text = message.Text,
+				Type = ActivityTypes.Message
+			};
+			return await _client.Conversations.PostActivityAsync(_conversation.ConversationId, userMessage);
+		}
+
+        private async Task<string> GetMessageFromBot(string activityId, int senderId)
+        {
+            string watermark = null;
+            var activitySet = await _client.Conversations.GetActivitiesAsync(_conversation.ConversationId, watermark);
+            watermark = activitySet?.Watermark;
+            var activities = from x in activitySet.Activities
+						     where x.From.Id == _botId
+							 select x;
+            var lastActivity = activities.LastOrDefault();
+            if (lastActivity != null)
+                return lastActivity.Text;
+            else return null;
         }
     }
 }

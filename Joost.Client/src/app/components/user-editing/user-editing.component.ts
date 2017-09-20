@@ -71,7 +71,7 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
   ngOnInit() {
     this.GetUser();
     this.changeStatusSubscription = this.eventEmitterService.changeStatusEvent.subscribe(data => {
-      this.user.Status = data;
+      this.user.Status = (data) ? data : "";
 
     }); 
   }
@@ -91,7 +91,7 @@ export class UserEditingComponent extends MDL implements OnInit, AfterViewChecke
       hidePickerOnBlur: true,
       placeholder: "Describe your mood..."
     }); 
-    if (this.isLoadFinished && this.messageEmoji[0]!==undefined && !this.isEmojiLoad) {
+    if (this.isLoadFinished && this.messageEmoji && this.messageEmoji[0]!==undefined && !this.isEmojiLoad) {
       this.messageEmoji[0].emojioneArea.setText(this.user.Status);
       this.isEmojiLoad = true;
     }

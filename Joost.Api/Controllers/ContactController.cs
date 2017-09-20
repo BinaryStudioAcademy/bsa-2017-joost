@@ -6,6 +6,7 @@ using Joost.Api.Models;
 using Joost.DbAccess.Entities;
 using Joost.Api.Filters;
 using Joost.Api.Services;
+using System.Configuration;
 
 namespace Joost.Api.Controllers
 {
@@ -22,7 +23,7 @@ namespace Joost.Api.Controllers
 
         // Get: api/contacts
         [HttpGet]
-        public async Task<IHttpActionResult> GetContact()
+        public async Task<IHttpActionResult> GetContacts()
         {
             var userId = GetCurrentUserId();
             var user = await _unitOfWork.Repository<User>().GetAsync(userId);
@@ -34,8 +35,8 @@ namespace Joost.Api.Controllers
             return Ok(cont);
         }
 
-        // Post: api/contacts
-        [HttpPost]
+		// Post: api/contacts
+		[HttpPost]
         public async Task<IHttpActionResult> AddContact([FromBody]ContactDto contact)
         {
             var userId = GetCurrentUserId();
@@ -107,8 +108,34 @@ namespace Joost.Api.Controllers
             return Ok();
         }
 
-        // Get: api/contacts/contacts-detail
-        [HttpGet]
+		// Get: api/contacts/group
+		[HttpGet]
+		[Route("group")]
+		public async Task<IHttpActionResult> GetContactsForGroup()
+		{
+			var userId = GetCurrentUserId();
+			var user = await _unitOfWork.Repository<User>().GetAsync(userId);
+			if (user == null)
+			{
+				return NotFound();
+			}
+
+			int chatBotIdInDb = int.Parse(ConfigurationManager.AppSettings["chatBotIdInDb"]);
+
+			var cont = user.Contacts.Select(t => new UserContactDto
+			{
+				Id = t.ContactUser.Id,
+				State = t.State,
+				Avatar = t.ContactUser.Avatar,
+				Name = t.ContactUser.FirstName + " " + t.ContactUser.LastName,
+				City = t.ContactUser.City,
+				UserState = t.ContactUser.State
+			}).Where(t => t.Id != chatBotIdInDb).OrderBy(t => t.State).ToList();
+
+			return Ok(cont);
+		}
+		// Get: api/contacts/contacts-detail
+		[HttpGet]
         [Route("contacts-detail")]
         public async Task<IHttpActionResult> GetContactsWithDetail()
         {
