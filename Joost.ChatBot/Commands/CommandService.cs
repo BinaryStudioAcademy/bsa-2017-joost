@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Joost.ChatBot.Commands.Help;
 using Joost.ChatBot.Commands.Weather;
-using Joost.ChatBot.Commands.Weather.Services;
 using Joost.ChatBot.Commands.Translate;
 using Joost.ChatBot.Commands.Cargo;
 

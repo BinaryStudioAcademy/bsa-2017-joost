@@ -1,7 +1,6 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.Translate.v2;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Configuration;
 

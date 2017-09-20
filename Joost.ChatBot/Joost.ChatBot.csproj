@@ -202,8 +202,6 @@
     <Compile Include="Commands\ICommandService.cs" />
     <Compile Include="Commands\Joke\TakeTheJokeCommand.cs" />
     <Compile Include="Commands\Translate\TranslateCommand.cs" />
-    <Compile Include="Commands\Weather\Converters\IApiResponseConverter.cs" />
-    <Compile Include="Commands\Weather\Converters\JsonResponseConverter.cs" />
     <Compile Include="Commands\Weather\GetWeatherCommand.cs" />
     <Compile Include="Commands\Weather\Models\DailyForecast.cs" />
     <Compile Include="Commands\Weather\Models\OpenWeatherMapDTO\City.cs" />
@@ -213,8 +211,6 @@
     <Compile Include="Commands\Weather\Models\OpenWeatherMapDTO\WeatherInfo.cs" />
     <Compile Include="Commands\Weather\Models\OpenWeatherMapDTO\WeatherListItem.cs" />
     <Compile Include="Commands\Weather\Models\Weather.cs" />
-    <Compile Include="Commands\Weather\Services\IWeatherService.cs" />
-    <Compile Include="Commands\Weather\Services\OpenWeatherMapService.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Global.asax.cs">

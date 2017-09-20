@@ -63,7 +63,6 @@ namespace Joost.ChatBot.Commands.Cargo
             return "I have some friends at NovaPoshta. Just ask me if you need to track your cargo";
         }
 
-
         public CargoItem Convert(string sResponse)
         {
             if (sResponse == null)
@@ -82,9 +81,15 @@ namespace Joost.ChatBot.Commands.Cargo
 
             if (item.success == true)
             {
-                resultHTML += $"<p>Status of your request: {item.data[0].Status}</p>";
-                resultHTML += $"<p>Expected delivery date: {item.data[0].ScheduledDeliveryDate}</p>";
-                resultHTML += $"<p>Place of arrival: {item.data[0].WarehouseRecipient}</p>";
+                resultHTML += "<div class='bot-cargo-container'>";
+                resultHTML += $"Status of your request: {item.data[0].Status}";
+                if(item.data[0].StatusCode != "3") // Status code 3 == Cargo Id do not found
+                {
+                    resultHTML += $"Expected delivery date: {item.data[0].ScheduledDeliveryDate}";
+                    resultHTML += $"Place of arrival: {item.data[0].WarehouseRecipient}";
+                }
+               
+                resultHTML += "</div>";
             }
             else
             {
