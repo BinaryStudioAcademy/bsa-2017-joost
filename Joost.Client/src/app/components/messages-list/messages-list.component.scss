@@ -1,4 +1,4 @@
-﻿@import '../../../vars.scss';
+@import '../../../vars.scss';
 
 .dialog-title {
     //display: flex;
@@ -146,7 +146,6 @@ div .mdl-list__item:hover{
         width: 1em;
         height: 1em;
         background-color: #B3E5FC;
-        z-index: -1;
         transform: rotate(45deg);
     }
 }
