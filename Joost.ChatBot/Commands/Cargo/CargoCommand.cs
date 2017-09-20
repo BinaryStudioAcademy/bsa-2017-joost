@@ -77,21 +77,19 @@ namespace Joost.ChatBot.Commands.Cargo
         {
             if (item == null)
                 return "An error occured";
-            string resultHTML = String.Empty;
+            string resultHTML = string.Empty;
 
-            if (item.success == true)
-            {
-                resultHTML += "<div class='bot-cargo-container'>";
-                resultHTML += $"Status of your request: {item.data[0].Status}";
-                if(item.data[0].StatusCode != "3") // Status code 3 == Cargo Id do not found
-                {
-                    resultHTML += $"Expected delivery date: {item.data[0].ScheduledDeliveryDate}";
-                    resultHTML += $"Place of arrival: {item.data[0].WarehouseRecipient}";
-                }
-               
-                resultHTML += "</div>";
-            }
-            else
+			if (item.success == true)
+			{
+				resultHTML += "<div class='bot-cargo-container'>";
+				resultHTML += $"<div class='bot-cargo-item'><div>Status of your request:</div><div>{item.data[0].Status}</div></div>";
+				if (!string.IsNullOrEmpty(item.data[0].ScheduledDeliveryDate))
+					resultHTML += $"<div class='bot-cargo-item'><div>Expected delivery date:</div><div>{item.data[0].ScheduledDeliveryDate}</div></div>";
+				if (!string.IsNullOrEmpty(item.data[0].WarehouseRecipient))
+					resultHTML += $"<div class='bot-cargo-item'><div>Place of arrival:</div><div>{item.data[0].WarehouseRecipient}</div></div>";
+				resultHTML += "</div>";
+			}
+			else
             {
                 resultHTML += "Can`t find your cargo";
             }

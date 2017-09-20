@@ -736,25 +736,27 @@ ul {
     color: #546E7A;
     background-color: #E3F2FD;
     margin: 0.5em;
-    padding: 0.5em;
     border-radius: 5px;
 }
 
-:host ::ng-deep .bot-weather-items-container{
-    div:nth-child(odd){
-        background-color: #E1F5FE;
+:host ::ng-deep .bot-weather-items-container {
+    padding: 0.5em;
+    >div:nth-child(odd){
+        background-color: #FAFAFA;
     }
 }
 
 :host ::ng-deep .bot-weather-city {
+    padding: 0.5em;
     font-size: 1.5em;
     padding-bottom: 0.4em;
     font-weight: 600;
 }
 
 :host ::ng-deep .bot-weather-item-container {
-    padding:0.3em 0;
+    padding:0.3em;
 }
+
 
 :host ::ng-deep .bot-weather-row {
     display: flex;
@@ -800,8 +802,52 @@ ul {
 
 :host ::ng-deep .bot-weather-temperature-item {
     margin: 0.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     div:first-child{
         padding-bottom: 0.5em;
+        color: #0277BD;
+        font-weight: 600;
+    }
+}
+
+// help command
+
+:host ::ng-deep .bot-help-container {
+    font-size: 1.286em;
+}
+
+:host ::ng-deep .bot-cmd-list {
+    padding: 0;
+    font-size: 0.8em;
+    >li {
+        list-style-type: none;
+    }
+}
+
+:host ::ng-deep .bot-command-header{
+    display: flex;
+}
+
+:host ::ng-deep .bot-command-description{
+    color: #546E7A;
+    padding-left: 1.5em;
+}
+
+//cargo bot
+
+:host ::ng-deep .bot-cargo-container{
+    display: flex;
+    flex-direction: column;
+}
+
+:host ::ng-deep .bot-cargo-item{
+    display: flex;
+    margin: 3px;
+    div:last-child {
+        color: #546E7A;
+        padding-left: 5px; 
     }
 }

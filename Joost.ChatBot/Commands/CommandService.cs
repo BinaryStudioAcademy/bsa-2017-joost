@@ -54,7 +54,14 @@ namespace Joost.ChatBot.Commands
                 List<string> aParams = new List<string>();
                 foreach (var entity in luis.entities)
                     aParams.Add(entity.entity);
-                return await cmd.ExecuteAsync(aParams.ToArray());
+				if(cmd != null)
+				{
+					return await cmd.ExecuteAsync(aParams.ToArray());
+				}
+				else
+				{
+					return "Sorry, I can't understand you <img alt='🤔' class='emojioneemoji' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f914.png'>";
+				}
 
             }
             catch (Exception ex)

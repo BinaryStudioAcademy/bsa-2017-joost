@@ -11,7 +11,7 @@ namespace Joost.ChatBot.Commands.Translate
 	{
 		public async Task<string> ExecuteAsync(string[] parameters)
 		{
-			string rez = "Can't recognize translate parameters";
+			string rez = "Sorry, I can't understand you <img alt='🤔' class='emojioneemoji' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f914.png'>";
 
 			if (parameters.Length < 2)
 				return rez;

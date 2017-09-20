@@ -122,8 +122,8 @@ namespace Joost.ChatBot.Commands.Weather
 		public static DateTime TimeStampToDateTime(int javaTimeStamp)
 		{
 			// Java timestamp is milliseconds past epoch
-			var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			dtDateTime = dtDateTime.AddMilliseconds(javaTimeStamp).ToLocalTime();
+			DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+			dtDateTime = dtDateTime.AddSeconds(javaTimeStamp).ToLocalTime();
 			return dtDateTime;
 		}
 
