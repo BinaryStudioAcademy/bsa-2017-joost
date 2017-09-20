@@ -25,6 +25,7 @@ declare var $: any;
     selector: "messages-list",
     templateUrl: "./messages-list.component.html",
     styleUrls: ["./messages-list.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecked {
 
@@ -503,13 +504,8 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
         this.scrollToBottom();
         let sh = this.scrollContainer.nativeElement.scrollHeight;
         let st = this.scrollContainer.nativeElement.scrollTop;
-        let ch = this.scrollContainer.nativeElement.clientHeight;
-        let step = sh - ch;
-        let eps = 1;
-        console.log("step - " + step)
         if (sh > 0 && st > 0) {
             this.toBottom = false;
-            console.log("exit");
         }
     }
 
@@ -520,6 +516,7 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
     }
 
     ngAfterViewChecked() {
+        this.cdRef.detectChanges();
         this.onAddMessages();
         this.onScrollToBottom();      
     }
