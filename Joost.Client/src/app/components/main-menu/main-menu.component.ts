@@ -12,6 +12,7 @@ import { UserState } from "../../models/user-detail";
 import { NotificationService } from "../../services/notification.service";
 import { EventEmitterService } from "../../services/event-emitter.service";
 import { AvatarService } from "../../services/avatar.service";
+import { NamePipe } from "../../pipes/name.pipe";
 declare var jquery: any;
 declare var $: any;
 @Component({

@@ -56,7 +56,7 @@ export class LoginSignUpComponent implements OnInit {
     this.checkEmailIsEmpty(this.email);
     this.isFormChecked = false;
     console.log(form);
-    if (form.invalid) {
+    if (form.invalid || this.password!=this.confirmPassword) {
       if (form.form.controls.signInEmail.valid==false || !this.userIsEmpty)  {
         this.isFormChecked = true;
         this.loginError = true;

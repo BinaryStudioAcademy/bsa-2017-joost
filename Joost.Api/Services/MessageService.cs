@@ -142,10 +142,12 @@ namespace Joost.Api.Services
 								AttachedFile = groupMessage.AttachedFile
 							};
 							_unitOfWork.Repository<GroupMessage>().Add(newMessage);
-							groupMessage.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
-							
-							await _unitOfWork.SaveAsync();
-                            await _chatHubService.SendToGroup(MessageDto.FromGroupMessageModel(newMessage));
+                            
+                            //groupMessage.Title = string.Format("{0} {1}", sender.FirstName, sender.LastName);
+                            groupMessage.Title = group.Name;
+                            await _unitOfWork.SaveAsync();
+                            //await _chatHubService.SendToGroup(MessageDto.FromGroupMessageModel(newMessage));
+                            await _chatHubService.SendToGroup(groupMessage);
                             int groupMessageId = newMessage.Id;
                             return groupMessageId;
                         }

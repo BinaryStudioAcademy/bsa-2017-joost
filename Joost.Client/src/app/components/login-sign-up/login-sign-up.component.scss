@@ -11,7 +11,7 @@ button{
 }
 
 .mdl-textfield.is-invalid.is-focused .mdl-textfield__input,
-.mdl-textfield.is-invalid.is-dirty .mdl-textfield__input {
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__input,{
     border-color: #d50000;
     box-shadow: none;
 }
@@ -22,14 +22,23 @@ button{
 }
 
 .mdl-textfield.is-invalid.is-focused .mdl-textfield__label,
-.mdl-textfield.is-invalid.is-dirty .mdl-textfield__label {
+.mdl-textfield.is-invalid.is-dirty .mdl-textfield__label{
     color: #d50000;
     font-size: 12px;
 }
-
 .validate{
     color:#d50000;
     font-size:14px;
     margin-top: -15px;
     margin-bottom: 5px;
+}
+.mdl-textfield.wrong .mdl-textfield__label{
+    color: #d50000;
+}
+.mdl-textfield.wrong.is-dirty .mdl-textfield__input,
+.mdl-textfield.wrong.is-focused .mdl-textfield__input{
+    border-color: #d50000;
+}
+.mdl-textfield.wrong .mdl-textfield__label:after{
+    background-color: #d50000;
 }

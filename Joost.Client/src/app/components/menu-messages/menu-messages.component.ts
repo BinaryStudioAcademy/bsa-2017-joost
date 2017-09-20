@@ -210,7 +210,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     let filteredDialogs = this.dialogs.filter(d => (d.Id == message.SenderId || d.Id == message.ReceiverId) && !d.IsGroup);
     if (filteredDialogs.length > 0) {
         filteredDialogs[0].LastMessage = this.GetFristMуssageLine(message.Text);
-        filteredDialogs[0].DateLastMessage = new Date(new Date(message.CreatedAt).toLocaleString());
+        filteredDialogs[0].DateLastMessage =  this.convertUTCDateToLocalDate(message.CreatedAt);
         this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
     }
   }
@@ -219,11 +219,19 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
     let filteredDialogs = this.dialogs.filter(d => d.Id == message.ReceiverId && d.IsGroup);
     if (filteredDialogs.length > 0) {
         filteredDialogs[0].LastMessage = this.GetFristMуssageLine(message.Text);
-        filteredDialogs[0].DateLastMessage = new Date(message.CreatedAt);
+        filteredDialogs[0].DateLastMessage = this.convertUTCDateToLocalDate(message.CreatedAt);
         this.filteredDialogs = this.OrderByArray(this.filteredDialogs, "DateLastMessage").map(item => item);
     }
   }
+  private convertUTCDateToLocalDate(time:Date) {
+      let date = new Date(time);
+      let newDate = new Date(date.getTime() + date.getTimezoneOffset()*60*1000);
+      let offset = date.getTimezoneOffset() / 60;
+      let hours = date.getHours();
+      newDate.setHours(hours - offset);
 
+      return newDate;   
+  }
   private updateLastMessage(message: Message) {
     // show only first line
     if (message.IsGroup) {
