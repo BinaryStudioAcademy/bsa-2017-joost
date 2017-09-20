@@ -22,7 +22,7 @@ namespace Joost.ChatBot.Commands.Cargo
                 var sUrl = WebConfigurationManager.AppSettings["NovaPoshta_Site_Url"];
                 var apiKey = WebConfigurationManager.AppSettings["NovaPoshta_Api_Key"];
 
-                string jsonObject = String.Format("{\"apiKey\":\"{0}\",\"modelName\": \"TrackingDocument\",\"calledMethod\":\"getStatusDocuments\",\"methodProperties\": {\"Documents\": [{\"DocumentNumber\": \"{1}\",\"Phone\":\"\"}]}}", apiKey, cargoId);
+                string jsonObject = "{\"apiKey\":\"" + apiKey + "\",\"modelName\": \"TrackingDocument\",\"calledMethod\":\"getStatusDocuments\",\"methodProperties\":{\"Documents\": [{\"DocumentNumber\": \"" + cargoId + "\",\"Phone\":\"\"}]}}";
 
                 try
                 {
