@@ -17,7 +17,6 @@ namespace Joost.ChatBot.Commands.Help
 		public async Task<string> ExecuteAsync(string[] parameters)
 		{
 			string rez = "";
-
 			foreach (IBotCommand cmd in _commands)
 				rez += $"<div class=\"bot-command-header\">{cmd.GetCommand()}</div><div class=\"bot-command-description\">{cmd.GetDescription()}</div>";
 			return rez;
