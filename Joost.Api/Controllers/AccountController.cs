@@ -69,7 +69,7 @@ namespace Joost.Api.Controllers
                 await _chatHubService.ChangeUserState(user, user.ConnectionId);
             }
             await _unitOfWork.SaveAsync();
-            return Ok(user);
+            return Ok();
         }
 
         // GET: api/account/name
@@ -111,7 +111,7 @@ namespace Joost.Api.Controllers
             _unitOfWork.Repository<User>().Attach(user);
             await _unitOfWork.SaveAsync();
 
-            return Ok(user);
+            return Ok();
         }
 
         // POST api/account/auth

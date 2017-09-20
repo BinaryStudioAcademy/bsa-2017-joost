@@ -116,8 +116,8 @@ namespace Joost.Api.Services
 						{
 							Id = lastGroup.Id,
 							Name = lastGroup.Name,
-							LastMessage = lastMessage != null ? lastMessage.Text: null,
-							DateLastMessage = lastMessage != null ? lastMessage.CreatedAt: new System.DateTime(),
+							LastMessage = lastMessage != null ? lastMessage.Text: "Group was created",
+							DateLastMessage = lastMessage != null ? lastMessage.CreatedAt: lastGroup.CreatedAt,
 							Avatar = lastGroup.Avatar,
 							IsGroup = true
 						};

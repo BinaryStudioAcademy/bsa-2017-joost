@@ -54,10 +54,12 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
 
   ngOnInit() {
       this.receiverSubscription = this.chatHubService.onAddMessageEvent.subscribe(message => {
+          this.updateDialogs();
           this.updateLastMessage(message);
       });
       this.senderSubscription = this.eventEmitterService.addMessageEvent.subscribe(message => {
-        this.updateLastMessage(message);        
+          this.updateDialogs();
+          this.updateLastMessage(message);        
       });
 
       this.addingGroupsSubscription = this.groupServive.addGroupEvent.subscribe(group => {
@@ -68,14 +70,14 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
         this.dialogs.push(data.dialog);
       });
 
-      // this.newContactSubscription = this.chatHubService.onNewUserInContactsEvent.subscribe((userContact: UserContact) => {
-      //       if (userContact.IsOnline) {
-      //         userContact.UserState = UserState.Offline;
-      //       }
-      //       if (userContact.State == ContactState.New) {
-      //           this.contacts.push(userContact);
-      //       }
-      // });
+      this.newContactSubscription = this.chatHubService.onAddContactEvent.subscribe((userContact: UserContact) => {
+             if (userContact.IsOnline) {
+               userContact.UserState = UserState.Offline;
+             }
+             if (userContact.State == ContactState.New) {
+                 this.contacts.push(userContact);
+             }
+       });
       this.removeNewContactSubscription = this.eventEmitterService.removeNewContact.subscribe((userContact: UserContact) => {
           for (let i = 0; i < this.contacts.length; i++) {
               if (this.contacts[i].Id == userContact.Id) {
@@ -135,6 +137,7 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
       var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
       this.UpdateFirstDlgMessages(sortArray);
       this.dialogs = sortArray;
+      console.log(sortArray);
       for (var i = this.dialogs.length - 1; i >= 0; i--) {
         if (!this.dialogs[i].IsOnline) {
           this.dialogs[i].UserState = UserState.Offline;
@@ -148,15 +151,19 @@ export class MenuMessagesComponent implements OnInit, OnDestroy, AfterViewChecke
           this.dialogService.getDialogs().subscribe(d => {
             var sortArray = this.OrderByArray(d, "DateLastMessage").map(item => item);
             this.UpdateFirstDlgMessages(sortArray);
-            this.dialogs = d;
-            this.filteredDialogs = d;
+            this.dialogs = sortArray;
+            for (var i = this.dialogs.length - 1; i >= 0; i--) {
+              if (!this.dialogs[i].IsOnline) {
+                this.dialogs[i].UserState = UserState.Offline;
+              }
+            }  
+            this.filteredDialogs = this.dialogs;
           }); 
         }
       });
     });
     this.contactService.getAllContacts().subscribe(data => {
         this.contacts = data.filter(t=>t.State == ContactState.New);
-        console.log(this.contacts);
         for (var i = this.contacts.length - 1; i >= 0; i--) {
           if (!this.contacts[i].IsOnline) {
             this.contacts[i].UserState = UserState.Offline;

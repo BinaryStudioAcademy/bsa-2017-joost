@@ -7,6 +7,7 @@ import { ContactState} from "../../models/contact";
 import { AuthenticationService } from '../../services/authentication.service';
 import { MDL } from "../mdl-base.component";
 import { EventEmitterService } from "../../services/event-emitter.service";
+import { ChatHubService } from "../../services/chat-hub.service";
 
 @Component({
   selector: 'app-user-add-contact',
@@ -22,6 +23,7 @@ export class UserAddContactComponent extends MDL implements OnInit{
 	constructor(
 		private router: Router,
         private location: Location,
+        private chatHubService: ChatHubService, 
         private eventEmitterService: EventEmitterService,
 		private contactService: ContactService
 	) {
@@ -79,8 +81,9 @@ export class UserAddContactComponent extends MDL implements OnInit{
 		this.contactService.confirmContact(id).subscribe(ok =>{
 			this.contact.State = ContactState.Accept;
             this.contactService.changeContactNotify(this.contact);
+            this.eventEmitterService.confirmContact.emit(this.contact);
             this.eventEmitterService.removeNewContact.emit(this.contact);
-			this.router.navigate(["menu"]); 
+            this.router.navigate(["menu"]); 
 		},
 	    async err=> {
 			await this.contactService.handleTokenErrorIfExist(err).then(ok => { 
@@ -88,7 +91,8 @@ export class UserAddContactComponent extends MDL implements OnInit{
 			    this.contactService.confirmContact(id).subscribe(ok => {
 				  this.contact.State = ContactState.Accept;
                   this.contactService.changeContactNotify(this.contact);
-                  this.eventEmitterService.removeNewContact.emit(this.contact); 
+                  this.eventEmitterService.confirmContact.emit(this.contact);
+                  this.eventEmitterService.removeNewContact.emit(this.contact);
                   this.router.navigate(["menu"]);
 			  	});
 			  }

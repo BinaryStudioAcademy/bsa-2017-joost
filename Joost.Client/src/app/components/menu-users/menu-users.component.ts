@@ -10,6 +10,7 @@ import { Contact,ContactState} from "../../models/contact";
 import { UserContact} from "../../models/user-contact";
 import { ChatHubService } from "../../services/chat-hub.service";
 import { Subscription } from "rxjs/Rx";
+import { EventEmitterService } from "../../services/event-emitter.service";
 
 declare var jquery: any;
 declare var $: any;
@@ -30,12 +31,15 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 	private newContactSubscription: Subscription;
 	private userOnlineSubscription: Subscription;
 	private userOfflineSubscription: Subscription;
-	private userChangeStateSubscription: Subscription;
+    private userChangeStateSubscription: Subscription; 
+    private addNewContactSubscription: Subscription;
+    private confirmContactEmitSubscription: Subscription;
 
 	
 	constructor(
 		private router: Router,
-		private contactService: ContactService,
+        private contactService: ContactService,
+        private eventEmitterService: EventEmitterService,
 		private chatHubService: ChatHubService
 		) { }
 
@@ -48,7 +52,6 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 			        this.result[i].UserState = UserState.Offline;
 			      }
 			    }
-			    console.log(this.result);
 			    this.searchContact = this.result;
 			},
 			async err => {
@@ -124,15 +127,18 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 		  this.onUserStateChange(user);
 		});
 		this.confirmContactSubscription = this.chatHubService.onConfirmContactEvent.subscribe((userContact: UserContact) => {
-			console.log("confirm");
-			let contact = this.result.find(c => c.Id == userContact.Id);
-			contact = userContact;
+            this.searchContact.find(c => c.Id == userContact.Id).State = userContact.State;
 		});
-		this.canceledContactSubscription = this.chatHubService.onCanceledContactEvent.subscribe((userContact: UserContact) => {
-			console.log("canceled");			
-			let contact = this.result.find(c => c.Id == userContact.Id);
-			contact = userContact;
-		});
+        this.canceledContactSubscription = this.chatHubService.onCanceledContactEvent.subscribe((userContact: UserContact) => {
+            let index = this.searchContact.findIndex(c => c.Id == userContact.Id);
+            this.searchContact.splice(index, 1);
+        });
+        this.addNewContactSubscription = this.eventEmitterService.addNewContact.subscribe(data => {
+            this.searchContact.push(data);
+        });
+        this.confirmContactEmitSubscription = this.eventEmitterService.confirmContact.subscribe(data => {
+            this.searchContact.push(data);
+        });
 	}
 	onUserStateChange(user:UserNetState){
 	  if (this.result) {
@@ -147,7 +153,8 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 		this.addContactSubscription.unsubscribe();
 		this.confirmContactSubscription.unsubscribe();
 		this.canceledContactSubscription.unsubscribe();		
-	}
+        this.addNewContactSubscription.unsubscribe();		
+    }
 
 	ngAfterViewChecked(): void {
 		if($("#message-panel").length > 0)
