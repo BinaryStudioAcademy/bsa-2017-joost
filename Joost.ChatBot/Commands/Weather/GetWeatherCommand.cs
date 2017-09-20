@@ -13,7 +13,7 @@ namespace Joost.ChatBot.Commands.Weather
 	{
 		public async Task<string> ExecuteAsync(string[] parameters)
 		{
-			if (parameters != null || parameters.Length >= 1)
+			if (parameters != null && parameters.Length > 0)
 			{
 				string city = parameters[0];
 				string period = (parameters.Length >= 2) ? parameters[1] : "1";
@@ -23,7 +23,7 @@ namespace Joost.ChatBot.Commands.Weather
 			}
 			else
 			{
-				return "Error occured when getting weather forecast";
+				return null;
 			}
 		}
 

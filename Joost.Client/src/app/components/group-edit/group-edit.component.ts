@@ -54,7 +54,7 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
             });
         
         // get current user contact list
-        this.contactService.getAllContacts()
+        this.contactService.getContactsForGroup()
         .subscribe(response => {
             this.unselectedMembers = response.filter(t=>t.State==ContactState.Accept || t.State==ContactState.Sent);
             this.filteredMembers = this.unselectedMembers;
@@ -62,7 +62,7 @@ export class GroupEditComponent extends MDL implements OnInit, OnDestroy {
             async err => {
                 await this.contactService.handleTokenErrorIfExist(err).then(ok => {
                     if (ok) {
-                        this.contactService.getAllContacts().subscribe(response => {
+                        this.contactService.getContactsForGroup().subscribe(response => {
                             this.unselectedMembers = response.filter(t=>t.State==ContactState.Accept || t.State==ContactState.Sent);
                             this.filteredMembers = this.unselectedMembers;
                         })

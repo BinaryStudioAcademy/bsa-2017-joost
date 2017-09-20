@@ -285,9 +285,9 @@ namespace Joost.Api.Services
                     responseMessage.ReceiverId = message.SenderId;
                     responseMessage.Title = "Joost Bot";
                     responseMessage.Text = text;
-                    responseMessage.CreatedAt = DateTime.Now;
-                    responseMessage.EditedAt = DateTime.Now;
-                    responseMessage.IsGroup = false;
+                    responseMessage.CreatedAt = DateTime.UtcNow;
+					responseMessage.EditedAt = DateTime.UtcNow;
+					responseMessage.IsGroup = false;
                 }
             }
             return responseMessage;

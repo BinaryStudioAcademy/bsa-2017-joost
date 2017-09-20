@@ -38,7 +38,7 @@ namespace Joost.ChatBot.Commands.Cargo
                             if (cargo != null)
                                 return CargoItemToHTMLString(cargo);
                             else
-                                return "Error when creating an HTML code";
+                                return null;
                         }
                     }
                 }
@@ -49,7 +49,7 @@ namespace Joost.ChatBot.Commands.Cargo
             }
             else
             {
-                return "Error occured when getting cargo info";
+                return null;
             }
         }
 
@@ -76,7 +76,7 @@ namespace Joost.ChatBot.Commands.Cargo
         public string CargoItemToHTMLString(CargoItem item)
         {
             if (item == null)
-                return "An error occured";
+                return null;
             string resultHTML = string.Empty;
 
 			if (item.success == true)
@@ -91,7 +91,7 @@ namespace Joost.ChatBot.Commands.Cargo
 			}
 			else
             {
-                resultHTML += "Can`t find your cargo";
+                resultHTML += "Can`t find your cargo. Please, check it's id";
             }
           
             return resultHTML;

@@ -11,8 +11,8 @@ namespace Joost.ChatBot.Commands.Translate
 	{
 		public async Task<string> ExecuteAsync(string[] parameters)
 		{
-			string rez = "Sorry, I can't understand you <img alt='🤔' class='emojioneemoji' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f914.png'>";
-
+			//string rez = "Sorry, I can't understand you <img alt='🤔' class='emojioneemoji' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f914.png'>";
+			string rez = null;
 			if (parameters.Length < 2)
 				return rez;
 
@@ -34,7 +34,7 @@ namespace Joost.ChatBot.Commands.Translate
 				}
 				else
 				{
-					rez = response.Translations[0].TranslatedText;
+					rez = "It will be: " + response.Translations[0].TranslatedText;
 				}
 			}
 			catch
@@ -43,7 +43,7 @@ namespace Joost.ChatBot.Commands.Translate
 			}
 			
 
-			return $"<i>{rez}</i>";
+			return rez;
 		}
 
 		public string GetCommand()

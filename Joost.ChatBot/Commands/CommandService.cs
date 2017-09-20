@@ -56,11 +56,15 @@ namespace Joost.ChatBot.Commands
                     aParams.Add(entity.entity);
 				if(cmd != null)
 				{
-					return await cmd.ExecuteAsync(aParams.ToArray());
+					var rez =  await cmd.ExecuteAsync(aParams.ToArray());
+					if (rez != null)
+						return rez;
+					else
+						return "Sorry, I can't understand you <img alt='🤔' class='emojioneemoji' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f914.png'>";
 				}
 				else
 				{
-					return "Sorry, I can't understand you <img alt='🤔' class='emojioneemoji' src='https://cdnjs.cloudflare.com/ajax/libs/emojione/2.1.4/assets/png/1f914.png'>";
+					return null;
 				}
 
             }
