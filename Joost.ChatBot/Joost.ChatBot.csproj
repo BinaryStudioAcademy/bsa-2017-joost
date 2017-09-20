@@ -193,6 +193,7 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Commands\Cargo\CargoCommand.cs" />
     <Compile Include="Commands\CommandService.cs" />
     <Compile Include="Commands\Help\HelpCommand.cs" />
     <Compile Include="Commands\IBotCommand.cs" />

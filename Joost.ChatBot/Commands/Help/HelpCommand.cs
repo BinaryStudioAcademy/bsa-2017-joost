@@ -14,7 +14,7 @@ namespace Joost.ChatBot.Commands.Help
 			_commands = commands;
 		}
 
-		public async Task<string> Execute(string[] parameters)
+		public async Task<string> ExecuteAsync(string[] parameters)
 		{
 			string rez = "";
 
@@ -30,7 +30,7 @@ namespace Joost.ChatBot.Commands.Help
 
 		public string GetDescription()
 		{
-			return "Return the avalible commands list";
+			return "List of things that i can help you with";
 		}
 	}
 }

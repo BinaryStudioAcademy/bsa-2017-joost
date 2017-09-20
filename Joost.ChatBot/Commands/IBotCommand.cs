@@ -6,6 +6,6 @@ namespace Joost.ChatBot.Commands
 	{
 		string GetCommand();
 		string GetDescription();
-		Task<string> Execute(string[] parameters);
+		Task<string> ExecuteAsync(string[] parameters);
 	}
 }

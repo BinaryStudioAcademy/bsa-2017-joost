@@ -11,7 +11,7 @@ namespace Joost.ChatBot.Commands.Joke
 	[Serializable]
 	public class TakeTheJokeCommand : IBotCommand
 	{
-		public async Task<string> Execute(string[] parameters)
+		public async Task<string> ExecuteAsync(string[] parameters)
 		{
 			var sUrl = WebConfigurationManager.AppSettings["Joke_site_url"];
 			try
@@ -40,7 +40,7 @@ namespace Joost.ChatBot.Commands.Joke
 
 		public string GetDescription()
 		{
-			return "Takes a random joke";
+			return "You can ask me for a joke or funny story if you are bored ;)";
 		}
 	}
 }

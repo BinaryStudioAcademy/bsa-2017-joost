@@ -10,7 +10,7 @@ namespace Joost.ChatBot.Commands.Translate
 	[Serializable]
 	public class TranslateCommand : IBotCommand
 	{
-		public async Task<string> Execute(string[] parameters)
+		public async Task<string> ExecuteAsync(string[] parameters)
 		{
 			string rez = "Can't recognize translate parameters";
 
@@ -49,12 +49,12 @@ namespace Joost.ChatBot.Commands.Translate
 
 		public string GetCommand()
 		{
-			return "Translate.Translate";
+			return "Translate";
 		}
 
 		public string GetDescription()
 		{
-			return "Translate the text";
+			return "I can speak in many languages. You can ask me for a translation by writing something like \"Translate 'yellow submarine' to ua\"";
 		}
 	}
 }

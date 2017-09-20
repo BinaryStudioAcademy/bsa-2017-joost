@@ -11,10 +11,9 @@ namespace Joost.ChatBot.Commands.Weather
 	[Serializable]
 	public class GetWeatherCommand : IBotCommand
 	{
-
-		public async Task<string> Execute(string[] parameters)
+		public async Task<string> ExecuteAsync(string[] parameters)
 		{
-			if (parameters != null || parameters.Length < 1)
+			if (parameters != null || parameters.Length >= 1)
 			{
 				string city = parameters[0];
 				string period = (parameters.Length >= 2) ? parameters[1] : "1";
@@ -35,7 +34,7 @@ namespace Joost.ChatBot.Commands.Weather
 
 		public string GetDescription()
 		{
-			return "If you need weather forecast you can just ask me for that by writing something like that: 'Weather in Lviv' or 'Weather in Kyiv for 3 days'";
+			return "If you need weather forecast you can just ask me for it by writing something like that: 'Weather in Lviv' or 'Weather in Kyiv for 3 days'";
 		}
 
 		public async Task<string> GetWeatherByCityNameForPeriod(string name, string dayPeriod)
