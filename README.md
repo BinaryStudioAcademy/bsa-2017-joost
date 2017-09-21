@@ -1,13 +1,29 @@
-> Перш ніж запустити проект потрібно виконати наступні команди:
+## Joost
 
-UPDATE 07.09.2017
+![Logo](Joost.Client/src/assets/img/logo.png)
+
+> Tools:
+* ASP.Net Web API
+* Microsoft SQL & Entity Framework
+* SignalR
+* Angular 4 (hosted on .Net Core)
+* Material Design Lite
+* Microsoft Bot Framework
+* LUIS
+
+
+
+
+
+
+
+
+
+
+> Перш ніж запустити проект потрібно виконати наступні команди:
 ```bash
 npm install jquery
 npm install material-design-lite --save
 npm install material-design-icons --save
 npm install emojionearea@^3.0.0
-```
-> Поточні баги
-```bash
-https://docs.google.com/spreadsheets/d/1ia4E6SzayDxQ6IZ0xj0hBt9OOs0fIKjuHUL7iXnXIfY/edit?usp=sharing
 ```
