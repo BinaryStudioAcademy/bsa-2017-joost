@@ -158,7 +158,7 @@ namespace Joost.Api.Controllers
 			else
 			{
 				var key = email.SendEmail(user);
-				var newUser = new User { Email = user.Email, Password = user.Password, IsActived = false };
+				var newUser = new User { Email = user.Email, Password = user.Password, IsActived = false, BirthDate = DateTime.UtcNow };
 				_unitOfWork.Repository<User>().Add(newUser);
 				_unitOfWork.Repository<ConfirmRegistration>().Add(new ConfirmRegistration() { Id = newUser.Id, Key = key.ToString(), DateOfRegistration = DateTime.Now });
 				await _unitOfWork.SaveAsync();

@@ -27,8 +27,7 @@
             
             <div class="left-panel-user-info">
               <a [routerLink]="['user-editing']" skipLocationChange>
-                  <div class="header-user-name" *ngIf="curUser.FirstName">{{curUser.FirstName + ' ' + curUser.LastName}}</div>
-                  <div class="header-user-name" *ngIf="!curUser.FirstName">{{curUser.Email}}</div>
+                  <div class="header-user-name">{{curUser | namePipe}}</div>
               </a>
               <div class="status">
                 <div class="mdl-textfield " *ngIf="editMode; else showMode">

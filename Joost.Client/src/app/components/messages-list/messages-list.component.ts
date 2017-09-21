@@ -369,18 +369,18 @@ export class MessagesListComponent implements OnInit, OnDestroy, AfterViewChecke
 
     private sendUserMessage(text: string, fileName: string) {
         let message = this.messageService.createMessage(this.currentUser.Id, this.receiverId, text, fileName, false);
-        this.messageService.sendUserMessage(message).subscribe(data => {
-            message.Id = data;
-            this.addToMessages(message);
-            this.messageText = null;
+        this.addToMessages(message);
+		this.messageService.sendUserMessage(message).subscribe(data => {
+			message.Id = data;
+			this.messageText = null;
             this.eventEmitterService.addMessageEvent.emit(message); 
         },
             async err => {
                 await this.messageService.handleTokenErrorIfExist(err).then(ok => { 
                     if (ok) {
+                        this.addToMessages(message);
                         this.messageService.sendUserMessage(message).subscribe(data => {
                             message.Id = data;                        
-                            this.addToMessages(message);
                             this.messageText = null;
                             this.eventEmitterService.addMessageEvent.emit(message);
                         });

@@ -1,5 +1,4 @@
 ﻿using Joost.Api.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,5 +14,7 @@ namespace Joost.Api.Services
         Task<bool> EditGroupMessage(MessageDto groupMessage);
         Task<bool> DeleteUserMessage(int senderId, int messageId);
         Task<bool> DeleteGroupMessage(int senderId, int groupMessageId);
+        int ChatBotIdInDb { get; }
+		Task<MessageDto> SendMessageToBot(MessageDto message);
     }
 }

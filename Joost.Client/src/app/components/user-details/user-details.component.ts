@@ -88,13 +88,13 @@ export class UserDetailsComponent extends MDL implements OnInit {
 	checkInContact():void {
 		this.contactService.getContacts().subscribe( list => {
 
-      this.isFriend = list.filter(t=>t.State!=ContactState.Accept).map(t=>t.ContactId).indexOf(this.user.Id) >= 0; 
+      this.isFriend = list.filter(t=>t.State==ContactState.Accept || t.State==ContactState.Sent).map(t=>t.ContactId).indexOf(this.user.Id) >= 0; 
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => {
         if (ok) { 
           this.contactService.getContacts().subscribe(list => {
-            this.isFriend = list.filter(t=>t.State!=ContactState.Accept).map(t=>t.ContactId).indexOf(this.user.Id) >= 0;
+            this.isFriend = list.filter(t=>t.State==ContactState.Accept || t.State==ContactState.Sent).map(t=>t.ContactId).indexOf(this.user.Id) >= 0;
           });
         }
       });

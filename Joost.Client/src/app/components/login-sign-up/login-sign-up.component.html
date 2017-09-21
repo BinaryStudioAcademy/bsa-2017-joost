@@ -40,7 +40,7 @@
             <div *ngIf="password_user.errors.required">Password is required.</div>
             <div *ngIf="password_user.errors.minlength && password_user.touched">Password cannot less 6 characters.</div>
         </div>
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"  [ngClass]="{'wrong': password!=confirmPassword && confirmPassword!=''}" style="width: 100%">
             <input class="mdl-textfield__input" 
             type="password" 
             [(ngModel)]="confirmPassword" 
