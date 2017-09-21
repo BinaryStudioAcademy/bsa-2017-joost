@@ -8,6 +8,8 @@ import { UserSearch } from "../../models/user-search";
 import { Contact,ContactState} from "../../models/contact";
 import { UserContact } from "../../models/user-contact";
 import { EventEmitterService } from "../../services/event-emitter.service";
+import { Subscription } from "rxjs/Rx";
+import { ChatHubService } from "../../services/chat-hub.service";
 
 declare var jquery: any;
 declare var $: any;
@@ -23,11 +25,14 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 	private searchString:string;
 	private isLoad:boolean = false;
     private contactList: Contact[];
+    private confirmContactSubscription: Subscription;
+    private canceledContactSubscription: Subscription;
 
 	constructor(
 		private accountService: AccountService,
         private authService: AuthenticationService,
         private eventEmitterService: EventEmitterService,
+        private chatHubService: ChatHubService,
 		private contactService: ContactService
 	) { }
 
@@ -78,6 +83,14 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 				    });
 			    }
 			});
+        });
+        this.confirmContactSubscription = this.chatHubService.onConfirmContactEvent.subscribe((userContact: UserContact) => {
+            debugger;
+            this.contactList.find(c => c.ContactId == userContact.Id).State = userContact.State;
+        });
+        this.canceledContactSubscription = this.chatHubService.onCanceledContactEvent.subscribe((userContact: UserContact) => {
+            debugger;
+            this.contactList.find(c => c.ContactId == userContact.Id).State = userContact.State;
         });
 	}
 
@@ -142,7 +155,8 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 							});
 						}
 					});
-				});
+                    });
+
 				this.accountService // check in RU layout
 				.searchResult(this.ChangeLayout(this.searchString,this.ENtoRUReplacePattern))
 				.subscribe(data =>{

@@ -114,6 +114,7 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
 		});
 
 		this.addContactSubscription = this.chatHubService.onAddContactEvent.subscribe((userContact: UserContact) => {
+            debugger;
 			this.result.push(userContact);
 			this.searchContact = this.result;
 		});
