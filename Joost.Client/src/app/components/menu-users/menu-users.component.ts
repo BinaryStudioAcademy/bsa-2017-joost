@@ -136,10 +136,14 @@ export class MenuUsersComponent implements OnInit, OnDestroy, AfterViewChecked  
             this.searchContact.splice(index, 1);
         });
         this.addNewContactSubscription = this.eventEmitterService.addNewContact.subscribe(data => {
-            this.searchContact.push(data);
+            if (this.searchContact.findIndex(c => c.Id == data.Id) == -1) {
+                this.searchContact.push(data);
+            }
         });
         this.confirmContactEmitSubscription = this.eventEmitterService.confirmContact.subscribe(data => {
-            this.searchContact.push(data);
+            if (this.searchContact.findIndex(c => c.Id == data.Id) == -1) {
+                this.searchContact.push(data);
+            }
         });
         this.removeContactEmitSubscription = this.eventEmitterService.removeContact.subscribe(data => {
             let index = this.searchContact.findIndex(c => c.Id == data);

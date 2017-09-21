@@ -25,8 +25,7 @@ export class UserDetailsComponent extends MDL implements OnInit {
   
   user: UserDetail;
   private isFriend = false;
-  private contactRemoveEmitSubscription: Subscription;
-  private contactRemoveSubscription: Subscription;
+  private contactDeclineSubscription: Subscription;
 
   constructor(
     private location: Location,
@@ -59,7 +58,10 @@ export class UserDetailsComponent extends MDL implements OnInit {
         });
         //this.isError = true;
         //console.log(this.isError);
-      });
+          });
+        this.contactDeclineSubscription = this.chatHubService.onCanceledContactEvent.subscribe((userContact: UserContact) => {
+            this.isFriend = false;
+        });
   }
 
   addToContact(){
