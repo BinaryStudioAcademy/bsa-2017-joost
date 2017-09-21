@@ -11,7 +11,16 @@
 * Microsoft Bot Framework
 * LUIS
 
-
+> Features:
+* Communication in real-time
+* Group conversations
+* Joost Bot - helpful and smart companion
+* In-app notifications control
+* Photos and file sharing 
+* Unlimited number of messages
+* Emoji
+* Messages citation
+* Basic user profile
 
 
 
