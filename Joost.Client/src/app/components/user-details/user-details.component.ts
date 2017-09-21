@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+﻿import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { Location } from '@angular/common';
 import { Observable } from "rxjs/Observable";
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -10,6 +10,10 @@ import { UserDetail } from "../../models/user-detail";
 import { Contact, ContactState } from "../../models/contact";
 
 import { MDL } from '../mdl-base.component';
+import { Subscription } from "rxjs/Rx";
+import { EventEmitterService } from "../../services/event-emitter.service";
+import { ChatHubService } from "../../services/chat-hub.service";
+import { UserContact } from "../../models/user-contact";
 declare var componentHandler: any;
 @Component({
   selector: 'app-user-details',
@@ -21,12 +25,16 @@ export class UserDetailsComponent extends MDL implements OnInit {
   
   user: UserDetail;
   private isFriend = false;
+  private contactRemoveEmitSubscription: Subscription;
+  private contactRemoveSubscription: Subscription;
 
   constructor(
     private location: Location,
     private userService: UserService,
     private contactService: ContactService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private eventEmitterService: EventEmitterService,
+    private chatHubService: ChatHubService,
   ) {
     super();
   }
@@ -55,14 +63,28 @@ export class UserDetailsComponent extends MDL implements OnInit {
   }
 
   addToContact(){
-		this.contactService.addContact(this.user.Id).subscribe(() =>{
-      this.isFriend = true;
+      this.contactService.addContact(this.user.Id).subscribe(() => {
+          this.isFriend = true;
+          let newContact = new UserContact();
+          newContact.Id = this.user.Id;
+          newContact.Name = this.user.FirstName + " " + this.user.LastName;
+          newContact.City = this.user.City;
+          newContact.Avatar = this.user.Avatar;
+          newContact.State = ContactState.Sent;
+          this.eventEmitterService.addNewContact.emit(newContact);
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => { 
         if (ok) {
           this.contactService.addContact(this.user.Id).subscribe(() => {
-            this.isFriend = true;
+              this.isFriend = true;
+              let newContact = new UserContact();
+              newContact.Id = this.user.Id;
+              newContact.Name = this.user.FirstName + " " + this.user.LastName;
+              newContact.City = this.user.City;
+              newContact.Avatar = this.user.Avatar;
+              newContact.State = ContactState.Sent;
+              this.eventEmitterService.addNewContact.emit(newContact);
           });
         }
       });
@@ -71,8 +93,9 @@ export class UserDetailsComponent extends MDL implements OnInit {
 
   deleteFromContact(){
     this.closeModal();
-		this.contactService.deleteContact(this.user.Id).subscribe(() =>{
-      this.isFriend = false;
+	this.contactService.deleteContact(this.user.Id).subscribe(() =>{
+        this.isFriend = false;
+        this.eventEmitterService.removeContact.emit(this.user.Id); 
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => { 
@@ -87,8 +110,7 @@ export class UserDetailsComponent extends MDL implements OnInit {
   
 	checkInContact():void {
 		this.contactService.getContacts().subscribe( list => {
-
-      this.isFriend = list.filter(t=>t.State==ContactState.Accept || t.State==ContactState.Sent).map(t=>t.ContactId).indexOf(this.user.Id) >= 0; 
+            this.isFriend = list.filter(t=>t.State==ContactState.Accept || t.State==ContactState.Sent).map(t=>t.ContactId).indexOf(this.user.Id) >= 0;
     },
     async err=> {
       await this.userService.handleTokenErrorIfExist(err).then(ok => {

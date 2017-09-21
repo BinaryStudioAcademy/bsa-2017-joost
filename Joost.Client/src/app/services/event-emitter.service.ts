@@ -12,6 +12,7 @@ export class EventEmitterService {
     public addNewContact: EventEmitter<UserContact>;
     public confirmContact: EventEmitter<UserContact>;
     public removeNewContact: EventEmitter<UserContact>;
+    public removeContact: EventEmitter<number>;
 
     constructor() {
         this.addMessageEvent = new EventEmitter<Message>();   
@@ -20,5 +21,6 @@ export class EventEmitterService {
         this.addNewContact = new EventEmitter<UserContact>();
         this.confirmContact = new EventEmitter<UserContact>();
         this.removeNewContact = new EventEmitter<UserContact>();
+        this.removeContact = new EventEmitter<number>();
     }      
 }

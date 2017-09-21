@@ -85,11 +85,9 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 			});
         });
         this.confirmContactSubscription = this.chatHubService.onConfirmContactEvent.subscribe((userContact: UserContact) => {
-            debugger;
             this.contactList.find(c => c.ContactId == userContact.Id).State = userContact.State;
         });
         this.canceledContactSubscription = this.chatHubService.onCanceledContactEvent.subscribe((userContact: UserContact) => {
-            debugger;
             this.contactList.find(c => c.ContactId == userContact.Id).State = userContact.State;
         });
 	}
@@ -222,7 +220,7 @@ export class MenuSearchComponent implements OnInit, AfterViewChecked {
 				    	newContact.Avatar = userInfo.Avatar;
 			    		newContact.State = ContactState.Sent;
                         this.contactService.changeContactNotify(newContact);
-                        this.eventEmitterService.addNewContact.emit(newContact); 
+                        //this.eventEmitterService.addNewContact.emit(newContact); 
 			    	});
 		     	}
 			});
