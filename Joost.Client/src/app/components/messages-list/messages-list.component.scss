@@ -583,9 +583,14 @@ ul {
 }
 
 .detail-info{
+  position: absolute;
   cursor:pointer;
 }
 
+.group-name{
+    padding-left: 40px;
+
+}
 .attached-citation {
     border-radius: 20px;
     background-color: #b2fcf9;/*#B3E5FC;*/
